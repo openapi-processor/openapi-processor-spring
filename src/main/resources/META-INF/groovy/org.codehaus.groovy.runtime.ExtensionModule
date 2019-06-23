@@ -1,0 +1,3 @@
+moduleName=java
+moduleVersion=1.0
+extensionClasses=com.github.hauner.openapi.extension.ToUpperFirstExtension
