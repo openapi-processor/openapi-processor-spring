@@ -26,21 +26,26 @@ class ApiConverter {
      */
     Api convert (OpenAPI api) {
         def target = new Api ()
-        // prepare the interfaces we will generate
-        target.interfaces = new InterfaceCollector ().collect (api.paths)
 
-        // group endpoints into interfaces
+        collectInterfaces (api, target)
+        addEndpointsToInterfaces (api, target)
+
+        target
+    }
+
+    private Map<String, PathItem> addEndpointsToInterfaces (OpenAPI api, Api target) {
         api.paths.each { Map.Entry<String, PathItem> entry ->
-
             def ops = new OperationCollector ().collect (entry.value)
             ops.each { op ->
                 def itf = target.getInterface (op.tags.first ())
                 ApiEndpoint ep = new ApiEndpoint (path: entry.key, method: op.httpMethod)
                 itf.endpoints.push (ep)
             }
-
         }
+    }
 
-        target
+    private void collectInterfaces (OpenAPI api, Api target) {
+        target.interfaces = new InterfaceCollector ()
+            .collect (api.paths)
     }
 }
