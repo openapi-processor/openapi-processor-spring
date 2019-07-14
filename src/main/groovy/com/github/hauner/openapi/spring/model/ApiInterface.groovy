@@ -1,7 +1,8 @@
-package com.github.hauner.openapi.spring.model;
+package com.github.hauner.openapi.spring.model
 
 class ApiInterface {
-    String name
+    String pkg = 'unknown'
+    String name = 'unknown'
 
     List<ApiEndpoint> endpoints = []
 
@@ -9,7 +10,15 @@ class ApiInterface {
         endpoints.find { it.path == endpoint }
     }
 
+    String getPackageName() {
+        pkg
+    }
+
+    String getInterfaceName() {
+        name.toUpperCaseFirst () + "Api"
+    }
+
     String toString () {
-        name
+        "$pkg.$name"
     }
 }
