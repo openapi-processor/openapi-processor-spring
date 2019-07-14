@@ -12,7 +12,11 @@ class InterfaceWriter {
         target.write ("package ${itf.packageName};\n\n")
         // todo imports
         target.write ("interface ${itf.interfaceName} {\n\n")
-        methodWriter.write(target, itf.endpoints)
+
+        itf.endpoints.each {
+            methodWriter.write(target, it)
+        }
+
         target.write ("}\n")
     }
 

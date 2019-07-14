@@ -58,11 +58,12 @@ interface NameApi {
     }
 
     void "writes methods" () {
-        def endpoints = [new ApiEndpoint(), new ApiEndpoint()]
+        def endpoints = [new ApiEndpoint(path: 'path1'), new ApiEndpoint(path: 'path2')]
 
-        writer.methodWriter.write (_ as Writer, endpoints) >> {
+        writer.methodWriter.write (_ as Writer, _ as ApiEndpoint) >> {
             Writer target = it.get (0)
-            target.write ("// none\n\n")
+            ApiEndpoint e = it.get (1)
+            target.write ("// ${e.path}\n\n")
         }
 
         def apiItf = new ApiInterface (name: 'name', endpoints: endpoints)
@@ -74,7 +75,9 @@ interface NameApi {
         def result = extractInterfaceBody(target.toString ())
         result == """\
 
-// none
+// path1
+
+// path2
 
 """
     }
