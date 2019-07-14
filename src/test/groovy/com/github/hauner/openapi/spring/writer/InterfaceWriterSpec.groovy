@@ -1,7 +1,7 @@
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.model.ApiEndpoint
-import com.github.hauner.openapi.spring.model.ApiInterface
+import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.Interface
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -15,7 +15,7 @@ class InterfaceWriterSpec extends Specification {
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {
-        def apiItf = new ApiInterface ()
+        def apiItf = new Interface ()
 
         when:
         writer.write (target, apiItf)
@@ -26,7 +26,7 @@ class InterfaceWriterSpec extends Specification {
 
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
-        def apiItf = new ApiInterface (pkg: pkg)
+        def apiItf = new Interface (pkg: pkg)
 
         when:
         writer.write (target, apiItf)
@@ -44,7 +44,7 @@ package $pkg;
 //    }
 
     void "writes 'interface' block" () {
-        def apiItf = new ApiInterface (name: 'name', endpoints: [])
+        def apiItf = new Interface (name: 'name', endpoints: [])
 
         when:
         writer.write (target, apiItf)
@@ -58,15 +58,15 @@ interface NameApi {
     }
 
     void "writes methods" () {
-        def endpoints = [new ApiEndpoint(path: 'path1'), new ApiEndpoint(path: 'path2')]
+        def endpoints = [new Endpoint(path: 'path1'), new Endpoint(path: 'path2')]
 
-        writer.methodWriter.write (_ as Writer, _ as ApiEndpoint) >> {
+        writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
             Writer target = it.get (0)
-            ApiEndpoint e = it.get (1)
+            Endpoint e = it.get (1)
             target.write ("// ${e.path}\n\n")
         }
 
-        def apiItf = new ApiInterface (name: 'name', endpoints: endpoints)
+        def apiItf = new Interface (name: 'name', endpoints: endpoints)
 
         when:
         writer.write (target, apiItf)

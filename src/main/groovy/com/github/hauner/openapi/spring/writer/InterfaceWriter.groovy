@@ -1,13 +1,13 @@
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.model.ApiInterface
+import com.github.hauner.openapi.spring.model.Interface
 
 
 class InterfaceWriter {
     HeaderWriter headerWriter
     MethodWriter methodWriter
 
-    void write (Writer target, ApiInterface itf) {
+    void write (Writer target, Interface itf) {
         headerWriter.write (target)
         target.write ("package ${itf.packageName};\n\n")
         // todo imports

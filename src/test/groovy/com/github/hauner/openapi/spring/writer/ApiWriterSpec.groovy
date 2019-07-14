@@ -2,7 +2,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.ApiInterface
+import com.github.hauner.openapi.spring.model.Interface
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -33,7 +33,7 @@ class ApiWriterSpec extends Specification {
 
     void "generates interface sources in api target folder"() {
         def interfaceWriter = Stub (InterfaceWriter) {
-            write (_ as Writer, _ as ApiInterface) >> {
+            write (_ as Writer, _ as Interface) >> {
                 Writer writer = it.get(0)
                 writer.write ('Foo interface!\n')
             } >> {
@@ -48,8 +48,8 @@ class ApiWriterSpec extends Specification {
         )
 
         def api = new Api(interfaces: [
-            new ApiInterface(pkg: "${opts.packageName}.api", name: 'Foo'),
-            new ApiInterface(pkg: "${opts.packageName}.api", name: 'Bar')
+            new Interface(pkg: "${opts.packageName}.api", name: 'Foo'),
+            new Interface(pkg: "${opts.packageName}.api", name: 'Bar')
         ])
 
         when:

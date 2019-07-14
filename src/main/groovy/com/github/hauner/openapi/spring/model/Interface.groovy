@@ -1,12 +1,12 @@
 package com.github.hauner.openapi.spring.model
 
-class ApiInterface {
+class Interface {
     String pkg = 'unknown'
     String name = 'unknown'
 
-    List<ApiEndpoint> endpoints = []
+    List<Endpoint> endpoints = []
 
-    ApiEndpoint getEndpoint(String endpoint) {
+    Endpoint getEndpoint(String endpoint) {
         endpoints.find { it.path == endpoint }
     }
 

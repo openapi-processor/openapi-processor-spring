@@ -1,6 +1,6 @@
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.ApiInterface
+import com.github.hauner.openapi.spring.model.Interface
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
@@ -14,14 +14,14 @@ class InterfaceCollector {
      * @param paths
      * @return list of interfaces to generate
      */
-    List<ApiInterface> collect(Paths paths) {
-        Map<String, ApiInterface> interfaces = new HashMap<> ()
+    List<Interface> collect(Paths paths) {
+        Map<String, Interface> interfaces = new HashMap<> ()
 
         paths.each { Map.Entry<String, PathItem> entry ->
             def operations = collectOperations (entry.value)
             operations.each { op ->
                 String targetInterfaceName = op.tags.first ()
-                interfaces.put (targetInterfaceName, new ApiInterface (name: targetInterfaceName))
+                interfaces.put (targetInterfaceName, new Interface (name: targetInterfaceName))
             }
         }
 

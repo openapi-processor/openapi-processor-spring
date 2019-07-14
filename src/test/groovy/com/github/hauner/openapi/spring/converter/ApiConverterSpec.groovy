@@ -1,10 +1,6 @@
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.support.ModelAsserts
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.parser.OpenAPIV3Parser
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -85,37 +81,4 @@ paths:
         method << ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
     }
 
-
-
-@Ignore
-    void "creates model for single endpoint with single response" () {
-
-        OpenAPI openApi = new OpenAPIV3Parser ()
-            .readContents ("""\
-openapi: 3.0.2
-info:
-  title: Ping API
-  version: 1.0.0
-
-paths:
-  /ping:
-    get:
-      tags:
-        - ping
-      responses:
-        '200':
-          description: string result
-          content:
-            text/plain:
-              schema:
-                type: string
-""").openAPI
-
-        when:
-        Api api = new ApiConverter ().convert (openApi)
-
-        then:
-        api.interfaces.size () == 1
-
-    }
 }
