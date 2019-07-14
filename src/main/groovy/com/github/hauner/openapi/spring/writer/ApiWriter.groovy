@@ -8,16 +8,25 @@ import groovy.util.logging.Slf4j
 class ApiWriter {
 
     private ApiOptions options
+    InterfaceWriter interfaceWriter
 
     File apiFolder
     File modelFolder
 
-    ApiWriter(ApiOptions options) {
+    ApiWriter(ApiOptions options, InterfaceWriter interfaceWriter) {
         this.options = options
+        this.interfaceWriter = interfaceWriter
     }
 
     void write(Api api) {
         createTargetFolders ()
+
+        api.interfaces.each {
+            def target = new File (apiFolder, "${it.interfaceName}.java")
+            def writer = new FileWriter(target)
+            interfaceWriter.write (writer, it)
+            writer.close ()
+        }
     }
 
     private void createTargetFolders () {
