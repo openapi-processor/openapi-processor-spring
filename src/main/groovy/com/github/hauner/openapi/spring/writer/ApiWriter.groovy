@@ -34,11 +34,11 @@ class ApiWriter {
         def apiPkg = [rootPkg, 'api'].join (File.separator)
         def modelPkg = [rootPkg, 'model'].join (File.separator)
 
-        apiFolder = createPackage (apiPkg)
-        modelFolder = createPackage (modelPkg)
+        apiFolder = createTargetPackage (apiPkg)
+        modelFolder = createTargetPackage (modelPkg)
     }
 
-    private File createPackage (String apiPkg) {
+    private File createTargetPackage (String apiPkg) {
         def folder = new File ([options.targetFolder, apiPkg].join (File.separator))
         def success = folder.mkdirs ()
         if (!success) {
