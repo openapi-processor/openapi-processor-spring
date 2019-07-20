@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model;
+package com.github.hauner.openapi.spring.model
 
 class Endpoint {
     String path
