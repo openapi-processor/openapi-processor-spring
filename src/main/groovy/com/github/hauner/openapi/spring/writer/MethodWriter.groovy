@@ -17,10 +17,37 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
+    static final MAPPING_ANNOTATION = [
+        get: '@GetMapping'
+    ]
+
+    static final KNOWN_TYPES = [
+        string: 'String'
+    ]
 
     void write(Writer target, Endpoint endpoint) {
-        target.write ("    // no methods")
+        target.write ("""\
+    ${getMapping (endpoint.method)}(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<${getType (endpoint.response.responseType)}> ${getMethodName(endpoint)}();
+""")
     }
+
+    private String getMapping(String method) {
+        MAPPING_ANNOTATION.get (method)
+    }
+
+    private String getType(Schema schema) {
+        KNOWN_TYPES.get (schema.type)
+    }
+
+    private String getMethodName(Endpoint endpoint) {
+        def tokens = endpoint.path.tokenize ('/')
+        tokens = tokens.collect {it.toUpperCaseFirst ()}
+        def name = tokens.join ('')
+        "${endpoint.method}${name}"
+    }
+
 }
