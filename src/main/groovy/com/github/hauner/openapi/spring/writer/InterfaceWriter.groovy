@@ -26,7 +26,24 @@ class InterfaceWriter {
     void write (Writer target, Interface itf) {
         headerWriter.write (target)
         target.write ("package ${itf.packageName};\n\n")
-        // todo imports
+        target.write ("\n")
+
+        Set<String> imports = []
+        itf.endpoints.each {
+            if (it.method == 'get') {
+                imports.add ('org.springframework.web.bind.annotation.GetMapping')
+            }
+
+            if (it.response) {
+                imports.add ('org.springframework.http.ResponseEntity')
+            }
+        }
+
+        imports.each {
+            target.write ("import ${it};")
+        }
+        target.write ("\n")
+
         target.write ("interface ${itf.interfaceName} {\n\n")
 
         itf.endpoints.each {

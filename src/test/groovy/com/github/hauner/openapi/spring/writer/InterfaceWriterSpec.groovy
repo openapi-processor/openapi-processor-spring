@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.Response
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -55,9 +56,37 @@ package $pkg;
 """)
     }
 
-//    void "writes 'imports'" () {
-//
-//    }
+    void "writes GetMapping import" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: 'get')
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.web.bind.annotation.GetMapping;
+""")
+    }
+
+    void "writes ResponseEntity import when any endpoint has a result" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: 'get', responses: [
+                new Response()
+            ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.http.ResponseEntity;
+""")
+    }
 
     void "writes 'interface' block" () {
         def apiItf = new Interface (name: 'name', endpoints: [])
@@ -98,6 +127,13 @@ interface NameApi {
 """
     }
 
+
+    String extractImports (String source) {
+        source.lines ()
+            .filter {it.startsWith ('import ')}
+            .collect (Collectors.toList ())
+            .join ('\n') + '\n'
+    }
 
     String extractInterfaceBlock (String source) {
         source.lines ()
