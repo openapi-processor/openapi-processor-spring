@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import spock.lang.Specification
 
@@ -56,7 +57,7 @@ paths:
         def itf = api.interfaces.get (0)
         def ep = itf.endpoints.get(0)
         ep.path == '/ping'
-        ep.method == 'get'
+        ep.method == HttpMethod.GET
         ep.response.contentType == 'text/plain'
         ep.response.responseType.type == 'string'
     }

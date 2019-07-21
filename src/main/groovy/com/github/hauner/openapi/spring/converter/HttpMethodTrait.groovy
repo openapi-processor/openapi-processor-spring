@@ -16,9 +16,11 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.model.HttpMethod
+
 /**
  * used to remember the http method of an openapi operation
  */
-trait HttpMethod {
-    String httpMethod
+trait HttpMethodTrait {
+    HttpMethod httpMethod
 }

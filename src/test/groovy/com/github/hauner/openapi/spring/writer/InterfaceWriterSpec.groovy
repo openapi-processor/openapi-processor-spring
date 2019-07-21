@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.Response
 import spock.lang.Specification
@@ -58,7 +59,7 @@ package $pkg;
 
     void "writes GetMapping import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: 'get')
+            new Endpoint(path: 'path', method: HttpMethod.GET)
         ])
 
         when:
@@ -73,7 +74,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
     void "writes ResponseEntity import when any endpoint has a result" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: 'get', responses: [
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
                 new Response()
             ])
         ])
@@ -103,7 +104,10 @@ interface NameApi {
     }
 
     void "writes methods" () {
-        def endpoints = [new Endpoint(path: 'path1'), new Endpoint(path: 'path2')]
+        def endpoints = [
+            new Endpoint(path: 'path1', method: HttpMethod.GET),
+            new Endpoint(path: 'path2', method: HttpMethod.GET)
+        ]
 
         writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
             Writer target = it.get (0)

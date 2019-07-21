@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 
 
@@ -28,17 +29,7 @@ class InterfaceWriter {
         target.write ("package ${itf.packageName};\n\n")
         target.write ("\n")
 
-        Set<String> imports = []
-        itf.endpoints.each {
-            if (it.method == 'get') {
-                imports.add ('org.springframework.web.bind.annotation.GetMapping')
-            }
-
-            if (it.response) {
-                imports.add ('org.springframework.http.ResponseEntity')
-            }
-        }
-
+        Set<String> imports = collectImports (itf.endpoints)
         imports.each {
             target.write ("import ${it};")
         }
@@ -53,4 +44,17 @@ class InterfaceWriter {
         target.write ("}\n")
     }
 
+    Set<String> collectImports(List<Endpoint> endpoints) {
+        Set<String> imports = []
+
+        endpoints.each {
+            imports.add (it.method.classNameWithPackage)
+
+            if (it.response) {
+                imports.add ('org.springframework.http.ResponseEntity')
+            }
+        }
+
+        imports
+    }
 }

@@ -16,17 +16,41 @@
 
 package com.github.hauner.openapi.spring.model
 
-class Endpoint {
-    String path
-    HttpMethod method
+enum HttpMethod {
+    GET ('get'),
+    PUT ('put'),
+    POST ('post'),
+    DELETE ('delete'),
+    OPTIONS ('options'),
+    HEAD ('head'),
+    PATCH ('patch'),
+    TRACE ('trace')
 
-    List<Response> responses = []
+    private String method
 
-    Response getResponse() {
-        if (responses.empty) {
-            return null
+    HttpMethod(String method) {
+        this.method = method
+    }
+
+    String getMethod() {
+        method
+    }
+
+    HttpMethod from(String method) {
+        values ().find {
+            it.method == method
         }
+    }
 
-        responses.get(0)
+    String getClassName () {
+        "${method.toUpperCaseFirst ()}Mapping"
+    }
+
+    String getClassNameWithPackage () {
+        "org.springframework.web.bind.annotation.${className}"
+    }
+
+    String getMappingAnnotation () {
+        "@${className}"
     }
 }

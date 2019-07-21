@@ -20,23 +20,15 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
-    static final MAPPING_ANNOTATION = [
-        get: '@GetMapping'
-    ]
-
     static final KNOWN_TYPES = [
         string: 'String'
     ]
 
     void write(Writer target, Endpoint endpoint) {
         target.write ("""\
-    ${getMapping (endpoint.method)}(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ${endpoint.method.mappingAnnotation}(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
     ResponseEntity<${getType (endpoint.response.responseType)}> ${getMethodName(endpoint)}();
 """)
-    }
-
-    private String getMapping(String method) {
-        MAPPING_ANNOTATION.get (method)
     }
 
     private String getType(Schema schema) {
@@ -47,7 +39,7 @@ class MethodWriter {
         def tokens = endpoint.path.tokenize ('/')
         tokens = tokens.collect {it.toUpperCaseFirst ()}
         def name = tokens.join ('')
-        "${endpoint.method}${name}"
+        "${endpoint.method.method}${name}"
     }
 
 }

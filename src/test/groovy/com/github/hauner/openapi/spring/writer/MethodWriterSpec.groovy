@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.Schema
 import spock.lang.Specification
@@ -26,7 +27,7 @@ class MethodWriterSpec extends Specification {
     def target = new StringWriter ()
 
     void "writes parameter less method with simple response type" () {
-        def endpoint = new Endpoint (path: '/ping', method: 'get', responses: [
+        def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
             new Response(contentType: 'text/plain',
                 responseType: new Schema(type: 'string'))
         ])
