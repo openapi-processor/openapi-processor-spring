@@ -31,7 +31,7 @@ class InterfaceWriter {
 
         Set<String> imports = collectImports (itf.endpoints)
         imports.each {
-            target.write ("import ${it};")
+            target.write ("import ${it};\n")
         }
         target.write ("\n")
 
