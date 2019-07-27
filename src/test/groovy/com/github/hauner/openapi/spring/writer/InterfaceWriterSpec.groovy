@@ -72,11 +72,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 """)
     }
 
-    void "writes ResponseEntity import when any endpoint has a result" () {
+    void "writes ResponseEntity import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
-                new Response()
-            ])
+            new Endpoint(path: 'path', method: HttpMethod.GET)
         ])
 
         when:

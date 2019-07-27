@@ -47,12 +47,10 @@ class InterfaceWriter {
     Set<String> collectImports(List<Endpoint> endpoints) {
         Set<String> imports = []
 
+        imports.add ('org.springframework.http.ResponseEntity')
+
         endpoints.each {
             imports.add (it.method.classNameWithPackage)
-
-            if (it.response) {
-                imports.add ('org.springframework.http.ResponseEntity')
-            }
         }
 
         imports
