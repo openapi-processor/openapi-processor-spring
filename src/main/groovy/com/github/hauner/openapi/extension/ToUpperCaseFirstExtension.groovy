@@ -16,7 +16,11 @@
 
 package com.github.hauner.openapi.extension
 
-class ToUpperFirstExtension {
+
+/**
+ * the extension module does not work when using the jar from a gradle plugin.
+ */
+class ToUpperCaseFirstExtension {
     static String toUpperCaseFirst(String self) {
         self.substring (0, 1).toUpperCase () + self.substring (1)
     }

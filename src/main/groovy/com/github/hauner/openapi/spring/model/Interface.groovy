@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.model
 
+import static com.github.hauner.openapi.extension.ToUpperCaseFirstExtension.*
+
 class Interface {
     String pkg = 'unknown'
     String name = 'unknown'
@@ -31,7 +33,7 @@ class Interface {
     }
 
     String getInterfaceName() {
-        name.toUpperCaseFirst () + "Api"
+        toUpperCaseFirst (name) + "Api"
     }
 
     String toString () {
