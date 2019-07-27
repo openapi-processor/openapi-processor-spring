@@ -1,3 +1,0 @@
-moduleName=openapi-spring-generator
-moduleVersion=1.0
-extensionClasses=com.github.hauner.openapi.extension.ToUpperCaseFirstExtension

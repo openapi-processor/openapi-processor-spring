@@ -52,7 +52,7 @@ class MethodWriter {
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
-        tokens = tokens.collect {it.toUpperCaseFirst ()}
+        tokens = tokens.collect {it.capitalize ()}
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
     }

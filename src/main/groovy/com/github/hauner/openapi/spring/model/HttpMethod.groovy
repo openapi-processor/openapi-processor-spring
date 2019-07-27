@@ -16,8 +16,6 @@
 
 package com.github.hauner.openapi.spring.model
 
-import static com.github.hauner.openapi.extension.ToUpperCaseFirstExtension.*
-
 enum HttpMethod {
     GET ('get'),
     PUT ('put'),
@@ -45,7 +43,7 @@ enum HttpMethod {
     }
 
     String getClassName () {
-        toUpperCaseFirst (method) + "Mapping"
+        method.capitalize () + "Mapping"
     }
 
     String getClassNameWithPackage () {
