@@ -17,6 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.support.ModelAsserts
+import com.github.hauner.openapi.spring.writer.HeaderWriter
+import com.github.hauner.openapi.spring.writer.InterfaceWriter
+import com.github.hauner.openapi.spring.writer.MethodWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -38,14 +41,14 @@ paths:
       tags:
         - ping
       responses:
-        'default':
+        '204':
           description: none
   /b:
     get:
       tags:
         - pong
       responses:
-        'default':
+        '204':
           description: none
   /c:
     get:
@@ -53,7 +56,7 @@ paths:
         - ping
         - pong
       responses:
-        'default':
+        '204':
           description: none
 """)
 
@@ -82,12 +85,15 @@ paths:
       tags:
         - ${method}
       responses:
-        'default':
-          description: none
+        '204':
+          description: no content
 """)
 
         when:
         api = new ApiConverter ().convert (openApi)
+        def w = new InterfaceWriter (headerWriter: new HeaderWriter (), methodWriter: new MethodWriter())
+        def writer = new StringWriter()
+        w.write (writer, api.interfaces.get (0))
 
         then:
         assertInterfaces (method)

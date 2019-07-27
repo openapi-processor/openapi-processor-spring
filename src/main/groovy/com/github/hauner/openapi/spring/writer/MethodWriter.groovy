@@ -21,25 +21,44 @@ import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
     static final KNOWN_TYPES = [
+        none: 'void',
         string: 'String'
     ]
 
-    void write(Writer target, Endpoint endpoint) {
+    void write (Writer target, Endpoint endpoint) {
         target.write ("""\
-    ${endpoint.method.mappingAnnotation}(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<${getType (endpoint.response.responseType)}> ${getMethodName(endpoint)}();
+    ${createMappingAnnotation (endpoint)}
+    ResponseEntity<${getType (endpoint.response.responseType)}> ${createMethodName (endpoint)}();
 """)
     }
 
-    private String getType(Schema schema) {
+    private String createMappingAnnotation (Endpoint endpoint) {
+        String mapping = "${endpoint.method.mappingAnnotation}"
+        mapping += "("
+        mapping += 'path = ' + quote(endpoint.path)
+
+        if (!endpoint.response.empty) {
+            mapping += ", "
+            mapping += 'produces = {' + quote(endpoint.response.contentType) + '}'
+        }
+
+        mapping += ")"
+        mapping
+    }
+
+    private String getType (Schema schema) {
         KNOWN_TYPES.get (schema.type)
     }
 
-    private String getMethodName(Endpoint endpoint) {
+    private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
         tokens = tokens.collect {it.toUpperCaseFirst ()}
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
+    }
+
+    private String quote (String content) {
+        '"' + content + '"'
     }
 
 }

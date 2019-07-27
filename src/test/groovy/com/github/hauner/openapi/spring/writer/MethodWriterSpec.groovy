@@ -26,6 +26,21 @@ class MethodWriterSpec extends Specification {
     def writer = new MethodWriter ()
     def target = new StringWriter ()
 
+    void "writes parameter less method without response" () {
+        def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
+            new Response(responseType: new Schema(type: 'none'))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getPing();
+"""
+    }
+
     void "writes parameter less method with simple response type" () {
         def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
             new Response(contentType: 'text/plain',

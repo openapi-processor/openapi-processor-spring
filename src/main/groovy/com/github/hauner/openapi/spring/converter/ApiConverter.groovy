@@ -57,8 +57,8 @@ class ApiConverter {
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
             PathItem pathItem = pathEntry.value
 
-            def httpMethods = new OperationCollector ().collect (pathItem)
-            httpMethods.each { httpMethod ->
+            def operations = new OperationCollector ().collect (pathItem)
+            operations.each { httpMethod ->
                 def itf = target.getInterface (httpMethod.tags.first ())
 
                 Endpoint ep = new Endpoint (path: pathEntry.key, method: httpMethod.httpMethod)
@@ -67,23 +67,43 @@ class ApiConverter {
                     def httpStatus = responseEntry.key
                     def httpResponse = responseEntry.value
 
-                    httpResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
-                        def contentType = contentEntry.key
-                        def mediaType = contentEntry.value
-
-                        def schema = new Schema(type: mediaType.schema.type)
-
-                        def response = new Response (
-                            contentType: contentType,
-                            responseType: schema)
-
-                        ep.responses.push (response)
+                    if (!httpResponse.content) {
+                        ep.responses.push (createEmptyResponse ())
+                    } else {
+                        ep.responses.addAll (createResponses (httpResponse))
                     }
                 }
 
                 itf.endpoints.push (ep)
             }
         }
+    }
+
+    private Response createEmptyResponse () {
+        def schema = new Schema (type: 'none')
+
+        def response = new Response (
+            responseType: schema)
+        response
+    }
+
+    private List<Response> createResponses (ApiResponse apiResponse) {
+        def responses = []
+
+        apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
+            def contentType = contentEntry.key
+            def mediaType = contentEntry.value
+
+            def schema = new Schema(type: mediaType.schema.type)
+
+            def response = new Response (
+                contentType: contentType,
+                responseType: schema)
+
+            responses.push (response)
+        }
+
+        responses
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {

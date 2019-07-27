@@ -62,4 +62,37 @@ paths:
         ep.response.responseType.type == 'string'
     }
 
+    void "creates model for an endpoint without parameters and without response content type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: Ping API
+  version: 1.0.0
+
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      responses:
+        '204':
+          description: no content
+""")
+
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.interfaces.size () == 1
+        api.interfaces.get(0).endpoints.size () == 1
+
+        and:
+        def itf = api.interfaces.get (0)
+        def ep = itf.endpoints.get(0)
+        ep.path == '/ping'
+        ep.method == HttpMethod.GET
+        !ep.response.contentType
+        ep.response.responseType.type == 'none'
+    }
+
 }
