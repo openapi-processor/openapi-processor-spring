@@ -55,7 +55,7 @@ class ApiWriter {
     }
 
     private File createTargetPackage (String apiPkg) {
-        def folder = new File ([options.targetFolder, apiPkg].join (File.separator))
+        def folder = new File ([options.targetDir, apiPkg].join (File.separator))
         def success = folder.mkdirs ()
         if (!success) {
             log.error ('failed to create package {}', folder)

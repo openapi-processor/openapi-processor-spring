@@ -32,15 +32,15 @@ class ApiWriterSpec extends Specification {
     void "creates package structure in target folder"() {
         def opts = new ApiOptions(
             packageName: 'com.github.hauner.openapi',
-            targetFolder: [target.root.toString (), 'java', 'src'].join (File.separator)
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
         )
 
         when:
         new ApiWriter (opts, Stub (InterfaceWriter)).write (new Api())
 
         then:
-        def api = new File([opts.targetFolder, 'com', 'github', 'hauner', 'openapi', 'api'].join(File.separator))
-        def model = new File([opts.targetFolder, 'com', 'github', 'hauner', 'openapi', 'model'].join(File.separator))
+        def api = new File([opts.targetDir, 'com', 'github', 'hauner', 'openapi', 'api'].join(File.separator))
+        def model = new File([opts.targetDir, 'com', 'github', 'hauner', 'openapi', 'model'].join(File.separator))
         api.exists ()
         api.isDirectory ()
         model.exists ()
@@ -60,7 +60,7 @@ class ApiWriterSpec extends Specification {
 
         def opts = new ApiOptions(
             packageName: 'com.github.hauner.openapi',
-            targetFolder: [target.root.toString (), 'java', 'src'].join (File.separator)
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
         )
 
         def api = new Api(interfaces: [
@@ -72,11 +72,11 @@ class ApiWriterSpec extends Specification {
         new ApiWriter (opts, interfaceWriter).write (api)
 
         then:
-        def fooSource = new File(getApiPath (opts.targetFolder, 'FooApi.java'))
+        def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
         fooSource.text == """\
 Foo interface!
 """
-        def barSource = new File(getApiPath (opts.targetFolder, 'BarApi.java'))
+        def barSource = new File(getApiPath (opts.targetDir, 'BarApi.java'))
         barSource.text == """\
 Bar interface!
 """

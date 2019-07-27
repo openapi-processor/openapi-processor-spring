@@ -17,17 +17,30 @@
 package com.github.hauner.openapi.spring
 
 class ApiOptions {
+
     /**
-     * the root package of the generated interfaces/model. Interfaces and Models will be generated
-     * to an "api" and "model" package inside the root package:
-     *
+     * the path to the open api yaml file.
+     */
+    String apiPath
+
+    /**
+     * the destination folder for generating interfaces & models. This is the parent of the
+     * {@link #packageName} folder tree.
+     */
+    String targetDir
+
+    /**
+     * the root package of the generated interfaces/model. The package folder tree will be created
+     * inside {@link #targetDir}.  Interfaces and Models will be placed into the "api" and "model"
+     * subpackages of packageName:
      * - interfaces => "${packageName}.api"
      * - models => "${packageName}.model"
      */
     String packageName
 
     /**
-     * the destination folder for generating interfaces & models.
+     * show the warning from the open api parser.
      */
-    String targetFolder
+    boolean showWarnings
+
 }
