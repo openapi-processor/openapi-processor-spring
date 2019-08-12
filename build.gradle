@@ -3,17 +3,20 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0-SNAPSHOT'
+version '0.1-SNAPSHOT'
+
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:2.5.7'
+    implementation 'org.codehaus.groovy:groovy-all:2.5.4'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.12'
+    compileOnly 'com.github.hauner.openapi:openapi-generatr:0.1-SNAPSHOT'
 
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
-    testRuntimeOnly 'org.slf4j:slf4j-nop:1.7.26'
+    testRuntimeOnly 'org.slf4j:slf4j-nop:1.7.25'
 }
