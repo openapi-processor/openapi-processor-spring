@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring
+package com.github.hauner.openapi.spring.generatr
 
 class ApiOptions {
 

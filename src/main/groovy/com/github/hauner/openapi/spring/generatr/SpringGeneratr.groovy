@@ -17,7 +17,6 @@
 package com.github.hauner.openapi.spring.generatr
 
 import com.github.hauner.openapi.api.OpenApiGeneratr
-import com.github.hauner.openapi.spring.ApiOptions
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
