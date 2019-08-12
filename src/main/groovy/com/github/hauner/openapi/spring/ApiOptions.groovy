@@ -31,7 +31,7 @@ class ApiOptions {
 
     /**
      * the root package of the generated interfaces/model. The package folder tree will be created
-     * inside {@link #targetDir}.  Interfaces and Models will be placed into the "api" and "model"
+     * inside {@link #targetDir}. Interfaces and models will be placed into the "api" and "model"
      * subpackages of packageName:
      * - interfaces => "${packageName}.api"
      * - models => "${packageName}.model"
@@ -39,7 +39,7 @@ class ApiOptions {
     String packageName
 
     /**
-     * show the warning from the open api parser.
+     * show warnings from the open api parser.
      */
     boolean showWarnings
 
