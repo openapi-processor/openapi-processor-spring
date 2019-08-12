@@ -41,7 +41,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "writes parameter less method with simple response type" () {
+    void "writes parameter less method with string response type" () {
         def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
             new Response(contentType: 'text/plain',
                 responseType: new Schema(type: 'string'))
