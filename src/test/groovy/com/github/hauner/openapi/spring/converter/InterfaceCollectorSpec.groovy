@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
@@ -24,7 +25,7 @@ import spock.lang.Specification
 
 class InterfaceCollectorSpec extends Specification {
 
-    void "set interface package from generatr options with 'api' sub package" () {
+    void "sets interface package from generatr options with 'api' sub package" () {
         def options = new ApiOptions(
             packageName: 'a.package.name'
         )
@@ -38,5 +39,18 @@ class InterfaceCollectorSpec extends Specification {
 
         then:
         result.first ().packageName == [options.packageName, 'api'].join ('.')
+    }
+
+    void "sets empty interface name when no interface name tag was provided" () {
+        def collector = new InterfaceCollector(new DefaultApiOptions())
+
+        def paths = new Paths()
+        paths.put ('/path', new PathItem(get: new Operation(tags: [])))
+
+        when:
+        def result = collector.collect (paths)
+
+        then:
+        result.first ().interfaceName == 'Api'
     }
 }

@@ -43,7 +43,7 @@ class InterfaceCollector {
         paths.each { Map.Entry<String, PathItem> entry ->
             def operations = collectOperations (entry.value)
             operations.each { op ->
-                String targetInterfaceName = op.tags.first ()
+                String targetInterfaceName = getInterfaceName (op)
 
                 def itf = new Interface (
                     pkg: [options.packageName, 'api'].join ('.'),
@@ -59,6 +59,16 @@ class InterfaceCollector {
 
     private List<Operation> collectOperations(PathItem item) {
         new OperationCollector ().collect (item)
+    }
+
+    private String getInterfaceName (def op) {
+        String targetInterfaceName = ''
+
+        if (!op.tags.empty) {
+            targetInterfaceName = op.tags.first ()
+        }
+
+        targetInterfaceName
     }
 
 }
