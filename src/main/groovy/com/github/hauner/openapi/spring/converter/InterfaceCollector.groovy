@@ -16,12 +16,19 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Interface
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 
 class InterfaceCollector {
+
+    private ApiOptions options
+
+    InterfaceCollector(ApiOptions options) {
+        this.options = options
+    }
 
     /**
      * extracts the interface names used to group the endpoints from the open api specification.
@@ -37,7 +44,13 @@ class InterfaceCollector {
             def operations = collectOperations (entry.value)
             operations.each { op ->
                 String targetInterfaceName = op.tags.first ()
-                interfaces.put (targetInterfaceName, new Interface (name: targetInterfaceName))
+
+                def itf = new Interface (
+                    pkg: [options.packageName, 'api'].join ('.'),
+                    name: targetInterfaceName
+                )
+
+                interfaces.put (targetInterfaceName, itf)
             }
         }
 

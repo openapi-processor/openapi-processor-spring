@@ -107,7 +107,7 @@ class ApiConverter {
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {
-        target.interfaces = new InterfaceCollector ()
+        target.interfaces = new InterfaceCollector (options)
             .collect (api.paths)
     }
 }
