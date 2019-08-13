@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Response
@@ -36,6 +37,10 @@ class ApiConverter {
 
     ApiConverter(ApiOptions options) {
         this.options = options
+
+        if (!this.options) {
+            this.options = new DefaultApiOptions()
+        }
     }
 
     /**
