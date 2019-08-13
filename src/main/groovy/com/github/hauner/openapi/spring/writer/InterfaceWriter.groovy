@@ -39,6 +39,7 @@ class InterfaceWriter {
 
         itf.endpoints.each {
             methodWriter.write(target, it)
+            target.write ("\n")
         }
 
         target.write ("}\n")

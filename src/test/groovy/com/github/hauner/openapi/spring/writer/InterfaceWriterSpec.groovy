@@ -19,7 +19,6 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
-import com.github.hauner.openapi.spring.model.Response
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -110,7 +109,7 @@ interface NameApi {
         writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
             Writer target = it.get (0)
             Endpoint e = it.get (1)
-            target.write ("// ${e.path}\n\n")
+            target.write ("// ${e.path}\n")
         }
 
         def apiItf = new Interface (name: 'name', endpoints: endpoints)
