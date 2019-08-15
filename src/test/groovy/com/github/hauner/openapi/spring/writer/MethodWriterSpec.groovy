@@ -168,4 +168,20 @@ class MethodWriterSpec extends Specification {
     ResponseEntity<Boolean> getBoolean();
 """
     }
+
+    void "writes parameter less method with inline object response type" () {
+        def endpoint = new Endpoint (path: '/inline', method: HttpMethod.GET, responses: [
+            new Response(contentType: 'application/json',
+                responseType: new Schema(type: 'map'))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<Map<String, Object>> getInline();
+"""
+    }
 }

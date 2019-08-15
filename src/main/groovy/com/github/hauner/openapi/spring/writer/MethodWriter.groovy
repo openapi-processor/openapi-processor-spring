@@ -40,6 +40,9 @@ class MethodWriter {
         ],
         boolean: [
             default: 'Boolean'
+        ],
+        map: [
+            default: 'Map<String, Object>'
         ]
     ]
 
