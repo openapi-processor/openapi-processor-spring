@@ -64,11 +64,15 @@ class InterfaceCollector {
     private String getInterfaceName (def op) {
         String targetInterfaceName = ''
 
-        if (!op.tags.empty) {
+        if (hasTags (op)) {
             targetInterfaceName = op.tags.first ()
         }
 
         targetInterfaceName
+    }
+
+    private boolean hasTags (op) {
+        op.tags && !op.tags.empty
     }
 
 }

@@ -45,7 +45,7 @@ class InterfaceCollectorSpec extends Specification {
         def collector = new InterfaceCollector(new DefaultApiOptions())
 
         def paths = new Paths()
-        paths.put ('/path', new PathItem(get: new Operation(tags: [])))
+        paths.put ('/path', new PathItem(get: new Operation()))
 
         when:
         def result = collector.collect (paths)
