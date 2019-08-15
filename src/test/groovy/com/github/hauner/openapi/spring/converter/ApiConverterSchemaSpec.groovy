@@ -36,7 +36,7 @@ paths:
     get:
       responses:
         '200':
-          description: string result
+          description: none
           content:
             application/vnd.integer:
               schema:
