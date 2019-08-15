@@ -23,6 +23,37 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class ApiConverterSchemaSpec extends Specification {
 
+    void "creates map<string, string> model for inline object type"() {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /inlineObject:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isbn:
+                    type: string
+                  title:
+                    type: string                
+""")
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.type == 'map'
+    }
     
     void "creates model for a basic data type with optional format #type/#format" () {
         def yaml = """\

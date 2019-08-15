@@ -63,12 +63,12 @@ class ApiConverter {
             PathItem pathItem = pathEntry.value
 
             def operations = new OperationCollector ().collect (pathItem)
-            operations.each { httpMethod ->
-                def itf = target.getInterface (getInterfaceName (httpMethod))
+            operations.each { httpOperation ->
+                def itf = target.getInterface (getInterfaceName (httpOperation))
 
-                Endpoint ep = new Endpoint (path: pathEntry.key, method: httpMethod.httpMethod)
+                Endpoint ep = new Endpoint (path: pathEntry.key, method: httpOperation.httpMethod)
 
-                httpMethod.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+                httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
                     def httpStatus = responseEntry.key
                     def httpResponse = responseEntry.value
 
@@ -99,7 +99,7 @@ class ApiConverter {
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            def schema = new Schema(type: mediaType.schema.type, format: mediaType.schema.format)
+            Schema schema = getSchema (mediaType)
 
             def response = new Response (
                 contentType: contentType,
@@ -109,6 +109,18 @@ class ApiConverter {
         }
 
         responses
+    }
+
+    private Schema getSchema (MediaType mediaType) {
+        if (isInlineObject (mediaType)) {
+            new Schema (type: 'map')
+        } else {
+            new Schema (type: mediaType.schema.type, format: mediaType.schema.format)
+        }
+    }
+
+    private boolean isInlineObject (MediaType mediaType) {
+        mediaType.schema.type == 'object'
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {
