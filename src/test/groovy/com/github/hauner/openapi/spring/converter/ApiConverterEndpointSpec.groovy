@@ -119,4 +119,33 @@ paths:
         api.interfaces.get (0).name == InterfaceCollector.INTERFACE_DEFAULT_NAME
     }
 
+    void "keeps order of endpoints"() {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint:
+    get:
+      responses:
+        '204':
+          description: no content
+
+    post:
+      responses:
+        '204':
+          description: no content
+""")
+
+        when:
+        api = new ApiConverter ().convert (openApi)
+
+        then:
+        def itf = api.interfaces.get (0)
+        itf.endpoints.get(0).method == HttpMethod.GET
+        itf.endpoints.get(1).method == HttpMethod.POST
+    }
 }

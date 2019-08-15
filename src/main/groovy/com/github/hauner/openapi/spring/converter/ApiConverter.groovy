@@ -79,7 +79,7 @@ class ApiConverter {
                     }
                 }
 
-                itf.endpoints.push (ep) // todo
+                itf.endpoints.add (ep)
             }
         }
     }
