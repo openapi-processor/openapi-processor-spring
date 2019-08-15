@@ -64,7 +64,7 @@ class ApiConverter {
 
             def operations = new OperationCollector ().collect (pathItem)
             operations.each { httpMethod ->
-                def itf = target.getInterface (httpMethod.tags.first ())
+                def itf = target.getInterface (getInterfaceName (httpMethod))
 
                 Endpoint ep = new Endpoint (path: pathEntry.key, method: httpMethod.httpMethod)
 
@@ -79,7 +79,7 @@ class ApiConverter {
                     }
                 }
 
-                itf.endpoints.push (ep)
+                itf.endpoints.push (ep) // todo
             }
         }
     }
@@ -105,7 +105,7 @@ class ApiConverter {
                 contentType: contentType,
                 responseType: schema)
 
-            responses.push (response)
+            responses.push (response) // todo
         }
 
         responses
@@ -114,5 +114,17 @@ class ApiConverter {
     private void collectInterfaces (OpenAPI api, Api target) {
         target.interfaces = new InterfaceCollector (options)
             .collect (api.paths)
+    }
+
+    private String getInterfaceName(def operation) {
+        if (!hasTags (operation)) {
+            return InterfaceCollector.INTERFACE_DEFAULT_NAME
+        }
+
+        operation.tags.first ()
+    }
+
+    private boolean hasTags (op) {
+        op.tags && !op.tags.empty
     }
 }

@@ -24,6 +24,8 @@ import io.swagger.v3.oas.models.Paths
 
 class InterfaceCollector {
 
+    public static final String INTERFACE_DEFAULT_NAME = ''
+
     private ApiOptions options
 
     InterfaceCollector(ApiOptions options) {
@@ -62,7 +64,7 @@ class InterfaceCollector {
     }
 
     private String getInterfaceName (def op) {
-        String targetInterfaceName = ''
+        String targetInterfaceName = INTERFACE_DEFAULT_NAME
 
         if (hasTags (op)) {
             targetInterfaceName = op.tags.first ()

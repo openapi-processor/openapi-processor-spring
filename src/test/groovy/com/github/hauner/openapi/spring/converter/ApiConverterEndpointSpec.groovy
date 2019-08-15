@@ -95,4 +95,28 @@ paths:
         ep.response.responseType.type == 'none'
     }
 
+
+    void "uses default interface name when no interface-name-tag is given" () {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint:
+    get:
+      responses:
+        '204':
+          description: no content
+""")
+
+        when:
+        api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.interfaces.get (0).name == InterfaceCollector.INTERFACE_DEFAULT_NAME
+    }
+
 }
