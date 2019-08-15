@@ -1,0 +1,40 @@
+openapi: 3.0.2
+info:
+  title: test complex data type responses
+  version: 1.0.0
+
+paths:
+  /book_inline:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    isbn:
+                      type: string
+                    title:
+                      type: string
+
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
