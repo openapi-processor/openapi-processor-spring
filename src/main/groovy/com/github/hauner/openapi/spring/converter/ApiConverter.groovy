@@ -73,7 +73,7 @@ class ApiConverter {
                     def httpResponse = responseEntry.value
 
                     if (!httpResponse.content) {
-                        ep.responses.push (createEmptyResponse ())
+                        ep.responses.add (createEmptyResponse ())
                     } else {
                         ep.responses.addAll (createResponses (httpResponse))
                     }
@@ -105,7 +105,7 @@ class ApiConverter {
                 contentType: contentType,
                 responseType: schema)
 
-            responses.push (response) // todo
+            responses.add (response)
         }
 
         responses
