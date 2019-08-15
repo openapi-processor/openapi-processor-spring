@@ -21,7 +21,7 @@ import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
 
-    static final KNOWN_TYPES = [
+    static final KNOWN_DATA_TYPES = [
         none: [
             default: 'void'
         ],
@@ -65,7 +65,7 @@ class MethodWriter {
     }
 
     private String getType (Schema schema) {
-        def type = KNOWN_TYPES.get (schema.type)
+        def type = KNOWN_DATA_TYPES.get (schema.type)
         if (schema.format) {
             type."${schema.format}"
         } else {
