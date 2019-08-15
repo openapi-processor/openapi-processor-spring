@@ -99,7 +99,7 @@ class ApiConverter {
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            def schema = new Schema(type: mediaType.schema.type)
+            def schema = new Schema(type: mediaType.schema.type, format: mediaType.schema.format)
 
             def response = new Response (
                 contentType: contentType,
