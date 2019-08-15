@@ -28,4 +28,5 @@ dependencies {
     testRuntimeOnly 'org.slf4j:slf4j-nop:1.7.25'
 
     testIntImplementation 'com.github.hauner.openapi:openapi-generatr-gradle:0.1-SNAPSHOT'
+    testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.0'
 }

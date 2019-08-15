@@ -16,21 +16,46 @@
 
 package com.github.hauner.openapi.generatr
 
+import com.github.difflib.DiffUtils
+import com.github.difflib.UnifiedDiffUtils
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.SpringGeneratr
 import groovy.io.FileType
-import org.junit.Rule
+import org.junit.Rule;
+import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-class GeneratrSpec extends Specification {
+import static org.junit.Assert.assertEquals;
+
+
+/**
+ * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
+ */
+
+@RunWith(Parameterized)
+class GeneratrTest {
 
     @Rule
-    TemporaryFolder folder
+    public TemporaryFolder folder = new TemporaryFolder()
 
-    @Unroll
-    void "generatr creates expected files for api set '#source'" () {
+    @Parameters(name = "{0}")
+    static Collection<String> sources () {
+        return [
+            'no-response-content'
+        ]
+    }
+
+    String source
+
+    GeneratrTest(String source) {
+        this.source = source
+    }
+
+    @Test()
+    void "generatr creates expected files for api set "() {
         def packageName = 'generated'
         def expectedPath = "./src/testInt/resources/${source}/${packageName}"
         def generatedPath = "${folder.root.absolutePath}/${packageName}"
@@ -53,13 +78,28 @@ class GeneratrSpec extends Specification {
         expectedFiles.each {
             def expected = new File([expectedPath, it].join ('/'))
             def generated = new File([generatedPath, it].join ('/'))
-            assert expected.text == generated.text
-        }
 
-        where:
-        source << [
-            'simple'
-        ]
+            printUnifiedDiff (expected, generated)
+            assertEquals(expected.text, generated.text)
+        }
+    }
+
+    void printUnifiedDiff (File expected, File generated) {
+        def patch = DiffUtils.diff (
+            expected.readLines (),
+            generated.readLines ())
+
+        def diff = UnifiedDiffUtils.generateUnifiedDiff (
+            expected.path,
+            generated.path,
+            expected.readLines (),
+            patch,
+            2
+        )
+
+        diff.each {
+            println it
+        }
     }
 
     List<String> collectGenerated(String generatedPath) {
@@ -77,4 +117,5 @@ class GeneratrSpec extends Specification {
         }
         expected
     }
+
 }
