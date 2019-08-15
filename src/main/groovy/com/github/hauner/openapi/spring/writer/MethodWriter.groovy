@@ -20,9 +20,27 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
+
     static final KNOWN_TYPES = [
-        none: 'void',
-        string: 'String'
+        none: [
+            default: 'void'
+        ],
+        string: [
+            default: 'String'
+        ],
+        integer: [
+            default: 'Integer',
+            int32: 'Integer',
+            int64: 'Long'
+        ],
+        number: [
+            default: 'Float',
+            float: 'Float',
+            double: 'Double'
+        ],
+        boolean: [
+            default: 'Boolean'
+        ]
     ]
 
     void write (Writer target, Endpoint endpoint) {
@@ -47,7 +65,12 @@ class MethodWriter {
     }
 
     private String getType (Schema schema) {
-        KNOWN_TYPES.get (schema.type)
+        def type = KNOWN_TYPES.get (schema.type)
+        if (schema.format) {
+            type."${schema.format}"
+        } else {
+            type.default
+        }
     }
 
     private String createMethodName (Endpoint endpoint) {
