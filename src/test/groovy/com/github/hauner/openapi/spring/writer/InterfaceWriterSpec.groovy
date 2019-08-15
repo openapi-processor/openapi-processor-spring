@@ -71,6 +71,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 """)
     }
 
+    void "writes mapping imports" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET),
+            new Endpoint(path: 'path', method: HttpMethod.PUT),
+            new Endpoint(path: 'path', method: HttpMethod.POST),
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.web.bind.annotation.GetMapping;
+""")
+        result.contains("""\
+import org.springframework.web.bind.annotation.PutMapping;
+""")
+        result.contains("""\
+import org.springframework.web.bind.annotation.PostMapping;
+""")
+    }
+
     void "writes ResponseEntity import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET)
@@ -83,6 +106,26 @@ import org.springframework.web.bind.annotation.GetMapping;
         def result = extractImports (target.toString ())
         result.contains("""\
 import org.springframework.http.ResponseEntity;
+""")
+    }
+
+    void "sorts imports as strings"() {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET),
+            new Endpoint(path: 'path', method: HttpMethod.PUT),
+            new Endpoint(path: 'path', method: HttpMethod.POST),
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 """)
     }
 

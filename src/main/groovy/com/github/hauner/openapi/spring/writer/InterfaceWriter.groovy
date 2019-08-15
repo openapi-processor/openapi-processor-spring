@@ -27,7 +27,6 @@ class InterfaceWriter {
     void write (Writer target, Interface itf) {
         headerWriter.write (target)
         target.write ("package ${itf.packageName};\n\n")
-        target.write ("\n")
 
         Set<String> imports = collectImports (itf.endpoints)
         imports.each {
@@ -54,6 +53,6 @@ class InterfaceWriter {
             imports.add (it.method.classNameWithPackage)
         }
 
-        imports
+        imports.sort ()
     }
 }
