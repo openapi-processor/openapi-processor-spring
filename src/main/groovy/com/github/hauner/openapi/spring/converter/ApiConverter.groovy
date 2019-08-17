@@ -52,6 +52,7 @@ class ApiConverter {
     Api convert (OpenAPI api) {
         def target = new Api ()
 
+        collectModels (api, target)
         collectInterfaces (api, target)
         addEndpointsToInterfaces (api, target)
 
@@ -126,6 +127,15 @@ class ApiConverter {
     private void collectInterfaces (OpenAPI api, Api target) {
         target.interfaces = new InterfaceCollector (options)
             .collect (api.paths)
+    }
+
+    private void collectModels (OpenAPI api, Api target) {
+        if (!api.components || !api.components.schemas) {
+            return
+        }
+
+        target.models = new SchemaCollector()
+            .collect (api.components.schemas)
     }
 
     private String getInterfaceName(def operation) {

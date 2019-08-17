@@ -23,6 +23,52 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class ApiConverterSchemaSpec extends Specification {
 
+    void "creates model for component schema object with simple properties" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: component schema object
+  version: 1.0.0
+
+paths:
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  \$ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
+""")
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.models.size () == 1
+
+        and:
+        def model = api.models.get (0)
+        assert model.name == 'Book'
+        assert model.properties.size () == 2
+        def isbn = model.properties.get(0)
+        assert isbn.type == 'string'
+        assert isbn.name == 'isbn'
+        def title = model.properties.get(1)
+        assert title.type == 'string'
+        assert title.name == 'title'
+    }
+
     void "creates map<string, string> model for inline object type"() {
         def openApi = parse ("""\
 openapi: 3.0.2

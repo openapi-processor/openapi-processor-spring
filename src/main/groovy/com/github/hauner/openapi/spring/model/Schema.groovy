@@ -17,6 +17,10 @@
 package com.github.hauner.openapi.spring.model
 
 class Schema {
+    String name
+
     String type
     String format
+
+    List<Schema> properties
 }
