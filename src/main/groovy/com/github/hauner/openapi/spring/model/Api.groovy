@@ -25,4 +25,8 @@ class Api {
         interfaces.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
+    Schema getModel(String name) {
+        models.find { it.name.toLowerCase () == name.toLowerCase () }
+    }
+
 }

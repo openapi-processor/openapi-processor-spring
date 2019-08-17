@@ -25,6 +25,7 @@ import com.github.hauner.openapi.spring.model.Schema
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.media.Schema as OaSchema
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 /**
@@ -76,7 +77,7 @@ class ApiConverter {
                     if (!httpResponse.content) {
                         ep.responses.add (createEmptyResponse ())
                     } else {
-                        ep.responses.addAll (createResponses (httpResponse))
+                        ep.responses.addAll (createResponses (httpResponse, target))
                     }
                 }
 
@@ -93,14 +94,14 @@ class ApiConverter {
         response
     }
 
-    private List<Response> createResponses (ApiResponse apiResponse) {
+    private List<Response> createResponses (ApiResponse apiResponse, Api target) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            Schema schema = getSchema (mediaType)
+            Schema schema = getSchema (mediaType.schema, target)
 
             def response = new Response (
                 contentType: contentType,
@@ -112,16 +113,34 @@ class ApiConverter {
         responses
     }
 
-    private Schema getSchema (MediaType mediaType) {
-        if (isInlineObject (mediaType)) {
+    private Schema getSchema (OaSchema schema, Api target) {
+        if (isRefObject (schema)) {
+            getModel(schema.$ref, target)
+        } else if (isInlineObject (schema)) {
             new Schema (type: 'map')
         } else {
-            new Schema (type: mediaType.schema.type, format: mediaType.schema.format)
+            new Schema (type: schema.type, format: schema.format)
         }
     }
 
-    private boolean isInlineObject (MediaType mediaType) {
-        mediaType.schema.type == 'object'
+    private Schema getModel (String ref, Api target) {
+        def idx = ref.lastIndexOf ('/')
+        def path = ref.substring (0, idx + 1 )
+        def name = ref.substring (idx + 1 )
+
+        if (path != '#/components/schemas/') {
+            return null
+        }
+
+        target.getModel (name)
+    }
+
+    private boolean isRefObject (OaSchema schema) {
+        schema.$ref != null
+    }
+
+    private boolean isInlineObject (OaSchema schema) {
+        schema.type == 'object'
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {

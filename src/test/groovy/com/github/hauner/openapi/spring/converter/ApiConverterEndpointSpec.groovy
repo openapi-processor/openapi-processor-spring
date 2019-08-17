@@ -25,6 +25,49 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class ApiConverterEndpointSpec extends Specification implements ModelAsserts {
 
+    void "creates model for an endpoint with a component schema object with simple properties" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: component schema object
+  version: 1.0.0
+
+paths:
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  \$ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
+""")
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.models.size () == 1
+        api.interfaces.size () == 1
+
+        and:
+        def itf = api.interfaces.get (0)
+        def ep = itf.endpoints.get(0)
+        ep.response.contentType == 'application/json'
+        ep.response.responseType.type == 'object'
+        ep.response.responseType.name == 'Book'
+    }
+
     void "creates model for an endpoint without parameters and a single response content type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
