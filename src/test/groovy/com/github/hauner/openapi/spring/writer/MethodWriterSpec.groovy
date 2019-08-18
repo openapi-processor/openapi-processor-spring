@@ -66,104 +66,13 @@ class MethodWriterSpec extends Specification {
 """
 
         where:
-        type     | contentType  | responseType
-        'string' | 'text/plain' | new StringDataType ()
-    }
-
-    void "writes parameter less method with string response type" () {
-        def endpoint = new Endpoint (path: '/string', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'text/plain',
-                responseType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<String> getString();
-"""
-    }
-
-    void "writes parameter less method with integer response type" () {
-        def endpoint = new Endpoint (path: '/integer', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.integer',
-                responseType: new IntegerDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Integer> getInteger();
-"""
-    }
-
-    void "writes parameter less method with long response type" () {
-        def endpoint = new Endpoint (path: '/long', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.long',
-                responseType: new LongDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Long> getLong();
-"""
-    }
-
-    void "writes parameter less method with float response type" () {
-        def endpoint = new Endpoint (path: '/float', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.float',
-                responseType: new FloatDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Float> getFloat();
-"""
-    }
-
-    void "writes parameter less method with double response type" () {
-        def endpoint = new Endpoint (path: '/double', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.double',
-                responseType: new DoubleDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Double> getDouble();
-"""
-    }
-
-    void "writes parameter less method with boolean response type" () {
-        def endpoint = new Endpoint (path: '/boolean', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.boolean',
-                responseType: new BooleanDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Boolean> getBoolean();
-"""
+        type      | contentType               | responseType
+        'string'  | 'text/plain'              | new StringDataType ()
+        'integer' | 'application/vnd.integer' | new IntegerDataType ()
+        'long'    | 'application/vnd.long'    | new LongDataType ()
+        'float'   | 'application/vnd.float'   | new FloatDataType ()
+        'double'  | 'application/vnd.double'  | new DoubleDataType ()
+        'boolean' | 'application/vnd.boolean' | new BooleanDataType ()
     }
 
     void "writes parameter less method with inline object response type" () {
