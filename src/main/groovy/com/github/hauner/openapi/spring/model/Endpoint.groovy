@@ -22,11 +22,7 @@ class Endpoint {
 
     List<Response> responses = []
 
-    Response getResponse() {
-        if (responses.empty) {
-            return null
-        }
-
-        responses.get(0)
+    Response getResponse () {
+        responses.first ()
     }
 }

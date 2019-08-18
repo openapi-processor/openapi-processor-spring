@@ -19,6 +19,10 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.Response
+import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.support.EmptyResponse
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -60,7 +64,7 @@ package $pkg;
 
     void "writes GetMapping import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET)
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
         ])
 
         when:
@@ -75,9 +79,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
     void "writes mapping imports" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET),
-            new Endpoint(path: 'path', method: HttpMethod.PUT),
-            new Endpoint(path: 'path', method: HttpMethod.POST),
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),
+            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: [new EmptyResponse()]),
+            new Endpoint(path: 'path', method: HttpMethod.POST, responses: [new EmptyResponse()])
         ])
 
         when:
@@ -98,7 +102,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
     void "writes ResponseEntity import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET)
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
         ])
 
         when:
@@ -113,9 +117,9 @@ import org.springframework.http.ResponseEntity;
 
     void "sorts imports as strings"() {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET),
-            new Endpoint(path: 'path', method: HttpMethod.PUT),
-            new Endpoint(path: 'path', method: HttpMethod.POST),
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),
+            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: [new EmptyResponse()]),
+            new Endpoint(path: 'path', method: HttpMethod.POST, responses: [new EmptyResponse()])
         ])
 
         when:
@@ -147,8 +151,8 @@ interface NameApi {
 
     void "writes methods" () {
         def endpoints = [
-            new Endpoint(path: 'path1', method: HttpMethod.GET),
-            new Endpoint(path: 'path2', method: HttpMethod.GET)
+            new Endpoint(path: 'path1', method: HttpMethod.GET, responses: [new EmptyResponse()]),
+            new Endpoint(path: 'path2', method: HttpMethod.GET, responses: [new EmptyResponse()])
         ]
 
         writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
