@@ -16,9 +16,12 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.model.Api
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter()
@@ -52,6 +55,46 @@ class DataTypeConverterSpec extends Specification {
         'number'  | 'float'  | 'Float'
         'number'  | 'double' | 'Double'
         'boolean' | null     | 'Boolean'
+    }
+
+    void "creates model for inline response object with name {path}Response{response code}"() {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /inline:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isbn:
+                    type: string
+                  title:
+                    type: string                
+""")
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def props = ep.response.responseType.properties
+        ep.response.responseType.type == 'InlineResponse200'
+        props.size () == 2
+        props.get ('isbn').type == 'String'
+        props.get ('title').type == 'String'
+
+        and:
+        api.models.size () == 1
+        api.models.first () is ep.response.responseType
     }
 
 }

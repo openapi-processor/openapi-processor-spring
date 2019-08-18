@@ -19,12 +19,11 @@ package com.github.hauner.openapi.spring.model.datatypes
 interface DataType {
 
     /**
-     * todo remove
-     *
      * The name of the type or property. if it not defined inline.
      *
      * @return the name of the type or property.
      */
+    @Deprecated
     String getName()
 
     /**

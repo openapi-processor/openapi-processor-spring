@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
@@ -55,12 +56,39 @@ class DataTypeConverter {
         new NoneDataType()
     }
 
-    DataType convert(Schema schema, List<DataType> dataTypes) {
+    /**
+     * converts an open api type (i.e. a schema) to a java data type. If the schema is of type
+     * object and declared inline than inlineObjectName is used as the type and it is added to
+     * the list of object data types.
+     *
+     * @param schema the open api type
+     * @param inlineObjectName type name for an inline object
+     * @param dataTypes list of know object types
+     * @return the resulting java data type
+     */
+    DataType convert(Schema schema, String inlineObjectName, List<DataType> dataTypes) {
         if (!schema) {
             return new NoneDataType()
+
+        } else if (isInlineObject (schema)) {
+            def inlineType = new CompositeDataType (type: inlineObjectName)
+
+            schema.properties.each { Map.Entry<String, Schema> entry ->
+                def propType = convert (entry.value,
+                    getNestedInlineObjectName (inlineObjectName, entry.key), dataTypes)
+
+                inlineType.addProperty (entry.key, propType)
+            }
+
+            dataTypes.add (inlineType)
+            return inlineType
         }
 
         getDataType(schema)
+    }
+
+    private String getNestedInlineObjectName (String inlineObjectName, String propName) {
+        inlineObjectName + propName.capitalize ()
     }
 
     private DataType getDataType (Schema schema) {
@@ -71,5 +99,10 @@ class DataTypeConverter {
             type.default(schema)
         }
     }
+
+    private boolean isInlineObject (Schema schema) {
+        schema.type == 'object'
+    }
+
 
 }
