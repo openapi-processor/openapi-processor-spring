@@ -21,11 +21,10 @@ import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.Schema
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
-import io.swagger.v3.oas.models.media.Schema as OaSchema
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 /**
@@ -35,6 +34,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
 class ApiConverter {
 
     private ApiOptions options
+    private DataTypeConverter dataTypes = new DataTypeConverter()
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -62,13 +62,14 @@ class ApiConverter {
 
     private Map<String, PathItem> addEndpointsToInterfaces (OpenAPI api, Api target) {
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
+            String path = pathEntry.key
             PathItem pathItem = pathEntry.value
 
             def operations = new OperationCollector ().collect (pathItem)
             operations.each { httpOperation ->
                 def itf = target.getInterface (getInterfaceName (httpOperation))
 
-                Endpoint ep = new Endpoint (path: pathEntry.key, method: httpOperation.httpMethod)
+                Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
 
                 httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
                     def httpStatus = responseEntry.key
@@ -77,7 +78,8 @@ class ApiConverter {
                     if (!httpResponse.content) {
                         ep.responses.add (createEmptyResponse ())
                     } else {
-                        ep.responses.addAll (createResponses (httpResponse, target))
+                        ep.responses.addAll (createResponses (httpResponse,
+                            getInlineResponseName (path, httpStatus), target))
                     }
                 }
 
@@ -86,61 +88,31 @@ class ApiConverter {
         }
     }
 
-    private Response createEmptyResponse () {
-        def schema = new Schema (type: 'none')
-
-        def response = new Response (
-            responseType: schema)
-        response
+    private String getInlineResponseName (String path, String httpStatus) {
+        path.substring (1).capitalize () + 'Response' + httpStatus
     }
 
-    private List<Response> createResponses (ApiResponse apiResponse, Api target) {
+    private Response createEmptyResponse () {
+        new Response (responseType: dataTypes.none ())
+    }
+
+    private List<Response> createResponses (ApiResponse apiResponse, String inlineName, Api target) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            Schema schema = getSchema (mediaType.schema, target)
+            DataType dataType = dataTypes.convert (mediaType.schema, inlineName, target.models)
 
             def response = new Response (
                 contentType: contentType,
-                responseType: schema)
+                responseType: dataType)
 
             responses.add (response)
         }
 
         responses
-    }
-
-    private Schema getSchema (OaSchema schema, Api target) {
-        if (isRefObject (schema)) {
-            getModel(schema.$ref, target)
-        } else if (isInlineObject (schema)) {
-            new Schema (type: 'map')
-        } else {
-            new Schema (type: schema.type, format: schema.format)
-        }
-    }
-
-    private Schema getModel (String ref, Api target) {
-        def idx = ref.lastIndexOf ('/')
-        def path = ref.substring (0, idx + 1 )
-        def name = ref.substring (idx + 1 )
-
-        if (path != '#/components/schemas/') {
-            return null
-        }
-
-        target.getModel (name)
-    }
-
-    private boolean isRefObject (OaSchema schema) {
-        schema.$ref != null
-    }
-
-    private boolean isInlineObject (OaSchema schema) {
-        schema.type == 'object'
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {
