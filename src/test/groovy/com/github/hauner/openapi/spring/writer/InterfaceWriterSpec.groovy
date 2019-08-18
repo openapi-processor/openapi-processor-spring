@@ -157,6 +157,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 """)
     }
 
+    void "filters unnecessary 'java.lang' imports"() {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
+                new Response(contentType: 'plain/text', responseType: new StringDataType())
+            ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        !result.contains("""\
+import java.lang.String;
+""")
+    }
+
     void "writes 'interface' block" () {
         def apiItf = new Interface (name: 'name', endpoints: [])
 

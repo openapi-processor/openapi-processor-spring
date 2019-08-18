@@ -57,6 +57,8 @@ class InterfaceWriter {
             }
         }
 
-        imports.sort ()
+        imports.findAll {
+            !it.startsWith ('java.lang.')
+        }.sort ()
     }
 }
