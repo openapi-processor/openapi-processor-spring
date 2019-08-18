@@ -23,6 +23,8 @@ import spock.lang.Specification
 
 import java.util.stream.Collectors
 
+import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
+
 
 class InterfaceWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
@@ -171,14 +173,6 @@ interface NameApi {
 """
     }
 
-
-    String extractImports (String source) {
-        source.lines ()
-            .filter {it.startsWith ('import ')}
-            .collect (Collectors.toList ())
-            .join ('\n') + '\n'
-    }
-
     String extractInterfaceBlock (String source) {
         source.lines ()
             .filter {it ==~ /interface (.+?) \{/ || it ==~ /\}/}
@@ -192,5 +186,3 @@ interface NameApi {
             .replaceFirst (/(?s)\}\n/, '')
     }
 }
-
-
