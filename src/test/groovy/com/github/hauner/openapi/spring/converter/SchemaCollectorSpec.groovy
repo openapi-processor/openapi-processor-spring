@@ -22,7 +22,7 @@ import spock.lang.Specification
 class SchemaCollectorSpec extends Specification {
 
     void "collects component schemas" () {
-        def collector = new SchemaCollector()
+        def collector = new SchemaCollector(converter: new DataTypeConverter())
 
         def schemas = [
             'Book': new Schema (type: 'object', properties: [:])

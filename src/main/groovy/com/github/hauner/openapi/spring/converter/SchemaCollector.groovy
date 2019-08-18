@@ -21,7 +21,7 @@ import io.swagger.v3.oas.models.media.Schema
 
 class SchemaCollector {
 
-    DataTypeConverter converter = new DataTypeConverter()
+    DataTypeConverter converter
 
     List<DataType> collect(Map<String, Schema> schemas) {
         List<DataType> dataTypes = []

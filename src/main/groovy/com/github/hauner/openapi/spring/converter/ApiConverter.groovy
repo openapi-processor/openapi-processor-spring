@@ -33,8 +33,8 @@ import io.swagger.v3.oas.models.responses.ApiResponse
  */
 class ApiConverter {
 
+    private DataTypeConverter dataTypeConverter = new DataTypeConverter()
     private ApiOptions options
-    private DataTypeConverter dataTypes = new DataTypeConverter()
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -93,7 +93,7 @@ class ApiConverter {
     }
 
     private Response createEmptyResponse () {
-        new Response (responseType: dataTypes.none ())
+        new Response (responseType: dataTypeConverter.none ())
     }
 
     private List<Response> createResponses (ApiResponse apiResponse, String inlineName, Api target) {
@@ -103,7 +103,7 @@ class ApiConverter {
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            DataType dataType = dataTypes.convert (mediaType.schema, inlineName, target.models)
+            DataType dataType = dataTypeConverter.convert (mediaType.schema, inlineName, target.models)
 
             def response = new Response (
                 contentType: contentType,
@@ -125,7 +125,7 @@ class ApiConverter {
             return
         }
 
-        target.models = new SchemaCollector()
+        target.models = new SchemaCollector(converter: dataTypeConverter)
             .collect (api.components.schemas)
     }
 
