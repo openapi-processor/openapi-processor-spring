@@ -16,31 +16,27 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType
 import io.swagger.v3.oas.models.media.Schema
+import spock.lang.Specification
 
-class SchemaCollector {
+class SchemaCollectorSpec extends Specification {
 
-    DataTypeConverter converter = new DataTypeConverter()
+    void "collects component schemas" () {
+        def collector = new SchemaCollector()
 
-    List<DataType> collect(Map<String, Schema> schemas) {
-        List<DataType> dataTypes = []
+        def schemas = [
+            'Book': new Schema (type: 'object', properties: [:])
+        ]
 
-        schemas.each { Map.Entry<String, Schema> entry ->
-            String name = entry.key
-            Schema schema = entry.value
+        when:
+        def dataTypes = collector.collect (schemas)
 
-            DataType type = findDataType (name, dataTypes)
-            if (!type) {
-                converter.convert (schema, name, dataTypes)
-            }
-        }
 
-        dataTypes
-    }
-
-    private DataType findDataType(String name, List<DataType> dataTypes) {
-        dataTypes.find { it.type.toLowerCase () == name.toLowerCase () }
+        then:
+        dataTypes.size () == 1
+        dataTypes.first ().type == 'Book'
     }
 
 }
+
+
