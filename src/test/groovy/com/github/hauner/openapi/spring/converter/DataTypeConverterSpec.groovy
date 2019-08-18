@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
@@ -81,13 +82,15 @@ paths:
                     type: string                
 """)
         when:
-        Api api = new ApiConverter ().convert (openApi)
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def props = ep.response.responseType.properties
         ep.response.responseType.type == 'InlineResponse200'
+        ep.response.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
         props.get ('isbn').type == 'String'
         props.get ('title').type == 'String'
@@ -126,7 +129,8 @@ components:
           type: string
 """)
         when:
-        Api api = new ApiConverter ().convert (openApi)
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
 
         then:
         api.models.size () == 1
@@ -134,6 +138,7 @@ components:
         and:
         def dataType = api.models.first ()
         assert dataType.type == 'Book'
+        assert dataType.packageName == "${options.packageName}.model"
         assert dataType.properties.size () == 2
         def isbn = dataType.properties.get('isbn')
         assert isbn.type == 'String'

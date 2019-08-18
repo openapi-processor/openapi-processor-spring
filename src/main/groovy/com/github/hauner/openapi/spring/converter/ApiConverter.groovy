@@ -33,7 +33,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
  */
 class ApiConverter {
 
-    private DataTypeConverter dataTypeConverter = new DataTypeConverter()
+    private DataTypeConverter dataTypeConverter
     private ApiOptions options
 
     ApiConverter(ApiOptions options) {
@@ -42,6 +42,8 @@ class ApiConverter {
         if (!this.options) {
             this.options = new DefaultApiOptions()
         }
+
+        dataTypeConverter = new DataTypeConverter(this.options)
     }
 
     /**

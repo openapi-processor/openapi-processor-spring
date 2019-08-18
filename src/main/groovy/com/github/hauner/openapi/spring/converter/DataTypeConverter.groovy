@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
@@ -52,6 +53,12 @@ class DataTypeConverter {
         ]
     ]
 
+    private ApiOptions options
+
+    DataTypeConverter(ApiOptions options) {
+        this.options = options
+    }
+
     DataType none() {
         new NoneDataType()
     }
@@ -86,7 +93,10 @@ class DataTypeConverter {
     }
 
     private DataType createObjectDataType (Schema schema, String objectName, List<DataType> dataTypes) {
-        def objectType = new CompositeDataType (type: objectName)
+        def objectType = new CompositeDataType (
+            type: objectName,
+            pkg: [options.packageName, 'model'].join ('.')
+        )
 
         schema.properties.each { Map.Entry<String, Schema> entry ->
             def propType = convert (entry.value,
