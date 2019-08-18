@@ -30,7 +30,7 @@ class CompositeDataType implements DataType {
     List<String> getImports () {
         List<String> imports = []
         properties.values ().each {
-            imports.addAll (it.imports)
+            imports.add ("${it.packageName}.${it.type}")
         }
         imports
     }
