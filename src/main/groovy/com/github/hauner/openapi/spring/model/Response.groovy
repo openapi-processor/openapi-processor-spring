@@ -23,6 +23,10 @@ class Response {
     String contentType
     DataType responseType
 
+    String getClassNameWithPackage () {
+        "${responseType.packageName}.${responseType.type}"
+    }
+
     boolean isEmpty() {
         responseType instanceof NoneDataType
     }

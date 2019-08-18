@@ -115,6 +115,28 @@ import org.springframework.http.ResponseEntity;
 """)
     }
 
+    void "writes model import"() {
+        def pkg = 'model.package'
+        def type = 'Model'
+
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
+                new Response(
+                    contentType: 'application/json',
+                    responseType: new CompositeDataType (type: type, pkg: pkg))
+            ]),
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import ${pkg}.${type};
+""")
+    }
+
     void "sorts imports as strings"() {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),

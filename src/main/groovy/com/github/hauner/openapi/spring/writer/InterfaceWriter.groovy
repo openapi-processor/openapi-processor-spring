@@ -51,6 +51,10 @@ class InterfaceWriter {
 
         endpoints.each {
             imports.add (it.method.classNameWithPackage)
+
+            if (!it.response.empty) {
+                imports.add (it.response.classNameWithPackage)
+            }
         }
 
         imports.sort ()
