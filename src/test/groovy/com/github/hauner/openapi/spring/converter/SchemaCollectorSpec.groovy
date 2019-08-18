@@ -16,13 +16,14 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 
 class SchemaCollectorSpec extends Specification {
 
     void "collects component schemas" () {
-        def collector = new SchemaCollector(converter: new DataTypeConverter())
+        def collector = new SchemaCollector(converter: new DataTypeConverter(new DefaultApiOptions()))
 
         def schemas = [
             'Book': new Schema (type: 'object', properties: [:])
