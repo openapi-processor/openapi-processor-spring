@@ -16,11 +16,14 @@
 
 package com.github.hauner.openapi.spring.model
 
+import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+
 class Response {
     String contentType
-    Schema responseType
+    DataType responseType
 
     boolean isEmpty() {
-        responseType.type == 'none'
+        responseType instanceof NoneDataType
     }
 }

@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model;
+package com.github.hauner.openapi.spring.model
+
+import com.github.hauner.openapi.spring.model.datatypes.DataType;
 
 class Api {
 
     List<Interface> interfaces = []
-    List<Schema> models = []
+    List<DataType> models = []
 
     Interface getInterface(String name) {
         interfaces.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
-    Schema getModel(String name) {
-        models.find { it.name.toLowerCase () == name.toLowerCase () }
+    DataType getModel(String name) {
+        models.find { it.type.toLowerCase () == name.toLowerCase () }
     }
 
 }
