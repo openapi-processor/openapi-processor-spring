@@ -19,8 +19,16 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.Schema
+import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
+import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
+import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
+import com.github.hauner.openapi.spring.model.datatypes.LongDataType
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class MethodWriterSpec extends Specification {
     def writer = new MethodWriter ()
@@ -28,7 +36,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes parameter less method without response" () {
         def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
-            new Response(responseType: new Schema(type: 'none'))
+            new Response(responseType: new NoneDataType())
         ])
 
         when:
@@ -41,10 +49,31 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    @Unroll
+    void "writes parameter less method with simple data type #type" () {
+        def endpoint = new Endpoint (path: "/$type", method: HttpMethod.GET, responses: [
+            new Response(contentType: contentType,
+                responseType: responseType)
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<${type.capitalize ()}> get${type.capitalize ()}();
+"""
+
+        where:
+        type     | contentType  | responseType
+        'string' | 'text/plain' | new StringDataType ()
+    }
+
     void "writes parameter less method with string response type" () {
         def endpoint = new Endpoint (path: '/string', method: HttpMethod.GET, responses: [
             new Response(contentType: 'text/plain',
-                responseType: new Schema(type: 'string'))
+                responseType: new StringDataType())
         ])
 
         when:
@@ -60,7 +89,7 @@ class MethodWriterSpec extends Specification {
     void "writes parameter less method with integer response type" () {
         def endpoint = new Endpoint (path: '/integer', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/vnd.integer',
-                responseType: new Schema(type: 'integer', format: 'int32'))
+                responseType: new IntegerDataType())
         ])
 
         when:
@@ -76,7 +105,7 @@ class MethodWriterSpec extends Specification {
     void "writes parameter less method with long response type" () {
         def endpoint = new Endpoint (path: '/long', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/vnd.long',
-                responseType: new Schema(type: 'integer', format: 'int64'))
+                responseType: new LongDataType())
         ])
 
         when:
@@ -89,26 +118,10 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "writes parameter less method with integer response type when no format is given" () {
-        def endpoint = new Endpoint (path: '/integer', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.integer',
-                responseType: new Schema(type: 'integer'))
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Integer> getInteger();
-"""
-    }
-
     void "writes parameter less method with float response type" () {
         def endpoint = new Endpoint (path: '/float', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/vnd.float',
-                responseType: new Schema(type: 'number', format: 'float'))
+                responseType: new FloatDataType())
         ])
 
         when:
@@ -124,7 +137,7 @@ class MethodWriterSpec extends Specification {
     void "writes parameter less method with double response type" () {
         def endpoint = new Endpoint (path: '/double', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/vnd.double',
-                responseType: new Schema(type: 'number', format: 'double'))
+                responseType: new DoubleDataType())
         ])
 
         when:
@@ -137,26 +150,10 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "writes parameter less method with number response type when no format is given" () {
-        def endpoint = new Endpoint (path: '/float', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/vnd.float',
-                responseType: new Schema(type: 'number'))
-        ])
-
-        when:
-        writer.write (target, endpoint)
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Float> getFloat();
-"""
-    }
-
     void "writes parameter less method with boolean response type" () {
         def endpoint = new Endpoint (path: '/boolean', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/vnd.boolean',
-                responseType: new Schema(type: 'boolean'))
+                responseType: new BooleanDataType())
         ])
 
         when:
@@ -172,7 +169,7 @@ class MethodWriterSpec extends Specification {
     void "writes parameter less method with inline object response type" () {
         def endpoint = new Endpoint (path: '/inline', method: HttpMethod.GET, responses: [
             new Response(contentType: 'application/json',
-                responseType: new Schema(type: 'map'))
+                responseType: new InlineObjectDataType())
         ])
 
         when:

@@ -17,39 +17,13 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.Schema
 
 class MethodWriter {
-
-    static final KNOWN_DATA_TYPES = [
-        none: [
-            default: 'void'
-        ],
-        string: [
-            default: 'String'
-        ],
-        integer: [
-            default: 'Integer',
-            int32: 'Integer',
-            int64: 'Long'
-        ],
-        number: [
-            default: 'Float',
-            float: 'Float',
-            double: 'Double'
-        ],
-        boolean: [
-            default: 'Boolean'
-        ],
-        map: [
-            default: 'Map<String, Object>'
-        ]
-    ]
 
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
     ${createMappingAnnotation (endpoint)}
-    ResponseEntity<${getType (endpoint.response.responseType)}> ${createMethodName (endpoint)}();
+    ResponseEntity<${endpoint.response.responseType.type}> ${createMethodName (endpoint)}();
 """)
     }
 
@@ -67,14 +41,6 @@ class MethodWriter {
         mapping
     }
 
-    private String getType (Schema schema) {
-        def type = KNOWN_DATA_TYPES.get (schema.type)
-        if (schema.format) {
-            type."${schema.format}"
-        } else {
-            type.default
-        }
-    }
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
