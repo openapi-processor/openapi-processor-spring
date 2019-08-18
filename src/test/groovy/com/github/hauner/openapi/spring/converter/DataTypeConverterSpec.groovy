@@ -40,7 +40,7 @@ class DataTypeConverterSpec extends Specification {
         Schema schema = new Schema(type: type, format: format)
 
         when:
-        def datatype = converter.convert (schema, [])
+        def datatype = converter.convert (schema, null, [])
 
         then:
         datatype.type == resultType
@@ -97,4 +97,47 @@ paths:
         api.models.first () is ep.response.responseType
     }
 
+    void "creates model for component schema object" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: component schema object
+  version: 1.0.0
+
+paths:
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  \$ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
+""")
+        when:
+        Api api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.models.size () == 1
+
+        and:
+        def dataType = api.models.first ()
+        assert dataType.type == 'Book'
+        assert dataType.properties.size () == 2
+        def isbn = dataType.properties.get('isbn')
+        assert isbn.type == 'String'
+        def title = dataType.properties.get('title')
+        assert title.type == 'String'
+    }
 }

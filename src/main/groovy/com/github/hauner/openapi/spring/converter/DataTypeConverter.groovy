@@ -58,40 +58,48 @@ class DataTypeConverter {
 
     /**
      * converts an open api type (i.e. a schema) to a java data type. If the schema is of type
-     * object and declared inline than inlineObjectName is used as the type and it is added to
-     * the list of object data types.
+     * object the objectName is used as the type and it is added to the list of object data types.
      *
      * @param schema the open api type
-     * @param inlineObjectName type name for an inline object
+     * @param objectName type name for an object
      * @param dataTypes list of know object types
      * @return the resulting java data type
      */
-    DataType convert(Schema schema, String inlineObjectName, List<DataType> dataTypes) {
+    DataType convert(Schema schema, String objectName, List<DataType> dataTypes) {
         if (!schema) {
-            return new NoneDataType()
+            new NoneDataType()
 
-        } else if (isInlineObject (schema)) {
-            def inlineType = new CompositeDataType (type: inlineObjectName)
+        } else if (isObject (schema)) {
+            createObjectDataType (schema, objectName, dataTypes)
 
-            schema.properties.each { Map.Entry<String, Schema> entry ->
-                def propType = convert (entry.value,
-                    getNestedInlineObjectName (inlineObjectName, entry.key), dataTypes)
-
-                inlineType.addProperty (entry.key, propType)
+        } else if (isRefObject (schema)) {
+            def datatype = getDataType (schema.$ref, dataTypes)
+            if (datatype) {
+                return datatype
             }
 
-            dataTypes.add (inlineType)
-            return inlineType
+            createObjectDataType (schema, schema.name, dataTypes)
+
+        } else {
+            createSimpleDataType (schema)
+        }
+    }
+
+    private DataType createObjectDataType (Schema schema, String objectName, List<DataType> dataTypes) {
+        def objectType = new CompositeDataType (type: objectName)
+
+        schema.properties.each { Map.Entry<String, Schema> entry ->
+            def propType = convert (entry.value,
+                getNestedObjectName (objectName, entry.key), dataTypes)
+
+            objectType.addProperty (entry.key, propType)
         }
 
-        getDataType(schema)
+        dataTypes.add (objectType)
+        objectType
     }
 
-    private String getNestedInlineObjectName (String inlineObjectName, String propName) {
-        inlineObjectName + propName.capitalize ()
-    }
-
-    private DataType getDataType (Schema schema) {
+    private DataType createSimpleDataType (Schema schema) {
         def type = KNOWN_DATA_TYPES.get (schema.type)
         if (schema.format) {
             type."${schema.format}"(schema)
@@ -100,9 +108,28 @@ class DataTypeConverter {
         }
     }
 
-    private boolean isInlineObject (Schema schema) {
+    private DataType getDataType (String ref, List<DataType> dataTypes) {
+        def idx = ref.lastIndexOf ('/')
+        def path = ref.substring (0, idx + 1)
+        def name = ref.substring (idx + 1)
+
+        if (path != '#/components/schemas/') {
+            return null
+        }
+
+       dataTypes.find { it.type == name }
+    }
+
+    private String getNestedObjectName (String inlineObjectName, String propName) {
+        inlineObjectName + propName.capitalize ()
+    }
+
+    private boolean isObject (Schema schema) {
         schema.type == 'object'
     }
 
+    private boolean isRefObject (Schema schema) {
+        schema.$ref != null
+    }
 
 }
