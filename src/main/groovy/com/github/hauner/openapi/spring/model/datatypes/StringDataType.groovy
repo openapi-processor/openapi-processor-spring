@@ -21,8 +21,6 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class StringDataType implements DataType {
 
-    String name
-
     @Override
     String getType () {
         'String'

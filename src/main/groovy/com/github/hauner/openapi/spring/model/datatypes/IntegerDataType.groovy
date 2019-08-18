@@ -22,11 +22,6 @@ package com.github.hauner.openapi.spring.model.datatypes
 class IntegerDataType implements DataType {
 
     @Override
-    String getName () {
-        return null
-    }
-
-    @Override
     String getType () {
         return 'Integer'
     }

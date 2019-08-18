@@ -19,14 +19,6 @@ package com.github.hauner.openapi.spring.model.datatypes
 interface DataType {
 
     /**
-     * The name of the type or property. if it not defined inline.
-     *
-     * @return the name of the type or property.
-     */
-    @Deprecated
-    String getName()
-
-    /**
      * The Java type name.
      *
      * @return the type name.

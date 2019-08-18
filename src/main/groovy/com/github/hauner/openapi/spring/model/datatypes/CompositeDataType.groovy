@@ -5,10 +5,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class CompositeDataType implements DataType {
 
-
-    String name // obsolete
-
-    String type  // java type, ie. name
+    String type
 
     Map<String, DataType> properties = new LinkedHashMap<>()
 
