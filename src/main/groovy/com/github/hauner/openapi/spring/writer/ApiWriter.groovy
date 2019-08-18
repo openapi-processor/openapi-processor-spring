@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -25,13 +26,22 @@ class ApiWriter {
 
     private ApiOptions options
     InterfaceWriter interfaceWriter
+    DataTypeWriter dataTypeWriter
 
     File apiFolder
     File modelFolder
 
+    @Deprecated
     ApiWriter(ApiOptions options, InterfaceWriter interfaceWriter) {
         this.options = options
         this.interfaceWriter = interfaceWriter
+        this.dataTypeWriter = new DataTypeWriter(headerWriter: new HeaderWriter ())
+    }
+
+    ApiWriter(ApiOptions options, InterfaceWriter interfaceWriter, DataTypeWriter dataTypeWriter) {
+        this.options = options
+        this.interfaceWriter = interfaceWriter
+        this.dataTypeWriter = dataTypeWriter
     }
 
     void write(Api api) {
@@ -41,6 +51,13 @@ class ApiWriter {
             def target = new File (apiFolder, "${it.interfaceName}.java")
             def writer = new FileWriter(target)
             interfaceWriter.write (writer, it)
+            writer.close ()
+        }
+
+        api.models.each {
+            def target = new File (modelFolder, "${it.type}.java")
+            def writer = new FileWriter(target)
+            dataTypeWriter.write (writer, it as CompositeDataType)
             writer.close ()
         }
     }

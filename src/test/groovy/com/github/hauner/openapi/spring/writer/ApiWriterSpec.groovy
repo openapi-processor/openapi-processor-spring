@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -28,6 +29,7 @@ class ApiWriterSpec extends Specification {
     @Rule TemporaryFolder target
 
     List<String> apiPkgPath = ['com', 'github', 'hauner', 'openapi', 'api']
+    List<String> apiModelPath = ['com', 'github', 'hauner', 'openapi', 'model']
 
     void "creates package structure in target folder"() {
         def opts = new ApiOptions(
@@ -82,7 +84,46 @@ Bar interface!
 """
     }
 
+    void "generates model sources in model target folder"() {
+        def dataTypeWriter = Stub (DataTypeWriter) {
+            write (_ as Writer, _ as CompositeDataType) >> {
+                Writer writer = it.get(0)
+                writer.write ('Foo class!\n')
+            } >> {
+                Writer writer = it.get(0)
+                writer.write ('Bar class!\n')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def api = new Api(models: [
+            new CompositeDataType(pkg: "${opts.packageName}.model", type: 'Foo'),
+            new CompositeDataType(pkg: "${opts.packageName}.model", type: 'Bar')
+        ])
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter).write (api)
+
+        then:
+        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
+        fooSource.text == """\
+Foo class!
+"""
+        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
+        barSource.text == """\
+Bar class!
+"""
+    }
+
     String getApiPath(String targetFolder, String clazzName) {
         ([targetFolder] + apiPkgPath + [clazzName]).join(File.separator)
+    }
+
+    String getModelPath(String targetFolder, String clazzName) {
+        ([targetFolder] + apiModelPath + [clazzName]).join(File.separator)
     }
 }
