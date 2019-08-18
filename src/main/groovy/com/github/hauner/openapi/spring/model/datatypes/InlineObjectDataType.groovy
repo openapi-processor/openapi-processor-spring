@@ -19,6 +19,11 @@ package com.github.hauner.openapi.spring.model.datatypes
 class InlineObjectDataType implements DataType {
 
     @Override
+    String getPackageName () {
+        null
+    }
+
+    @Override
     String getType () {
         'Map<String, Object>'
     }
