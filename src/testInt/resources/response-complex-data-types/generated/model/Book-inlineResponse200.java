@@ -5,7 +5,7 @@
 
 package generated.model;
 
-public class Book {
+public class Book-inlineResponse200 {
 
     private String isbn;
     private String title;
