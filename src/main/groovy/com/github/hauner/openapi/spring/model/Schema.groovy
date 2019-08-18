@@ -16,11 +16,20 @@
 
 package com.github.hauner.openapi.spring.model
 
-class Schema {
+import com.github.hauner.openapi.spring.model.datatypes.DataType
+
+@Deprecated
+class Schema implements DataType {
+
     String name
 
     String type
     String format
 
     List<Schema> properties
+
+    @Override
+    List<String> getImports () {
+        null
+    }
 }
