@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import spock.lang.PendingFeature
 import spock.lang.Specification
 
@@ -53,8 +54,7 @@ package $pkg;
 """)
     }
 
-//    @PendingFeature
-    void "writes imports for 'external' types" () {
+    void "writes imports of 'external' types" () {
         def pkg = 'external'
 
         def dataType = new CompositeDataType (type: 'Book', properties: [
@@ -68,6 +68,24 @@ package $pkg;
         def result = extractImports (target.toString ())
         result.contains("""\
 import external.Isbn;
+""")
+    }
+
+//    @PendingFeature
+    void "writes properties"() {
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new CompositeDataType (type: 'Book', properties: [
+            isbn: new StringDataType(),
+            title: new StringDataType ()
+        ], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+    private String isbn;
+    private String title;
 """)
     }
 }

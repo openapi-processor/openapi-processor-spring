@@ -53,7 +53,8 @@ class CompositeDataType implements DataType {
         properties.get (name)
     }
 
-    String getDataTypeName() {
-        type
+    Set<String> getSortedPropertyNames() {
+        properties.keySet ().sort ()
     }
+
 }

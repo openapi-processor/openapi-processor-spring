@@ -34,7 +34,11 @@ class DataTypeWriter {
 
         target.write ("public class ${dataType.type} {\n\n")
 
-        // todo properties
+        dataType.getSortedPropertyNames ().each {
+            def propDataType = dataType.getObjectProperty (it)
+            target.write ("    private ${propDataType.name} ${it};\n")
+        }
+
         // todo property getters/setters
 
         target.write ("}\n")
