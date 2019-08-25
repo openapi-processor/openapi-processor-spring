@@ -34,7 +34,7 @@ class FloatDataType implements DataType {
     }
 
     @Override
-    List<String> getImports () {
+    Set<String> getImports () {
         []
     }
 

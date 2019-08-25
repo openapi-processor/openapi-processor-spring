@@ -40,7 +40,7 @@ class CompositeDataType implements DataType {
     }
 
     @Override
-    List<String> getImports () {
+    Set<String> getImports () {
         List<String> imports = []
         properties.values ().each {
             imports.add ("${it.packageName}.${it.name}")

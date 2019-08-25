@@ -40,6 +40,6 @@ interface DataType {
      *
      * @return the import list.
      */
-    List<String> getImports()  // todo Set
+    Set<String> getImports()
 
 }

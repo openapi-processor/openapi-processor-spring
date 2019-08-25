@@ -32,7 +32,7 @@ class IntegerDataType implements DataType {
     }
 
     @Override
-    List<String> getImports () {
+    Set<String> getImports () {
         return []
     }
 

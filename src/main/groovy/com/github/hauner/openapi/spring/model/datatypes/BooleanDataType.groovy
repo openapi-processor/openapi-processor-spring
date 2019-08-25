@@ -34,7 +34,7 @@ class BooleanDataType implements DataType {
     }
 
     @Override
-    List<String> getImports () {
+    Set<String> getImports () {
         []
     }
 

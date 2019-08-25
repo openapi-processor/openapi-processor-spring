@@ -34,7 +34,7 @@ class LongDataType implements DataType {
     }
 
     @Override
-    List<String> getImports () {
+    Set<String> getImports () {
         []
     }
 
