@@ -183,7 +183,7 @@ import java.lang.String;
         then:
         def result = extractInterfaceBlock(target.toString ())
         result == """\
-interface NameApi {
+public interface NameApi {
 }
 """
     }
@@ -218,7 +218,7 @@ interface NameApi {
 
     String extractInterfaceBlock (String source) {
         source.lines ()
-            .filter {it ==~ /interface (.+?) \{/ || it ==~ /\}/}
+            .filter {it ==~ /public interface (.+?) \{/ || it ==~ /\}/}
             .collect (Collectors.toList ())
             .join ('\n') + '\n'
     }

@@ -38,7 +38,7 @@ class InterfaceWriter {
         }
         target.write ("\n")
 
-        target.write ("interface ${itf.interfaceName} {\n\n")
+        target.write ("public interface ${itf.interfaceName} {\n\n")
 
         itf.endpoints.each {
             methodWriter.write(target, it)

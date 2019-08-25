@@ -9,7 +9,7 @@ import generated.model;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-interface Api {
+public interface Api {
 
     @GetMapping(path = "/book_inline", produces = {"application/json"})
     ResponseEntity<Map<String, Object>> getBook_inline();

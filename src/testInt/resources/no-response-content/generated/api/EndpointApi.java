@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-interface EndpointApi {
+public interface EndpointApi {
 
     @GetMapping(path = "/endpoint")
     ResponseEntity<void> getEndpoint();

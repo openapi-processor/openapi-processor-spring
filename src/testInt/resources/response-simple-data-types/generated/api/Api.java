@@ -8,7 +8,7 @@ package generated.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-interface Api {
+public interface Api {
 
     @GetMapping(path = "/string", produces = {"text/plain"})
     ResponseEntity<String> getString();
