@@ -45,12 +45,12 @@ class CompositeDataType implements DataType {
         imports
     }
 
-    void addProperty(String name, DataType type) {
+    void addObjectProperty (String name, DataType type) {
         properties.put (name, type)
     }
 
-    String getPackageName() {
-        pkg
+    DataType getObjectProperty (String name) {
+        properties.get (name)
     }
 
     String getDataTypeName() {

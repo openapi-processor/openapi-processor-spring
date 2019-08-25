@@ -102,7 +102,7 @@ class DataTypeConverter {
             def propType = convert (entry.value,
                 getNestedObjectName (objectName, entry.key), dataTypes)
 
-            objectType.addProperty (entry.key, propType)
+            objectType.addObjectProperty (entry.key, propType)
         }
 
         dataTypes.add (objectType)
