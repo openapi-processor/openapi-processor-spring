@@ -32,7 +32,7 @@ class InterfaceWriter {
         headerWriter.write (target)
         target.write ("package ${itf.packageName};\n\n")
 
-        Set<String> imports = collectImports (itf.endpoints)
+        List<String> imports = collectImports (itf.packageName, itf.endpoints)
         imports.each {
             target.write ("import ${it};\n")
         }
@@ -48,7 +48,7 @@ class InterfaceWriter {
         target.write ("}\n")
     }
 
-    Set<String> collectImports(List<Endpoint> endpoints) {
+    List<String> collectImports(String packageName, List<Endpoint> endpoints) {
         Set<String> imports = []
 
         imports.add ('org.springframework.http.ResponseEntity')
@@ -61,8 +61,7 @@ class InterfaceWriter {
             }
         }
 
-        imports.findAll {
-            !it.startsWith ('java.lang.')
-        }.sort ()
+        new ImportFilter ().filter (packageName, imports)
+            .sort ()
     }
 }

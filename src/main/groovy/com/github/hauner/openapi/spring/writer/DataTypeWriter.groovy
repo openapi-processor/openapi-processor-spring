@@ -31,11 +31,13 @@ class DataTypeWriter {
         headerWriter.write (target)
         target.write ("package ${dataType.packageName};\n\n")
 
-        Set<String> imports = collectImports (dataType)
+        List<String> imports = collectImports (dataType.packageName, dataType)
         imports.each {
             target.write ("import ${it};\n")
         }
-        target.write ("\n")
+        if (!imports.isEmpty ()) {
+            target.write ("\n")
+        }
 
         target.write ("public class ${dataType.type} {\n\n")
 
@@ -43,15 +45,20 @@ class DataTypeWriter {
             def propDataType = dataType.getObjectProperty (it)
             target.write ("    private ${propDataType.name} ${it};\n")
         }
+        if (!dataType.sortedPropertyNames.empty) {
+            target.write ("\n")
+        }
 
         // todo property getters/setters
 
         target.write ("}\n")
     }
 
-    Set<String> collectImports(DataType dataType) {
+    List<String> collectImports(String packageName, DataType dataType) {
         Set<String> imports = []
         imports.addAll (dataType.imports)
-        imports.sort ()
+
+        new ImportFilter ().filter (packageName, imports)
+            .sort ()
     }
 }

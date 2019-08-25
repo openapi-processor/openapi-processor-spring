@@ -46,8 +46,7 @@ class DataTypeWriterSpec extends Specification {
         writer.write (target, dataType)
 
         then:
-        target.toString ().contains (
-"""\
+        target.toString ().contains ("""\
 package $pkg;
 
 """)
@@ -70,7 +69,22 @@ import external.Isbn;
 """)
     }
 
-//    @PendingFeature
+    void "writes no extra line feed when imports are empty" () {
+        def pkg = 'external'
+
+        def dataType = new ObjectDataType (type: 'Book', properties: [:], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString () contains("""\
+package $pkg;
+
+public class Book {
+""")
+    }
+
     void "writes properties"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new ObjectDataType (type: 'Book', properties: [
@@ -85,6 +99,7 @@ import external.Isbn;
         target.toString ().contains ("""\
     private String isbn;
     private String title;
+
 """)
     }
 }
