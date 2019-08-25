@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.support.StringUtil
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
@@ -93,7 +94,7 @@ class ApiConverter {
     }
 
     private String getInlineResponseName (String path, String httpStatus) {
-        path.substring (1).capitalize () + 'Response' + httpStatus
+        StringUtil.toCamelCase (path.substring (1)) + 'Response' + httpStatus
     }
 
     private Response createEmptyResponse () {
