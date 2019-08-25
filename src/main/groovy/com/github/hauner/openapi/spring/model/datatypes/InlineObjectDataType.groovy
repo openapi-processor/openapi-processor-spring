@@ -18,9 +18,12 @@ package com.github.hauner.openapi.spring.model.datatypes
 
 /**
  * OpenAPI inline object type as property map.
+
+ * @deprecated replaced by object type with generated name from endpoint.
  *
  * @author Martin Hauner
  */
+@Deprecated
 class InlineObjectDataType implements DataType {
 
     @Override
