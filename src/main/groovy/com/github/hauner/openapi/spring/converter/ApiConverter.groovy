@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,10 @@ import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 /**
- * converts the open api model to a new model that is better suited for generating source files
+ * Converts the open api model to a new model that is better suited for generating source files
  * from the open api specification.
+ *
+ * @author Martin Hauner
  */
 class ApiConverter {
 

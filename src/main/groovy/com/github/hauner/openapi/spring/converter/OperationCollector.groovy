@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 
 /**
- * collects a list of all used http methods of the given path (i.e. endpoint)
+ * Collects a list of all used http methods of the given path (i.e. endpoint).
+ *
+ * @author Martin Hauner
  */
 class OperationCollector {
 

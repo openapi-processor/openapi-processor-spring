@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 
+/**
+ * Collects the target interfaces for the endpoints of the OpenAPI description.
+ *
+ * @author Martin Hauner
+ */
 class InterfaceCollector {
 
     public static final String INTERFACE_DEFAULT_NAME = ''

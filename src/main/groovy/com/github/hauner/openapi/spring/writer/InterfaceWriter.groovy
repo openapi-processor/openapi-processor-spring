@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,11 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 
-
+/**
+ * Writer for Java interfaces.
+ *
+ * @author Martin Hauner
+ */
 class InterfaceWriter {
     HeaderWriter headerWriter
     MethodWriter methodWriter

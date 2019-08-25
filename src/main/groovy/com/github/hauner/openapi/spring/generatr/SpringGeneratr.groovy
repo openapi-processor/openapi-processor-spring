@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,11 @@ import com.github.hauner.openapi.spring.writer.MethodWriter
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
+/**
+ *  Entry point of the openapi-generatr-gradle plugin.
+ *
+ *  @author Martin Hauner
+ */
 class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
 
     @Override

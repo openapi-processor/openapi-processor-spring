@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.model.HttpMethod
 
 /**
- * used to remember the http method of an openapi operation
+ * Used to remember the http method of an OpenAPI operation.
+ *
+ * @author Martin Hauner
  */
 trait HttpMethodTrait {
     HttpMethod httpMethod

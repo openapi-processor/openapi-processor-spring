@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,11 @@
 
 package com.github.hauner.openapi.extension
 
+/**
+ * String support.
+ *
+ * @author Martin Hauner
+ */
 trait ToUpperCaseFirst {
     String toUpperCaseFirst(String self) {
         self.substring (0, 1).toUpperCase () + self.substring (1)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Mapping of http methods to Spring annotations.
+ *
+ * @author Martin Hauner
+ */
 package com.github.hauner.openapi.spring.model
 
 enum HttpMethod {

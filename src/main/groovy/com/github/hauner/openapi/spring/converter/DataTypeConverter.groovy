@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr-spring
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,11 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import io.swagger.v3.oas.models.media.Schema
 
+/**
+ * Converter to map OpenAPI schemas to Java data types.
+ *
+ * @author Martin Hauner
+ */
 class DataTypeConverter {
 
     private static final KNOWN_DATA_TYPES = [
