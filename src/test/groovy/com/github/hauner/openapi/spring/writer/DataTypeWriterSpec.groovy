@@ -16,9 +16,8 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
@@ -30,7 +29,7 @@ class DataTypeWriterSpec extends Specification {
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {
-        def dataType = new CompositeDataType(type: 'Book', properties: [:])
+        def dataType = new ObjectDataType(type: 'Book', properties: [:])
 
         when:
         writer.write (target, dataType)
@@ -41,7 +40,7 @@ class DataTypeWriterSpec extends Specification {
 
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new CompositeDataType (type: 'Book', properties: [:], pkg: pkg)
+        def dataType = new ObjectDataType (type: 'Book', properties: [:], pkg: pkg)
 
         when:
         writer.write (target, dataType)
@@ -57,8 +56,8 @@ package $pkg;
     void "writes imports of 'external' types" () {
         def pkg = 'external'
 
-        def dataType = new CompositeDataType (type: 'Book', properties: [
-            'isbn': new CompositeDataType (type: 'Isbn', properties: [:], pkg: pkg)
+        def dataType = new ObjectDataType (type: 'Book', properties: [
+            'isbn': new ObjectDataType (type: 'Isbn', properties: [:], pkg: pkg)
         ])
 
         when:
@@ -74,7 +73,7 @@ import external.Isbn;
 //    @PendingFeature
     void "writes properties"() {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new CompositeDataType (type: 'Book', properties: [
+        def dataType = new ObjectDataType (type: 'Book', properties: [
             isbn: new StringDataType(),
             title: new StringDataType ()
         ], pkg: pkg)

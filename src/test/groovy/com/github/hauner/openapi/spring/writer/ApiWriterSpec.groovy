@@ -19,7 +19,7 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Interface
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -86,7 +86,7 @@ Bar interface!
 
     void "generates model sources in model target folder"() {
         def dataTypeWriter = Stub (DataTypeWriter) {
-            write (_ as Writer, _ as CompositeDataType) >> {
+            write (_ as Writer, _ as ObjectDataType) >> {
                 Writer writer = it.get(0)
                 writer.write ('Foo class!\n')
             } >> {
@@ -101,8 +101,8 @@ Bar interface!
         )
 
         def api = new Api(models: [
-            new CompositeDataType(pkg: "${opts.packageName}.model", type: 'Foo'),
-            new CompositeDataType(pkg: "${opts.packageName}.model", type: 'Bar')
+            new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'),
+            new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar')
         ])
 
         when:

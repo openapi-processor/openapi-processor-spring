@@ -21,8 +21,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  *
  * @author Martin Hauner
  */
-// todo rename ObjectDataType
-class CompositeDataType implements DataType {
+class ObjectDataType implements DataType {
 
     String type
     String pkg = 'unknown'

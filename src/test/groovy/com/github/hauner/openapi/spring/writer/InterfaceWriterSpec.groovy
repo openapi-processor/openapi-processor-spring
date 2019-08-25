@@ -20,7 +20,7 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.support.EmptyResponse
 import spock.lang.Specification
@@ -123,7 +123,7 @@ import org.springframework.http.ResponseEntity;
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
                 new Response(
                     contentType: 'application/json',
-                    responseType: new CompositeDataType (type: type, pkg: pkg))
+                    responseType: new ObjectDataType (type: type, pkg: pkg))
             ]),
         ])
 

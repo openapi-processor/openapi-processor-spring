@@ -1,6 +1,6 @@
 package com.github.hauner.openapi.learn
 
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import spock.lang.Specification
 
@@ -32,8 +32,8 @@ class PropertyNotationSpec extends Specification {
         // CompositeDataType must not implement a getProperty() method. It overrides groovy's
         // getProperty() and that breaks the groovy property notation.
 
-        def object = new CompositeDataType (type: 'Type')
-        DataType typed = new CompositeDataType (type: 'Typed')
+        def object = new ObjectDataType (type: 'Type')
+        DataType typed = new ObjectDataType (type: 'Typed')
 
         expect:
         object.name != null

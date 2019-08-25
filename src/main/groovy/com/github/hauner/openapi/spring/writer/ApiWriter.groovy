@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import groovy.util.logging.Slf4j
 
 /**
@@ -62,7 +62,7 @@ class ApiWriter {
         api.models.each {
             def target = new File (modelFolder, "${it.name}.java")
             def writer = new FileWriter(target)
-            dataTypeWriter.write (writer, it as CompositeDataType)
+            dataTypeWriter.write (writer, it as ObjectDataType)
             writer.close ()
         }
     }

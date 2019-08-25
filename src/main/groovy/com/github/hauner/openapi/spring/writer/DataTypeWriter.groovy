@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.model.datatypes.CompositeDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 
 /**
@@ -27,7 +27,7 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 class DataTypeWriter {
     HeaderWriter headerWriter
 
-    void write (Writer target, CompositeDataType dataType) {
+    void write (Writer target, ObjectDataType dataType) {
         headerWriter.write (target)
         target.write ("package ${dataType.packageName};\n\n")
 
