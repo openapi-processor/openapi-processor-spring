@@ -65,7 +65,7 @@ components:
         def itf = api.interfaces.get (0)
         def ep = itf.endpoints.get(0)
         ep.response.contentType == 'application/json'
-        ep.response.responseType.type == 'Book'
+        ep.response.responseType.name == 'Book'
     }
 
     void "creates model for an endpoint without parameters and a single response content type" () {
@@ -102,7 +102,7 @@ paths:
         ep.path == '/ping'
         ep.method == HttpMethod.GET
         ep.response.contentType == 'text/plain'
-        ep.response.responseType.type == 'String'
+        ep.response.responseType.name == 'String'
     }
 
     void "creates model for an endpoint without parameters and without response content type" () {

@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class FloatDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        'Float'
     }
 
     @Override
-    String getType () {
-        'Float'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override

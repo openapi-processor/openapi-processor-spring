@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class LongDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        'Long'
     }
 
     @Override
-    String getType () {
-        'Long'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override

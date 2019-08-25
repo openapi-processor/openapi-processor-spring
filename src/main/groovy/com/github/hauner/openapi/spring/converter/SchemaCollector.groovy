@@ -40,7 +40,7 @@ class SchemaCollector {
     }
 
     private DataType findDataType(String name, List<DataType> dataTypes) {
-        dataTypes.find { it.type.toLowerCase () == name.toLowerCase () }
+        dataTypes.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
 }

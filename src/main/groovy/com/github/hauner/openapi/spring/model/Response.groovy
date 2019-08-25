@@ -24,7 +24,7 @@ class Response {
     DataType responseType
 
     String getClassNameWithPackage () {
-        "${responseType.packageName}.${responseType.type}"
+        "${responseType.packageName}.${responseType.name}"
     }
 
     boolean isEmpty() {

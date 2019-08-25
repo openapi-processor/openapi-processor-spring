@@ -19,21 +19,22 @@ package com.github.hauner.openapi.spring.model.datatypes
 interface DataType {
 
     /**
-     * The package of this type.
-     */
-    String getPackageName()
-
-    /**
      * The Java type name without package.
      *
      * @return the type name.
      */
-    String getType()
+    String getName ()
+
+    /**
+     * The package of this type without class.
+     */
+    String getPackageName ()
 
     /**
      * Provides the list of import required for this type.
      *
      * @return the import list.
      */
-    List<String> getImports()
+    List<String> getImports()  // todo Set
+
 }

@@ -27,10 +27,20 @@ class CompositeDataType implements DataType {
     Map<String, DataType> properties = new LinkedHashMap<>()
 
     @Override
+    String getName () {
+        type
+    }
+
+    @Override
+    String getPackageName () {
+        pkg
+    }
+
+    @Override
     List<String> getImports () {
         List<String> imports = []
         properties.values ().each {
-            imports.add ("${it.packageName}.${it.type}")
+            imports.add ("${it.packageName}.${it.name}")
         }
         imports
     }

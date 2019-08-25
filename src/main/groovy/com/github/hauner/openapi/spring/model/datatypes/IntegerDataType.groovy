@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class IntegerDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        return 'Integer'
     }
 
     @Override
-    String getType () {
-        return 'Integer'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override

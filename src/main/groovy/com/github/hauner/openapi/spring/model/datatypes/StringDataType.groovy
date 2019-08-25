@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class StringDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        'String'
     }
 
     @Override
-    String getType () {
-        'String'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override

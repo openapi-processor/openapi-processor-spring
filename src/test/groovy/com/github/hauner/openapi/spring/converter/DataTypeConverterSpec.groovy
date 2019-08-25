@@ -44,7 +44,7 @@ class DataTypeConverterSpec extends Specification {
         def datatype = converter.convert (schema, null, [])
 
         then:
-        datatype.type == resultType
+        datatype.name == resultType
 
         where:
         type      | format   | resultType
@@ -89,11 +89,11 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def props = ep.response.responseType.properties
-        ep.response.responseType.type == 'InlineResponse200'
+        ep.response.responseType.name == 'InlineResponse200'
         ep.response.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
-        props.get ('isbn').type == 'String'
-        props.get ('title').type == 'String'
+        props.get ('isbn').name == 'String'
+        props.get ('title').name == 'String'
 
         and:
         api.models.size () == 1
@@ -137,12 +137,12 @@ components:
 
         and:
         def dataType = api.models.first ()
-        assert dataType.type == 'Book'
+        assert dataType.name == 'Book'
         assert dataType.packageName == "${options.packageName}.model"
         assert dataType.properties.size () == 2
         def isbn = dataType.properties.get('isbn')
-        assert isbn.type == 'String'
+        assert isbn.name == 'String'
         def title = dataType.properties.get('title')
-        assert title.type == 'String'
+        assert title.name == 'String'
     }
 }

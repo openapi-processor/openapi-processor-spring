@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class DoubleDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        'Double'
     }
 
     @Override
-    String getType () {
-        'Double'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override

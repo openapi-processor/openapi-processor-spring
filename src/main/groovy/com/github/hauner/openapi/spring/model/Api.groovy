@@ -28,7 +28,7 @@ class Api {
     }
 
     DataType getModel(String name) {
-        models.find { it.type.toLowerCase () == name.toLowerCase () }
+        models.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
 }

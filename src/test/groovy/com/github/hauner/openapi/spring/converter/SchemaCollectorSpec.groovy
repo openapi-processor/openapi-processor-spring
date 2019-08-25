@@ -35,7 +35,7 @@ class SchemaCollectorSpec extends Specification {
 
         then:
         dataTypes.size () == 1
-        dataTypes.first ().type == 'Book'
+        dataTypes.first ().name == 'Book'
     }
 
 }

@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class NoneDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        null
+    String getName () {
+        'void'
     }
 
     @Override
-    String getType () {
-        'void'
+    String getPackageName () {
+        null
     }
 
     @Override

@@ -127,7 +127,7 @@ class DataTypeConverter {
             return null
         }
 
-       dataTypes.find { it.type == name }
+       dataTypes.find { it.name == name }
     }
 
     private String getNestedObjectName (String inlineObjectName, String propName) {

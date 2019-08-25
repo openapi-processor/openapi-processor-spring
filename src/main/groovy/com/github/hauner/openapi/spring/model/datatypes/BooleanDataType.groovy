@@ -22,13 +22,13 @@ package com.github.hauner.openapi.spring.model.datatypes
 class BooleanDataType implements DataType {
 
     @Override
-    String getPackageName () {
-        'java.lang'
+    String getName () {
+        'Boolean'
     }
 
     @Override
-    String getType () {
-        'Boolean'
+    String getPackageName () {
+        'java.lang'
     }
 
     @Override
