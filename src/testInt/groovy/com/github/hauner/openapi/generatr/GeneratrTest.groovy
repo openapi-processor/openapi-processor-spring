@@ -56,11 +56,11 @@ class GeneratrTest {
         this.source = source
     }
 
-    @Test()
+    @Test
     void "generatr creates expected files for api set "() {
         def packageName = 'generated'
-        def expectedPath = "./src/testInt/resources/${source}/${packageName}"
-        def generatedPath = "${folder.root.absolutePath}/${packageName}"
+        def expectedPath = ['.', 'src', 'testInt', 'resources', source, packageName].join(File.separator)
+        def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
 
         def generatr = new SpringGeneratr()
         def options = new ApiOptions(
@@ -82,7 +82,11 @@ class GeneratrTest {
             def generated = new File([generatedPath, it].join ('/'))
 
             printUnifiedDiff (expected, generated)
-            assertEquals(expected.text, generated.text)
+            assertEquals(
+                // ignore cr (ie. crlf vs lf)
+                expected.text.replace('\r',''),
+                generated.text.replace('\r','')
+            )
         }
     }
 
