@@ -37,17 +37,17 @@ class DataTypeConverterSpec extends Specification {
     }
 
     @Unroll
-    void "converts schema(#type, #format) to #result" () {
+    void "converts schema(#type, #format) to #javaType" () {
         Schema schema = new Schema(type: type, format: format)
 
         when:
         def datatype = converter.convert (schema, null, [])
 
         then:
-        datatype.name == resultType
+        datatype.name == javaType
 
         where:
-        type      | format   | resultType
+        type      | format   | javaType
         'string'  | null     | 'String'
         'integer' | null     | 'Integer'
         'integer' | 'int32'  | 'Integer'
@@ -56,6 +56,23 @@ class DataTypeConverterSpec extends Specification {
         'number'  | 'float'  | 'Float'
         'number'  | 'double' | 'Double'
         'boolean' | null     | 'Boolean'
+    }
+
+    void "throws when hitting an unknown data type" () {
+        Schema schema = new Schema(type: type, format: format)
+
+        when:
+        converter.convert (schema, null, [])
+
+        then:
+        def e = thrown(UnknownDataTypeException)
+        e.type == type
+        e.format == format
+
+        where:
+        type | format
+        'x'  | null
+        'y'  | 'none'
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {

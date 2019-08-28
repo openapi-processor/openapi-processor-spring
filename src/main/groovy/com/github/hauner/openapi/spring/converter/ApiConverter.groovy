@@ -23,6 +23,7 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.StringUtil
+import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
@@ -34,6 +35,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
  *
  * @author Martin Hauner
  */
+@Slf4j
 class ApiConverter {
 
     private DataTypeConverter dataTypeConverter
@@ -76,19 +78,25 @@ class ApiConverter {
 
                 Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
 
-                httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
-                    def httpStatus = responseEntry.key
-                    def httpResponse = responseEntry.value
+                try {
 
-                    if (!httpResponse.content) {
-                        ep.responses.add (createEmptyResponse ())
-                    } else {
-                        ep.responses.addAll (createResponses (httpResponse,
-                            getInlineResponseName (path, httpStatus), target))
+                    httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+                        def httpStatus = responseEntry.key
+                        def httpResponse = responseEntry.value
+
+                        if (!httpResponse.content) {
+                            ep.responses.add (createEmptyResponse ())
+                        } else {
+                            ep.responses.addAll (createResponses (httpResponse,
+                                getInlineResponseName (path, httpStatus), target))
+                        }
                     }
-                }
 
-                itf.endpoints.add (ep)
+                    itf.endpoints.add (ep)
+
+                } catch (UnknownDataTypeException e) {
+                    log.error ("failed to parse endpoint {} {} because of: {}", ep.path, ep.method, e.message)
+                }
             }
         }
     }
