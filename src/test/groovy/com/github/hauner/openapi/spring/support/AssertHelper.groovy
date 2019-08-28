@@ -5,7 +5,7 @@ import java.util.stream.Collectors
 class AssertHelper {
 
     static String extractImports (String source) {
-        source.lines ()
+        source.readLines ().stream ()
             .filter {it.startsWith ('import ')}
             .collect (Collectors.toList ())
             .join ('\n') + '\n'

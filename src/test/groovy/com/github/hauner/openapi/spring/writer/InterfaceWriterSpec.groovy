@@ -217,7 +217,7 @@ public interface NameApi {
     }
 
     String extractInterfaceBlock (String source) {
-        source.lines ()
+        source.readLines ().stream ()
             .filter {it ==~ /public interface (.+?) \{/ || it ==~ /\}/}
             .collect (Collectors.toList ())
             .join ('\n') + '\n'
