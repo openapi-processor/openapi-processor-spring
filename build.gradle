@@ -19,7 +19,7 @@ testSets {
 check.dependsOn testInt
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:2.5.4'
+    implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.12'
     compileOnly 'com.github.hauner.openapi:openapi-generatr-gradle:0.1-SNAPSHOT'
 
