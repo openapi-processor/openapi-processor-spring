@@ -34,6 +34,6 @@ class UnknownDataTypeException extends RuntimeException {
 
     @Override
     String getMessage () {
-        return "unknown schema $type ${format ? "/" + format: ""}}"
+        "unknown schema: $type${format ? "/" + format: ''}"
     }
 }
