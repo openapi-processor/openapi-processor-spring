@@ -28,6 +28,8 @@ class UnknownDataTypeException extends RuntimeException {
 
     UnknownDataTypeException(String type, String format) {
         super()
+        this.type = type
+        this.format = format
     }
 
     @Override
