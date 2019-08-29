@@ -28,4 +28,7 @@ public interface Api {
     @GetMapping(path = "/boolean", produces = {"application/vnd.boolean"})
     ResponseEntity<Boolean> getBoolean();
 
+    @GetMapping(path = "/array-string", produces = {"application/vnd.array"})
+    ResponseEntity<String[]> getArrayString();
+
 }

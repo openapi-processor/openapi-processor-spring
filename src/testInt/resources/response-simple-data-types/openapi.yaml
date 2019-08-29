@@ -67,3 +67,16 @@ paths:
               schema:
                 type: boolean
           description: none
+
+  /array-string:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.array:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none
+

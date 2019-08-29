@@ -45,7 +45,7 @@ class GeneratrTest {
     static Collection<String> sources () {
         return [
 //            'response-complex-data-types',  // pending
-            'response-simple-data-types',
+            'response-simple-data-types', // pending
             'no-response-content'
         ]
     }
