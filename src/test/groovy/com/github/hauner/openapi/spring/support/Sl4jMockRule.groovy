@@ -18,7 +18,7 @@ class Sl4jMockRule extends ExternalResource {
     Logger orgLogger
 
     Sl4jMockRule(Class target, Logger logger) {
-        logField = target.getDeclaredField("log");
+        logField = target.getDeclaredField("log")
         mockLogger = logger
     }
 
