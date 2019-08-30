@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.support.StringUtil
 
 /**
  * Writer for Java interface methods, i.e. endpoints.
@@ -49,7 +50,7 @@ class MethodWriter {
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
-        tokens = tokens.collect {it.capitalize ()}
+        tokens = tokens.collect { StringUtil.toCamelCase (it) }
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
     }

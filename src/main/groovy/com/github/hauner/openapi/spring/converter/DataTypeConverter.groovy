@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
@@ -27,6 +28,7 @@ import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 
 /**
@@ -79,7 +81,10 @@ class DataTypeConverter {
      */
     DataType convert(Schema schema, String objectName, List<DataType> dataTypes) {
         if (!schema) {
-            new NoneDataType()
+            new NoneDataType ()
+
+        } else if (isArray (schema)) {
+            createArrayDataType (schema as ArraySchema, objectName, dataTypes)
 
         } else if (isObject (schema)) {
             createObjectDataType (schema, objectName, dataTypes)
@@ -95,6 +100,12 @@ class DataTypeConverter {
         } else {
             createSimpleDataType (schema)
         }
+    }
+
+    private DataType createArrayDataType (ArraySchema schema, String objectName, List<DataType> dataTypes) {
+        DataType item = convert (schema.items, objectName, dataTypes)
+        def array = new ArrayDataType(item: item)
+        array
     }
 
     private DataType createObjectDataType (Schema schema, String objectName, List<DataType> dataTypes) {
@@ -141,6 +152,10 @@ class DataTypeConverter {
 
     private String getNestedObjectName (String inlineObjectName, String propName) {
         inlineObjectName + propName.capitalize ()
+    }
+
+    private boolean isArray (Schema schema) {
+        schema.type == 'array'
     }
 
     private boolean isObject (Schema schema) {
