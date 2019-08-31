@@ -71,13 +71,21 @@ class ApiWriter {
         def rootPkg = options.packageName.replace ('.', File.separator)
         def apiPkg = [rootPkg, 'api'].join (File.separator)
         def modelPkg = [rootPkg, 'model'].join (File.separator)
+        log.debug ('creating target folders: {}', rootPkg)
 
         apiFolder = createTargetPackage (apiPkg)
+        log.debug ('created target folder: {}', apiFolder.absolutePath)
+
         modelFolder = createTargetPackage (modelPkg)
+        log.debug ('created target folder: {}', modelFolder.absolutePath)
     }
 
     private File createTargetPackage (String apiPkg) {
         def folder = new File ([options.targetDir, apiPkg].join (File.separator))
+        if (folder.exists () && folder.isDirectory ()) {
+            return folder
+        }
+
         def success = folder.mkdirs ()
         if (!success) {
             log.error ('failed to create package {}', folder)

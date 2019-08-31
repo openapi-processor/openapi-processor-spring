@@ -16,17 +16,23 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.support.Sl4jMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.slf4j.Logger
 import spock.lang.Specification
 
 class ApiWriterSpec extends Specification {
 
     @Rule TemporaryFolder target
+
+    def log = Mock Logger
+    @Rule Sl4jMockRule rule = new Sl4jMockRule(ApiWriter, log)
 
     List<String> apiPkgPath = ['com', 'github', 'hauner', 'openapi', 'api']
     List<String> apiModelPath = ['com', 'github', 'hauner', 'openapi', 'model']
@@ -47,6 +53,21 @@ class ApiWriterSpec extends Specification {
         api.isDirectory ()
         model.exists ()
         model.isDirectory ()
+    }
+
+    void "does not log error when the target folder structure already exists" () {
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        when:
+        target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'api')
+        target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'model')
+        new ApiWriter (opts, Stub (InterfaceWriter)).write (new Api())
+
+        then:
+        0 * log.error (*_)
     }
 
     void "generates interface sources in api target folder"() {
