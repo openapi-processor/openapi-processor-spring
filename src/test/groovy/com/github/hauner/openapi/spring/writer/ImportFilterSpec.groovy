@@ -56,4 +56,14 @@ class ImportFilterSpec extends Specification {
         result.empty
     }
 
+    void "corrects imports of generic types" () {
+        when:
+        def result = filter.filter ('any', [
+            'java.util.Collection<String>'
+        ] as Set)
+
+        then:
+        result.size () == 1
+        result.first () == 'java.util.Collection'
+    }
 }
