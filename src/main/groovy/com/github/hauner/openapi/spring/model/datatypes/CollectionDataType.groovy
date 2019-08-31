@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.datatypes;
-
-import java.util.Set;
+package com.github.hauner.openapi.spring.model.datatypes
 
 /**
  * OpenAPI type 'array' maps to Collection<>.
  *
  * @author Martin Hauner
  */
-public class CollectionDataType implements DataType {
+class CollectionDataType implements DataType {
 
     private DataType item
 
     @Override
-    public String getName () {
+    String getName () {
         "Collection<${item.name}>"
     }
 
     @Override
-    public String getPackageName () {
+    String getPackageName () {
         "java.util"
     }
 
@@ -43,7 +41,7 @@ public class CollectionDataType implements DataType {
     }
 
     @Override
-    public Set<String> getImports () {
+    Set<String> getImports () {
         ['java.util.Collection'] + item.imports
     }
 
