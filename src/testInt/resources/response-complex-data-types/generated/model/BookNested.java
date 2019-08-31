@@ -5,10 +5,19 @@
 
 package generated.model;
 
-public class BookInlineResponse200 {
+public class BookNested {
 
+    private Author author;
     private String isbn;
     private String title;
+
+    public Author getAuthor () {
+        return author;
+    }
+
+    public void setAuthor (Author author) {
+        this.author = author;
+    }
 
     public String getIsbn () {
         return isbn;

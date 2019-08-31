@@ -29,6 +29,16 @@ paths:
                 schema:
                   $ref: '#/components/schemas/Book'
 
+  /book-nested:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/BookNested'
+
 components:
   schemas:
     Book:
@@ -38,3 +48,19 @@ components:
           type: string
         title:
           type: string
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+
+    BookNested:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
+        author:
+          $ref: '#/components/schemas/Author'

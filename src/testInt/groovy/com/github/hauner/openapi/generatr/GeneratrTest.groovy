@@ -44,7 +44,7 @@ class GeneratrTest {
     @Parameters(name = "{0}")
     static Collection<String> sources () {
         return [
-//            'response-complex-data-types',  // pending
+            'response-complex-data-types',
             'response-simple-data-types',
             'no-response-content'
         ]
