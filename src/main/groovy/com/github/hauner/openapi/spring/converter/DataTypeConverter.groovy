@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
@@ -104,8 +105,22 @@ class DataTypeConverter {
 
     private DataType createArrayDataType (ArraySchema schema, String objectName, List<DataType> dataTypes) {
         DataType item = convert (schema.items, objectName, dataTypes)
-        def array = new ArrayDataType(item: item)
-        array
+
+        switch(getJavaType(schema)) {
+            case Collection.name:
+                new CollectionDataType (item: item)
+                break;
+            default:
+                new ArrayDataType(item: item)
+        }
+    }
+
+    private String getJavaType (ArraySchema schema) {
+        if (!hasExtensions (schema)) {
+            return null
+        }
+
+        schema.extensions.get ('x-java-type')
     }
 
     private DataType createObjectDataType (Schema schema, String objectName, List<DataType> dataTypes) {
@@ -152,6 +167,10 @@ class DataTypeConverter {
 
     private String getNestedObjectName (String inlineObjectName, String propName) {
         inlineObjectName + propName.capitalize ()
+    }
+
+    boolean hasExtensions (ArraySchema schema) {
+        schema.extensions != null
     }
 
     private boolean isArray (Schema schema) {

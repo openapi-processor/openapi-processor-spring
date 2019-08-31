@@ -5,6 +5,7 @@
 
 package generated.api;
 
+import java.util.Collection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -30,5 +31,8 @@ public interface Api {
 
     @GetMapping(path = "/array-string", produces = {"application/vnd.array"})
     ResponseEntity<String[]> getArrayString();
+
+    @GetMapping(path = "/array-collection", produces = {"application/vnd.collection"})
+    ResponseEntity<Collection<String>> getArrayCollection();
 
 }

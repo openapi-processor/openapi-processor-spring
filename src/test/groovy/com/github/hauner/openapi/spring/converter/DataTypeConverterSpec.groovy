@@ -75,7 +75,7 @@ class DataTypeConverterSpec extends Specification {
         'y'  | 'none'
     }
 
-    void "converts simple array schema to Collection<>" () {
+    void "converts simple array schema to Array[]" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -104,6 +104,38 @@ paths:
         def ep = itf.endpoints.first ()
         ep.response.responseType.name == 'String[]'
     }
+
+    void "converts simple array schema to Collection<> set via x-java-type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /array-string:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.collection:
+              schema:
+                type: array
+                x-java-type: java.util.Collection
+                items:
+                  type: string
+          description: none              
+""")
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == 'Collection<String>'
+    }
+
 
     void "creates model for inline response object with name {path}Response{response code}"() {
         def openApi = parse ("""\
