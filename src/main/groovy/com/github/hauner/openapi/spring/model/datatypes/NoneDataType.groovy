@@ -34,6 +34,11 @@ class NoneDataType implements DataType {
     }
 
     @Override
+    String getImport () {
+        null
+    }
+
+    @Override
     Set<String> getImports () {
         []
     }

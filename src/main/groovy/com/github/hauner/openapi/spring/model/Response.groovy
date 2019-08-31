@@ -28,8 +28,8 @@ class Response {
     String contentType
     DataType responseType
 
-    String getClassNameWithPackage () {
-        "${responseType.packageName}.${responseType.name}"
+    String getImport () {
+        responseType.import
     }
 
     boolean isEmpty() {

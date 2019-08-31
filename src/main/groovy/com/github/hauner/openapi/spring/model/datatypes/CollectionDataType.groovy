@@ -38,6 +38,11 @@ public class CollectionDataType implements DataType {
     }
 
     @Override
+    String getImport () {
+        [packageName, 'Collection'].join('.')
+    }
+
+    @Override
     public Set<String> getImports () {
         ['java.util.Collection'] + item.imports
     }

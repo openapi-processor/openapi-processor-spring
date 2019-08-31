@@ -36,6 +36,11 @@ class ArrayDataType implements DataType {
     }
 
     @Override
+    String getImport () {
+        item.import
+    }
+
+    @Override
     Set<String> getImports () {
         item.imports
     }

@@ -26,18 +26,7 @@ class ImportFilter {
     Set<String> filter(String packageName, Set<String> imports) {
         imports.findAll {
            !it.startsWith ('java.lang.') && !it.startsWith (packageName)
-        }.collect {
-            removeGenericType (it)
         }
-    }
-
-    private String removeGenericType(String type) {
-        def idx = type.indexOf ('<')
-        if (idx == -1) {
-            return type
-        }
-
-        type.substring (0, idx)
     }
 
 }

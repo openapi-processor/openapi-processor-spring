@@ -34,6 +34,11 @@ class BooleanDataType implements DataType {
     }
 
     @Override
+    String getImport () {
+        [packageName, name].join ('.')
+    }
+
+    @Override
     Set<String> getImports () {
         []
     }

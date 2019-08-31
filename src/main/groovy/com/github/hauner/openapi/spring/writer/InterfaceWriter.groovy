@@ -57,7 +57,7 @@ class InterfaceWriter {
             imports.add (it.method.classNameWithPackage)
 
             if (!it.response.empty) {
-                imports.add (it.response.classNameWithPackage)
+                imports.add (it.response.import)
             }
         }
 

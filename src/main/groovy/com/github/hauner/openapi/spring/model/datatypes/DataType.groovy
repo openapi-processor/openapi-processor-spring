@@ -36,10 +36,16 @@ interface DataType {
     String getPackageName ()
 
     /**
-     * Provides the list of import required for this type.
+     * Provides the import of this type.
      *
-     * @return the import list.
+     * @return import of this type.
      */
-    Set<String> getImports()
+    String getImport ()
 
+    /**
+     * Provides the list of imports for the types referenced by this this type.
+     *
+     * @return the referenced import list.
+     */
+    Set<String> getImports ()
 }

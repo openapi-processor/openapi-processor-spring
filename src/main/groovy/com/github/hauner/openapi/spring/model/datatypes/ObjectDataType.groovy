@@ -39,6 +39,11 @@ class ObjectDataType implements DataType {
     }
 
     @Override
+    String getImport () {
+        [packageName, name].join ('.')
+    }
+
+    @Override
     Set<String> getImports () {
         List<String> imports = []
         properties.values ().each {
