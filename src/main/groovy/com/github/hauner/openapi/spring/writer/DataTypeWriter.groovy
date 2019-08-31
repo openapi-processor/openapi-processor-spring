@@ -52,20 +52,29 @@ class DataTypeWriter {
 
         propertyNames.each {
             def propDataType = dataType.getObjectProperty (it)
-
-            target.write ("""\
-    public ${propDataType.name} get${it.capitalize ()} () {
-        return $it;
-    }
-
-    public void set${it.capitalize ()} (${propDataType.name} $it) {
-        this.$it = $it;
-    }
-
-""")
+            target.write (getGetter (it, propDataType))
+            target.write (getSetter (it, propDataType))
         }
 
         target.write ("}\n")
+    }
+
+    private GString getGetter (String propertyName, DataType propDataType) {
+        """\
+    public ${propDataType.name} get${propertyName.capitalize ()} () {
+        return ${propertyName};
+    }
+
+"""
+    }
+
+    private GString getSetter (String propertyName, DataType propDataType) {
+        """\
+    public void set${propertyName.capitalize ()} (${propDataType.name} ${propertyName}) {
+        this.${propertyName} = ${propertyName};
+    }
+
+"""
     }
 
     List<String> collectImports(String packageName, DataType dataType) {
