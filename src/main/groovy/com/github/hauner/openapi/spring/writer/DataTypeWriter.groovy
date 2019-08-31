@@ -20,7 +20,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 
 /**
- * Writer for Java classes.
+ * Writer for POJO classes.
  *
  * @author Martin Hauner
  */
@@ -41,15 +41,29 @@ class DataTypeWriter {
 
         target.write ("public class ${dataType.type} {\n\n")
 
-        dataType.getSortedPropertyNames ().each {
+        def propertyNames = dataType.sortedPropertyNames
+        propertyNames.each {
             def propDataType = dataType.getObjectProperty (it)
             target.write ("    private ${propDataType.name} ${it};\n")
         }
-        if (!dataType.sortedPropertyNames.empty) {
+        if (!propertyNames.empty) {
             target.write ("\n")
         }
 
-        // todo property getters/setters
+        propertyNames.each {
+            def propDataType = dataType.getObjectProperty (it)
+
+            target.write ("""\
+    public ${propDataType.name} get${it.capitalize ()} () {
+        return $it;
+    }
+
+    public void set${it.capitalize ()} (${propDataType.name} $it) {
+        this.$it = $it;
+    }
+
+""")
+        }
 
         target.write ("}\n")
     }

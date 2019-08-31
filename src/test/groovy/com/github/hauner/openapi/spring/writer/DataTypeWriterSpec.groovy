@@ -29,7 +29,7 @@ class DataTypeWriterSpec extends Specification {
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {
-        def dataType = new ObjectDataType(type: 'Book', properties: [:])
+        def dataType = new ObjectDataType(type: 'Book', properties: [:] as Map)
 
         when:
         writer.write (target, dataType)
@@ -40,7 +40,7 @@ class DataTypeWriterSpec extends Specification {
 
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new ObjectDataType (type: 'Book', properties: [:], pkg: pkg)
+        def dataType = new ObjectDataType (type: 'Book', properties: [:] as Map, pkg: pkg)
 
         when:
         writer.write (target, dataType)
@@ -56,7 +56,7 @@ package $pkg;
         def pkg = 'external'
 
         def dataType = new ObjectDataType (type: 'Book', properties: [
-            'isbn': new ObjectDataType (type: 'Isbn', properties: [:], pkg: pkg)
+            'isbn': new ObjectDataType (type: 'Isbn', properties: [:] as Map, pkg: pkg)
         ])
 
         when:
@@ -72,7 +72,7 @@ import external.Isbn;
     void "writes no extra line feed when imports are empty" () {
         def pkg = 'external'
 
-        def dataType = new ObjectDataType (type: 'Book', properties: [:], pkg: pkg)
+        def dataType = new ObjectDataType (type: 'Book', properties: [:] as Map, pkg: pkg)
 
         when:
         writer.write (target, dataType)
@@ -99,6 +99,39 @@ public class Book {
         target.toString ().contains ("""\
     private String isbn;
     private String title;
+
+""")
+    }
+
+    void "writes property getters & setters" () {
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new ObjectDataType (type: 'Book', properties: [
+            isbn: new StringDataType(),
+            title: new StringDataType ()
+        ], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+    public String getIsbn () {
+        return isbn;
+    }
+
+    public void setIsbn (String isbn) {
+        this.isbn = isbn;
+    }
+
+""")
+        target.toString ().contains ("""\
+    public String getTitle () {
+        return title;
+    }
+
+    public void setTitle (String title) {
+        this.title = title;
+    }
 
 """)
     }
