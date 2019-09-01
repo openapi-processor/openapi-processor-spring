@@ -49,12 +49,6 @@ components:
         title:
           type: string
 
-    Author:
-      type: object
-      properties:
-        name:
-          type: string
-
     BookNested:
       type: object
       properties:
@@ -64,3 +58,9 @@ components:
           type: string
         author:
           $ref: '#/components/schemas/Author'
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string

@@ -29,10 +29,41 @@ class SchemaCollector {
 
     DataTypeConverter converter
 
-    List<DataType> collect(Map<String, Schema> schemas) {
-        List<DataType> dataTypes = []
+    void collect(Map<String, Schema> schemas, DataTypes dataTypes) {
 
-        schemas.each { Map.Entry<String, Schema> entry ->
+        // avoid forward references, so the data type converter has seen (& stored) all nested
+        // data types before they are used.
+        def sortedSchemas = schemas.sort { left, right ->
+            Set<String> leftRefs = []
+            Set<String> rightRefs = []
+
+            collectRefs (left.value, leftRefs)
+            collectRefs (right.value, rightRefs)
+
+            if (leftRefs.empty && rightRefs.empty) {
+                return 0
+            }
+
+            if (leftRefs.empty && !rightRefs.empty) {
+                return -1
+            }
+
+            if (!leftRefs.empty && rightRefs.empty) {
+                return 1
+            }
+
+            if (rightRefs.contains (left.key)) {
+                return -1
+            }
+
+            if (leftRefs.contains (right.key)) {
+                return 1
+            }
+
+            return 0
+        }
+
+        sortedSchemas.each { Map.Entry<String, Schema> entry ->
             String name = entry.key
             Schema schema = entry.value
 
@@ -41,12 +72,20 @@ class SchemaCollector {
                 converter.convert (schema, name, dataTypes)
             }
         }
-
-        dataTypes
     }
 
-    private DataType findDataType(String name, List<DataType> dataTypes) {
-        dataTypes.find { it.name.toLowerCase () == name.toLowerCase () }
+    private void collectRefs (Schema schema, Set<String> refs) {
+        if (schema.$ref != null) {
+            refs.add (schema.$ref.substring ('#/components/schemas/'.length ()))
+        }
+
+        if (schema.properties == null) {
+            return
+        }
+
+        schema.properties.values ().each {
+            collectRefs (it, refs)
+        }
     }
 
 }

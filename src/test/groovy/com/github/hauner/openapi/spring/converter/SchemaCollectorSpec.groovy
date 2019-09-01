@@ -39,6 +39,35 @@ class SchemaCollectorSpec extends Specification {
         dataTypes.find('Book')
     }
 
+    void "collects component schemas with forward reference" () {
+        def dataTypes = new DataTypes()
+        def collector = new SchemaCollector(converter: new DataTypeConverter(new DefaultApiOptions()))
+
+        def schemas = [
+            Book: new Schema (type: 'object', properties: [
+                author: new Schema ($ref: '#/components/schemas/Author'),
+                isbn: new Schema ($ref: '#/components/schemas/Isbn')
+            ]),
+            Author: new Schema (type: 'object', properties: [
+                name: new Schema (type: 'string'),
+                email: new Schema ($ref: '#/components/schemas/Email')
+            ]),
+            Isbn: new Schema (type: 'object', properties: [
+                isbn: new Schema (type: 'string')
+            ]),
+            Email: new Schema (type: 'string', properties: [:] as Map),
+        ]
+
+        when:
+        collector.collect (schemas, dataTypes)
+
+        then:
+        dataTypes.size () == 4
+        dataTypes.find ('Book')
+        dataTypes.find ('Author')
+        dataTypes.find ('Isbn')
+        dataTypes.find ('Email')
+    }
 }
 
 
