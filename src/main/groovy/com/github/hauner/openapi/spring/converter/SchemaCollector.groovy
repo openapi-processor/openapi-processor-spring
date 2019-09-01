@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import io.swagger.v3.oas.models.media.Schema
 
@@ -35,7 +36,7 @@ class SchemaCollector {
             String name = entry.key
             Schema schema = entry.value
 
-            DataType type = findDataType (name, dataTypes)
+            DataType type = dataTypes.find (name)
             if (!type) {
                 converter.convert (schema, name, dataTypes)
             }

@@ -26,14 +26,26 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType;
 class Api {
 
     List<Interface> interfaces = []
-    List<DataType> models = []
+
+    /**
+     * data types created from '#/component/schemas'
+     */
+    private DataTypes models = new DataTypes()
+
+    DataTypes getModels() {
+        models
+    }
+
+    void setModels(List<DataType> dataTypes) {
+        models.add(dataTypes)
+    }
 
     Interface getInterface(String name) {
         interfaces.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
     DataType getModel(String name) {
-        models.find { it.name.toLowerCase () == name.toLowerCase () }
+        models.dataTypes.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
 }

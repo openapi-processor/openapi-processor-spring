@@ -17,25 +17,26 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
+import com.github.hauner.openapi.spring.model.DataTypes
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 
 class SchemaCollectorSpec extends Specification {
 
     void "collects component schemas" () {
+        def dataTypes = new DataTypes()
         def collector = new SchemaCollector(converter: new DataTypeConverter(new DefaultApiOptions()))
 
         def schemas = [
-            'Book': new Schema (type: 'object', properties: [:])
+            'Book': new Schema (type: 'object', properties: [:] as Map)
         ]
 
         when:
-        def dataTypes = collector.collect (schemas)
-
+        collector.collect (schemas, dataTypes)
 
         then:
         dataTypes.size () == 1
-        dataTypes.first ().name == 'Book'
+        dataTypes.find('Book')
     }
 
 }

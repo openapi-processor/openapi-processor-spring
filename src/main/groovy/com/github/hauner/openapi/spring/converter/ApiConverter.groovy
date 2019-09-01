@@ -138,8 +138,8 @@ class ApiConverter {
             return
         }
 
-        target.models = new SchemaCollector(converter: dataTypeConverter)
-            .collect (api.components.schemas)
+        new SchemaCollector(converter: dataTypeConverter)
+            .collect (api.components.schemas, target.models)
     }
 
     private String getInterfaceName(def operation) {

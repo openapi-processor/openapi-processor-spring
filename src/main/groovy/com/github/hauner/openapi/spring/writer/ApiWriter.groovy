@@ -59,7 +59,7 @@ class ApiWriter {
             writer.close ()
         }
 
-        api.models.each {
+        api.models.dataTypes.each {
             def target = new File (modelFolder, "${it.name}.java")
             def writer = new FileWriter(target)
             dataTypeWriter.write (writer, it as ObjectDataType)

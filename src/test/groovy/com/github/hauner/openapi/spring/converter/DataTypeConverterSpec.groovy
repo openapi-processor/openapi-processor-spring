@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.DataTypes
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -41,7 +42,7 @@ class DataTypeConverterSpec extends Specification {
         Schema schema = new Schema(type: type, format: format)
 
         when:
-        def datatype = converter.convert (schema, null, [])
+        def datatype = converter.convert (schema, null, new DataTypes())
 
         then:
         datatype.name == javaType
@@ -62,7 +63,7 @@ class DataTypeConverterSpec extends Specification {
         Schema schema = new Schema(type: type, format: format)
 
         when:
-        converter.convert (schema, null, [])
+        converter.convert (schema, null, new DataTypes())
 
         then:
         def e = thrown(UnknownDataTypeException)
@@ -176,7 +177,7 @@ paths:
 
         and:
         api.models.size () == 1
-        api.models.first () is ep.response.responseType
+        api.models.find ('InlineResponse200') is ep.response.responseType
     }
 
     void "creates model for component schema object" () {
@@ -215,13 +216,14 @@ components:
         api.models.size () == 1
 
         and:
-        def dataType = api.models.first ()
-        assert dataType.name == 'Book'
-        assert dataType.packageName == "${options.packageName}.model"
-        assert dataType.properties.size () == 2
-        def isbn = dataType.properties.get('isbn')
+        def dataTypes = api.models
+        def book = dataTypes.find ('Book')
+        assert book.name == 'Book'
+        assert book.packageName == "${options.packageName}.model"
+        assert book.properties.size () == 2
+        def isbn = book.properties.get('isbn')
         assert isbn.name == 'String'
-        def title = dataType.properties.get('title')
+        def title = book.properties.get('title')
         assert title.name == 'String'
     }
 }

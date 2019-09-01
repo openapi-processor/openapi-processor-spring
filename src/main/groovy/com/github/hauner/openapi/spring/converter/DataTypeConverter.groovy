@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
@@ -80,7 +81,7 @@ class DataTypeConverter {
      * @param dataTypes list of know object types
      * @return the resulting java data type
      */
-    DataType convert(Schema schema, String objectName, List<DataType> dataTypes) {
+    DataType convert(Schema schema, String objectName, DataTypes dataTypes) {
         if (!schema) {
             new NoneDataType ()
 
@@ -91,7 +92,7 @@ class DataTypeConverter {
             createObjectDataType (schema, objectName, dataTypes)
 
         } else if (isRefObject (schema)) {
-            def datatype = getDataType (schema.$ref, dataTypes)
+            def datatype = dataTypes.findRef (schema.$ref)
             if (datatype) {
                 return datatype
             }
@@ -103,7 +104,7 @@ class DataTypeConverter {
         }
     }
 
-    private DataType createArrayDataType (ArraySchema schema, String objectName, List<DataType> dataTypes) {
+    private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
         DataType item = convert (schema.items, objectName, dataTypes)
 
         switch(getJavaType(schema)) {
@@ -123,7 +124,7 @@ class DataTypeConverter {
         schema.extensions.get ('x-java-type')
     }
 
-    private DataType createObjectDataType (Schema schema, String objectName, List<DataType> dataTypes) {
+    private DataType createObjectDataType (Schema schema, String objectName, DataTypes dataTypes) {
         def objectType = new ObjectDataType (
             type: objectName,
             pkg: [options.packageName, 'model'].join ('.')
@@ -151,18 +152,6 @@ class DataTypeConverter {
         } else {
             type.default(schema)
         }
-    }
-
-    private DataType getDataType (String ref, List<DataType> dataTypes) {
-        def idx = ref.lastIndexOf ('/')
-        def path = ref.substring (0, idx + 1)
-        def name = ref.substring (idx + 1)
-
-        if (path != '#/components/schemas/') {
-            return null
-        }
-
-       dataTypes.find { it.name == name }
     }
 
     private String getNestedObjectName (String inlineObjectName, String propName) {
