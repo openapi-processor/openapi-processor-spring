@@ -73,15 +73,15 @@ class DataTypeConverter {
     }
 
     /**
-     * converts an open api type (i.e. a schema) to a java data type. If the schema is of type
-     * object the objectName is used as the type and it is added to the list of object data types.
+     * converts an open api type (i.e. a schema) to a java data type. If the schema is not a simple
+     * inline type the objectName is used as the type and it is added to the list of data types.
      *
      * @param schema the open api type
      * @param objectName type name for an object
-     * @param dataTypes list of know object types
+     * @param dataTypes known object types
      * @return the resulting java data type
      */
-    DataType convert(Schema schema, String objectName, DataTypes dataTypes) {
+    DataType convert (Schema schema, String objectName, DataTypes dataTypes) {
         if (!schema) {
             new NoneDataType ()
 
@@ -100,8 +100,19 @@ class DataTypeConverter {
             createObjectDataType (schema, schema.name, dataTypes)
 
         } else {
-            createSimpleDataType (schema)
+//            createSimpleDataType (schema)
+            createSimpleDataType (schema, objectName, dataTypes)
         }
+    }
+
+    /**
+     * converts an open api type (i.e. a schema) to a java data type.
+     *
+     * @param schema the open api type
+     * @return the resulting java data type
+     */
+    DataType convert (Schema schema) {
+        return createSimpleDataType (schema)
     }
 
     private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
@@ -131,8 +142,12 @@ class DataTypeConverter {
         )
 
         schema.properties.each { Map.Entry<String, Schema> entry ->
-            def propType = convert (entry.value,
-                getNestedObjectName (objectName, entry.key), dataTypes)
+            def propType
+            if (isSimpleInline (entry.value)) {
+                propType = convert (entry.value) // never asked again, no need to remember this
+            } else {
+                propType = convert (entry.value, getNestedObjectName (objectName, entry.key), dataTypes)
+            }
 
             objectType.addObjectProperty (entry.key, propType)
         }
@@ -141,6 +156,24 @@ class DataTypeConverter {
         objectType
     }
 
+    private DataType createSimpleDataType (Schema schema, String name, DataTypes dataTypes) {
+        def type = KNOWN_DATA_TYPES.get (schema.type)
+        if (type == null) {
+            throw new UnknownDataTypeException(schema.type, schema.format)
+        }
+
+        DataType simpleType
+        if (schema.format) {
+            simpleType = type."${schema.format}"(schema)
+        } else {
+            simpleType = type.default(schema)
+        }
+
+        dataTypes.add (name, simpleType)
+        simpleType
+    }
+
+    // not needed anymore ?
     private DataType createSimpleDataType (Schema schema) {
         def type = KNOWN_DATA_TYPES.get (schema.type)
         if (type == null) {
@@ -174,4 +207,7 @@ class DataTypeConverter {
         schema.$ref != null
     }
 
+    private boolean isSimpleInline (Schema schema) {
+        ['string', 'integer', 'number', 'boolean'].contains (schema.type)
+    }
 }

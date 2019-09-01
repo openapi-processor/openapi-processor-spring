@@ -226,4 +226,54 @@ components:
         def title = book.properties.get('title')
         assert title.name == 'String'
     }
+
+    void "create named simple data types from #/components/schemas" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: component simple schemas 
+  version: 1.0.0
+
+paths:
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  \$ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Isbn:
+      type: string
+     
+    Title:
+      type: string
+
+    Book:
+      type: object
+      properties:
+        isbn:
+          \$ref: '#/components/schemas/Isbn'
+        title:
+          \$ref: '#/components/schemas/Title'
+          
+""")
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        api.models.size () == 3
+
+        and:
+        def dataTypes = api.models
+        assert dataTypes.find ('Book')
+        assert dataTypes.find ('Isbn')
+        assert dataTypes.find ('Title')
+    }
+
 }

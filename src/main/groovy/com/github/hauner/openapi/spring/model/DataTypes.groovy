@@ -27,12 +27,10 @@ class DataTypes {
 
     private Map<String, DataType> types = [:]
 
-    // needed?
     List<DataType> getDataTypes () {
         types.values () as List<DataType>
     }
 
-    // needed?
     void add (List<DataType> dataTypes) {
         dataTypes.each {
             types.put (it.name, it)
@@ -48,6 +46,15 @@ class DataTypes {
         types.put (dataType.name, dataType)
     }
 
+    /**
+     * store data type.
+     *
+     * @param name name of the data type
+     * @param dataType the source data type
+     */
+    void add (String name, DataType dataType) {
+        types.put (name, dataType)
+    }
 
     /**
      * find data type by name.
