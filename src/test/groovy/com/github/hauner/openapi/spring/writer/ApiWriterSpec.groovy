@@ -16,11 +16,12 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -121,10 +122,10 @@ Bar interface!
             targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
         )
 
-        def api = new Api(models: [
-            new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'),
-            new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar')
-        ])
+        def dt = new DataTypes()
+        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
+        def api = new Api(dt)
 
         when:
         new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter).write (api)
@@ -138,6 +139,35 @@ Foo class!
         barSource.text == """\
 Bar class!
 """
+    }
+
+    void "generates model for object data types only" () {
+        def dataTypeWriter = Mock (DataTypeWriter) {
+            write (_ as Writer, _ as ObjectDataType) >> {
+                Writer writer = it.get(0)
+                writer.write ('Foo class!\n')
+            } >> {
+                Writer writer = it.get(0)
+                writer.write ('Bar class!\n')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def dt = new DataTypes()
+        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
+        dt.add ('simple', new StringDataType())
+        def api = new Api(dt)
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter).write (api)
+
+        then:
+        0 * dataTypeWriter.write (_, dt.find ('simple'))
     }
 
     String getApiPath(String targetFolder, String clazzName) {

@@ -30,22 +30,27 @@ class Api {
     /**
      * data types created from '#/component/schemas'
      */
-    private DataTypes models = new DataTypes()
+    private DataTypes models
+
+    Api() {
+        this.models = new DataTypes()
+    }
+
+    Api(DataTypes models) {
+        this.models = models
+    }
 
     DataTypes getModels() {
         models
     }
 
+    @Deprecated // only used from test
     void setModels(List<DataType> dataTypes) {
         models.add(dataTypes)
     }
 
     Interface getInterface(String name) {
         interfaces.find { it.name.toLowerCase () == name.toLowerCase () }
-    }
-
-    DataType getModel(String name) {
-        models.dataTypes.find { it.name.toLowerCase () == name.toLowerCase () }
     }
 
 }

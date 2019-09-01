@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
  * Container for Java data types from OpenAPI '#/component/schemas'.
@@ -27,8 +28,25 @@ class DataTypes {
 
     private Map<String, DataType> types = [:]
 
+    /**
+     * provides all named data types (including simple data types) used by the api endpoint.
+     *
+     * @return list of object data types
+     */
     List<DataType> getDataTypes () {
         types.values () as List<DataType>
+    }
+
+    /**
+     * provides the object data types (model classes) used by the api endpoints. For this object
+     * the generatr will create POJOs classes.
+     *
+     * @return list of object data types
+     */
+    List<ObjectDataType> getObjectDataTypes () {
+        types.values ().findAll {
+          it instanceof ObjectDataType
+        } as List<ObjectDataType>
     }
 
     void add (List<DataType> dataTypes) {
