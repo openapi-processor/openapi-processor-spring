@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.model.datatypes
 
 /**
  * OpenAPI type 'integer' with format 'int32' maps to java Integer.
+ *
+ * @author Martin Hauner
  */
 class IntegerDataType implements DataType {
 
