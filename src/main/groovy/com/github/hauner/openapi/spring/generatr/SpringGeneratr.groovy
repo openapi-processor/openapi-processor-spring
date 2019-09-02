@@ -23,6 +23,7 @@ import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MethodWriter
 import io.swagger.v3.parser.OpenAPIV3Parser
+import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
@@ -44,8 +45,15 @@ class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
 
     @Override
     void run (ApiOptions options) {
+        ParseOptions opts = new ParseOptions(
+            // loads $refs to other files into #/components/schema and replaces the $refs to the
+            // external files with $refs to #/components/schema. The generatr can now always
+            // generate the model based on #/components/schema.
+            resolve: true
+        )
+
         SwaggerParseResult result = new OpenAPIV3Parser ()
-            .readWithInfo (options.apiPath, null)
+        .readLocation (options.apiPath, null, opts)
 
         if (options.showWarnings) {
             printWarnings(result.messages)
