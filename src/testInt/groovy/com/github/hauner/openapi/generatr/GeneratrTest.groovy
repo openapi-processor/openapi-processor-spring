@@ -44,9 +44,10 @@ class GeneratrTest {
     @Parameters(name = "{0}")
     static Collection<String> sources () {
         return [
-            'response-complex-data-types',
+            'no-response-content',
             'response-simple-data-types',
-            'no-response-content'
+            'response-complex-data-types',
+            //'ref-into-another-file' // pending
         ]
     }
 
