@@ -12,7 +12,7 @@ import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.assertEquals;
 
-public class GeneratrTestBase {
+abstract class GeneratrTestBase {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder()
