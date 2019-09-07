@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.DataTypes
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 
@@ -68,6 +70,30 @@ class SchemaCollectorSpec extends Specification {
         dataTypes.find ('Isbn')
         dataTypes.find ('Email')
     }
+
+    void "collects component schemas with array ref" () {
+        def dataTypes = new DataTypes()
+        def collector = new SchemaCollector(converter: new DataTypeConverter(new DefaultApiOptions()))
+
+        def schemas = [
+            Book: new Schema (type: 'object', properties: [
+                authors: new ArraySchema (items: new Schema($ref: '#/components/schemas/Author')),
+            ]),
+            Author: new Schema (type: 'object', properties: [
+                name: new Schema (type: 'string'),
+            ])
+        ]
+
+        when:
+        collector.collect (schemas, dataTypes)
+
+        then:
+        assert dataTypes.size () == 2
+        def book = dataTypes.find ('Book')
+        assert book.properties.size () == 1
+        def array = book.properties.get ('authors')
+        array instanceof ArrayDataType
+        array.item.type == 'Author'
+    }
+
 }
-
-

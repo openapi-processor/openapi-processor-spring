@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 
 /**
@@ -79,12 +80,14 @@ class SchemaCollector {
             refs.add (schema.$ref.substring ('#/components/schemas/'.length ()))
         }
 
-        if (schema.properties == null) {
-            return
+        if (schema.properties != null) {
+            schema.properties.values ().each {
+                collectRefs (it, refs)
+            }
         }
 
-        schema.properties.values ().each {
-            collectRefs (it, refs)
+        if (schema instanceof ArraySchema) {
+            collectRefs (schema.items, refs)
         }
     }
 
