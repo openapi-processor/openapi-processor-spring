@@ -1,16 +1,40 @@
 # What's this?
 
-an (experimental) simple opinionated OpenAPI interface only code generator for Spring Boot. 
+an (experimental) simple opinionated [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot]. 
 
 # Status
 
-(August 2019) work in progress, not yet usable except for simple apis.  
-
+(September 2019) work in progress, not yet usable except for simple apis.  
 
 
 # Documentation
 
+[OpenAPI specification][openapi-spec].
+
 ## OpenAPI to Java type mapping
+
+[OpenAPI data types][openapi-spec-types]
+
+### simple data types
+
+The following table shows the supported data type mappings.
+
+`type`    | `format`    | generatr Java type  
+------    | --------    | ------------------  
+`integer` |             | `Integer`          
+`integer` | `int32`     | `Integer`          
+`integer` | `int64`     | `Long`             
+`number`  |             | `Float`
+`number`  | `float`     | `Float`
+`number`  | `double`    | `Double`
+`string`  |             | `String`
+`string`  | `byte`      | not implemented
+`string`  | `binary`    | not implemented
+`boolean` |             | `Boolean`
+`string`  | `date`      | not implemented (`LocalDate`)  
+`string`  | `date-time` | not implemented (`Instant`, `ZonedDateTime` ?)
+`string`  | `password`  | ignored
+
 
 ### array
 
@@ -36,8 +60,8 @@ it will create the endpoint like this:
 
 #### `x-java-type`
 
-The generatr does support an OpenAPI extension for array schemas. By adding the `x-java-type`
-extension to the array schema it is possible to override the default:
+The generatr does support an [OpenAPI extension][openapi-spec-exts] for array schemas. By adding the
+ `x-java-type` extension to the array schema it is possible to override the default:
 
     /array-collection:
     get:
@@ -62,12 +86,24 @@ line will change the endpoint to:
     ResponseEntity<Collection<String>> getArrayCollection();
 
 
-The generatr needs to know the given type to generate proper java code so we can't simply add
-a random collection type. The generatr does currently recognize the following types:
+The generatr needs to know the given type to generate proper java code so we can't simply add a random
+ collection type. The generatr does currently recognize the following types:
 
-- java.util.Collection 
+- `java.util.Collection` 
 
 
 # Sample
 
-See `openapi-generatr-spring-mvc-sample` for a complete working sample for a minimal openapi.yaml.
+See [`openapi-generatr-spring-mvc-sample`][generatr-sample] for a complete working sample of a minimal
+ openapi.yaml.
+
+
+
+[openapi]: https://www.openapis.org/
+[openapi-spec]: https://github.com/OAI/OpenAPI-Specification
+[openapi-spec-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#dataTypes
+[openapi-spec-exts]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#specificationExtensions
+
+[springboot]: https://spring.io/projects/spring-boot
+
+[generatr-sample]: https://github.com/hauner/openapi-generatr-spring-mvc-sample
