@@ -26,7 +26,7 @@ class ObjectDataType implements DataType {
     String type
     String pkg = 'unknown'
 
-    Map<String, DataType> properties = new LinkedHashMap<>()
+    Map<String, DataType> properties = new HashMap<>()
 
     @Override
     String getName () {
