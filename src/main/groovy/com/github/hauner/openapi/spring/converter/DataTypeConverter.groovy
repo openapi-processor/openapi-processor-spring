@@ -21,6 +21,7 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
@@ -42,7 +43,8 @@ class DataTypeConverter {
 
     private static final KNOWN_DATA_TYPES = [
         string: [
-            default: {new StringDataType()}
+            default: {new StringDataType()},
+            date: {new LocalDateDataType ()}
         ],
         integer: [
             default: {new IntegerDataType()},

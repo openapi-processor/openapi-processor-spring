@@ -50,6 +50,7 @@ class DataTypeConverterSpec extends Specification {
         where:
         type      | format   | javaType
         'string'  | null     | 'String'
+        'string'  | 'date'   | 'LocalDate'
         'integer' | null     | 'Integer'
         'integer' | 'int32'  | 'Integer'
         'integer' | 'int64'  | 'Long'
