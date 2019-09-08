@@ -75,8 +75,9 @@ class DataTypeConverter {
     }
 
     /**
-     * converts an open api type (i.e. a schema) to a java data type. If the schema is not a simple
-     * inline type the objectName is used as the type and it is added to the list of data types.
+     * converts an open api type (i.e. a {@code Schema}) to a java data type including nested types.
+     * All (nested) $referenced types (except inline types) must be available from {@code dataTypes}.
+     * {@code objectName} is used as the type name and it is added to the list of data types.
      *
      * @param schema the open api type
      * @param objectName type name for an object
@@ -90,31 +91,20 @@ class DataTypeConverter {
         } else if (isArray (schema)) {
             createArrayDataType (schema as ArraySchema, objectName, dataTypes)
 
-        } else if (isObject (schema)) {
-            createObjectDataType (schema, objectName, dataTypes)
-
         } else if (isRefObject (schema)) {
             def datatype = dataTypes.findRef (schema.$ref)
             if (datatype) {
                 return datatype
             }
 
-            createObjectDataType (schema, schema.name, dataTypes)
+            createObjectDataType (schema, getRefName (schema), dataTypes)
+
+        } else if (isObject (schema)) {
+            createObjectDataType (schema, objectName, dataTypes)
 
         } else {
-//            createSimpleDataType (schema)
             createSimpleDataType (schema, objectName, dataTypes)
         }
-    }
-
-    /**
-     * converts an open api type (i.e. a schema) to a java data type.
-     *
-     * @param schema the open api type
-     * @return the resulting java data type
-     */
-    DataType convert (Schema schema) {
-        return createSimpleDataType (schema)
     }
 
     private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
@@ -123,7 +113,7 @@ class DataTypeConverter {
         switch(getJavaType(schema)) {
             case Collection.name:
                 new CollectionDataType (item: item)
-                break;
+                break
             default:
                 new ArrayDataType(item: item)
         }
@@ -145,8 +135,9 @@ class DataTypeConverter {
 
         schema.properties.each { Map.Entry<String, Schema> entry ->
             def propType
-            if (isSimpleInline (entry.value)) {
-                propType = convert (entry.value) // never asked again, no need to remember this
+            if (isSimple (entry.value)) {
+                // simple inline type,  no need to remember this
+                propType = createSimpleDataType (entry.value)
             } else {
                 propType = convert (entry.value, getNestedObjectName (objectName, entry.key), dataTypes)
             }
@@ -209,7 +200,12 @@ class DataTypeConverter {
         schema.$ref != null
     }
 
-    private boolean isSimpleInline (Schema schema) {
+    private boolean isSimple (Schema schema) {
         ['string', 'integer', 'number', 'boolean'].contains (schema.type)
     }
+
+    private String getRefName (Schema schema) {
+        schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
+    }
+
 }

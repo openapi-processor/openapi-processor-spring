@@ -17,8 +17,10 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
+import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -26,7 +28,7 @@ import spock.lang.Unroll
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
-    def converter = new DataTypeConverter()
+    def converter = new DataTypeConverter(new DefaultApiOptions())
 
 
     void "creates none data type" () {
@@ -75,6 +77,28 @@ class DataTypeConverterSpec extends Specification {
         type | format
         'x'  | null
         'y'  | 'none'
+    }
+
+    void "converts object schema with ref" () {
+        def dt = new DataTypes()
+
+        Schema barSchema = new Schema(type: 'object', properties: [
+            val: new Schema (type: 'string')
+        ])
+        Schema fooSchema = new Schema (type: 'object', properties: [
+            bar: new ObjectSchema ($ref: "#/components/schemas/Bar")
+        ])
+
+        when:
+        converter.convert (barSchema, 'Bar', dt)
+        converter.convert (fooSchema, 'Foo', dt)
+
+        then:
+        assert dt.size () == 2
+        def bar = dt.find ('Bar')
+        bar.properties['val'].name == 'String'
+        def foo = dt.find ('Foo')
+        foo.properties['bar'] == bar
     }
 
     void "converts simple array schema to Array[]" () {
