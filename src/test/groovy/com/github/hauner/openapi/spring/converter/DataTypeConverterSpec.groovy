@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
@@ -252,7 +253,7 @@ components:
         assert title.name == 'String'
     }
 
-    void "create named simple data types from #/components/schemas" () {
+    void "creates named simple data types from #/components/schemas" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -299,6 +300,61 @@ components:
         assert dataTypes.find ('Book')
         assert dataTypes.find ('Isbn')
         assert dataTypes.find ('Title')
+    }
+
+    void "creates named array data types from #/components/schemas" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: component simple schemas 
+  version: 1.0.0
+
+paths:
+  /book:
+    get:
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+                schema:
+                  \$ref: '#/components/schemas/Book'
+
+components:
+
+  schemas:
+    Authors:
+      type: array
+      items:
+        \$ref: '#/components/schemas/Author'
+        
+    Author:      
+      type: object
+      properties:
+        name:
+          type: string
+     
+    Book:
+      type: object
+      properties:
+        authors:
+          \$ref: '#/components/schemas/Authors'
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        api.models.size () == 3
+
+        and:
+        def dataTypes = api.models
+        def book = dataTypes.find ('Book')
+        def authors = dataTypes.find ('Authors')
+        authors instanceof ArrayDataType
+        authors.name == 'Author[]'
+        def author = dataTypes.find ('Author')
     }
 
 }

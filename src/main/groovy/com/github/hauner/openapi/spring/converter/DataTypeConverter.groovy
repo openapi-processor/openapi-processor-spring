@@ -110,13 +110,17 @@ class DataTypeConverter {
     private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
         DataType item = convert (schema.items, objectName, dataTypes)
 
-        switch(getJavaType(schema)) {
+        def arrayType
+        switch (getJavaType (schema)) {
             case Collection.name:
-                new CollectionDataType (item: item)
+                arrayType = new CollectionDataType (item: item)
                 break
             default:
-                new ArrayDataType(item: item)
+                arrayType = new ArrayDataType (item: item)
         }
+
+        dataTypes.add (objectName, arrayType)
+        arrayType
     }
 
     private String getJavaType (ArraySchema schema) {
@@ -166,7 +170,6 @@ class DataTypeConverter {
         simpleType
     }
 
-    // not needed anymore ?
     private DataType createSimpleDataType (Schema schema) {
         def type = KNOWN_DATA_TYPES.get (schema.type)
         if (type == null) {
