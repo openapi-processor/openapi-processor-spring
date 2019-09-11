@@ -40,4 +40,8 @@ class DataTypeInfo {
         this.inline = inline
     }
 
+    boolean isArray () {
+        schema.type == 'array'
+    }
+
 }

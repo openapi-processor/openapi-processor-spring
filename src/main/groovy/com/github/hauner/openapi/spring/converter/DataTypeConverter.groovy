@@ -87,7 +87,7 @@ class DataTypeConverter {
     DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
         Schema schema = dataTypeInfo.schema
 
-        if (isArray (schema)) {
+        if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
 
         } else if (isRefObject (schema)) {
@@ -199,10 +199,6 @@ class DataTypeConverter {
 
     boolean hasExtensions (ArraySchema schema) {
         schema.extensions != null
-    }
-
-    private boolean isArray (Schema schema) {
-        schema.type == 'array'
     }
 
     private boolean isObject (Schema schema) {
