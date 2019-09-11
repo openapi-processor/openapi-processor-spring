@@ -86,7 +86,6 @@ class DataTypeConverter {
      */
     DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
         Schema schema = dataTypeInfo.schema
-        String objectName = dataTypeInfo.name
 
         if (!schema) {
             new NoneDataType ()
@@ -107,7 +106,7 @@ class DataTypeConverter {
             createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (schema, objectName, dataTypes)
+            createSimpleDataType (dataTypeInfo, dataTypes)
         }
     }
 
@@ -163,7 +162,10 @@ class DataTypeConverter {
         objectType
     }
 
-    private DataType createSimpleDataType (Schema schema, String name, DataTypes dataTypes) {
+    private DataType createSimpleDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+        Schema schema = dataTypeInfo.schema
+        String name = dataTypeInfo.name
+
         def type = KNOWN_DATA_TYPES.get (schema.type)
         if (type == null) {
             throw new UnknownDataTypeException(schema.type, schema.format)
