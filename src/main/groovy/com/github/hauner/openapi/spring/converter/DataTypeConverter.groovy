@@ -87,10 +87,7 @@ class DataTypeConverter {
     DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
         Schema schema = dataTypeInfo.schema
 
-        if (!schema) {
-            new NoneDataType ()
-
-        } else if (isArray (schema)) {
+        if (isArray (schema)) {
             createArrayDataType (dataTypeInfo, dataTypes)
 
         } else if (isRefObject (schema)) {
