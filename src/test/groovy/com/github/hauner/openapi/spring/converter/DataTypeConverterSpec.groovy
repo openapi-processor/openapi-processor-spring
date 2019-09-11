@@ -45,7 +45,7 @@ class DataTypeConverterSpec extends Specification {
         Schema schema = new Schema(type: type, format: format)
 
         when:
-        def datatype = converter.convert (schema, null, new DataTypes())
+        def datatype = converter.convert (new DataTypeInfo (schema, javaType, true), new DataTypes())
 
         then:
         datatype.name == javaType
@@ -67,7 +67,7 @@ class DataTypeConverterSpec extends Specification {
         Schema schema = new Schema(type: type, format: format)
 
         when:
-        converter.convert (schema, null, new DataTypes())
+        converter.convert (new DataTypeInfo(schema, null), new DataTypes())
 
         then:
         def e = thrown(UnknownDataTypeException)
@@ -91,8 +91,8 @@ class DataTypeConverterSpec extends Specification {
         ])
 
         when:
-        converter.convert (barSchema, 'Bar', dt)
-        converter.convert (fooSchema, 'Foo', dt)
+        converter.convert (new DataTypeInfo (barSchema, 'Bar', false), dt)
+        converter.convert (new DataTypeInfo (fooSchema, 'Foo', false), dt)
 
         then:
         assert dt.size () == 2

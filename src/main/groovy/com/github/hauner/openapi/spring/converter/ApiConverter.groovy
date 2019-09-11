@@ -116,7 +116,8 @@ class ApiConverter {
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
 
-            DataType dataType = dataTypeConverter.convert (mediaType.schema, inlineName, target.models)
+            DataType dataType = dataTypeConverter.convert (
+                new DataTypeInfo (mediaType.schema, inlineName), target.models)
 
             def response = new Response (
                 contentType: contentType,
