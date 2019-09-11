@@ -90,7 +90,7 @@ class DataTypeConverter {
         if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
 
-        } else if (isRefObject (schema)) {
+        } else if (dataTypeInfo.isRefObject ()) {
             def datatype = dataTypes.findRef (schema.$ref)
             if (datatype) {
                 return datatype
@@ -203,10 +203,6 @@ class DataTypeConverter {
 
     private boolean isObject (Schema schema) {
         schema.type == 'object'
-    }
-
-    private boolean isRefObject (Schema schema) {
-        schema.$ref != null
     }
 
     private boolean isSimple (Schema schema) {

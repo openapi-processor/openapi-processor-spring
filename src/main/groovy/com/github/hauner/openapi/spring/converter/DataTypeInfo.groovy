@@ -44,4 +44,8 @@ class DataTypeInfo {
         schema.type == 'array'
     }
 
+    boolean isRefObject () {
+        schema.$ref != null
+    }
+
 }
