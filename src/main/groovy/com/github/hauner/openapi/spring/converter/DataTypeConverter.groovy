@@ -145,16 +145,9 @@ class DataTypeConverter {
         )
 
         schema.properties.each { Map.Entry<String, Schema> entry ->
-            def propType
-            if (isSimple (entry.value)) {
-                // simple inline type,  no need to remember this
-                propType = createSimpleDataType (entry.value)
-            } else {
-                def name = getNestedObjectName (objectName, entry.key)
-                DataTypeInfo info = new DataTypeInfo(entry.value, name)
-                propType = convert (info, dataTypes)
-            }
-
+            def name = getNestedObjectName (objectName, entry.key)
+            DataTypeInfo info = new DataTypeInfo(entry.value, name, true)
+            def propType = convert (info, dataTypes)
             objectType.addObjectProperty (entry.key, propType)
         }
 
