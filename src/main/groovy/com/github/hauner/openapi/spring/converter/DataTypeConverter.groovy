@@ -99,7 +99,7 @@ class DataTypeConverter {
             DataTypeInfo objectDataTypeInfo = new DataTypeInfo(schema, getRefName (schema))
             createObjectDataType (objectDataTypeInfo, dataTypes)
 
-        } else if (isObject (schema)) {
+        } else if (dataTypeInfo.isObject ()) {
             createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
@@ -199,10 +199,6 @@ class DataTypeConverter {
 
     boolean hasExtensions (ArraySchema schema) {
         schema.extensions != null
-    }
-
-    private boolean isObject (Schema schema) {
-        schema.type == 'object'
     }
 
     private boolean isSimple (Schema schema) {

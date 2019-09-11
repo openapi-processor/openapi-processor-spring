@@ -44,6 +44,10 @@ class DataTypeInfo {
         schema.type == 'array'
     }
 
+    boolean isObject () {
+        schema.type == 'object'
+    }
+
     boolean isRefObject () {
         schema.$ref != null
     }
