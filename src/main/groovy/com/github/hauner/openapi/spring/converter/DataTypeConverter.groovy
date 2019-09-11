@@ -84,30 +84,6 @@ class DataTypeConverter {
      * @param dataTypes known object types
      * @return the resulting java data type
      */
-    @Deprecated
-    DataType convert (Schema schema, String objectName, DataTypes dataTypes) {
-        if (!schema) {
-            new NoneDataType ()
-
-        } else if (isArray (schema)) {
-            createArrayDataType (schema as ArraySchema, objectName, dataTypes)
-
-        } else if (isRefObject (schema)) {
-            def datatype = dataTypes.findRef (schema.$ref)
-            if (datatype) {
-                return datatype
-            }
-
-            createObjectDataType (schema, getRefName (schema), dataTypes)
-
-        } else if (isObject (schema)) {
-            createObjectDataType (schema, objectName, dataTypes)
-
-        } else {
-            createSimpleDataType (schema, objectName, dataTypes)
-        }
-    }
-
     DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
         Schema schema = dataTypeInfo.schema
         String objectName = dataTypeInfo.name
@@ -135,7 +111,8 @@ class DataTypeConverter {
     }
 
     private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
-        DataType item = convert (schema.items, objectName, dataTypes)
+        DataTypeInfo info = new DataTypeInfo(schema.items, objectName)
+        DataType item = convert (info, dataTypes)
 
         def arrayType
         switch (getJavaType (schema)) {
@@ -170,7 +147,9 @@ class DataTypeConverter {
                 // simple inline type,  no need to remember this
                 propType = createSimpleDataType (entry.value)
             } else {
-                propType = convert (entry.value, getNestedObjectName (objectName, entry.key), dataTypes)
+                def name = getNestedObjectName (objectName, entry.key)
+                DataTypeInfo info = new DataTypeInfo(entry.value, name)
+                propType = convert (info, dataTypes)
             }
 
             objectType.addObjectProperty (entry.key, propType)
