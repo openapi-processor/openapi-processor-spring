@@ -199,12 +199,4 @@ class DataTypeConverter {
         schema.extensions != null
     }
 
-    private boolean isSimple (Schema schema) {
-        ['string', 'integer', 'number', 'boolean'].contains (schema.type)
-    }
-
-    private String getRefName (Schema schema) {
-        schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
-    }
-
 }
