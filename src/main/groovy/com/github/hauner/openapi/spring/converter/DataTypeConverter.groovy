@@ -92,7 +92,7 @@ class DataTypeConverter {
             new NoneDataType ()
 
         } else if (isArray (schema)) {
-            createArrayDataType (schema as ArraySchema, objectName, dataTypes)
+            createArrayDataType (dataTypeInfo, dataTypes)
 
         } else if (isRefObject (schema)) {
             def datatype = dataTypes.findRef (schema.$ref)
@@ -110,12 +110,12 @@ class DataTypeConverter {
         }
     }
 
-    private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
-        DataTypeInfo info = new DataTypeInfo(schema.items, objectName)
+    private DataType createArrayDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+        DataTypeInfo info = new DataTypeInfo(dataTypeInfo.schema.items, dataTypeInfo.name)
         DataType item = convert (info, dataTypes)
 
         def arrayType
-        switch (getJavaType (schema)) {
+        switch (getJavaType (dataTypeInfo.schema as ArraySchema)) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
