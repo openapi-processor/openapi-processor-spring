@@ -85,19 +85,17 @@ class DataTypeConverter {
      * @return the resulting java data type
      */
     DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        Schema schema = dataTypeInfo.schema
 
         if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isRefObject ()) {
-            def datatype = dataTypes.findRef (schema.$ref)
+            def datatype = dataTypes.findRef (dataTypeInfo.ref)
             if (datatype) {
                 return datatype
             }
 
-            DataTypeInfo objectDataTypeInfo = new DataTypeInfo(schema, getRefName (schema))
-            createObjectDataType (objectDataTypeInfo, dataTypes)
+            createObjectDataType (dataTypeInfo.buildForRef (), dataTypes)
 
         } else if (dataTypeInfo.isObject ()) {
             createObjectDataType (dataTypeInfo, dataTypes)

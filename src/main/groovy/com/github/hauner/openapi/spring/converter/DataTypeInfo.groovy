@@ -40,6 +40,19 @@ class DataTypeInfo {
         this.inline = inline
     }
 
+    /**
+     * Factory method to create a {@code DataTypeInfo} with the $ref name (without "path").
+     *
+     * @return a new DataTypeObject
+     */
+    DataTypeInfo buildForRef () {
+        new DataTypeInfo(schema, getRefName (schema))
+    }
+
+    String getRef () {
+        schema.$ref
+    }
+
     boolean isArray () {
         schema.type == 'array'
     }
@@ -50,6 +63,10 @@ class DataTypeInfo {
 
     boolean isRefObject () {
         schema.$ref != null
+    }
+
+    private String getRefName (Schema schema) {
+        schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
     }
 
 }
