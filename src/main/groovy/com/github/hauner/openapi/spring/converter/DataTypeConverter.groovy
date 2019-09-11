@@ -111,8 +111,8 @@ class DataTypeConverter {
     }
 
     private DataType createArrayDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        DataTypeInfo info = new DataTypeInfo(dataTypeInfo.schema.items, dataTypeInfo.name)
-        DataType item = convert (info, dataTypes)
+        DataTypeInfo itemDataTypeInfo = new DataTypeInfo(dataTypeInfo.schema.items, dataTypeInfo.name)
+        DataType item = convert (itemDataTypeInfo, dataTypes)
 
         def arrayType
         switch (getJavaType (dataTypeInfo.schema as ArraySchema)) {
