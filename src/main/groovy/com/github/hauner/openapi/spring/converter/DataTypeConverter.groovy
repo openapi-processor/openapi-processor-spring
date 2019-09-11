@@ -100,10 +100,11 @@ class DataTypeConverter {
                 return datatype
             }
 
-            createObjectDataType (schema, getRefName (schema), dataTypes)
+            DataTypeInfo objectDataTypeInfo = new DataTypeInfo(schema, getRefName (schema))
+            createObjectDataType (objectDataTypeInfo, dataTypes)
 
         } else if (isObject (schema)) {
-            createObjectDataType (schema, objectName, dataTypes)
+            createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
             createSimpleDataType (schema, objectName, dataTypes)
@@ -135,7 +136,10 @@ class DataTypeConverter {
         schema.extensions.get ('x-java-type')
     }
 
-    private DataType createObjectDataType (Schema schema, String objectName, DataTypes dataTypes) {
+    private DataType createObjectDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+        Schema schema = dataTypeInfo.schema
+        String objectName = dataTypeInfo.name
+
         def objectType = new ObjectDataType (
             type: objectName,
             pkg: [options.packageName, 'model'].join ('.')
