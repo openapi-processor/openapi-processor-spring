@@ -178,19 +178,6 @@ class DataTypeConverter {
         simpleType
     }
 
-    private DataType createSimpleDataType (Schema schema) {
-        def type = KNOWN_DATA_TYPES.get (schema.type)
-        if (type == null) {
-            throw new UnknownDataTypeException(schema.type, schema.format)
-        }
-
-        if (schema.format) {
-            type."${schema.format}"(schema)
-        } else {
-            type.default(schema)
-        }
-    }
-
     private String getNestedObjectName (String inlineObjectName, String propName) {
         inlineObjectName + propName.capitalize ()
     }
