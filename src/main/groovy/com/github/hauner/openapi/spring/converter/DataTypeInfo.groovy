@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import groovy.transform.stc.ClosureParams
 import io.swagger.v3.oas.models.media.Schema
 
 /**
@@ -24,6 +25,8 @@ import io.swagger.v3.oas.models.media.Schema
  *
  * @author Martin Hauner
  */
+
+// todo better name SchemaInfo ? it wraps the source schema and not the target data type
 class DataTypeInfo {
     Schema schema
     String name
@@ -40,13 +43,31 @@ class DataTypeInfo {
         this.inline = inline
     }
 
+    void eachProperty (@ClosureParams({"String,DataTypeInfo"}) Closure closure) {
+        schema.properties.each { Map.Entry<String, Schema> entry ->
+            closure (entry.key, buildForNestedType (entry.key, entry.value))
+        }
+    }
+
     /**
      * Factory method to create a {@code DataTypeInfo} with the $ref name (without "path").
      *
-     * @return a new DataTypeObject
+     * @return a new DataTypeInfo
      */
     DataTypeInfo buildForRef () {
         new DataTypeInfo(schema, getRefName (schema))
+    }
+
+    /**
+     * Factory method to create an inline {@code DataTypeInfo} with (property) name and (property)
+     * schema.
+     *
+     * @param nestedName the property name
+     * @param nestedSchema the property schema
+     * @return a new DataTypeInfo
+     */
+    DataTypeInfo buildForNestedType (String nestedName, Schema nestedSchema) {
+        new DataTypeInfo (nestedSchema, getNestedTypeName (nestedName), true)
     }
 
     /**
@@ -90,6 +111,10 @@ class DataTypeInfo {
 
     private String getRefName (Schema schema) {
         schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
+    }
+
+    private String getNestedTypeName (String propName) {
+        name + propName.capitalize ()
     }
 
 }

@@ -135,19 +135,14 @@ class DataTypeConverter {
     }
 
     private DataType createObjectDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        Schema schema = dataTypeInfo.schema
-        String objectName = dataTypeInfo.name
-
         def objectType = new ObjectDataType (
-            type: objectName,
+            type: dataTypeInfo.name,
             pkg: [options.packageName, 'model'].join ('.')
         )
 
-        schema.properties.each { Map.Entry<String, Schema> entry ->
-            def name = getNestedObjectName (objectName, entry.key)
-            DataTypeInfo info = new DataTypeInfo(entry.value, name, true)
-            def propType = convert (info, dataTypes)
-            objectType.addObjectProperty (entry.key, propType)
+        dataTypeInfo.eachProperty { String propName, DataTypeInfo propDataTypeInfo ->
+            def propType = convert (propDataTypeInfo, dataTypes)
+            objectType.addObjectProperty (propName, propType)
         }
 
         dataTypes.add (objectType)
@@ -173,10 +168,6 @@ class DataTypeConverter {
 
         dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
-    }
-
-    private String getNestedObjectName (String inlineObjectName, String propName) {
-        inlineObjectName + propName.capitalize ()
     }
 
     boolean hasExtensions (ArraySchema schema) {
