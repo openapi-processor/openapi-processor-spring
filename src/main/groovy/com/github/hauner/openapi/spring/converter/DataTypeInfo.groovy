@@ -49,6 +49,29 @@ class DataTypeInfo {
         new DataTypeInfo(schema, getRefName (schema))
     }
 
+    /**
+     * get type from OpenAPI schema.
+     *
+     * @return schema type
+     */
+    String getType () {
+        schema.type
+    }
+
+    /**
+     * get type format from OpenAPI schema.
+     *
+     * @return schema type format
+     */
+    String getFormat () {
+        schema.format
+    }
+
+    /**
+     * get $ref from OpenAPI schema.
+     *
+     * @return schema $ref
+     */
     String getRef () {
         schema.$ref
     }

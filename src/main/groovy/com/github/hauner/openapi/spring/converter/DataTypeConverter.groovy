@@ -155,26 +155,23 @@ class DataTypeConverter {
     }
 
     private DataType createSimpleDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        Schema schema = dataTypeInfo.schema
-        String name = dataTypeInfo.name
-
-        def type = KNOWN_DATA_TYPES.get (schema.type)
+        def type = KNOWN_DATA_TYPES.get (dataTypeInfo.type)
         if (type == null) {
-            throw new UnknownDataTypeException(schema.type, schema.format)
+            throw new UnknownDataTypeException(dataTypeInfo.type, dataTypeInfo.format)
         }
 
         DataType simpleType
-        if (schema.format) {
-            simpleType = type."${schema.format}"(schema)
+        if (dataTypeInfo.format) {
+            simpleType = type."${dataTypeInfo.format}"(dataTypeInfo)
         } else {
-            simpleType = type.default(schema)
+            simpleType = type.default(dataTypeInfo)
         }
 
         if (dataTypeInfo.inline) {
             return simpleType
         }
 
-        dataTypes.add (name, simpleType)
+        dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
     }
 
