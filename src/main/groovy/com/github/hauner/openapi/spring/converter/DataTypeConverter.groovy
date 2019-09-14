@@ -31,8 +31,6 @@ import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import io.swagger.v3.oas.models.media.ArraySchema
-import io.swagger.v3.oas.models.media.Schema
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -106,11 +104,11 @@ class DataTypeConverter {
     }
 
     private DataType createArrayDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        DataTypeInfo itemDataTypeInfo = new DataTypeInfo(dataTypeInfo.schema.items, dataTypeInfo.name)
+        DataTypeInfo itemDataTypeInfo = dataTypeInfo.buildForItem ()
         DataType item = convert (itemDataTypeInfo, dataTypes)
 
         def arrayType
-        switch (getJavaType (dataTypeInfo.schema as ArraySchema)) {
+        switch (dataTypeInfo.getXJavaType ()) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
@@ -124,14 +122,6 @@ class DataTypeConverter {
 
         dataTypes.add (dataTypeInfo.name, arrayType)
         arrayType
-    }
-
-    private String getJavaType (ArraySchema schema) {
-        if (!hasExtensions (schema)) {
-            return null
-        }
-
-        schema.extensions.get ('x-java-type')
     }
 
     private DataType createObjectDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
@@ -168,10 +158,6 @@ class DataTypeConverter {
 
         dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
-    }
-
-    boolean hasExtensions (ArraySchema schema) {
-        schema.extensions != null
     }
 
 }

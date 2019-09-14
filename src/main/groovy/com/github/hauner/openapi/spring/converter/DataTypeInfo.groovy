@@ -71,6 +71,15 @@ class DataTypeInfo {
     }
 
     /**
+     * Factory method to create an {@code DataTypeInfo} of the item type of an array schema.
+     *
+     * @return s new DataTypeInfo
+     */
+    DataTypeInfo buildForItem () {
+        new DataTypeInfo (schema.items, name)
+    }
+
+    /**
      * get type from OpenAPI schema.
      *
      * @return schema type
@@ -97,6 +106,20 @@ class DataTypeInfo {
         schema.$ref
     }
 
+    /**
+     * get the custom Java type (fully qualified) defined via the {@code x-java-type} OpenAPI
+     * extension. If no {@code x-java-type} is set the result is {@code null}.
+     *
+     * @return fully qualified name of the Java type or null if not set
+     */
+    String getXJavaType () {
+        if (!hasExtensions ()) {
+            return null
+        }
+
+        schema.extensions.get ('x-java-type')
+    }
+
     boolean isArray () {
         schema.type == 'array'
     }
@@ -107,6 +130,10 @@ class DataTypeInfo {
 
     boolean isRefObject () {
         schema.$ref != null
+    }
+
+    private boolean hasExtensions () {
+        schema.extensions != null
     }
 
     private String getRefName (Schema schema) {
