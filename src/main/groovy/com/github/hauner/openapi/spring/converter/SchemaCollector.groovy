@@ -42,7 +42,7 @@ class SchemaCollector {
             collectRefs (right.value, rightRefs)
 
             if (leftRefs.empty && rightRefs.empty) {
-                return 0
+                return left.key <=> right.key
             }
 
             if (leftRefs.empty && !rightRefs.empty) {
@@ -61,7 +61,7 @@ class SchemaCollector {
                 return 1
             }
 
-            return 0
+            return left.key <=> right.key
         }
 
         sortedSchemas.each { Map.Entry<String, Schema> entry ->
@@ -70,7 +70,7 @@ class SchemaCollector {
 
             DataType type = dataTypes.find (name)
             if (!type) {
-                converter.convert (schema, name, dataTypes)
+                converter.convert (new SchemaInfo(schema, name), dataTypes)
             }
         }
     }

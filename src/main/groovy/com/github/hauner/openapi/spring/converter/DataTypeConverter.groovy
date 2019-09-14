@@ -31,8 +31,6 @@ import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import io.swagger.v3.oas.models.media.ArraySchema
-import io.swagger.v3.oas.models.media.Schema
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -77,41 +75,40 @@ class DataTypeConverter {
     /**
      * converts an open api type (i.e. a {@code Schema}) to a java data type including nested types.
      * All (nested) $referenced types (except inline types) must be available from {@code dataTypes}.
-     * {@code objectName} is used as the type name and it is added to the list of data types.
+     * {@code dataTypeInfo} provides the type name used to add it to the list of data types (except
+     * for inline types).
      *
-     * @param schema the open api type
-     * @param objectName type name for an object
+     * @param dataTypeInfo the open api type with context information
      * @param dataTypes known object types
      * @return the resulting java data type
      */
-    DataType convert (Schema schema, String objectName, DataTypes dataTypes) {
-        if (!schema) {
-            new NoneDataType ()
+    DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
 
-        } else if (isArray (schema)) {
-            createArrayDataType (schema as ArraySchema, objectName, dataTypes)
+        if (dataTypeInfo.isArray ()) {
+            createArrayDataType (dataTypeInfo, dataTypes)
 
-        } else if (isRefObject (schema)) {
-            def datatype = dataTypes.findRef (schema.$ref)
+        } else if (dataTypeInfo.isRefObject ()) {
+            def datatype = dataTypes.findRef (dataTypeInfo.ref)
             if (datatype) {
                 return datatype
             }
 
-            createObjectDataType (schema, getRefName (schema), dataTypes)
+            createObjectDataType (dataTypeInfo.buildForRef (), dataTypes)
 
-        } else if (isObject (schema)) {
-            createObjectDataType (schema, objectName, dataTypes)
+        } else if (dataTypeInfo.isObject ()) {
+            createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (schema, objectName, dataTypes)
+            createSimpleDataType (dataTypeInfo, dataTypes)
         }
     }
 
-    private DataType createArrayDataType (ArraySchema schema, String objectName, DataTypes dataTypes) {
-        DataType item = convert (schema.items, objectName, dataTypes)
+    private DataType createArrayDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
+        SchemaInfo itemDataTypeInfo = dataTypeInfo.buildForItem ()
+        DataType item = convert (itemDataTypeInfo, dataTypes)
 
         def arrayType
-        switch (getJavaType (schema)) {
+        switch (dataTypeInfo.getXJavaType ()) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
@@ -119,96 +116,48 @@ class DataTypeConverter {
                 arrayType = new ArrayDataType (item: item)
         }
 
-        dataTypes.add (objectName, arrayType)
+        if (dataTypeInfo.inline) {
+            return arrayType
+        }
+
+        dataTypes.add (dataTypeInfo.name, arrayType)
         arrayType
     }
 
-    private String getJavaType (ArraySchema schema) {
-        if (!hasExtensions (schema)) {
-            return null
-        }
-
-        schema.extensions.get ('x-java-type')
-    }
-
-    private DataType createObjectDataType (Schema schema, String objectName, DataTypes dataTypes) {
+    private DataType createObjectDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
         def objectType = new ObjectDataType (
-            type: objectName,
+            type: dataTypeInfo.name,
             pkg: [options.packageName, 'model'].join ('.')
         )
 
-        schema.properties.each { Map.Entry<String, Schema> entry ->
-            def propType
-            if (isSimple (entry.value)) {
-                // simple inline type,  no need to remember this
-                propType = createSimpleDataType (entry.value)
-            } else {
-                propType = convert (entry.value, getNestedObjectName (objectName, entry.key), dataTypes)
-            }
-
-            objectType.addObjectProperty (entry.key, propType)
+        dataTypeInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
+            def propType = convert (propDataTypeInfo, dataTypes)
+            objectType.addObjectProperty (propName, propType)
         }
 
         dataTypes.add (objectType)
         objectType
     }
 
-    private DataType createSimpleDataType (Schema schema, String name, DataTypes dataTypes) {
-        def type = KNOWN_DATA_TYPES.get (schema.type)
+    private DataType createSimpleDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
+        def type = KNOWN_DATA_TYPES.get (dataTypeInfo.type)
         if (type == null) {
-            throw new UnknownDataTypeException(schema.type, schema.format)
+            throw new UnknownDataTypeException(dataTypeInfo.type, dataTypeInfo.format)
         }
 
         DataType simpleType
-        if (schema.format) {
-            simpleType = type."${schema.format}"(schema)
+        if (dataTypeInfo.format) {
+            simpleType = type."${dataTypeInfo.format}"(dataTypeInfo)
         } else {
-            simpleType = type.default(schema)
+            simpleType = type.default(dataTypeInfo)
         }
 
-        dataTypes.add (name, simpleType)
+        if (dataTypeInfo.inline) {
+            return simpleType
+        }
+
+        dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
-    }
-
-    private DataType createSimpleDataType (Schema schema) {
-        def type = KNOWN_DATA_TYPES.get (schema.type)
-        if (type == null) {
-            throw new UnknownDataTypeException(schema.type, schema.format)
-        }
-
-        if (schema.format) {
-            type."${schema.format}"(schema)
-        } else {
-            type.default(schema)
-        }
-    }
-
-    private String getNestedObjectName (String inlineObjectName, String propName) {
-        inlineObjectName + propName.capitalize ()
-    }
-
-    boolean hasExtensions (ArraySchema schema) {
-        schema.extensions != null
-    }
-
-    private boolean isArray (Schema schema) {
-        schema.type == 'array'
-    }
-
-    private boolean isObject (Schema schema) {
-        schema.type == 'object'
-    }
-
-    private boolean isRefObject (Schema schema) {
-        schema.$ref != null
-    }
-
-    private boolean isSimple (Schema schema) {
-        ['string', 'integer', 'number', 'boolean'].contains (schema.type)
-    }
-
-    private String getRefName (Schema schema) {
-        schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
     }
 
 }
