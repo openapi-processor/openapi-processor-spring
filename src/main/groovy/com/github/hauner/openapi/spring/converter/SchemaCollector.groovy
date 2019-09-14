@@ -70,7 +70,7 @@ class SchemaCollector {
 
             DataType type = dataTypes.find (name)
             if (!type) {
-                converter.convert (new DataTypeInfo(schema, name), dataTypes)
+                converter.convert (new SchemaInfo(schema, name), dataTypes)
             }
         }
     }

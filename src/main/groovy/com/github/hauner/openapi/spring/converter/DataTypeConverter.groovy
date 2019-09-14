@@ -82,7 +82,7 @@ class DataTypeConverter {
      * @param dataTypes known object types
      * @return the resulting java data type
      */
-    DataType convert (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+    DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
 
         if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
@@ -103,8 +103,8 @@ class DataTypeConverter {
         }
     }
 
-    private DataType createArrayDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
-        DataTypeInfo itemDataTypeInfo = dataTypeInfo.buildForItem ()
+    private DataType createArrayDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
+        SchemaInfo itemDataTypeInfo = dataTypeInfo.buildForItem ()
         DataType item = convert (itemDataTypeInfo, dataTypes)
 
         def arrayType
@@ -124,13 +124,13 @@ class DataTypeConverter {
         arrayType
     }
 
-    private DataType createObjectDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+    private DataType createObjectDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
         def objectType = new ObjectDataType (
             type: dataTypeInfo.name,
             pkg: [options.packageName, 'model'].join ('.')
         )
 
-        dataTypeInfo.eachProperty { String propName, DataTypeInfo propDataTypeInfo ->
+        dataTypeInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
             def propType = convert (propDataTypeInfo, dataTypes)
             objectType.addObjectProperty (propName, propType)
         }
@@ -139,7 +139,7 @@ class DataTypeConverter {
         objectType
     }
 
-    private DataType createSimpleDataType (DataTypeInfo dataTypeInfo, DataTypes dataTypes) {
+    private DataType createSimpleDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
         def type = KNOWN_DATA_TYPES.get (dataTypeInfo.type)
         if (type == null) {
             throw new UnknownDataTypeException(dataTypeInfo.type, dataTypeInfo.format)

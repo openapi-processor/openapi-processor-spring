@@ -26,18 +26,17 @@ import io.swagger.v3.oas.models.media.Schema
  * @author Martin Hauner
  */
 
-// todo better name SchemaInfo ? it wraps the source schema and not the target data type
-class DataTypeInfo {
+class SchemaInfo {
     Schema schema
     String name
     boolean inline = false
 
-    DataTypeInfo (Schema schema, String name) {
+    SchemaInfo (Schema schema, String name) {
         this.schema = schema
         this.name = name
     }
 
-    DataTypeInfo (Schema schema, String name, boolean inline) {
+    SchemaInfo (Schema schema, String name, boolean inline) {
         this.schema = schema
         this.name = name
         this.inline = inline
@@ -54,8 +53,8 @@ class DataTypeInfo {
      *
      * @return a new DataTypeInfo
      */
-    DataTypeInfo buildForRef () {
-        new DataTypeInfo(schema, getRefName (schema))
+    SchemaInfo buildForRef () {
+        new SchemaInfo(schema, getRefName (schema))
     }
 
     /**
@@ -66,8 +65,8 @@ class DataTypeInfo {
      * @param nestedSchema the property schema
      * @return a new DataTypeInfo
      */
-    DataTypeInfo buildForNestedType (String nestedName, Schema nestedSchema) {
-        new DataTypeInfo (nestedSchema, getNestedTypeName (nestedName), true)
+    SchemaInfo buildForNestedType (String nestedName, Schema nestedSchema) {
+        new SchemaInfo (nestedSchema, getNestedTypeName (nestedName), true)
     }
 
     /**
@@ -75,8 +74,8 @@ class DataTypeInfo {
      *
      * @return s new DataTypeInfo
      */
-    DataTypeInfo buildForItem () {
-        new DataTypeInfo (schema.items, name)
+    SchemaInfo buildForItem () {
+        new SchemaInfo (schema.items, name)
     }
 
     /**
