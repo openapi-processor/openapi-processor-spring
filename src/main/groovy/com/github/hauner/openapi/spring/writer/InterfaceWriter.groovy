@@ -53,15 +53,20 @@ class InterfaceWriter {
 
         imports.add ('org.springframework.http.ResponseEntity')
 
-        endpoints.each {
-            imports.add (it.method.classNameWithPackage)
+        endpoints.each { ep ->
+            imports.add (ep.method.classNameWithPackage)
 
-            if (!it.response.empty) {
-                imports.add (it.response.import)
+            ep.parameters.each { p ->
+                imports.add (p.annotationWithPackage)
+            }
+
+            if (!ep.response.empty) {
+                imports.add (ep.response.import)
             }
         }
 
-        new ImportFilter ().filter (packageName, imports)
+        new ImportFilter ()
+            .filter (packageName, imports)
             .sort ()
     }
 }

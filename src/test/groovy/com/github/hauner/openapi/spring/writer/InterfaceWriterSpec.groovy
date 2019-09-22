@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.support.EmptyResponse
 import spock.lang.Specification
 
@@ -112,6 +113,24 @@ import org.springframework.web.bind.annotation.PostMapping;
         def result = extractImports (target.toString ())
         result.contains("""\
 import org.springframework.http.ResponseEntity;
+""")
+    }
+
+    void "writes RequestParam import" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
+                parameters: [
+                    new QueryParameter(name: 'any', dataType: new StringDataType())
+                ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.web.bind.annotation.RequestParam;
 """)
     }
 

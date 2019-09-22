@@ -7,10 +7,11 @@ package generated.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = true) String foo);
+    ResponseEntity<void> getEndpoint(@RequestParam(name = "foo") String foo);
 
 }
