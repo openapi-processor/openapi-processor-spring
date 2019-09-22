@@ -191,4 +191,5 @@ paths:
         itf.endpoints.get(0).method == HttpMethod.GET
         itf.endpoints.get(1).method == HttpMethod.POST
     }
+
 }
