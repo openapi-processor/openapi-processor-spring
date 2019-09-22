@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.model
 
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+
 /**
  * Endpoint properties.
  *
@@ -26,8 +28,10 @@ class Endpoint {
     HttpMethod method
 
     List<Response> responses = []
+    List<QueryParameter> parameters = []
 
     Response getResponse () {
         responses.first ()
     }
+
 }

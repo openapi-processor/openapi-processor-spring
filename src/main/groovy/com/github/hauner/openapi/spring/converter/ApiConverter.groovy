@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.StringUtil
@@ -27,6 +28,7 @@ import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.parameters.Parameter
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 /**
@@ -79,6 +81,9 @@ class ApiConverter {
                 Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
 
                 try {
+                    httpOperation.parameters.each { Parameter parameter ->
+                        ep.parameters.addAll (createParameter(parameter, target))
+                    }
 
                     httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
                         def httpStatus = responseEntry.key
@@ -99,6 +104,13 @@ class ApiConverter {
                 }
             }
         }
+    }
+
+    private QueryParameter createParameter (Parameter parameter, Api target) {
+        DataType dataType = dataTypeConverter.convert (
+            new SchemaInfo (parameter.schema, parameter.name), target.models)
+
+        new QueryParameter(name: parameter.name, required: parameter.required, dataType: dataType)
     }
 
     private String getInlineResponseName (String path, String httpStatus) {

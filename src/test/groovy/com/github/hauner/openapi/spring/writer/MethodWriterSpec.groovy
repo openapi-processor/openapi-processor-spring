@@ -27,6 +27,7 @@ import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -90,4 +91,22 @@ class MethodWriterSpec extends Specification {
     ResponseEntity<Map<String, Object>> getInline();
 """
     }
+
+    void "writes simple (optional) query parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false) String foo);
+"""
+    }
+
 }

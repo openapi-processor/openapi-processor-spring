@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.support.StringUtil
 
 /**
@@ -29,7 +30,7 @@ class MethodWriter {
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
     ${createMappingAnnotation (endpoint)}
-    ResponseEntity<${endpoint.response.responseType.name}> ${createMethodName (endpoint)}();
+    ResponseEntity<${endpoint.response.responseType.name}> ${createMethodName (endpoint)}(${createParameter(endpoint)});
 """)
     }
 
@@ -47,12 +48,33 @@ class MethodWriter {
         mapping
     }
 
+    private String createParameterAnnotation (QueryParameter parameter) {
+        String param = "${parameter.annotation}"
+        param += '('
+        param += 'name = ' + quote (parameter.name)
+
+        if (!parameter.required) {
+            param += ", "
+            param += 'required = false'
+        }
+
+        param += ')'
+        param
+    }
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
         tokens = tokens.collect { StringUtil.toCamelCase (it) }
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
+    }
+
+    private String createParameter (Endpoint endpoint) {
+        def ps = endpoint.parameters.collect {
+            "${createParameterAnnotation (it)} ${it.dataType.name} ${it.name}"
+        }
+
+        ps.join (', ')
     }
 
     private String quote (String content) {

@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.spring.model.parameters
 
-import org.junit.Ignore
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 
-//@Ignore
-@RunWith(Parameterized)
-class GeneratrPendingTest extends GeneratrEndToEndTest {
+class QueryParameter {
+    String name
+    boolean required
+    DataType dataType
 
-    @Parameterized.Parameters(name = "{0}")
-    static Collection<String> sources () {
-        return [
-            'params-simple-data-types'
-        ]
+    String getAnnotationName () {
+        "RequestParam"
     }
 
-    GeneratrPendingTest (String source) {
-        super (source)
+    String getAnnotationWithPackage () {
+        "org.springframework.web.bind.annotation.${annotationName}"
+    }
+
+    String getAnnotation () {
+        "@${annotationName}"
     }
 
 }
