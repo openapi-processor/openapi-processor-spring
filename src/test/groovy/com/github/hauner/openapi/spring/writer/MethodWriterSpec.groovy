@@ -92,6 +92,23 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    void "writes simple (required) query parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestParam(name = "foo") String foo);
+"""
+    }
+
     void "writes simple (optional) query parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             new Response (contentType: 'application/json', responseType: new NoneDataType())

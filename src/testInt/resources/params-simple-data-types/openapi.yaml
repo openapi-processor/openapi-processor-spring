@@ -5,7 +5,6 @@ info:
 
 paths:
   /endpoint:
-
     get:
       tags:
         - endpoint
@@ -14,6 +13,21 @@ paths:
           description: query, required, string
           in: query
           required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+
+  /endpoint-optional:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: foo
+          description: query, not required, string
+          in: query
+          required: false
           schema:
             type: string
       responses:
