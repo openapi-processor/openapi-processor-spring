@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
@@ -41,8 +42,27 @@ class QueryParameter {
         "@${annotationName}"
     }
 
-    boolean isObject () {
-        dataType instanceof ObjectDataType
+    /**
+     * Is the parameter required?
+     *
+     * @return true if the parameter is required, otherwise false.
+     */
+    boolean isRequired () {
+        if (dataType instanceof MapDataType) {
+            return true
+        }
+
+        required
+    }
+
+    /**
+     * Create annotation with parameters? If the query parameter is mapped to a pojo object it
+     * should not have any parameters.
+     *
+     * @return true if the annotation should have parameters, false otherwise
+     */
+    boolean withParameters () {
+        ! (dataType instanceof ObjectDataType)
     }
 
 }

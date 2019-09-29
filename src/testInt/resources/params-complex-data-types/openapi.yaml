@@ -20,20 +20,20 @@ paths:
         '204':
           description: empty
 
-#  /endpoint-map:
-#    get:
-#      tags:
-#        - endpoint
-#      parameters:
-#        - name: props
-#          description: query, not required, map from single property
-#          in: query
-#          required: false
-#          schema:
-#            $ref: '#/components/schemas/PropsMap'
-#      responses:
-#        '204':
-#          description: empty
+  /endpoint-map:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: props
+          description: query, not required, map from single property
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SinglePropMap'
+      responses:
+        '204':
+          description: empty
 
 #  /endpoint-map-all:
 #    get:
@@ -81,6 +81,15 @@ components:
           type: string
           default: "2"
 
+    SinglePropMap:
+      type: object
+      x-java-type: java.util.Map
+      properties:
+        prop1:
+          type: string
+        prop2:
+          type: string
+
 #    PropsMap:
 #      type: object
 #      x-java-type: java.util.Map<String>
@@ -90,14 +99,6 @@ components:
 #        prop2:
 #          type: string
 
-#    SinglePropsMap:
-#      type: object
-#      x-java-type: java.util.Map
-#      properties:
-#        prop1:
-#          type: string
-#        prop2:
-#          type: string
 #
 #    MultiPropsMap:
 #      type: object

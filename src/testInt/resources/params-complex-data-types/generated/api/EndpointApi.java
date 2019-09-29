@@ -14,4 +14,7 @@ public interface EndpointApi {
     @GetMapping(path = "/endpoint-object")
     ResponseEntity<void> getEndpointObject(@RequestParam Props props);
 
+    @GetMapping(path = "/endpoint-map")
+    ResponseEntity<void> getEndpointMap(@RequestParam(name = "props") Map props);
+
 }

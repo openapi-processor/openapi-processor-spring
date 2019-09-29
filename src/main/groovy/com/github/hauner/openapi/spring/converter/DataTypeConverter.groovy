@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
+import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
@@ -125,17 +126,27 @@ class DataTypeConverter {
     }
 
     private DataType createObjectDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
-        def objectType = new ObjectDataType (
-            type: dataTypeInfo.name,
-            pkg: [options.packageName, 'model'].join ('.')
-        )
+        def objectType
+        switch (dataTypeInfo.getXJavaType ()) {
+            case Map.name:
+                objectType = new MapDataType ()
+                dataTypes.add (dataTypeInfo.name, objectType)
+                break
 
-        dataTypeInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
-            def propType = convert (propDataTypeInfo, dataTypes)
-            objectType.addObjectProperty (propName, propType)
+            default:
+                objectType = new ObjectDataType (
+                    type: dataTypeInfo.name,
+                    pkg: [options.packageName, 'model'].join ('.')
+                )
+
+                dataTypeInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
+                    def propType = convert (propDataTypeInfo, dataTypes)
+                    objectType.addObjectProperty (propName, propType)
+                }
+
+                dataTypes.add (objectType)
         }
 
-        dataTypes.add (objectType)
         objectType
     }
 

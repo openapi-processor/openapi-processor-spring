@@ -51,14 +51,14 @@ class MethodWriter {
     private String createParameterAnnotation (QueryParameter parameter) {
         String param = "${parameter.annotation}"
 
-        // does not need parameter
-        if (parameter.isObject ()) {
+        if (! parameter.withParameters ()) {
             return param;
         }
 
         param += '('
         param += 'name = ' + quote (parameter.name)
 
+        // required is default, so add required only if the parameter is not required
         if (!parameter.required) {
             param += ", "
             param += 'required = false'

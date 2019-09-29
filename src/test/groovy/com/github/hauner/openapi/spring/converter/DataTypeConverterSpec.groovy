@@ -163,6 +163,86 @@ paths:
         ep.response.responseType.name == 'Collection<String>'
     }
 
+    void "converts object schema to Map<> set via x-java-type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint-map:
+    get:
+      parameters:
+        - name: props
+          description: query, map from single property
+          in: query
+          required: false
+          schema:
+            type: object
+            x-java-type: java.util.Map
+            properties:
+              prop1:
+                type: string
+              prop2:
+                type: string
+      responses:
+        '204':
+          description: empty
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.parameters.first ().dataType.name == 'Map'
+    }
+
+    void "converts ref object schema to Map<> set via x-java-type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint-map:
+    get:
+      parameters:
+        - name: props
+          description: query, map from single property
+          in: query
+          required: false
+          schema:
+            \$ref: '#/components/schemas/SinglePropMap'
+      responses:
+        '204':
+          description: empty
+
+components:
+  schemas:
+    SinglePropMap:
+      type: object
+      x-java-type: java.util.Map
+      properties:
+        prop1:
+          type: string
+        prop2:
+          type: string
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.parameters.first ().dataType.name == 'Map'
+    }
 
     void "creates model for inline response object with name {path}Response{response code}"() {
         def openApi = parse ("""\

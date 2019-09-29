@@ -25,6 +25,7 @@ import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
+import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
@@ -146,6 +147,23 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     ResponseEntity<void> getFoo(@RequestParam Foo foo);
+"""
+    }
+
+    void "writes map from single query parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false, dataType: new MapDataType ())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestParam(name = "foo") Map foo);
 """
     }
 
