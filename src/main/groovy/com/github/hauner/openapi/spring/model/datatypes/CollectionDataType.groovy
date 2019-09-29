@@ -32,7 +32,7 @@ class CollectionDataType implements DataType {
 
     @Override
     String getPackageName () {
-        "java.util"
+        'java.util'
     }
 
     @Override
