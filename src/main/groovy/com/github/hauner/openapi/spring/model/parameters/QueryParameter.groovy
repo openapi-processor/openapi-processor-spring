@@ -18,6 +18,11 @@ package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 
+/**
+ * OpenAPI query parameter.
+ *
+ * @author Martin Hauner
+ */
 class QueryParameter {
     String name
     boolean required
