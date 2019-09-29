@@ -1,11 +1,48 @@
 # What's this?
 
-an (experimental) simple opinionated [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot]. 
+an (experimental) simple opinionated [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot]
+for server side implementation. 
+
+expectations:
+
+- generates only Java interfaces and Java model classes (get/set pojos) for the defined endpoints and schemas to 
+  allow (nearly) full control of the endpoint implementation.
+
+- interfaces and models are implemented & compiled by your project (that is easily done with gradle). The generatr
+  does not generate any other files.
+  
+- the generated code does not use swagger annotations. It does not make sense (to me) to generate the documentation
+ from the code when I generated the code from the documentation (i.e. an openapi.yaml). 
+ 
+- it generates simple code.
+
+- it supports x-extensions (e.g. `x-java-type`) where necessary to help the generatr creating the expected code. 
+ 
+- it handles Spring types like `Page<>`, `Pageable`.
+
+- WebFlux support.   
+
+
 
 # Status
 
-(September 2019) work in progress, not yet usable except for simple apis.  
+(September 2019) this is work in progress.
 
+current status & limitations:
+
+- generates interfaces & models for all endpoints
+- supports openapi.yaml files that reference other files
+- property names in the openapi description must be java compatible (i.e. no `@JsonProperty` on model classes)
+- limited parameter support
+   - query parameters (i.e. `in: query`) 
+       - does handle basic data types and `object`s
+   - no path parameters (i.e. `in: path`)
+   - no header parameters (i.e. `in: header`)
+   - no cookie parameters (i.e. `in: cookie`)
+- honors only the first response content description
+- does not support special Spring types
+- MVC only, no WebFlux
+- there are probably more limitations ... ;-) 
 
 # Documentation
 
@@ -31,8 +68,8 @@ The following table shows the supported data type mappings.
 `string`  | `byte`      | not implemented
 `string`  | `binary`    | not implemented
 `boolean` |             | `Boolean`
-`string`  | `date`      | not implemented (`LocalDate`)  
-`string`  | `date-time` | not implemented (`Instant`, `ZonedDateTime` ?)
+`string`  | `date`      | `LocalDate`  
+`string`  | `date-time` | not implemented (`Instant`, `ZonedDateTime`, `OffsetDataTime`, configurable ?)
 `string`  | `password`  | ignored
 
 
@@ -213,6 +250,26 @@ The possible values of `x-type-java` for query parameters are
 See [`openapi-generatr-spring-mvc-sample`][generatr-sample] for a complete working sample of a minimal
  openapi.yaml.
 
+# Features & Bugs
+
+In case some feature is missing or the generated code is not 100% what you would expect create an issue
+with test case. Providing a test case will help significantly :-) 
+
+A test case is a single folder with an openapi.yaml file and the expected Java files the generatr should create.
+The structure looks like this:
+
+    my-new-test-case/
+                     openapi.yaml
+                     generated/
+                               api/
+                                  AnEndpointInterfaceApi.java
+                                  .. more api interfaces ..
+                               model/
+                                     AModelClass.java
+                                     AnotherModelClass.java
+                                     .. more model files ..
+
+See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
 
 [openapi]: https://www.openapis.org/
@@ -221,5 +278,8 @@ See [`openapi-generatr-spring-mvc-sample`][generatr-sample] for a complete worki
 [openapi-spec-exts]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#specificationExtensions
 
 [springboot]: https://spring.io/projects/spring-boot
+[spring-requestparam]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html
+[spring-responseentity]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
 
+[generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
 [generatr-sample]: https://github.com/hauner/openapi-generatr-spring-mvc-sample
