@@ -27,7 +27,7 @@ class GeneratrPendingTest extends GeneratrEndToEndTest {
     @Parameterized.Parameters(name = "{0}")
     static Collection<String> sources () {
         return [
-            'params-simple-data-types'
+            'params-complex-data-types'
         ]
     }
 

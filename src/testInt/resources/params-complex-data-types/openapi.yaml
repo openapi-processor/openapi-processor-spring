@@ -1,0 +1,113 @@
+openapi: 3.0.2
+info:
+  title: test complex parameters
+  version: 1.0.0
+
+paths:
+
+  /endpoint-object:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: props
+          description: query, not required, object
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Props'
+      responses:
+        '204':
+          description: empty
+
+#  /endpoint-map:
+#    get:
+#      tags:
+#        - endpoint
+#      parameters:
+#        - name: props
+#          description: query, not required, map from single property
+#          in: query
+#          required: false
+#          schema:
+#            $ref: '#/components/schemas/PropsMap'
+#      responses:
+#        '204':
+#          description: empty
+
+#  /endpoint-map-all:
+#    get:
+#      tags:
+#        - endpoint
+#      parameters:
+#        - name: props
+#          description: query, not required, map from all properties
+#          in: query
+#          required: false
+#          schema:
+#            $ref: '#/components/schemas/Props'
+#          x-java-type: java.util.Map<String, String>
+#      responses:
+#        '204':
+#          description: empty
+#
+#  /endpoint-multimap:
+#    get:
+#      tags:
+#        - endpoint
+#      parameters:
+#        - name: props
+#          description: query, not required, map from all properties
+#          in: query
+#          required: false
+#          schema:
+#            $ref: '#/components/schemas/Props'
+#          x-java-type: org.springframework.util.MultiValueMap<String,String>
+#      responses:
+#        '204':
+#          description: empty
+
+components:
+
+  schemas:
+
+    Props:
+      type: object
+      properties:
+        prop1:
+          type: string
+          default: "1"
+        prop2:
+          type: string
+          default: "2"
+
+#    PropsMap:
+#      type: object
+#      x-java-type: java.util.Map<String>
+#      properties:
+#        prop1:
+#          type: string
+#        prop2:
+#          type: string
+
+#    SinglePropsMap:
+#      type: object
+#      x-java-type: java.util.Map
+#      properties:
+#        prop1:
+#          type: string
+#        prop2:
+#          type: string
+#
+#    MultiPropsMap:
+#      type: object
+#      x-java-type: org.springframework.util.MultiValueMap<String,String>
+#      properties:
+#        prop1:
+#          type: array
+#          items:
+#            type: string
+#        prop2:
+#          type: array
+#          items:
+#            type: string
