@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
  * OpenAPI query parameter.
@@ -38,6 +39,10 @@ class QueryParameter {
 
     String getAnnotation () {
         "@${annotationName}"
+    }
+
+    boolean isObject () {
+        dataType instanceof ObjectDataType
     }
 
 }

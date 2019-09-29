@@ -50,6 +50,12 @@ class MethodWriter {
 
     private String createParameterAnnotation (QueryParameter parameter) {
         String param = "${parameter.annotation}"
+
+        // does not need parameter
+        if (parameter.isObject ()) {
+            return param;
+        }
+
         param += '('
         param += 'name = ' + quote (parameter.name)
 
