@@ -34,7 +34,8 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
             'no-response-content',
             'response-simple-data-types',
             'response-complex-data-types',
-            'ref-into-another-file'
+            'ref-into-another-file',
+            'params-simple-data-types'
         ]
     }
 
