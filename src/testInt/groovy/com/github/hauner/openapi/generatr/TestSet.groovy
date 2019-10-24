@@ -17,27 +17,13 @@
 package com.github.hauner.openapi.generatr
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 
-//@Ignore
-@RunWith(Parameterized)
-class GeneratrPendingTest extends GeneratrTestBase {
+class TestSet {
+    String name
+    ApiOptions options
 
-    @Parameterized.Parameters(name = "{0}")
-    static Collection<TestSet> sources () {
-        return [
-//            new TestSet(data: 'params-complex-data-types')
-            new TestSet(name: 'response-array-data-type-collection', options: new ApiOptions(
-                typeMappings: [
-                    'array': 'java.util.Collection'
-                ]
-            ))
-        ]
+    @Override
+    String toString () {
+        name
     }
-
-    GeneratrPendingTest (TestSet testSet) {
-        super (testSet)
-    }
-
 }

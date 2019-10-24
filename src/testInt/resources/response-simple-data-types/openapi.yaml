@@ -80,15 +80,14 @@ paths:
                   type: string
           description: none
 
-  /array-collection:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.collection:
-              schema:
-                type: array
-                x-java-type: java.util.Collection
-                items:
-                  type: string
-          description: none
+#  /array-collection:
+#    get:
+#      responses:
+#        '200':
+#          content:
+#            application/vnd.collection:
+#              schema:
+#                type: array
+#                items:
+#                  type: string
+#          description: none

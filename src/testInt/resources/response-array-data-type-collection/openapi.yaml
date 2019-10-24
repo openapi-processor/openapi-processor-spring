@@ -1,0 +1,29 @@
+openapi: 3.0.2
+info:
+  title: test array data type response with java.util.Collection mapping
+  version: 1.0.0
+
+paths:
+#  /array-string:
+#    get:
+#      responses:
+#        '200':
+#          content:
+#            application/vnd.array:
+#              schema:
+#                type: array
+#                items:
+#                  type: string
+#          description: none
+
+  /array-collection:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.collection:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none

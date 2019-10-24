@@ -18,7 +18,6 @@ package com.github.hauner.openapi.generatr
 
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 
 /**
@@ -28,19 +27,19 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized)
 class GeneratrEndToEndTest extends GeneratrTestBase {
 
-    @Parameters(name = "{0}")
-    static Collection<String> sources () {
+    @Parameterized.Parameters(name = "{0}")
+    static Collection<TestSet> sources () {
         return [
-            'no-response-content',
-            'response-simple-data-types',
-            'response-complex-data-types',
-            'ref-into-another-file',
-            'params-simple-data-types'
+            new TestSet(name: 'no-response-content'),
+            new TestSet(name: 'response-simple-data-types'),
+            new TestSet(name: 'response-complex-data-types'),
+            new TestSet(name: 'ref-into-another-file'),
+            new TestSet(name: 'params-simple-data-types')
         ]
     }
 
-    GeneratrEndToEndTest (String source) {
-        super(source)
+    GeneratrEndToEndTest (TestSet testSet) {
+        super (testSet)
     }
 
 }
