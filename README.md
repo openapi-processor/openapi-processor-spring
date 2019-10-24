@@ -16,8 +16,6 @@ expectations:
  
 - it generates simple code.
 
-- it supports x-extensions (e.g. `x-java-type`) where necessary to help the generatr creating the expected code. 
- 
 - it handles Spring types like `Page<>`, `Pageable`.
 
 - WebFlux support.   
@@ -26,7 +24,7 @@ expectations:
 
 # Status
 
-(September 2019) this is work in progress.
+(October 2019) this is work in progress.
 
 current status & limitations:
 
@@ -95,7 +93,52 @@ it will create the endpoint like this:
     @GetMapping(path = "/array-string", produces = {"application/json"})
     ResponseEntity<String[]> getArrayString();
 
+#### java type mapping
+
+By default the OpenAPI `array` is mapped to a simple java array. It is possible to change that default 
+mapping for example to `java.util.Collection` by adding a type mapping to the generator options.
+
+Given the api: 
+
+    /array-collection:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.collection:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none
+
+and adding `array` to the `typeMappings` property of the generatr options object like this (example
+ in groovy notation):
+
+    typeMappings = [
+        'array': 'java.util.Collection'
+    ]
+
+the generated code will change to:
+
+    @GetMapping(path = "/array-collection", produces = {"application/json"})
+    ResponseEntity<Collection<String>> getArrayCollection();
+
+using the `array`s `items` type as the generic parameter.
+
+The generatr needs to know the given type to generate proper java code so we can't simply add a random
+ collection type. The generatr does currently recognize the following types:
+
+- `java.util.Collection` 
+
 #### `x-java-type`
+
+> no longer supported
+> 
+> an `x-java-type` extension looks like a simple solution to help the generatr create the expected
+> code. But has a significant drawback. It has to be part of the api description. As an api provider
+> I don't care which technology is used to access my api. So I don't want to add any technology specific
+> details in the api description.
 
 The generatr does support an [OpenAPI extension][openapi-spec-exts] for array schemas. By adding the
  `x-java-type` extension to the array schema it is possible to override the default:
