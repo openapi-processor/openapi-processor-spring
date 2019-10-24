@@ -111,6 +111,7 @@ class SchemaInfo {
      *
      * @return fully qualified name of the Java type or null if not set
      */
+    @Deprecated
     String getXJavaType () {
         if (!hasExtensions ()) {
             return null

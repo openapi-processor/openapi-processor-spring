@@ -132,7 +132,7 @@ paths:
         ep.response.responseType.name == 'String[]'
     }
 
-    void "converts simple array schema to Collection<> set via x-java-type" () {
+    void "converts simple array schema to Collection<> set via options" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -148,13 +148,14 @@ paths:
             application/vnd.collection:
               schema:
                 type: array
-                x-java-type: java.util.Collection
                 items:
                   type: string
           description: none              
 """)
         when:
-        def options = new ApiOptions(packageName: 'pkg')
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
+            'array': 'java.util.Collection'
+        ])
         Api api = new ApiConverter (options).convert (openApi)
 
         then:

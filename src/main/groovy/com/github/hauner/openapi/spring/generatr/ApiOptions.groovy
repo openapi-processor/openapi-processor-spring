@@ -48,4 +48,11 @@ class ApiOptions {
      */
     boolean showWarnings
 
+    /**
+     * map OpenAPI type names to fully qualified java class names. All usages of the given type
+     * in the api description will be replaced with the given java class in the generated code and
+     * no model class will be generated for the OpenAPI type.
+     */
+    Map<String, String> typeMappings
+
 }

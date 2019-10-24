@@ -109,7 +109,7 @@ class DataTypeConverter {
         DataType item = convert (itemDataTypeInfo, dataTypes)
 
         def arrayType
-        switch (dataTypeInfo.getXJavaType ()) {
+        switch (getArrayDataType()) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
@@ -169,6 +169,15 @@ class DataTypeConverter {
 
         dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
+    }
+
+
+    private String getArrayDataType() {
+        if (!options.typeMappings) {
+           return null
+        }
+
+        options.typeMappings.array
     }
 
 }
