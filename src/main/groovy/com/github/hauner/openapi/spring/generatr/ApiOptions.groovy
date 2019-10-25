@@ -52,8 +52,9 @@ class ApiOptions {
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
-     * {@link ArrayTypeMapping}: used to globally override the default mapping of the OpenAPI
-     * {@code array} from a simple java array to another collection type.
+     * {@link com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping}: used to globally
+     * override the default mapping of the OpenAPI {@code array} from a simple java array to another
+     * collection type.
      */
     List<?> typeMappings
 

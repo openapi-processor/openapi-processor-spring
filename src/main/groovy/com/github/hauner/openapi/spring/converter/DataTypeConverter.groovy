@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.ArrayTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType

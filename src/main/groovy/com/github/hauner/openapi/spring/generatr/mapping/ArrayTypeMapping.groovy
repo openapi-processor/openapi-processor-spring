@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.generatr.mapping
 
 /**
  * Used with {@link ApiOptions} to globally override the default mapping of the OpenAPI {@code array}

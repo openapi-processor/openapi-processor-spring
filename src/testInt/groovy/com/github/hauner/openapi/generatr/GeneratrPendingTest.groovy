@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.generatr
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.ArrayTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
