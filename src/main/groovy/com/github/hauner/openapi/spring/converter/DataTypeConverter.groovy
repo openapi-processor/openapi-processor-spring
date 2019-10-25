@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.generatr.ArrayTypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -173,11 +174,31 @@ class DataTypeConverter {
 
 
     private String getArrayDataType() {
-        if (!options.typeMappings) {
-           return null
+        if (options.typeMappings && options.typeMappings.containsKey ('array')) {
+            return options.typeMappings.array
         }
 
-        options.typeMappings.array
+        if (options.typeMappingsNew) {
+            List<ArrayTypeMapping> arrays = options.typeMappingsNew.findAll {
+                it instanceof ArrayTypeMapping
+            }.collect {
+                it as ArrayTypeMapping
+            }
+
+            // no mapping use default
+            if (arrays.isEmpty ()) {
+                return null
+            }
+
+            if (arrays.size () != 1) {
+//               throw new DuplicateTypeMapping();
+            }
+
+            def array = arrays.first ()
+            return array.typeName
+        }
+
+        null
     }
 
 }

@@ -53,6 +53,15 @@ class ApiOptions {
      * in the api description will be replaced with the given java class in the generated code and
      * no model class will be generated for the OpenAPI type.
      */
+    @Deprecated
     Map<String, String> typeMappings
 
+    /**
+     * provide additional type mapping information to map OpenAPI types to java types. The list can
+     * contain the following mappings:
+     *
+     * {@link ArrayTypeMapping}: used to globally override the default mapping of the OpenAPI
+     * {@code array} from a java array to another collection type.
+     */
+    List<?> typeMappingsNew
 }
