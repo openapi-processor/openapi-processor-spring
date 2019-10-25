@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.generatr
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.generatr.ArrayTypeMapping
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -30,7 +31,7 @@ class GeneratrPendingTest extends GeneratrTestBase {
 //            new TestSet(data: 'params-complex-data-types')
             new TestSet(name: 'response-array-data-type-collection', options: new ApiOptions(
                 typeMappings: [
-                    'array': 'java.util.Collection'
+                    new ArrayTypeMapping(typeName: 'java.util.Collection')
                 ]
             ))
         ]

@@ -174,12 +174,8 @@ class DataTypeConverter {
 
 
     private String getArrayDataType() {
-        if (options.typeMappings && options.typeMappings.containsKey ('array')) {
-            return options.typeMappings.array
-        }
-
-        if (options.typeMappingsNew) {
-            List<ArrayTypeMapping> arrays = options.typeMappingsNew.findAll {
+        if (options.typeMappings) {
+            List<ArrayTypeMapping> arrays = options.typeMappings.findAll {
                 it instanceof ArrayTypeMapping
             }.collect {
                 it as ArrayTypeMapping
