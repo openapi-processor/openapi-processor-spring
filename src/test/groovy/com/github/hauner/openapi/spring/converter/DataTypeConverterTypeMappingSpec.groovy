@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
 
@@ -50,6 +52,44 @@ paths:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
             new ArrayTypeMapping (typeName: 'java.util.Collection')
         ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == 'Collection<String>'
+    }
+
+    void "converts simple array response schema to Collection<> via endpoint mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /array-string:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.collection:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none              
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/array-string',
+                    mappings: [
+                         new ResponseTypeMapping (contentType: 'application/vnd.collection', typeName: 'java.util.Collection')
+                    ])
+                ])
         Api api = new ApiConverter (options).convert (openApi)
 
         then:

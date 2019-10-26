@@ -20,12 +20,11 @@ import groovy.transform.stc.ClosureParams
 import io.swagger.v3.oas.models.media.Schema
 
 /**
- * Helper for DataTypeConverter. Holds an OpenAPI schema and context information, i.e. name and if
- * this is an inline type with a generated name.
+ * Helper for {@link DataTypeConverter}. Holds an OpenAPI schema and context information, i.e. name
+ * and if this is an inline type with a generated name.
  *
  * @author Martin Hauner
  */
-
 class SchemaInfo {
     Schema schema
     String name

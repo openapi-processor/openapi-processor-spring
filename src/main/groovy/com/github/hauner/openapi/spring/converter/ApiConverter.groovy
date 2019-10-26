@@ -92,8 +92,13 @@ class ApiConverter {
                         if (!httpResponse.content) {
                             ep.responses.add (createEmptyResponse ())
                         } else {
-                            ep.responses.addAll (createResponses (httpResponse,
-                                getInlineResponseName (path, httpStatus), target))
+                            List<Response> responses = createResponses (
+                                path,
+                                httpResponse,
+                                getInlineResponseName (path, httpStatus),
+                                target)
+
+                            ep.responses.addAll (responses)
                         }
                     }
 
@@ -121,7 +126,7 @@ class ApiConverter {
         new Response (responseType: dataTypeConverter.none ())
     }
 
-    private List<Response> createResponses (ApiResponse apiResponse, String inlineName, Api target) {
+    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, Api target) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
@@ -129,7 +134,7 @@ class ApiConverter {
             def mediaType = contentEntry.value
 
             DataType dataType = dataTypeConverter.convert (
-                new SchemaInfo (mediaType.schema, inlineName), target.models)
+                new ResponseSchemaInfo (path, contentType, mediaType.schema, inlineName), target.models)
 
             def response = new Response (
                 contentType: contentType,

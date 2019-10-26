@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -105,12 +107,12 @@ class DataTypeConverter {
         }
     }
 
-    private DataType createArrayDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
-        SchemaInfo itemDataTypeInfo = dataTypeInfo.buildForItem ()
-        DataType item = convert (itemDataTypeInfo, dataTypes)
+    private DataType createArrayDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
+        SchemaInfo itemSchemaInfo = schemaInfo.buildForItem ()
+        DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        switch (getArrayDataType()) {
+        switch (getArrayDataType(schemaInfo)) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
@@ -118,11 +120,11 @@ class DataTypeConverter {
                 arrayType = new ArrayDataType (item: item)
         }
 
-        if (dataTypeInfo.inline) {
+        if (schemaInfo.inline) {
             return arrayType
         }
 
-        dataTypes.add (dataTypeInfo.name, arrayType)
+        dataTypes.add (schemaInfo.name, arrayType)
         arrayType
     }
 
@@ -173,15 +175,33 @@ class DataTypeConverter {
     }
 
 
-    private String getArrayDataType() {
+    private String getArrayDataType(SchemaInfo schemaInfo) {
         if (options.typeMappings) {
+
+            List<EndpointTypeMapping> endpoints = getEndpointMappings ()
+
+            if (schemaInfo instanceof ResponseSchemaInfo) {
+                String ep = schemaInfo.path
+                String ct = schemaInfo.contentType
+
+                EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
+                if (endpoint) {
+                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint)
+
+                    def response = responses.find { it.contentType == ct }
+                    if (response) {
+                        return response.typeName
+                    }
+                }
+            }
+
             List<ArrayTypeMapping> arrays = options.typeMappings.findAll {
                 it instanceof ArrayTypeMapping
             }.collect {
                 it as ArrayTypeMapping
             }
 
-            // no mapping use default
+            // no mapping, use default
             if (arrays.isEmpty ()) {
                 return null
             }
@@ -195,6 +215,22 @@ class DataTypeConverter {
         }
 
         null
+    }
+
+    private List<ResponseTypeMapping> getResponseMappings (EndpointTypeMapping endpoint) {
+        endpoint.mappings.findAll {
+            it instanceof ResponseTypeMapping
+        }.collect {
+            it as ResponseTypeMapping
+        }
+    }
+
+    private List<EndpointTypeMapping> getEndpointMappings () {
+        options.typeMappings.findAll {
+            it instanceof EndpointTypeMapping
+        }.collect {
+            it as EndpointTypeMapping
+        }
     }
 
 }

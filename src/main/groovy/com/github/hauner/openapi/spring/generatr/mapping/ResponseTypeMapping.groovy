@@ -17,23 +17,21 @@
 package com.github.hauner.openapi.spring.generatr.mapping
 
 /**
- * Used with {@link com.github.hauner.openapi.spring.generatr.ApiOptions} to globally override the
- * default mapping of the OpenAPI {@code array} from a java array to another collection type. All
- * usages of {@code array} in the api description will be replaced with the given java class in the
- * generated code.
- *
- * Only one mapping of this kind is allowed.
+ * Used with {@link EndpointTypeMapping} to configure the java type that represents the response
+ * content type of the endpoint.
  *
  * @author Martin Hauner
  */
-class ArrayTypeMapping {
+class ResponseTypeMapping {
 
     /**
-     * The fully qualified java type name of the collection type that should be used for the OpenAPI
-     * {@code array} type.
-     *
-     * Note that {@link #typeName} is limited to the following values:
-     * - 'java.util.Collection'
+     * The content type of this mapping. Must match 1:1 with what is written in the api.
+     */
+    String contentType
+
+    /**
+     * The fully qualified java type name that will be used for a {@link #contentType} response.
      */
     String typeName
+
 }
