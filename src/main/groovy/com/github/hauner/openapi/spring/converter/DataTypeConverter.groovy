@@ -190,7 +190,7 @@ class DataTypeConverter {
 
                     def response = responses.find { it.contentType == ct }
                     if (response) {
-                        return response.typeName
+                        return response.targetTypeName
                     }
                 }
             }
@@ -211,7 +211,7 @@ class DataTypeConverter {
             }
 
             def array = arrays.first ()
-            return array.typeName
+            return array.targetTypeName
         }
 
         null

@@ -31,7 +31,7 @@ class GeneratrPendingTest extends GeneratrTestBase {
 //            new TestSet(data: 'params-complex-data-types')
             new TestSet(name: 'response-array-data-type-collection', options: new ApiOptions(
                 typeMappings: [
-                    new ArrayTypeMapping(typeName: 'java.util.Collection')
+                    new ArrayTypeMapping(targetTypeName: 'java.util.Collection')
                 ]
             ))
         ]

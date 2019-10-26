@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.generatr.mapping
 
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that represents the response
- * content type of the endpoint.
+ * schema for a content type of the endpoint.
  *
  * @author Martin Hauner
  */
@@ -30,8 +30,14 @@ class ResponseTypeMapping {
     String contentType
 
     /**
-     * The fully qualified java type name that will be used for a {@link #contentType} response.
+     * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
      */
-    String typeName
+    String sourceTypeName
+
+    /**
+     * The fully qualified java type name that will be used for {@link #sourceTypeName} in an
+     * {@link #contentType} response.
+     */
+    String targetTypeName
 
 }

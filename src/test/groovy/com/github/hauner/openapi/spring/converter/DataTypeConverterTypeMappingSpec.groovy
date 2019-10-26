@@ -41,7 +41,7 @@ paths:
       responses:
         '200':
           content:
-            application/vnd.collection:
+            application/vnd.any:
               schema:
                 type: array
                 items:
@@ -50,7 +50,7 @@ paths:
 """)
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new ArrayTypeMapping (typeName: 'java.util.Collection')
+            new ArrayTypeMapping (targetTypeName: 'java.util.Collection')
         ])
         Api api = new ApiConverter (options).convert (openApi)
 

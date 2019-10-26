@@ -32,8 +32,8 @@ class ArrayTypeMapping {
      * The fully qualified java type name of the collection type that should be used for the OpenAPI
      * {@code array} type.
      *
-     * Note that {@link #typeName} is limited to the following values:
+     * Note that {@link #targetTypeName} is limited to the following values:
      * - 'java.util.Collection'
      */
-    String typeName
+    String targetTypeName
 }
