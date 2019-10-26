@@ -24,6 +24,7 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -34,6 +35,7 @@ import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 
 /**
@@ -115,6 +117,12 @@ class DataTypeConverter {
         switch (getArrayDataType(schemaInfo)) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
+                break
+            case List.name:
+                arrayType = new ListDataType (item: item)
+                break
+            case Set.name:
+                arrayType = new SetDataType (item: item)
                 break
             default:
                 arrayType = new ArrayDataType (item: item)

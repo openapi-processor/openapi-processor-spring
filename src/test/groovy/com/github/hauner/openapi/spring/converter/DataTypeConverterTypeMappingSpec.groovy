@@ -22,13 +22,15 @@ import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 
 class DataTypeConverterTypeMappingSpec extends Specification {
 
-    void "converts simple array schema to Collection<> set via global array mapping" () {
+    @Unroll
+    void "converts simple array schema to #responseTypeName set via global array mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -50,14 +52,20 @@ paths:
 """)
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new ArrayTypeMapping (targetTypeName: 'java.util.Collection')
+            new ArrayTypeMapping (targetTypeName: targetTypeName)
         ])
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'Collection<String>'
+        ep.response.responseType.name == responseTypeName
+
+        where:
+        targetTypeName         | responseTypeName
+        'java.util.Collection' | 'Collection<String>'
+        'java.util.List'       | 'List<String>'
+        'java.util.Set'        | 'Set<String>'
     }
 
     void "converts simple array response schema to Collection<> via endpoint response type array mapping" () {

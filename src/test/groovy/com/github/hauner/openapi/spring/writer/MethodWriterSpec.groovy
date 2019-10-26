@@ -20,14 +20,17 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import spock.lang.Specification
@@ -91,6 +94,54 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
     ResponseEntity<Map<String, Object>> getInline();
+"""
+    }
+
+    void "writes method with Collection response type" () {
+        def endpoint = new Endpoint (path: '/collection', method: HttpMethod.GET, responses: [
+            new Response(contentType: 'application/json',
+                responseType: new CollectionDataType (item: new StringDataType()))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<Collection<String>> getCollection();
+"""
+    }
+
+    void "writes method with List response type" () {
+        def endpoint = new Endpoint (path: '/list', method: HttpMethod.GET, responses: [
+            new Response(contentType: 'application/json',
+                responseType: new ListDataType (item: new StringDataType()))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<List<String>> getList();
+"""
+    }
+
+    void "writes method with Set response type" () {
+        def endpoint = new Endpoint (path: '/set', method: HttpMethod.GET, responses: [
+            new Response(contentType: 'application/json',
+                responseType: new SetDataType (item: new StringDataType()))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    ResponseEntity<Set<String>> getSet();
 """
     }
 

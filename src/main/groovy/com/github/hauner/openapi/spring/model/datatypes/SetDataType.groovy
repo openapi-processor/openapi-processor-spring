@@ -17,17 +17,17 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * OpenAPI type 'array' maps to Collection<>.
+ * OpenAPI type 'array' maps to Set<>.
  *
  * @author Martin Hauner
  */
-class CollectionDataType implements DataType {
+class SetDataType implements DataType {
 
     private DataType item
 
     @Override
     String getName () {
-        "Collection<${item.name}>"
+        "Set<${item.name}>"
     }
 
     @Override
@@ -37,7 +37,7 @@ class CollectionDataType implements DataType {
 
     @Override
     String getImport () {
-        [packageName, 'Collection'].join('.')
+        [packageName, 'Set'].join('.')
     }
 
     @Override
