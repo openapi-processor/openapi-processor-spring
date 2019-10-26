@@ -184,17 +184,26 @@ class DataTypeConverter {
                 String ep = schemaInfo.path
                 String ct = schemaInfo.contentType
 
+                // check endpoint response mapping
                 EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
                 if (endpoint) {
-                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint)
+                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
 
                     def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
                     if (response) {
                         return response.targetTypeName
                     }
                 }
+
+                // check global response mapping
+                List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
+                def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
+                if (response) {
+                    return response.targetTypeName
+                }
             }
 
+            // check global mapping
             List<ArrayTypeMapping> arrays = options.typeMappings.findAll {
                 it instanceof ArrayTypeMapping
             }.collect {
@@ -217,8 +226,8 @@ class DataTypeConverter {
         null
     }
 
-    private List<ResponseTypeMapping> getResponseMappings (EndpointTypeMapping endpoint) {
-        endpoint.typeMappings.findResults {
+    private List<ResponseTypeMapping> getResponseMappings (List<?> typeMappings) {
+        typeMappings.findResults {
             it instanceof ResponseTypeMapping ? it : null
         }
     }
