@@ -31,16 +31,28 @@ class GeneratrPendingTest extends GeneratrTestBase {
     static Collection<TestSet> sources () {
         return [
 //            new TestSet(data: 'params-complex-data-types')
-            new TestSet(name: 'response-array-data-type-collection', options: new ApiOptions(
-                typeMappings: [
-                    new ArrayTypeMapping(targetTypeName: 'java.util.Collection'),
-                    new ResponseTypeMapping (contentType: 'application/vnd.global-response', sourceTypeName: 'array', targetTypeName: 'java.util.List'),
-                    new EndpointTypeMapping (path: '/array-endpoint-response',
-                        typeMappings: [
-                            new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'array', targetTypeName: 'java.util.Set')
-                        ])
-                ]
-            ))
+            new TestSet(name: 'response-array-data-type-mapping',
+                options: new ApiOptions(
+                    typeMappings: [
+                        new ArrayTypeMapping(
+                            targetTypeName: 'java.util.Collection'
+                        ),
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.global-response',
+                            sourceTypeName: 'array',
+                            targetTypeName: 'java.util.List'
+                        ),
+                        new EndpointTypeMapping (
+                            path: '/array-endpoint-response',
+                            typeMappings: [
+                                new ResponseTypeMapping (
+                                    contentType: 'application/vnd.any',
+                                    sourceTypeName: 'array',
+                                    targetTypeName: 'java.util.Set')]
+                        )
+                    ]
+                )
+            )
         ]
     }
 
