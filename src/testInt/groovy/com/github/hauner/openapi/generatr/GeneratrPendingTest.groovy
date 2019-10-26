@@ -18,6 +18,8 @@ package com.github.hauner.openapi.generatr
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -31,7 +33,12 @@ class GeneratrPendingTest extends GeneratrTestBase {
 //            new TestSet(data: 'params-complex-data-types')
             new TestSet(name: 'response-array-data-type-collection', options: new ApiOptions(
                 typeMappings: [
-                    new ArrayTypeMapping(targetTypeName: 'java.util.Collection')
+                    new ArrayTypeMapping(targetTypeName: 'java.util.Collection'),
+                    new ResponseTypeMapping (contentType: 'application/vnd.global-response', sourceTypeName: 'array', targetTypeName: 'java.util.List'),
+                    new EndpointTypeMapping (path: '/array-endpoint-response',
+                        typeMappings: [
+                            new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'array', targetTypeName: 'java.util.Set')
+                        ])
                 ]
             ))
         ]
