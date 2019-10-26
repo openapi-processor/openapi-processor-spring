@@ -204,10 +204,8 @@ class DataTypeConverter {
             }
 
             // check global mapping
-            List<ArrayTypeMapping> arrays = options.typeMappings.findAll {
-                it instanceof ArrayTypeMapping
-            }.collect {
-                it as ArrayTypeMapping
+            List<ArrayTypeMapping> arrays = options.typeMappings.findResults {
+                it instanceof ArrayTypeMapping ? it : null
             }
 
             // no mapping, use default
