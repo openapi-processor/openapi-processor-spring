@@ -188,7 +188,7 @@ class DataTypeConverter {
                 if (endpoint) {
                     List<ResponseTypeMapping> responses = getResponseMappings (endpoint)
 
-                    def response = responses.find { it.contentType == ct }
+                    def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
                     if (response) {
                         return response.targetTypeName
                     }

@@ -60,7 +60,7 @@ paths:
         ep.response.responseType.name == 'Collection<String>'
     }
 
-    void "converts simple array response schema to Collection<> via endpoint mapping" () {
+    void "converts simple array response schema to Collection<> via content type array endpoint mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -73,7 +73,7 @@ paths:
       responses:
         '200':
           content:
-            application/vnd.collection:
+            application/vnd.any:
               schema:
                 type: array
                 items:
@@ -87,7 +87,8 @@ paths:
             typeMappings: [
                 new EndpointTypeMapping (path: '/array-string',
                     typeMappings: [
-                         new ResponseTypeMapping (contentType: 'application/vnd.collection', typeName: 'java.util.Collection')
+                        new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'object', targetTypeName: 'pkg.TargetClass'),
+                        new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'array', targetTypeName: 'java.util.Collection')
                     ])
                 ])
         Api api = new ApiConverter (options).convert (openApi)
