@@ -136,21 +136,31 @@ class DataTypeConverter {
         arrayType
     }
 
-    private DataType createObjectDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
+    private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
-        switch (dataTypeInfo.getXJavaType ()) {
+
+        String targetTypeName = getObjectDataType (schemaInfo)
+        if (targetTypeName) {
+            // todo MappedDataType -> do not create model
+            return new ObjectDataType (
+                type: targetTypeName.substring (targetTypeName.lastIndexOf ('.') + 1),
+                pkg: targetTypeName.substring (0, targetTypeName.lastIndexOf ('.'))
+            )
+        }
+
+        switch (schemaInfo.getXJavaType ()) {
             case Map.name:
                 objectType = new MapDataType ()
-                dataTypes.add (dataTypeInfo.name, objectType)
+                dataTypes.add (schemaInfo.name, objectType)
                 break
 
             default:
                 objectType = new ObjectDataType (
-                    type: dataTypeInfo.name,
+                    type: schemaInfo.name,
                     pkg: [options.packageName, 'model'].join ('.')
                 )
 
-                dataTypeInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
+                schemaInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
                     def propType = convert (propDataTypeInfo, dataTypes)
                     objectType.addObjectProperty (propName, propType)
                 }
@@ -182,6 +192,32 @@ class DataTypeConverter {
         simpleType
     }
 
+
+    private String getObjectDataType(SchemaInfo schemaInfo) {
+        if (options.typeMappings) {
+
+            List<EndpointTypeMapping> endpoints = getEndpointMappings ()
+
+            if (schemaInfo instanceof ResponseSchemaInfo) {
+                String ep = schemaInfo.path
+                String ct = schemaInfo.contentType
+
+                // check endpoint response mapping
+                EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
+                if (endpoint) {
+                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
+
+                    def response = responses.find { it.contentType == ct && it.sourceTypeName == 'object' }
+                    if (response) {
+                        return response.targetTypeName
+                    }
+                }
+
+            }
+        }
+
+        null
+    }
 
     private String getArrayDataType(SchemaInfo schemaInfo) {
         if (options.typeMappings) {

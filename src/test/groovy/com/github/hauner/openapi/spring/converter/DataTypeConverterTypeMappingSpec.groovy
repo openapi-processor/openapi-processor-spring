@@ -142,4 +142,43 @@ paths:
         ep.response.responseType.name == 'Collection<String>'
     }
 
+    void "converts simple object response schema to java type via endpoint mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /object:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.any:
+              schema:
+                type: object
+                properties:
+                  prop:
+                    type: string
+          description: none              
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/object',
+                    typeMappings: [
+                         new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'object', targetTypeName: 'pkg.TargetClass')
+                    ])
+                ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == 'TargetClass'
+    }
+
 }
