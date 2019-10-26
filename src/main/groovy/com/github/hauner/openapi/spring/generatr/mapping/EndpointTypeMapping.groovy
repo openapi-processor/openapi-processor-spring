@@ -39,6 +39,6 @@ class EndpointTypeMapping {
      *
      * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
      */
-    List<?> mappings
+    List<?> typeMappings
 
 }

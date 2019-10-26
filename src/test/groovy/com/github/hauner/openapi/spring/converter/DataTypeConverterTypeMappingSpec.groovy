@@ -86,7 +86,7 @@ paths:
             packageName: 'pkg',
             typeMappings: [
                 new EndpointTypeMapping (path: '/array-string',
-                    mappings: [
+                    typeMappings: [
                          new ResponseTypeMapping (contentType: 'application/vnd.collection', typeName: 'java.util.Collection')
                     ])
                 ])

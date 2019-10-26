@@ -218,7 +218,7 @@ class DataTypeConverter {
     }
 
     private List<ResponseTypeMapping> getResponseMappings (EndpointTypeMapping endpoint) {
-        endpoint.mappings.findAll {
+        endpoint.typeMappings.findAll {
             it instanceof ResponseTypeMapping
         }.collect {
             it as ResponseTypeMapping
