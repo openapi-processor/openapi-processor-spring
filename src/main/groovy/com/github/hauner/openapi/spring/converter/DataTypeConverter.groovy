@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
 import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -248,8 +248,8 @@ class DataTypeConverter {
             }
 
             // check global mapping
-            List<ArrayTypeMapping> arrays = options.typeMappings.findResults {
-                it instanceof ArrayTypeMapping ? it : null
+            List<TypeMapping> arrays = options.typeMappings.findResults {
+                it instanceof TypeMapping && it.sourceTypeName == 'array' ? it : null
             }
 
             // no mapping, use default

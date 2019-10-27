@@ -17,10 +17,11 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.mapping.ArrayTypeMapping
 import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -52,7 +53,7 @@ paths:
 """)
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new ArrayTypeMapping (targetTypeName: targetTypeName)
+            new TypeMapping (sourceTypeName: 'array', targetTypeName: targetTypeName)
         ])
         Api api = new ApiConverter (options).convert (openApi)
 

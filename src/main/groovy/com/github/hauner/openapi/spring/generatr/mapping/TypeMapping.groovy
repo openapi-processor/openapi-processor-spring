@@ -17,23 +17,24 @@
 package com.github.hauner.openapi.spring.generatr.mapping
 
 /**
- * Used with {@link com.github.hauner.openapi.spring.generatr.ApiOptions} to globally override the
- * default mapping of the OpenAPI {@code array} from a java array to another collection type. All
- * usages of {@code array} in the api description will be replaced with the given java class in the
- * generated code.
+ * Used with {@link com.github.hauner.openapi.spring.generatr.ApiOptions#typeMappings} to map an
+ * OpenAPI schema to a java type.
  *
- * Only one mapping of this kind is allowed.
+ * To override the type mapping of the OpenAPI {@code array} from a simple java array to another
+ * collection type the @(link #soucrceTypeName) should be set to {@code array}.
  *
  * @author Martin Hauner
  */
-class ArrayTypeMapping {
+class TypeMapping {
 
     /**
-     * The fully qualified java type name of the collection type that should be used for the OpenAPI
-     * {@code array} type.
-     *
-     * Note that {@link #targetTypeName} is limited to the following values:
-     * - 'java.util.Collection'
+     * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
+     */
+    String sourceTypeName
+
+    /**
+     * The fully qualified java type name that will replace {@link #sourceTypeName}.
      */
     String targetTypeName
+
 }
