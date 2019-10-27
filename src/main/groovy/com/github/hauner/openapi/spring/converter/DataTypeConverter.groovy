@@ -141,11 +141,13 @@ class DataTypeConverter {
 
         String targetTypeName = getObjectDataType (schemaInfo)
         if (targetTypeName) {
-            // todo MappedDataType -> do not create model
-            return new ObjectDataType (
+            objectType = new ObjectDataType (
                 type: targetTypeName.substring (targetTypeName.lastIndexOf ('.') + 1),
                 pkg: targetTypeName.substring (0, targetTypeName.lastIndexOf ('.'))
             )
+
+            dataTypes.add (schemaInfo.name, objectType)
+            return objectType
         }
 
         switch (schemaInfo.getXJavaType ()) {
@@ -212,8 +214,23 @@ class DataTypeConverter {
                         return response.targetTypeName
                     }
                 }
-
             }
+
+            // check global mapping
+            List<TypeMapping> mappings = options.typeMappings.findResults {
+                it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
+            }
+
+            if (mappings.isEmpty ()) {
+                return null
+            }
+
+            if (mappings.size () != 1) {
+                // todo throw new DuplicateTypeMapping();
+            }
+
+            def mapping = mappings.first ()
+            return mapping.targetTypeName
         }
 
         null
@@ -258,7 +275,7 @@ class DataTypeConverter {
             }
 
             if (arrays.size () != 1) {
-//               throw new DuplicateTypeMapping();
+                // todo throw new DuplicateTypeMapping();
             }
 
             def array = arrays.first ()
