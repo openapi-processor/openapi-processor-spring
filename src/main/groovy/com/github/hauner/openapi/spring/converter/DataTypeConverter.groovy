@@ -27,6 +27,7 @@ import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
@@ -141,7 +142,7 @@ class DataTypeConverter {
 
         String targetTypeName = getObjectDataType (schemaInfo)
         if (targetTypeName) {
-            objectType = new ObjectDataType (
+            objectType = new MappedDataType (
                 type: targetTypeName.substring (targetTypeName.lastIndexOf ('.') + 1),
                 pkg: targetTypeName.substring (0, targetTypeName.lastIndexOf ('.'))
             )

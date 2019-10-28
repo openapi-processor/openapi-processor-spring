@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
@@ -160,6 +161,7 @@ Bar class!
         def dt = new DataTypes()
         dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
         dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
+        dt.add (new MappedDataType(pkg: "mapped", type: 'Type'))
         dt.add ('simple', new StringDataType())
         def api = new Api(dt)
 
@@ -168,6 +170,7 @@ Bar class!
 
         then:
         0 * dataTypeWriter.write (_, dt.find ('simple'))
+        0 * dataTypeWriter.write (_, dt.find ('Type'))
     }
 
     String getApiPath(String targetFolder, String clazzName) {
