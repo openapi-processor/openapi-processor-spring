@@ -28,7 +28,10 @@ import io.swagger.v3.oas.models.media.Schema
 class SchemaInfo {
     Schema schema
     String name
+
     boolean inline = false
+
+    RefResolver resolver
 
     SchemaInfo (Schema schema, String name) {
         this.schema = schema
@@ -53,7 +56,11 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForRef () {
-        new SchemaInfo(schema, getRefName (schema))
+        def refName = getRefName (schema)
+        Schema refSchema = resolver.resolve (schema.$ref)
+        def info = new SchemaInfo(refSchema, refName)
+        info.resolver = resolver
+        info
     }
 
     /**
@@ -65,7 +72,9 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForNestedType (String nestedName, Schema nestedSchema) {
-        new SchemaInfo (nestedSchema, getNestedTypeName (nestedName), true)
+        def info = new SchemaInfo (nestedSchema, getNestedTypeName (nestedName), true)
+        info.resolver = resolver
+        info
     }
 
     /**
@@ -74,7 +83,9 @@ class SchemaInfo {
      * @return s new DataTypeInfo
      */
     SchemaInfo buildForItem () {
-        new SchemaInfo (schema.items, name)
+        def info = new SchemaInfo (schema.items, name)
+        info.resolver = resolver
+        info
     }
 
     /**

@@ -26,6 +26,7 @@ import io.swagger.v3.oas.models.media.Schema
  *
  * @author Martin Hauner
  */
+@Deprecated
 class SchemaCollector {
 
     DataTypeConverter converter

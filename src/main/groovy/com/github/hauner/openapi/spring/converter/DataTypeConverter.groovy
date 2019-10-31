@@ -100,7 +100,8 @@ class DataTypeConverter {
                 return datatype
             }
 
-            createObjectDataType (dataTypeInfo.buildForRef (), dataTypes)
+            def refTypeInfo = dataTypeInfo.buildForRef ()
+            convert (refTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isObject ()) {
             createObjectDataType (dataTypeInfo, dataTypes)

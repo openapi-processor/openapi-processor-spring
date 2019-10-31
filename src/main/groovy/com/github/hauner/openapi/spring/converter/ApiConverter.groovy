@@ -62,7 +62,7 @@ class ApiConverter {
     Api convert (OpenAPI api) {
         def target = new Api ()
 
-        collectModels (api, target)
+//        collectModels (api, target)
         collectInterfaces (api, target)
         addEndpointsToInterfaces (api, target)
 
@@ -70,6 +70,8 @@ class ApiConverter {
     }
 
     private Map<String, PathItem> addEndpointsToInterfaces (OpenAPI api, Api target) {
+        def resolver = new RefResolver (api.components)
+
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
             String path = pathEntry.key
             PathItem pathItem = pathEntry.value
@@ -82,7 +84,7 @@ class ApiConverter {
 
                 try {
                     httpOperation.parameters.each { Parameter parameter ->
-                        ep.parameters.addAll (createParameter(parameter, target))
+                        ep.parameters.addAll (createParameter(parameter, target, resolver))
                     }
 
                     httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
@@ -96,7 +98,8 @@ class ApiConverter {
                                 path,
                                 httpResponse,
                                 getInlineResponseName (path, httpStatus),
-                                target)
+                                target,
+                            resolver)
 
                             ep.responses.addAll (responses)
                         }
@@ -111,9 +114,11 @@ class ApiConverter {
         }
     }
 
-    private QueryParameter createParameter (Parameter parameter, Api target) {
-        DataType dataType = dataTypeConverter.convert (
-            new SchemaInfo (parameter.schema, parameter.name), target.models)
+    private QueryParameter createParameter (Parameter parameter, Api target, resolver) {
+        def info = new SchemaInfo (parameter.schema, parameter.name)
+        info.resolver = resolver
+
+        DataType dataType = dataTypeConverter.convert (info, target.models)
 
         new QueryParameter(name: parameter.name, required: parameter.required, dataType: dataType)
     }
@@ -126,15 +131,24 @@ class ApiConverter {
         new Response (responseType: dataTypeConverter.none ())
     }
 
-    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, Api target) {
+    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, Api target, RefResolver resolver) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
+            def schema = mediaType.schema
+
+            def info = new ResponseSchemaInfo (
+                path,
+                contentType,
+                schema,
+                inlineName)
+            info.resolver = resolver
 
             DataType dataType = dataTypeConverter.convert (
-                new ResponseSchemaInfo (path, contentType, mediaType.schema, inlineName), target.models)
+                info,
+                target.models)
 
             def response = new Response (
                 contentType: contentType,
