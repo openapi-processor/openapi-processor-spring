@@ -28,7 +28,7 @@ class Api {
     List<Interface> interfaces = []
 
     /**
-     * data types created from '#/component/schemas'
+     * named data types (i.e. $ref) used in the OpenAPI description.
      */
     private DataTypes models
 
