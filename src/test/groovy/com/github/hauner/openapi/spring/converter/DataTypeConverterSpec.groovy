@@ -22,7 +22,6 @@ import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -170,7 +169,6 @@ paths:
         ep.parameters.first ().dataType.name == 'Map'
     }
 
-    @Ignore
     void "converts ref object schema to Map<> set via x-java-type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
