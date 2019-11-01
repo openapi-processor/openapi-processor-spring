@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
@@ -56,6 +57,19 @@ class QueryParameter {
     }
 
     /**
+     * Create annotation? If the query parameter is mapped to a pojo object it should not have a
+     * {@code @RequestParam} annotation.
+     */
+    boolean withAnnotation () {
+        ! (
+            dataType instanceof ObjectDataType
+         || dataType instanceof MappedDataType
+        )
+    }
+
+    /**
+     * todo this is not right.
+     *
      * Create annotation with parameters? If the query parameter is mapped to a pojo object it
      * should not have any parameters.
      *

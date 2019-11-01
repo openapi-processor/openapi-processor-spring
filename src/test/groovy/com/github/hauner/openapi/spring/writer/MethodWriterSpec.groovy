@@ -179,7 +179,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "writes object query parameter" () {
+    void "writes object query parameter without @RequestParam annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             new Response (contentType: 'application/json', responseType: new NoneDataType())
         ], parameters: [
@@ -197,7 +197,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam Foo foo);
+    ResponseEntity<void> getFoo(Foo foo);
 """
     }
 

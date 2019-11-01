@@ -57,7 +57,9 @@ class InterfaceWriter {
             imports.add (ep.method.classNameWithPackage)
 
             ep.parameters.each { p ->
-                imports.add (p.annotationWithPackage)
+                if (p.withAnnotation()) {
+                    imports.add (p.annotationWithPackage)
+                }
             }
 
             if (!ep.response.empty) {

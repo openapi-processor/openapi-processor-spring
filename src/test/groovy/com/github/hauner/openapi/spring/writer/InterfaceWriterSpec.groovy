@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.Response
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
@@ -130,6 +131,30 @@ import org.springframework.http.ResponseEntity;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
+import org.springframework.web.bind.annotation.RequestParam;
+""")
+    }
+
+    void "does not write @RequestParam annotation import of request parameter that does not want the annotation" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
+                type: 'Foo', properties: [
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
+                ]
+            ))
+        ])
+
+        def apiItf = new Interface (name: 'name', endpoints: [endpoint])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        ! result.contains("""\
 import org.springframework.web.bind.annotation.RequestParam;
 """)
     }

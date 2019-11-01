@@ -77,7 +77,13 @@ class MethodWriter {
 
     private String createParameter (Endpoint endpoint) {
         def ps = endpoint.parameters.collect {
-            "${createParameterAnnotation (it)} ${it.dataType.name} ${it.name}"
+
+            if (it.withAnnotation ()) {
+                "${createParameterAnnotation (it)} ${it.dataType.name} ${it.name}"
+            } else {
+                "${it.dataType.name} ${it.name}"
+            }
+
         }
 
         ps.join (', ')
