@@ -29,19 +29,11 @@ class SchemaInfo {
     Schema schema
     String name
 
-    boolean inline = false
-
     RefResolver resolver
 
     SchemaInfo (Schema schema, String name) {
         this.schema = schema
         this.name = name
-    }
-
-    SchemaInfo (Schema schema, String name, boolean inline) {
-        this.schema = schema
-        this.name = name
-        this.inline = inline
     }
 
     void eachProperty (@ClosureParams({"String,DataTypeInfo"}) Closure closure) {
@@ -72,7 +64,7 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForNestedType (String nestedName, Schema nestedSchema) {
-        def info = new SchemaInfo (nestedSchema, getNestedTypeName (nestedName), true)
+        def info = new SchemaInfo (nestedSchema, getNestedTypeName (nestedName))
         info.resolver = resolver
         info
     }

@@ -41,10 +41,4 @@ class ResponseSchemaInfo extends SchemaInfo {
         this.contentType = contentType
     }
 
-    ResponseSchemaInfo (String path, String contentType, Schema schema, String name, boolean inline) {
-        super (schema, name, inline)
-        this.path = path
-        this.contentType = contentType
-    }
-
 }
