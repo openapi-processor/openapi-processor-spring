@@ -81,9 +81,8 @@ class DataTypeConverter {
 
     /**
      * converts an open api type (i.e. a {@code Schema}) to a java data type including nested types.
-     * All (nested) $referenced types (except inline types) must be available from {@code dataTypes}.
-     * {@code dataTypeInfo} provides the type name used to add it to the list of data types (except
-     * for inline types).
+     * Stores named objects in {@code dataTypes} for re-use. {@code dataTypeInfo} provides the type
+     * name used to add it to the list of data types.
      *
      * @param dataTypeInfo the open api type with context information
      * @param dataTypes known object types
