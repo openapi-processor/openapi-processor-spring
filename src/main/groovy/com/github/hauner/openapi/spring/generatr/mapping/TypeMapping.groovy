@@ -37,4 +37,9 @@ class TypeMapping {
      */
     String targetTypeName
 
+    /**
+     * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
+     */
+    List<String> genericTypeNames = []
+
 }

@@ -23,12 +23,17 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class MappedDataType implements DataType {
 
-    String type
+    private String type
     String pkg = 'unknown'
+    List<String> genericTypes = []
 
     @Override
     String getName () {
-        type
+        if (genericTypes.empty) {
+            "${type}"
+        } else {
+            "${type}<${getGenericTypeNames().join (', ')}>"
+        }
     }
 
     @Override
@@ -38,12 +43,22 @@ class MappedDataType implements DataType {
 
     @Override
     String getImport () {
-        [packageName, name].join ('.')
+        [packageName, type].join ('.')
     }
 
     @Override
     Set<String> getImports () {
-        []
+         [getImport ()] + genericTypes
+    }
+
+    private List<String> getGenericTypeNames () {
+        genericTypes.collect {
+            getClassName (it)
+        }
+    }
+
+    private String getClassName (String ref) {
+        ref.substring (ref.lastIndexOf ('.') + 1)
     }
 
 }

@@ -23,7 +23,7 @@ import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-//@Ignore
+@Ignore
 @RunWith(Parameterized)
 class GeneratrPendingTest extends GeneratrTestBase {
 

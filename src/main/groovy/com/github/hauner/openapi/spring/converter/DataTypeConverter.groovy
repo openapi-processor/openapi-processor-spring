@@ -69,6 +69,20 @@ class DataTypeConverter {
         ]
     ]
 
+    private class TargetType {
+        String typeName
+        List<String> genericNames
+
+        String getName () {
+            typeName.substring (typeName.lastIndexOf ('.') + 1)
+        }
+
+        String getPkg () {
+            typeName.substring (0, typeName.lastIndexOf ('.'))
+        }
+
+    }
+
     private ApiOptions options
 
     DataTypeConverter(ApiOptions options) {
@@ -135,11 +149,12 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        String targetTypeName = getObjectDataType (schemaInfo)
-        if (targetTypeName) {
+        TargetType targetType = getObjectDataType (schemaInfo)
+        if (targetType) {
             objectType = new MappedDataType (
-                type: targetTypeName.substring (targetTypeName.lastIndexOf ('.') + 1),
-                pkg: targetTypeName.substring (0, targetTypeName.lastIndexOf ('.'))
+                type: targetType.name,
+                pkg: targetType.pkg,
+                genericTypes: targetType.genericNames
             )
 
             dataTypes.add (schemaInfo.name, objectType)
@@ -186,7 +201,7 @@ class DataTypeConverter {
     }
 
 
-    private String getObjectDataType(SchemaInfo schemaInfo) {
+    private TargetType getObjectDataType(SchemaInfo schemaInfo) {
         if (options.typeMappings) {
 
             List<EndpointTypeMapping> endpoints = getEndpointMappings ()
@@ -202,7 +217,10 @@ class DataTypeConverter {
 
                     def response = responses.find { it.contentType == ct && it.sourceTypeName == 'object' }
                     if (response) {
-                        return response.targetTypeName
+                        return new TargetType (
+                            typeName: response.targetTypeName,
+                            genericNames: []
+                        )
                     }
                 }
             }
@@ -221,7 +239,9 @@ class DataTypeConverter {
             }
 
             def mapping = mappings.first ()
-            return mapping.targetTypeName
+            return new TargetType (
+                typeName: mapping.targetTypeName,
+                genericNames: mapping.genericTypeNames ?: [])
         }
 
         null
