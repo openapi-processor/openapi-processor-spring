@@ -60,6 +60,8 @@ class InterfaceWriter {
                 if (p.withAnnotation()) {
                     imports.add (p.annotationWithPackage)
                 }
+
+                imports.add (p.dataTypeImport)
             }
 
             if (!ep.response.empty) {

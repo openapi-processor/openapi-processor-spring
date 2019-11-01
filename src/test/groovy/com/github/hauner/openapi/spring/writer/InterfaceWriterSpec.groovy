@@ -117,7 +117,7 @@ import org.springframework.http.ResponseEntity;
 """)
     }
 
-    void "writes RequestParam import" () {
+    void "writes @RequestParam import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
                 parameters: [
@@ -135,7 +135,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 """)
     }
 
-    void "does not write @RequestParam annotation import of request parameter that does not want the annotation" () {
+    void "does not write @RequestParam annotation import of parameter that does not want the annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             new Response (contentType: 'application/json', responseType: new NoneDataType())
         ], parameters: [
@@ -156,6 +156,30 @@ import org.springframework.web.bind.annotation.RequestParam;
         def result = extractImports (target.toString ())
         ! result.contains("""\
 import org.springframework.web.bind.annotation.RequestParam;
+""")
+    }
+
+    void "writes import of request parameter data type" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
+                pkg: 'model', type: 'Foo', properties: [
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
+                ]
+            ))
+        ])
+
+        def apiItf = new Interface (name: 'name', endpoints: [endpoint])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import model.Foo;
 """)
     }
 

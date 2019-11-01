@@ -43,6 +43,10 @@ class QueryParameter {
         "@${annotationName}"
     }
 
+    String getDataTypeImport() {
+        dataType.import
+    }
+
     /**
      * Is the parameter required?
      *
