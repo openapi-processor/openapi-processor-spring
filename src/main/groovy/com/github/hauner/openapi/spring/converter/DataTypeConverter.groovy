@@ -130,11 +130,6 @@ class DataTypeConverter {
                 arrayType = new ArrayDataType (item: item)
         }
 
-        if (schemaInfo.inline) {
-            return arrayType
-        }
-
-        dataTypes.add (schemaInfo.name, arrayType)
         arrayType
     }
 
@@ -188,11 +183,6 @@ class DataTypeConverter {
             simpleType = type.default(dataTypeInfo)
         }
 
-        if (dataTypeInfo.inline) {
-            return simpleType
-        }
-
-        dataTypes.add (dataTypeInfo.name, simpleType)
         simpleType
     }
 

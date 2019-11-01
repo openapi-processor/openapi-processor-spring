@@ -20,7 +20,6 @@ import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
-import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Ignore
@@ -304,7 +303,7 @@ components:
         assert title.name == 'String'
     }
 
-    void "creates named simple data types from #/components/schemas" () {
+    void "skips named simple data types from #/components/schemas" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -344,20 +343,18 @@ components:
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
-        api.models.size () == 3
+        api.models.size () == 1
 
         and:
         def dataTypes = api.models
         assert dataTypes.find ('Book')
-        assert dataTypes.find ('Isbn')
-        assert dataTypes.find ('Title')
     }
 
-    void "creates named array data types from #/components/schemas" () {
+    void "skips named array data types from #/components/schemas" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
-  title: component simple schemas 
+  title: component array schemas 
   version: 1.0.0
 
 paths:
@@ -397,15 +394,12 @@ components:
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
-        api.models.size () == 3
+        api.models.size () == 2
 
         and:
         def dataTypes = api.models
         def book = dataTypes.find ('Book')
         assert book != null
-        def authors = dataTypes.find ('Authors')
-        assert authors instanceof ArrayDataType
-        assert authors.name == 'Author[]'
         def author = dataTypes.find ('Author')
         assert author != null
     }
