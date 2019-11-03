@@ -32,12 +32,19 @@ class ResponseTypeMapping {
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
      */
+    @Deprecated // use mapping
     String sourceTypeName
 
     /**
      * The fully qualified java type name that will be used for {@link #sourceTypeName} in an
      * {@link #contentType} response.
      */
+    @Deprecated // use mapping
     String targetTypeName
+
+    /**
+     * Type mapping valid only for responses with {@link #contentType}.
+     */
+    TypeMapping mapping
 
 }

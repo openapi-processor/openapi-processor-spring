@@ -51,4 +51,14 @@ class RegexSpec extends Specification {
         expect:
         "prefix\nXXXX\npostfix" ==~ /(?s)prefix(.+?)postfix/
     }
+
+    void "extract generic types" () {
+        Pattern p = ~/.+?<(.+?)>/
+        Matcher m = "mapping.Bar<java.lang.String, java.lang.Boolean>" =~ p
+
+        expect:
+        m.find ()
+        m.group (1) == "java.lang.String, java.lang.Boolean"
+    }
+
 }
