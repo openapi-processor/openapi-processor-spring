@@ -16,21 +16,29 @@ expectations:
  
 - it generates simple code.
 
-- it handles Spring types like `Page<>`, `Pageable`.
+- it allows type mappings (with generic values) to map schemas defined in the openapi.yaml to existing java classes.
+ This includes Spring types like `Page<>` & `Pageable`.
+ 
+- it allows to add additional parameters to an endpoint. For example to pass the `HttpServletRequest` to the controller
+method.
 
-- WebFlux support.   
+- it handles multiple responses by generating one controller method for each response content type.
+
+- WebFlux support, may need its own generatr.   
 
 
 
 # Status
 
-(October 2019) this is work in progress.
+(November 2019) this is work in progress.
 
 current status & limitations:
 
+## status
 - generates interfaces & models for all endpoints
-- supports openapi.yaml files that reference other files
-- property names in the openapi description must be java compatible (i.e. no `@JsonProperty` on model classes)
+
+## limitations
+- property names in the openapi description must be java compatible (i.e. no `@JsonProperty` yet on model classes)
 - limited parameter support
    - query parameters (i.e. `in: query`) 
        - does handle basic data types and `object`s
@@ -38,7 +46,6 @@ current status & limitations:
    - no header parameters (i.e. `in: header`)
    - no cookie parameters (i.e. `in: cookie`)
 - honors only the first response content description
-- does not support special Spring types
 - MVC only, no WebFlux
 - there are probably more limitations ... ;-) 
 
@@ -98,6 +105,9 @@ it will create the endpoint like this:
 By default the OpenAPI `array` is mapped to a simple java array. It is possible to change that default 
 mapping for example to `java.util.Collection` by adding a type mapping to the generator options.
 
+The `SpringGeneratrOptions` object has a property `typeMapping` that takes either a file name to a yaml
+file (with extension `.yaml`) or an inline yaml. 
+
 Given the api: 
 
     /array-collection:
@@ -112,12 +122,12 @@ Given the api:
                   type: string
           description: none
 
-and adding `array` to the `typeMappings` property of the generatr options object like this (example
- in groovy notation):
+and the following yaml:
 
-    typeMappings = [
-        'array': 'java.util.Collection'
-    ]
+    maps:
+      types:
+        - from array
+          to java.util.Collection
 
 the generated code will change to:
 
@@ -126,10 +136,12 @@ the generated code will change to:
 
 using the `array`s `items` type as the generic parameter.
 
-The generatr needs to know the given type to generate proper java code so we can't simply add a random
- collection type. The generatr does currently recognize the following types:
+The generatr needs to know the given collection type to generate proper java code so we can't simply
+add a random collection type. The generatr does currently recognize the following types:
 
-- `java.util.Collection` 
+- `java.util.Collection`
+- `java.util.List`
+- `java.util.Set`
 
 #### `x-java-type`
 
@@ -174,10 +186,12 @@ The generatr needs to know the given type to generate proper java code so we can
 ## Endpoint Response
 
 All generated endpoints have a [`ResponseEntity<>`][spring-responseentity] result. This allows an endpoint
-implementation full control of the response. 
-
+implementation full control of the response at the cost of having to provide a `ResponseEntity` even if
+it could just return its pojo result.
 
 ## Endpoint Parameters
+
+todo
 
 ### Query Parameters
 
@@ -206,6 +220,8 @@ will generate the following interface method:
     ResponseEntity<void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
 
 #### object query parameter
+
+> no longer supported, will be re-implemented using type mappings
 
 In case multiple query parameters should be mapped into a single model object like in this description:
 
@@ -303,6 +319,7 @@ The structure looks like this:
 
     my-new-test-case/
                      openapi.yaml
+                     mapping.yaml
                      generated/
                                api/
                                   AnEndpointInterfaceApi.java
@@ -311,6 +328,8 @@ The structure looks like this:
                                      AModelClass.java
                                      AnotherModelClass.java
                                      .. more model files ..
+
+The `mapping.yaml` contains the type mapping information and is an optional file.
 
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
