@@ -11,6 +11,12 @@ version '0.1-SNAPSHOT'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
+ext {
+    bintrayUser = BINTRAY_USER ?: 'n/a'
+    bintrayKey = BINTRAY_KEY ?: 'n/a'
+}
+
+
 repositories {
     mavenCentral()
 }
