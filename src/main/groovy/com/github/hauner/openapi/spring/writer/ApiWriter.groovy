@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import groovy.util.logging.Slf4j

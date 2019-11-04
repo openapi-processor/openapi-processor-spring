@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.generatr
 
 import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -31,7 +32,7 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  *
  *  @author Martin Hauner
  */
-class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
+class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
 
     @Override
     String getName () {
@@ -39,12 +40,12 @@ class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
     }
 
     @Override
-    Class<ApiOptions> getOptionsType () {
-        return ApiOptions
+    Class<SpringGeneratrOptions> getOptionsType () {
+        return SpringGeneratrOptions
     }
 
     @Override
-    void run (ApiOptions options) {
+    void run (SpringGeneratrOptions generatrOptions) {
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
             // external files with $refs to #/components/schema.
@@ -52,12 +53,13 @@ class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
         )
 
         SwaggerParseResult result = new OpenAPIV3Parser ()
-        .readLocation (options.apiPath, null, opts)
+        .readLocation (generatrOptions.apiPath, null, opts)
 
-        if (options.showWarnings) {
+        if (generatrOptions.showWarnings) {
             printWarnings(result.messages)
         }
 
+        def options = convertOptions (generatrOptions)
         def cv = new ApiConverter(options)
         def api = cv.convert (result.openAPI)
 
@@ -68,6 +70,16 @@ class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
         )
 
         writer.write (api)
+    }
+
+    private ApiOptions convertOptions (SpringGeneratrOptions generatrOptions) {
+        def options = new ApiOptions()
+        def reader = new TypeMappingReader ()
+        options.apiPath = generatrOptions.apiPath
+        options.targetDir = generatrOptions.targetDir
+        options.packageName = generatrOptions.packageName
+        options.typeMappings = reader.read (generatrOptions.typeMappings)
+        options
     }
 
     private static printWarnings(List<String> warnings) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.converter
 
 /**
  * Options of the generatr.
@@ -44,18 +44,13 @@ class ApiOptions {
     String packageName
 
     /**
-     * show warnings from the open api parser.
-     */
-    boolean showWarnings
-
-    /**
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
-     * {@link com.github.hauner.openapi.spring.generatr.mapping.TypeMapping}: used to globally override
+     * {@link com.github.hauner.openapi.spring.converter.mapping.TypeMapping}: used to globally override
      * the mapping of an OpenAPI schema to a specific java type.
      *
-     * {@link com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping}: used to override
+     * {@link com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping}: used to override
      * parameter, response type mappings or to add additional parameters on a single endpoint.
      */
     List<?> typeMappings

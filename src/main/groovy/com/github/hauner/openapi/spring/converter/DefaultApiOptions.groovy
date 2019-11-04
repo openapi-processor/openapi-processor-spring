@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.converter
 
 /**
  * ApiOptions defaults.

@@ -16,8 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
+
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import io.swagger.v3.oas.models.media.ObjectSchema

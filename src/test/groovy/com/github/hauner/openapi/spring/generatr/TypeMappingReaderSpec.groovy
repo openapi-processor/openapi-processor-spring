@@ -16,15 +16,13 @@
 
 package com.github.hauner.openapi.spring.generatr
 
-import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
-
-import java.lang.reflect.Parameter
 
 class TypeMappingReaderSpec extends Specification {
 

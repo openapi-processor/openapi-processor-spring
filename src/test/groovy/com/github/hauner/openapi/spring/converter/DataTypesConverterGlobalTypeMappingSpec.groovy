@@ -16,8 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
 

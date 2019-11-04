@@ -16,8 +16,6 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter

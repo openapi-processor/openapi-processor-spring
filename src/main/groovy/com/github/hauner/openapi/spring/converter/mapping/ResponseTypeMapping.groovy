@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that represents the schema of
- * the parameter of the endpoint.
+ * Used with {@link EndpointTypeMapping} to configure the java type that represents the response
+ * schema for a content type of the endpoint.
  *
  * @author Martin Hauner
  */
-class ParameterTypeMapping {
+class ResponseTypeMapping {
 
     /**
-     * The parameter name of this mapping. Must match 1:1 with what is written in the api.
+     * The content type of this mapping. Must match 1:1 with what is written in the api.
      */
-    String parameterName
+    String contentType
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
@@ -36,13 +36,14 @@ class ParameterTypeMapping {
     String sourceTypeName
 
     /**
-     * The fully qualified java type name that will be used for {@link #parameterName}.
+     * The fully qualified java type name that will be used for {@link #sourceTypeName} in an
+     * {@link #contentType} response.
      */
     @Deprecated // use mapping
     String targetTypeName
 
     /**
-     * Type mapping valid only for requests with parameter {@link #parameterName}.
+     * Type mapping valid only for responses with {@link #contentType}.
      */
     TypeMapping mapping
 

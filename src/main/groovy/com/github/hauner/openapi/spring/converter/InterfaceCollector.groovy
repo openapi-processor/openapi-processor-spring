@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
 import com.github.hauner.openapi.spring.model.Interface
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem

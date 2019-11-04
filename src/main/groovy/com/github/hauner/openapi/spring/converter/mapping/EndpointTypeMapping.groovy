@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link com.github.hauner.openapi.spring.generatr.ApiOptions} to override parameter or
+ * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
  * response type mappings on a single endpoint. It can also be used to add parameters that are not
  * defined in the api. For example to pass {@link javax.servlet.http.HttpServletRequest} to the
  * controller method.

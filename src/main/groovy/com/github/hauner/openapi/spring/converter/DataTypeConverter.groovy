@@ -16,10 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
-import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType

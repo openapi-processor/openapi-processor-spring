@@ -16,11 +16,8 @@
 
 package com.github.hauner.openapi.generatr
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
-
 class TestSet {
     String name
-    ApiOptions options
 
     @Override
     String toString () {

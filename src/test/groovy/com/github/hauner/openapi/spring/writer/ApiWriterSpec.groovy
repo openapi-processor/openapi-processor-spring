@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.generatr.ApiOptions
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Interface

@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.spring.generatr
 
-import com.github.hauner.openapi.spring.generatr.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import org.yaml.snakeyaml.Yaml
 
 import java.util.regex.Matcher
@@ -95,7 +95,10 @@ class TypeMappingReader {
     private ResponseTypeMapping readResponseTypeMapping (Map<String, ?> source) {
         def content = source.content
         def mapping = readTypMapping (source)
-        new ResponseTypeMapping(contentType: content, mapping: mapping)
+        new ResponseTypeMapping(contentType: content, mapping: mapping,
+            sourceTypeName: mapping.sourceTypeName,
+            targetTypeName: mapping.targetTypeName
+        )
     }
 
     private TypeMapping readTypMapping (Map<String, ?> source) {

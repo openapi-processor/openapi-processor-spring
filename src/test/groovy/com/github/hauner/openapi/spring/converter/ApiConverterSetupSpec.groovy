@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.generatr.DefaultApiOptions
+
 import spock.lang.Specification
 
 class ApiConverterSetupSpec extends Specification {
