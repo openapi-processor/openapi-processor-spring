@@ -47,8 +47,7 @@ class SpringGeneratr implements OpenApiGeneratr<ApiOptions> {
     void run (ApiOptions options) {
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
-            // external files with $refs to #/components/schema. The generatr can now always
-            // generate the model based on #/components/schema.
+            // external files with $refs to #/components/schema.
             resolve: true
         )
 
