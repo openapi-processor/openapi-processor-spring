@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '0.1-SNAPSHOT'
+version '1.0.0.A1'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
