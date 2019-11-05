@@ -27,7 +27,6 @@ method.
 - WebFlux support, may need its own generatr.   
 
 
-
 # Status
 
 (November 2019) this is work in progress.
@@ -35,13 +34,15 @@ method.
 current status & limitations:
 
 ## status
-- generates interfaces & models for all endpoints
 
-## limitations
+- generates interfaces & models for all endpoints
+- supports query parameters (i.e. `in: query`) for basic and object types
+- supports responses with basic and object types
+- supports type mappings with generics (one level only) 
+
+## known limitations
 - property names in the openapi description must be java compatible (i.e. no `@JsonProperty` yet on model classes)
 - limited parameter support
-   - query parameters (i.e. `in: query`) 
-       - does handle basic data types and `object`s
    - no path parameters (i.e. `in: path`)
    - no header parameters (i.e. `in: header`)
    - no cookie parameters (i.e. `in: cookie`)
@@ -143,46 +144,6 @@ add a random collection type. The generatr does currently recognize the followin
 - `java.util.List`
 - `java.util.Set`
 
-#### `x-java-type`
-
-> no longer supported
-> 
-> an `x-java-type` extension looks like a simple solution to help the generatr create the expected
-> code. But has a significant drawback. It has to be part of the api description. As an api provider
-> I don't care which technology is used to access my api. So I don't want to add any technology specific
-> details in the api description.
-
-The generatr does support an [OpenAPI extension][openapi-spec-exts] for array schemas. By adding the
- `x-java-type` extension to the array schema it is possible to override the default:
-
-    /array-collection:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.collection:
-              schema:
-                type: array
-                x-java-type: java.util.Collection
-                items:
-                  type: string
-          description: none
-
-The
-
-    x-java-type: java.util.Collection
-    
-line will change the endpoint to:
-
-    @GetMapping(path = "/array-collection", produces = {"application/json"})
-    ResponseEntity<Collection<String>> getArrayCollection();
-
-
-The generatr needs to know the given type to generate proper java code so we can't simply add a random
- collection type. The generatr does currently recognize the following types:
-
-- `java.util.Collection` 
-
 ## Endpoint Response
 
 All generated endpoints have a [`ResponseEntity<>`][spring-responseentity] result. This allows an endpoint
@@ -190,8 +151,6 @@ implementation full control of the response at the cost of having to provide a `
 it could just return its pojo result.
 
 ## Endpoint Parameters
-
-todo
 
 ### Query Parameters
 
@@ -219,89 +178,68 @@ will generate the following interface method:
     @GetMapping(path = "/endpoint")
     ResponseEntity<void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
 
-#### object query parameter
+# gradle
 
-> no longer supported, will be re-implemented using type mappings
+To use openapi-generatr-spring in a gradle project the gradle file of the project requires a few additional instructions.
 
-In case multiple query parameters should be mapped into a single model object like in this description:
+1. the generatr itself is a `buildscript` dependency:
 
-    paths:
-      /endpoint:
-        get:
-          parameters:
-            - name: props
-              description: object via multiple query parameters 
-              in: query
-              required: false
-              schema:
-                type: object
-                properties:
-                  prop1:
-                    type: string
-                  prop2:
-                    type: string
-              style: form
-              explode: true
-          responses:
-            '204':
-              description: empty
+        buildscript {
+          dependencies {
+            // adds generatr-spring
+            classpath 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
+          }
+        }
 
-the generatr will by default create this interface method:
+2. the [openapi-generatr-gradle][generatr-gradle] is activated in the `plugins` configuration: 
 
-    @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpointObject(@RequestParam Props props); 
+        plugins {
+            ....
+            // add generatr-gradle plugin
+            id 'com.github.hauner.openapi-generatr' version '<version>'
+        }
+        
+3.  the plugin will find the generatr on the build classpath and adds a `generatrSpring` configuration block that is
+    used to configure the generatr.
 
-Default values for the object properties will be ignored even if defined. Springs [`@RequestParam`][spring-requestparam]
-annotation does not support default values for multiple properties. The generatr also ignores `style` & `exploded`
-which are mainly interesting for client side code generation. 
-
-If the controller method should be one of the following variations
-
-    @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpointObject(@RequestParam(name = "foo") Map foo); 
-
-> used to to convert the query parameter `foo` to a map.
+        generatrSpring {
+            // the path to the open api yaml file.
+            apiPath = "$projectDir/src/api/openapi.yaml"
     
-    @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpointObject(@RequestParam Map<String,String> allParams); 
-
-> populates the map with all query parameter names and values.
-
-    @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpointObject(@RequestParam MultiValueMap<String,String> allParams); 
-
-> same as the previous but can handle multiple query parameters of the same name
-
-the generatr needs some help to generate the proper code. Adding the `x-type-java` extension property to the schema
-tells the generatr which Java type it should use.  
-
-    parameters:
-      - name: props
-        description: object via multiple query parameters 
-        in: query
-        schema:
-          type: object
-          x-java-type: java.util.Map
-          properties:
-            prop1:
-              type: string
-            prop2:
-              type: string
-
-The possible values of `x-type-java` for query parameters are          
-
-- `java.util.Map`
-  
-  this should be used to convert a single query parameter to a map. It is the first variation above.
+            // the destination folder for generating interfaces & models. This is the parent of the
+            // {packageName} folder tree.
+            targetDir = "$projectDir/build/openapi"
     
-- `java.util.Map<>`
+            // the root package of the generated interfaces/model. The package folder tree will be
+            // created inside {targetDir}. Interfaces and models will be placed into the "api" and
+            // "model" subpackages of packageName:
+            // - interfaces => "${packageName}.api"
+            // - models => "${packageName}.model"
+            packageName = "com.github.hauner.openapi.sample"
+    
+            // show warnings from the open api parser.
+            showWarnings = true
+            
+            // mapping if required (see java type mapping)
+            typeMapping = "$projectDir/openapi-mapping.yaml"
+        }
 
-  this should be used to add all query parameter to a single map. It is the second variation above.
+4. the plugin will also add a gradle task `generateSpring` to run the generatr.
+ 
+5. to automatically generate & compile the generatr output the `sourceSets` are extended to include the generatr output
+and the `compileJava` task gets a dependency on `generateSpring` so the generatr runs before compilation:  
 
-- `org.springframework.util.MultiValueMap`
+        sourceSets {
+            main {
+                java {
+                    // add generated files
+                    srcDir 'build/openapi'
+                }
+            }
+        }
 
-  this should be used to add all query parameter (which may have multiple parameters with the same name) to a single
-  multi value map. It is the third variation above.
+        // generate api before compiling
+        compileJava.dependsOn ('generateSpring')
 
 
 # Sample
@@ -344,4 +282,5 @@ See the [existing integration tests][generatr-int-resources] for a couple of exa
 [spring-responseentity]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
 
 [generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
+[generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [generatr-sample]: https://github.com/hauner/openapi-generatr-spring-mvc-sample
