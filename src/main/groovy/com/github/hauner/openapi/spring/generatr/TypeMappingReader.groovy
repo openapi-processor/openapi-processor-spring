@@ -45,6 +45,11 @@ class TypeMappingReader {
 
         Yaml yaml = new Yaml()
         Map props = yaml.load (mapping)
+
+        if (props == null) {
+            return null
+        }
+
         parse (props)
     }
 

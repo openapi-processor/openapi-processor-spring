@@ -29,6 +29,17 @@ class TypeMappingReaderSpec extends Specification {
     @Rule
     TemporaryFolder folder
 
+    void "ignores empty type mapping" () {
+        def yaml = ""
+
+        when:
+        def reader = new TypeMappingReader()
+        def mappings = reader.read (yaml)
+
+        then:
+        mappings == null
+    }
+
     void "reads mapping from file" () {
         def yaml = """\
 openapi-generatr-spring: v1.0
