@@ -185,6 +185,12 @@ To use openapi-generatr-spring in a gradle project the gradle file of the projec
 1. the generatr itself is a `buildscript` dependency:
 
         buildscript {
+          repositories {
+             maven {
+               url  "https://dl.bintray.com/hauner/openapi-generatr"
+            }
+          }
+          
           dependencies {
             // adds generatr-spring
             classpath 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
@@ -221,7 +227,7 @@ To use openapi-generatr-spring in a gradle project the gradle file of the projec
             showWarnings = true
             
             // mapping if required (see java type mapping)
-            typeMapping = "$projectDir/openapi-mapping.yaml"
+            typeMappings = "$projectDir/openapi-mapping.yaml"
         }
 
 4. the plugin will also add a gradle task `generateSpring` to run the generatr.
