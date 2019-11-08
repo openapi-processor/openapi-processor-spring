@@ -1,0 +1,22 @@
+.dbgb {
+  border: 1px solid black;
+}
+
+
+p.note {
+  display: block;
+  //width: 100%;
+  //max-width: 100%;
+  margin-bottom: $sp-5;
+  overflow-x: auto;
+  border-radius: 0; //$border-radius;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+p.info {
+  margin-left: 2em;
+  margin-right: 2em;
+  padding: 0.8em;
+
+  border-left: 0.5em solid $blue-000;
+}

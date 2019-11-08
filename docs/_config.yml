@@ -1,0 +1,26 @@
+title: openapi-generatr-spring
+
+description: >-
+  an openapi generatr for spring-boot
+
+baseurl: "/docs"
+url: "https://hauner.github.io/openapi-generatr-spring"
+
+twitter_username: "@MartinHauner"
+github_username:  hauner
+
+remote_theme: pmarsceill/just-the-docs
+
+exclude:
+  - README.md
+  - SCRATCH.md
+
+# "just-the-docs" theme options
+search_enabled: true
+search_tokenizer_separator: /[\s/]+/
+
+aux_links:
+  openapi-generatr-spring:
+    - //github.com/hauner/openapi-generatr-spring
+
+#footer_content:
