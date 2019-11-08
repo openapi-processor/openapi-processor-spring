@@ -4,7 +4,7 @@ description: >-
   an openapi generatr for spring-boot
 
 baseurl: "/docs"
-url: "https://hauner.github.io/openapi-generatr-spring"
+#url: "https://hauner.github.io/openapi-generatr-spring"
 
 twitter_username: "@MartinHauner"
 github_username:  hauner
