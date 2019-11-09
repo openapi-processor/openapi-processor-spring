@@ -4,7 +4,7 @@ description: >-
   an openapi generatr for spring-boot
 
 url: "https://hauner.github.io"
-baseurl: "/openapi-generatr-spring"
+baseurl: "/openapi-generatr-spring/"
 
 twitter_username: "@MartinHauner"
 github_username:  hauner
@@ -15,7 +15,9 @@ exclude:
   - README.md
   - SCRATCH.md
 
-# "just-the-docs" theme options
+##
+## "just-the-docs" theme options
+##
 search_enabled: true
 search_tokenizer_separator: /[\s/]+/
 
