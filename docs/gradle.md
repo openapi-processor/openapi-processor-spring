@@ -124,5 +124,5 @@ Adding automatic compilation in this way will also automatically include the gen
 
 
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
-[docs-mapping]: /openapi-generatr-spring/mapping.html
+[docs-mapping]: /openapi-generatr-spring/mapping/
 [docs-running]: #running-generatr-spring
