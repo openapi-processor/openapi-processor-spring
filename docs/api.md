@@ -1,14 +1,16 @@
 ---
 layout: default
-title: Type Mapping
-nav_order: 2
+title: Generatr API
+nav_order: 20
 ---
 
-# Type Mapping
+# Generatr API
 {: .no_toc }
 
 todo
 {: .label .label-yellow }
+
+describe the generatr api
 
 ## table of contents
 {: .no_toc .text-delta }
