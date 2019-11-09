@@ -7,59 +7,83 @@ permalink: /
 ---
 
 # openapi-generatr-spring
+{: .no_toc }
 
 a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot].
+{: .mb-6 }
 
+Note that the generatr is still in an early state and not all features are completely implemented.
+(November 2019)
+{: .note .info .mb-6}
+
+
+## table of contents
+{: .no_toc .text-delta }
+
+1. replaced by toc
+{:toc}
+
+## Latest Version
+
+See the [maven repository][bintray]{:target="_blank"}.
+
+## Releases
+
+See the [release notes][generatr-releases]{:target="_blank"}.
 
 ## Features
 
-- generates only Java interfaces and Java model classes (get/set pojos) for all defined endpoints and schemas
-  to allow (nearly) full control of the endpoint implementation. It does not generate any other file. 
+- <span class="label label-green">partially implemented</span> generates only java interfaces and java model classes
+  (get/set pojos) for all defined endpoints and schemas to allow (nearly) full control of the endpoint
+   implementation. It does not generate any other file. 
+  
+  - <span class="label label-red">caveat</span> property names in the openapi description must be java
+    compatible. The generatr does not yet generate a `@JsonProperty` name to map the api name to a 
+    java property name.
 
-  implemented
-  {: .label .label-green }
+  - <span class="label label-red">caveat</span> limited parameter support:
+     - <span class="label label-green">done</span> query parameters, i.e. `in: query`
+     - <span class="label label-red">todo</span> path parameters, i.e. `in: path`
+     - <span class="label label-red">todo</span> header parameters, i.e. `in: header`
+     - <span class="label label-red">todo</span> cookie parameters, i.e. `in: cookie`
+{: .mb-5 }
 
-- interfaces and models are implemented & compiled by your project. 
-
-- gradle support by using the [openapi-generatr-gradle][generatr-gradle] plugin.
-
-  implemented
-  {: .label .label-green }
-
-- simple & flexible type mappings with generic support (one level) to map schemas defined in the openapi.yaml to
-  existing java classes. For example to map the openapi `array` type to different Java collections or to map paging
-  parameters and results to Spring types like `Page<>` & `Pageable`.
+- <span class="label label-green">partially implemented</span> simple & flexible type mappings with generic support
+  (one level) to map schemas defined in the openapi.yaml to existing java types. For example to map the openapi
+  `array` type to different java collections or to map paging parameters and results to Spring types like `Page<>`
+   & `Pageable`.
    
   it is possible to define the mapping globally or for a specific response or parameter or even only for a specific
   endpoint. 
 
-  partially implemented
-  {: .label .label-green }
-  
-- add additional parameters to an endpoint which are not defined in the openapi description. For example to pass
-  a `HttpServletRequest` to the endpoint implementation.
+  - <span class="label label-red">caveat</span> the mapping can be defined at all levels but is not yet honored
+    at all places.
+{: .mb-5 }
+    
+- <span class="label label-green">implemented</span> gradle support via [openapi-generatr-gradle][generatr-gradle] plugin.
 
-  planned
-  {: .label .label-yellow }
+  - <span class="label label-red">caveat</span> the gradle plugin is currently the only option to run the
+  generatr.
+{: .mb-5 }
+
+
+- <span class="label label-yellow">planned</span> add additional parameters to an endpoint which are not defined in
+  the openapi description. For example to pass a `HttpServletRequest` to the endpoint implementation.
  
-- handle multiple responses by generating one endpoint method for each response content type.
+- <span class="label label-yellow">planned</span> handle multiple responses by generating one endpoint method for
+  each response content type.
  
-  planned
-  {: .label .label-yellow }
+- <span class="label label-yellow">planned</span> WebFlux support, may need its own generatr. 
 
-- WebFlux support, may need its own generatr. 
-
-  planned
-  {: .label .label-yellow }
-
-- the generated code is nicely formatted.
-
-  planned
-  {: .label .label-yellow }
+- <span class="label label-yellow">planned</span> nicely formatted source code by running a code formatter.
 
 - the generated code does not use swagger annotations. There is no need to generate the documentation from the code
   when the code is generated from the documentation (i.e. an openapi.yaml). 
 
+
+The generated source code has to be included in a project to compile it. This is easily done
+with the [openapi-generatr-gradle][generatr-gradle] plugin. See [Using Gradle][docs-gradle].
+{: .note .info .mb-6}
 
 ## License
 
@@ -75,7 +99,11 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 {% endfor %}
 </ul>
 
+[docs-gradle]: /openapi-generatr-spring/gradle.html
+
+[bintray]: https://bintray.com/hauner/openapi-generatr
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
+[generatr-releases]: https://github.com/hauner/openapi-generatr-spring/releases
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot

@@ -1,54 +1,12 @@
-# What's this?
+# openapi-generatr-spring
 
-an (experimental) simple opinionated [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot]
-for server side implementation. 
-
-expectations:
-
-- generates only Java interfaces and Java model classes (get/set pojos) for the defined endpoints and schemas to 
-  allow (nearly) full control of the endpoint implementation.
-
-- interfaces and models are implemented & compiled by your project (that is easily done with gradle). The generatr
-  does not generate any other files.
-  
-- the generated code does not use swagger annotations. It does not make sense (to me) to generate the documentation
- from the code when I generated the code from the documentation (i.e. an openapi.yaml). 
+a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot].
  
-- it generates simple code.
 
-- it allows type mappings (with generic values) to map schemas defined in the openapi.yaml to existing java classes.
- This includes Spring types like `Page<>` & `Pageable`.
- 
-- it allows to add additional parameters to an endpoint. For example to pass the `HttpServletRequest` to the controller
-method.
+# Getting Started
 
-- it handles multiple responses by generating one controller method for each response content type.
+See the [documentation][generatr-doc].
 
-- WebFlux support, may need its own generatr.   
-
-
-# Status
-
-(November 2019) this is work in progress.
-
-current status & limitations:
-
-## status
-
-- generates interfaces & models for all endpoints
-- supports query parameters (i.e. `in: query`) for basic and object types
-- supports responses with basic and object types
-- supports type mappings with generics (one level only) 
-
-## known limitations
-- property names in the openapi description must be java compatible (i.e. no `@JsonProperty` yet on model classes)
-- limited parameter support
-   - no path parameters (i.e. `in: path`)
-   - no header parameters (i.e. `in: header`)
-   - no cookie parameters (i.e. `in: cookie`)
-- honors only the first response content description
-- MVC only, no WebFlux
-- there are probably more limitations ... ;-) 
 
 # Documentation
 
@@ -287,6 +245,7 @@ See the [existing integration tests][generatr-int-resources] for a couple of exa
 [spring-requestparam]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html
 [spring-responseentity]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
 
+[generatr-doc]: https://hauner.github.io/openapi-generatr-spring/
 [generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [generatr-sample]: https://github.com/hauner/openapi-generatr-spring-mvc-sample
