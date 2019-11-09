@@ -31,7 +31,6 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
@@ -44,29 +43,6 @@ import com.github.hauner.openapi.spring.model.datatypes.StringDataType
  * @author Martin Hauner
  */
 class DataTypeConverter {
-
-    private static final KNOWN_DATA_TYPES = [
-        string: [
-            default: {new StringDataType()},
-            date: {new LocalDateDataType ()}
-        ],
-        integer: [
-            default: {new IntegerDataType()},
-            int32: {new IntegerDataType()},
-            int64: {new LongDataType()}
-        ],
-        number: [
-            default: {new FloatDataType()},
-            float: {new FloatDataType()},
-            double: {new DoubleDataType()}
-        ],
-        boolean: [
-            default: {new BooleanDataType()}
-        ],
-        map: [
-            default: {new InlineObjectDataType()}
-        ]
-    ]
 
     private class TargetType {
         String typeName
@@ -119,7 +95,7 @@ class DataTypeConverter {
             createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (dataTypeInfo, dataTypes)
+            createSimpleDataType (dataTypeInfo)
         }
     }
 
@@ -183,22 +159,50 @@ class DataTypeConverter {
         objectType
     }
 
-    private DataType createSimpleDataType (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
-        def type = KNOWN_DATA_TYPES.get (dataTypeInfo.type)
-        if (type == null) {
-            throw new UnknownDataTypeException(dataTypeInfo.type, dataTypeInfo.format)
+    private DataType createSimpleDataType (SchemaInfo schemaInfo) {
+        def simpleType
+
+        def typeFormat = schemaInfo.type
+        if (schemaInfo.format) {
+            typeFormat += '/' + schemaInfo.format
         }
 
-        DataType simpleType
-        if (dataTypeInfo.format) {
-            simpleType = type."${dataTypeInfo.format}"(dataTypeInfo)
-        } else {
-            simpleType = type.default(dataTypeInfo)
+        switch (getSimpleDataType(schemaInfo)) {
+            default:
+                switch (typeFormat) {
+                    case 'integer':
+                    case 'integer/int32':
+                        simpleType = new IntegerDataType()
+                        break
+                    case 'integer/int64':
+                        simpleType = new LongDataType ()
+                        break
+                    case 'number':
+                    case 'number/float':
+                        simpleType = new FloatDataType ()
+                        break
+                    case 'number/double':
+                        simpleType = new DoubleDataType ()
+                        break
+                    case 'boolean':
+                        simpleType = new BooleanDataType ()
+                        break
+                    case 'string':
+                        simpleType = new StringDataType ()
+                        break
+                    case 'string/date':
+                        simpleType = new LocalDateDataType ()
+                        break
+                    case 'string/date-time':
+                        throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
+                        break
+                    default:
+                        throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
+                }
         }
 
         simpleType
     }
-
 
     private TargetType getObjectDataType(SchemaInfo schemaInfo) {
         if (options.typeMappings) {
@@ -292,6 +296,11 @@ class DataTypeConverter {
             return array.targetTypeName
         }
 
+        null
+    }
+
+    private String getSimpleDataType(SchemaInfo schemaInfo) {
+        // todo mapping, string date/date-time
         null
     }
 
