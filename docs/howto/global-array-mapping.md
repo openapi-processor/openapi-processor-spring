@@ -13,38 +13,38 @@ mapping for example to `java.util.Collection` by adding a type mapping to the [`
 Given the following openapi.yaml fragment: 
 
 ```yaml
-paths:
- 
-  /array:
-    get:
-      responses:
-        '200':
-          description: 
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+    paths:
+     
+      /array:
+        get:
+          responses:
+            '200':
+              description: 
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      type: string
 ```
 
 the generatr will create the following endpoint interface:
 
 ```java
-@GetMapping(path = "/array", produces = {"application/json"});
-ResponseEntity<String[]> getArray();
+    @GetMapping(path = "/array", produces = {"application/json"});
+    ResponseEntity<String[]> getArray();
 ```
 
 To globally change the mapping of `array` to another collection type we just need to add a simple entry
 to the [`mapping.yaml`][docs-mapping]. Adding the following 
 
 ```yaml
-map:
-  types:
-
-    # map array to java.util.Collection
-    - from array
-      to java.util.Collection
+    map:
+      types:
+    
+        # map array to java.util.Collection
+        - from array
+          to java.util.Collection
 ```
 
 will change the generated endpoint to:
