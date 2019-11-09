@@ -12,7 +12,7 @@ permalink: /
 a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot].
 {: .mb-6 }
 
-Note that the generatr is still in an early state and not all features are completely implemented.
+Note that the generatr is still in an early state of development and not all features are completely implemented.
 (November 2019)
 {: .note .info .mb-6}
 
