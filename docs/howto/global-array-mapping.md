@@ -36,7 +36,7 @@ the generatr will create the following endpoint interface:
 ```
 
 To globally change the mapping of `array` to another collection type we just need to add a simple entry
-to the [`mapping.yaml`][docs-mapping]. Adding the following 
+to the [`mapping.yaml`][docs-mapping]. Adding the following *global* type mapping.
 
 ```yaml
     map:
