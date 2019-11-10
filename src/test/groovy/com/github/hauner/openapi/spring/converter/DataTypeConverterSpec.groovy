@@ -130,6 +130,7 @@ paths:
         ep.response.responseType.name == 'String[]'
     }
 
+    @Deprecated
     void "converts object schema to Map<> set via x-java-type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
@@ -168,6 +169,7 @@ paths:
         ep.parameters.first ().dataType.name == 'Map'
     }
 
+    @Deprecated
     void "converts ref object schema to Map<> set via x-java-type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
