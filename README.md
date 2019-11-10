@@ -8,9 +8,6 @@ a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][spri
 See the [documentation][generatr-doc].
 
 
-# Documentation
-
-[OpenAPI specification][openapi-spec].
 
 ## OpenAPI to Java type mapping
 
@@ -89,7 +86,7 @@ The structure looks like this:
                      mapping.yaml
                      generated/
                                api/
-                                  AnEndpointInterfaceApi.java
+                                  AnEndpointInterface.java
                                   .. more api interfaces ..
                                model/
                                      AModelClass.java
