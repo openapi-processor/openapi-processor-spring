@@ -218,4 +218,38 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    void "writes method name from path with valid java identifiers" () {
+        def endpoint = new Endpoint (path: '/f_o-ooo/b_a-rrr', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFOOooBARrr(@RequestParam(name = "foo") String foo);
+"""
+    }
+
+    void "writes method parameter with valid java identifiers" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: '_fo-o', required: true, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestParam(name = "_fo-o") String foO);
+"""
+    }
+
 }

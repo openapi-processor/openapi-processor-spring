@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.support.StringUtil
+import com.github.hauner.openapi.support.Identifier
 
 /**
  * Writer for Java interface methods, i.e. endpoints.
@@ -70,7 +70,7 @@ class MethodWriter {
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
-        tokens = tokens.collect { StringUtil.toCamelCase (it) }
+        tokens = tokens.collect { Identifier.fromJson (it).capitalize () }
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
     }
@@ -79,9 +79,9 @@ class MethodWriter {
         def ps = endpoint.parameters.collect {
 
             if (it.withAnnotation ()) {
-                "${createParameterAnnotation (it)} ${it.dataType.name} ${it.name}"
+                "${createParameterAnnotation (it)} ${it.dataType.name} ${Identifier.fromJson (it.name)}"
             } else {
-                "${it.dataType.name} ${it.name}"
+                "${it.dataType.name} ${Identifier.fromJson (it.name)}"
             }
 
         }
