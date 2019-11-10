@@ -9,30 +9,6 @@ See the [documentation][generatr-doc].
 
 
 
-## OpenAPI to Java type mapping
-
-[OpenAPI data types][openapi-spec-types]
-
-### simple data types
-
-The following table shows the supported data type mappings.
-
-`type`    | `format`    | generatr Java type  
-------    | --------    | ------------------  
-`integer` |             | `Integer`          
-`integer` | `int32`     | `Integer`          
-`integer` | `int64`     | `Long`             
-`number`  |             | `Float`
-`number`  | `float`     | `Float`
-`number`  | `double`    | `Double`
-`string`  |             | `String`
-`string`  | `byte`      | not implemented
-`string`  | `binary`    | not implemented
-`boolean` |             | `Boolean`
-`string`  | `date`      | `LocalDate`  
-`string`  | `date-time` | not implemented (`Instant`, `ZonedDateTime`, `OffsetDataTime`, configurable ?)
-`string`  | `password`  | ignored
-
 
 ## Endpoint Response
 
