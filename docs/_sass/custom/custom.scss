@@ -1,1 +1,29 @@
+////
+//// Grid system
+////
+
+//$gutter-spacing: $sp-6;
+//$gutter-spacing-sm: $sp-4;
+//$nav-width: 264px;
+//$nav-width-md: 248px;
+//$content-width: 800px;
+//$header-height: 60px;
+//$search-results-width: 500px;
+
+$nav-width: 260px;
+$content-width: 840px;
+
+////
+//// Media queries in pixels
+////
+
+$media-queries: (
+xs: 320px,
+sm: 500px,
+md: $content-width,
+lg: $content-width + $nav-width,
+xl: 1400px
+);
+
+
 //$nav-width: 330px;
