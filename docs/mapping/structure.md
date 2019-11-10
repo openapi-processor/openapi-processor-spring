@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Structure
+title: Mapping Structure
 parent: Type Mapping
-nav_order: 1
+nav_order: 5
 ---
 
 # mapping.yaml structure
