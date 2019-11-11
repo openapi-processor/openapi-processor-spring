@@ -26,7 +26,8 @@ class ObjectDataType implements DataType {
     String type
     String pkg = 'unknown'
 
-    Map<String, DataType> properties = new HashMap<>()
+    // must preserve the insertion order
+    Map<String, DataType> properties = new LinkedHashMap<> ()
 
     @Override
     String getName () {
@@ -58,10 +59,6 @@ class ObjectDataType implements DataType {
 
     DataType getObjectProperty (String name) {
         properties.get (name)
-    }
-
-    Set<String> getSortedPropertyNames() {
-        properties.keySet ().sort ()
     }
 
 }

@@ -42,7 +42,7 @@ class DataTypeWriter {
 
         target.write ("public class ${dataType.type} {\n\n")
 
-        def propertyNames = dataType.sortedPropertyNames
+        def propertyNames = dataType.properties.keySet ()
         propertyNames.each {
             def javaPropertyName = Identifier.fromJson (it)
             def propDataType = dataType.getObjectProperty (it)

@@ -9,22 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BookNested {
 
-    @JsonProperty("author")
-    private Author author;
-
     @JsonProperty("isbn")
     private String isbn;
 
     @JsonProperty("title")
     private String title;
 
-    public Author getAuthor () {
-        return author;
-    }
-
-    public void setAuthor (Author author) {
-        this.author = author;
-    }
+    @JsonProperty("author")
+    private Author author;
 
     public String getIsbn () {
         return isbn;
@@ -40,6 +32,14 @@ public class BookNested {
 
     public void setTitle (String title) {
         this.title = title;
+    }
+
+    public Author getAuthor () {
+        return author;
+    }
+
+    public void setAuthor (Author author) {
+        this.author = author;
     }
 
 }
