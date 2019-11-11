@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
@@ -401,6 +402,48 @@ components:
         assert book != null
         def author = dataTypes.find ('Author')
         assert author != null
+    }
+
+
+    void "preserves order of object properties" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint:
+    get:
+      responses:
+        '200':
+          description: empty
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  b:
+                    type: string
+                  a:
+                    type: string
+                  c:
+                    type: string
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg')
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def rt = ep.response.responseType as ObjectDataType
+        def keys = rt.properties.keySet ()
+
+        keys[0] == 'b'
+        keys[1] == 'a'
+        keys[2] == 'c'
     }
 
 }
