@@ -5,10 +5,17 @@
 
 package generated.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BookNested {
 
+    @JsonProperty("author")
     private Author author;
+
+    @JsonProperty("isbn")
     private String isbn;
+
+    @JsonProperty("title")
     private String title;
 
     public Author getAuthor () {

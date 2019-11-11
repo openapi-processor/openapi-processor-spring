@@ -5,9 +5,14 @@
 
 package generated.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BookInlineResponse200 {
 
+    @JsonProperty("isbn")
     private String isbn;
+
+    @JsonProperty("title")
     private String title;
 
     public String getIsbn () {

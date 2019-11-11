@@ -5,8 +5,11 @@
 
 package generated.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Author {
 
+    @JsonProperty("name")
     private String name;
 
     public String getName () {

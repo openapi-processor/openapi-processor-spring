@@ -69,22 +69,6 @@ import external.Isbn;
 """)
     }
 
-    void "writes no extra line feed when imports are empty" () {
-        def pkg = 'external'
-
-        def dataType = new ObjectDataType (type: 'Book', properties: [:] as Map, pkg: pkg)
-
-        when:
-        writer.write (target, dataType)
-
-        then:
-        target.toString () contains("""\
-package $pkg;
-
-public class Book {
-""")
-    }
-
     void "writes properties"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new ObjectDataType (type: 'Book', properties: [
@@ -98,6 +82,9 @@ public class Book {
         then:
         target.toString ().contains ("""\
     private String isbn;
+
+""")
+        target.toString ().contains ("""\
     private String title;
 
 """)
@@ -140,6 +127,45 @@ public class Book {
         def pkg = 'com.github.hauner.openapi'
 
         def dataType = new ObjectDataType (type: 'Book', properties: [
+            'a-isbn' : new StringDataType (),
+            'a-title': new StringDataType ()
+        ], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+    private String aIsbn;
+""")
+
+        target.toString ().contains ("""\
+    private String aTitle;
+""")
+    }
+
+    void "writes imports of @JsonProperty" () {
+        def pkg = 'external'
+
+        def dataType = new ObjectDataType (type: 'Book', properties: [
+            'isbn' : new StringDataType (),
+            'title': new StringDataType ()
+        ], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import com.fasterxml.jackson.annotation.JsonProperty;
+""")
+    }
+
+    void "writes properties with @JsonProperty annotation" () {
+        def pkg = 'com.github.hauner.openapi'
+
+        def dataType = new ObjectDataType (type: 'Book', properties: [
                     'a-isbn': new StringDataType (),
                     'a-title': new StringDataType ()
                 ], pkg: pkg)
@@ -149,7 +175,10 @@ public class Book {
 
         then:
         target.toString ().contains ("""\
+    @JsonProperty("a-isbn")
     private String aIsbn;
+
+    @JsonProperty("a-title")
     private String aTitle;
 
 """)

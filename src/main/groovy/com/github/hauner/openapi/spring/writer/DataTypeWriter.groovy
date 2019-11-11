@@ -46,10 +46,8 @@ class DataTypeWriter {
         propertyNames.each {
             def javaPropertyName = Identifier.fromJson (it)
             def propDataType = dataType.getObjectProperty (it)
-            target.write ("    private ${propDataType.name} ${javaPropertyName};\n")
-        }
-        if (!propertyNames.empty) {
-            target.write ("\n")
+            target.write ("    @JsonProperty(\"$it\")\n")
+            target.write ("    private ${propDataType.name} ${javaPropertyName};\n\n")
         }
 
         propertyNames.each {
@@ -82,6 +80,7 @@ class DataTypeWriter {
 
     List<String> collectImports(String packageName, DataType dataType) {
         Set<String> imports = []
+        imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
         imports.addAll (dataType.imports)
 
         new ImportFilter ().filter (packageName, imports)
