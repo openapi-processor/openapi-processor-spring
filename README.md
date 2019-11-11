@@ -8,42 +8,6 @@ a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][spri
 See the [documentation][generatr-doc].
 
 
-
-
-## Endpoint Response
-
-All generated endpoints have a [`ResponseEntity<>`][spring-responseentity] result. This allows an endpoint
-implementation full control of the response at the cost of having to provide a `ResponseEntity` even if
-it could just return its pojo result.
-
-## Endpoint Parameters
-
-### Query Parameters
-
-#### simple query parameters
-
-The following query parameter description 
-
-    paths:
-      /endpoint:
-        get:
-          parameters:
-            - name: foo
-              description: simple query parameter with default value
-              in: query
-              required: false
-              schema:
-                type: string
-                default: 'not set'
-          responses:
-            '204':
-              description: empty
-
-will generate the following interface method:
-
-    @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
-
 # Sample
 
 See [`openapi-generatr-spring-mvc-sample`][generatr-sample] for a complete working sample of a minimal
