@@ -136,4 +136,23 @@ public class Book {
 """)
     }
 
+    void "writes properties with valid java identifiers" () {
+        def pkg = 'com.github.hauner.openapi'
+
+        def dataType = new ObjectDataType (type: 'Book', properties: [
+                    'a-isbn': new StringDataType (),
+                    'a-title': new StringDataType ()
+                ], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+    private String aIsbn;
+    private String aTitle;
+
+""")
+    }
+
 }

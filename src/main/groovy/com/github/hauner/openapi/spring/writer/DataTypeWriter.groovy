@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.support.Identifier
 
 /**
  * Writer for POJO classes.
@@ -43,17 +44,19 @@ class DataTypeWriter {
 
         def propertyNames = dataType.sortedPropertyNames
         propertyNames.each {
+            def javaPropertyName = Identifier.fromJson (it)
             def propDataType = dataType.getObjectProperty (it)
-            target.write ("    private ${propDataType.name} ${it};\n")
+            target.write ("    private ${propDataType.name} ${javaPropertyName};\n")
         }
         if (!propertyNames.empty) {
             target.write ("\n")
         }
 
         propertyNames.each {
+            def javaPropertyName = Identifier.fromJson (it)
             def propDataType = dataType.getObjectProperty (it)
-            target.write (getGetter (it, propDataType))
-            target.write (getSetter (it, propDataType))
+            target.write (getGetter (javaPropertyName, propDataType))
+            target.write (getSetter (javaPropertyName, propDataType))
         }
 
         target.write ("}\n")
