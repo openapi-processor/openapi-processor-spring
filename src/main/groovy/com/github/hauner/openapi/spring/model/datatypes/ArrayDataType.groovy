@@ -36,13 +36,13 @@ class ArrayDataType implements DataType {
     }
 
     @Override
-    String getImport () {
-        item.import
+    Set<String> getImports () {
+        item.imports
     }
 
     @Override
-    Set<String> getImports () {
-        item.imports
+    Set<String> getReferencedImports () {
+        item.referencedImports
     }
 
 }

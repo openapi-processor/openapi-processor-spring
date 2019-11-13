@@ -42,13 +42,13 @@ class MappedDataType implements DataType {
     }
 
     @Override
-    String getImport () {
-        [packageName, type].join ('.')
+    Set<String> getImports () {
+        [[packageName, type].join ('.')] + genericTypes
     }
 
     @Override
-    Set<String> getImports () {
-         [getImport ()] + genericTypes
+    Set<String> getReferencedImports () {
+         []
     }
 
     private List<String> getGenericTypeNames () {

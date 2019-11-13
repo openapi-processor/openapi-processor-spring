@@ -16,8 +16,10 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
@@ -52,11 +54,11 @@ package $pkg;
 """)
     }
 
-    void "writes imports of 'external' types" () {
+    void "writes imports of nested types" () {
         def pkg = 'external'
 
         def dataType = new ObjectDataType (type: 'Book', properties: [
-            'isbn': new ObjectDataType (type: 'Isbn', properties: [:] as Map, pkg: pkg)
+            'isbn': new ObjectDataType (type: 'Isbn', properties: [:] as LinkedHashMap, pkg: pkg)
         ])
 
         when:
@@ -66,6 +68,21 @@ package $pkg;
         def result = extractImports (target.toString ())
         result.contains("""\
 import external.Isbn;
+""")
+    }
+
+    void "writes import of generic list type" () {
+        def dataType = new ObjectDataType (type: 'Book', properties: [
+            'authors': new ListDataType (item: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import java.util.List;
 """)
     }
 

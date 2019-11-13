@@ -61,11 +61,11 @@ class InterfaceWriter {
                     imports.add (p.annotationWithPackage)
                 }
 
-                imports.add (p.dataTypeImport)
+                imports.addAll (p.dataTypeImports)
             }
 
             if (!ep.response.empty) {
-                imports.add (ep.response.import)
+                imports.addAll (ep.response.imports)
             }
         }
 

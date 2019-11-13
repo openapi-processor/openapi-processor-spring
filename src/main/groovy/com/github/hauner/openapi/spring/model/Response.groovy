@@ -28,8 +28,8 @@ class Response {
     String contentType
     DataType responseType
 
-    String getImport () {
-        responseType.import
+    Set<String> getImports () {
+        responseType.imports
     }
 
     boolean isEmpty() {

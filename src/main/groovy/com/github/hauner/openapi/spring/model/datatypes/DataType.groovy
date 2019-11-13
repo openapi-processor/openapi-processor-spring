@@ -36,16 +36,17 @@ interface DataType {
     String getPackageName ()
 
     /**
-     * Provides the import of this type.
+     * Provides the import(s) of this type, usually a single import. If it is a generic type it will
+     * add another import for each generic parameter.
      *
      * @return import of this type.
      */
-    String getImport ()
+    Set<String> getImports ()
 
     /**
      * Provides the list of imports for the types referenced by this this type.
      *
      * @return the referenced import list.
      */
-    Set<String> getImports ()
+    Set<String> getReferencedImports ()
 }

@@ -34,12 +34,12 @@ class DoubleDataType implements DataType {
     }
 
     @Override
-    String getImport () {
-        [packageName, name].join ('.')
+    Set<String> getImports () {
+        [[packageName, name].join ('.')]
     }
 
     @Override
-    Set<String> getImports () {
+    Set<String> getReferencedImports () {
         []
     }
 

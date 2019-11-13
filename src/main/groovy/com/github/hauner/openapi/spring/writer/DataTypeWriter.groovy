@@ -60,7 +60,7 @@ class DataTypeWriter {
         target.write ("}\n")
     }
 
-    private GString getGetter (String propertyName, DataType propDataType) {
+    private String getGetter (String propertyName, DataType propDataType) {
         """\
     public ${propDataType.name} get${propertyName.capitalize ()} () {
         return ${propertyName};
@@ -69,7 +69,7 @@ class DataTypeWriter {
 """
     }
 
-    private GString getSetter (String propertyName, DataType propDataType) {
+    private String getSetter (String propertyName, DataType propDataType) {
         """\
     public void set${propertyName.capitalize ()} (${propDataType.name} ${propertyName}) {
         this.${propertyName} = ${propertyName};
@@ -81,7 +81,7 @@ class DataTypeWriter {
     List<String> collectImports(String packageName, DataType dataType) {
         Set<String> imports = []
         imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
-        imports.addAll (dataType.imports)
+        imports.addAll (dataType.referencedImports)
 
         new ImportFilter ().filter (packageName, imports)
             .sort ()

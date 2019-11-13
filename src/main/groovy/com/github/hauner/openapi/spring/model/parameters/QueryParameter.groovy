@@ -43,8 +43,8 @@ class QueryParameter {
         "@${annotationName}"
     }
 
-    String getDataTypeImport() {
-        dataType.import
+    Set<String> getDataTypeImports () {
+        dataType.imports
     }
 
     /**
