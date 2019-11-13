@@ -54,7 +54,6 @@ package $pkg;
 """)
     }
 
-    @Ignore
     void "writes imports of nested types" () {
         def pkg = 'external'
 
@@ -72,7 +71,6 @@ import external.Isbn;
 """)
     }
 
-    @Ignore
     void "writes import of generic list type" () {
         def dataType = new ObjectDataType (type: 'Book', properties: [
             'authors': new ListDataType (item: new StringDataType())
