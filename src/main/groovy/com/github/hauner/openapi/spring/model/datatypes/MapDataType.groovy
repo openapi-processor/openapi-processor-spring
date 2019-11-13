@@ -39,7 +39,7 @@ class MapDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
+    Set<String> getReferencedImports () {
         ['java.util.Map', 'java.lang.String']
     }
 

@@ -47,5 +47,5 @@ interface DataType {
      *
      * @return the referenced import list.
      */
-    Set<String> getImports ()
+    Set<String> getReferencedImports ()
 }

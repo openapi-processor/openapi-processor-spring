@@ -41,8 +41,8 @@ class ListDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
-        [getImport()] + item.imports
+    Set<String> getReferencedImports () {
+        [getImport ()] + item.import
     }
 
 }

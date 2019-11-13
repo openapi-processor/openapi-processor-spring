@@ -47,7 +47,7 @@ class MappedDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
+    Set<String> getReferencedImports () {
          [getImport ()] + genericTypes
     }
 

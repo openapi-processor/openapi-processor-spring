@@ -41,8 +41,8 @@ class SetDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
-        [getImport ()] + item.imports
+    Set<String> getReferencedImports () {
+        [getImport ()] + item.referencedImports
     }
 
 }

@@ -45,10 +45,10 @@ class ObjectDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
+    Set<String> getReferencedImports () {
         List<String> imports = []
         properties.values ().each {
-            imports.add ("${it.packageName}.${it.name}")
+            imports.addAll (it.referencedImports)
         }
         imports
     }

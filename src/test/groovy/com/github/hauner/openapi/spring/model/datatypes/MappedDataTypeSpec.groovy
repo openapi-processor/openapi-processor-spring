@@ -24,7 +24,7 @@ class MappedDataTypeSpec extends Specification {
         def type = new MappedDataType(pkg: 'model', type: 'Foo', genericTypes: generics)
 
         expect:
-        type.imports == imports as Set
+        type.referencedImports == imports as Set
 
         where:
         generics                                 | imports

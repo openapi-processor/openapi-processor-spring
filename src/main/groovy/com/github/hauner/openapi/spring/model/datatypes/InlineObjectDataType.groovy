@@ -42,7 +42,7 @@ class InlineObjectDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
+    Set<String> getReferencedImports () {
         []
     }
 
