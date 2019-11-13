@@ -44,7 +44,7 @@ class QueryParameter {
     }
 
     String getDataTypeImport() {
-        dataType.import
+        dataType.imports
     }
 
     /**

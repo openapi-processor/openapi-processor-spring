@@ -40,7 +40,7 @@ interface DataType {
      *
      * @return import of this type.
      */
-    String getImport ()
+    String getImports ()
 
     /**
      * Provides the list of imports for the types referenced by this this type.

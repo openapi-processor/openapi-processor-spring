@@ -36,8 +36,8 @@ class ArrayDataType implements DataType {
     }
 
     @Override
-    String getImport () {
-        item.import
+    String getImports () {
+        item.imports
     }
 
     @Override

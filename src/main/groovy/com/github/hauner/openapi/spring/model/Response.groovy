@@ -29,7 +29,7 @@ class Response {
     DataType responseType
 
     String getImport () {
-        responseType.import
+        responseType.imports
     }
 
     boolean isEmpty() {

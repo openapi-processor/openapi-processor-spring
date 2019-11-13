@@ -37,7 +37,7 @@ class InlineObjectDataType implements DataType {
     }
 
     @Override
-    String getImport () {
+    String getImports () {
         null
     }
 

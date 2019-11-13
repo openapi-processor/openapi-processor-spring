@@ -34,7 +34,7 @@ class MapDataType implements DataType {
     }
 
     @Override
-    String getImport () {
+    String getImports () {
         [packageName, 'Map'].join('.')
     }
 

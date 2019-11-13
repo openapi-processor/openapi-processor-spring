@@ -40,7 +40,7 @@ class ObjectDataType implements DataType {
     }
 
     @Override
-    String getImport () {
+    String getImports () {
         [packageName, name].join ('.')
     }
 
