@@ -34,8 +34,8 @@ class LocalDateDataType implements DataType {
     }
 
     @Override
-    String getImports () {
-        [packageName, name].join ('.')
+    Set<String> getImports () {
+        [[packageName, name].join ('.')]
     }
 
     @Override

@@ -36,13 +36,13 @@ class CollectionDataType implements DataType {
     }
 
     @Override
-    String getImports () {
-        [packageName, 'Collection'].join('.')
+    Set<String> getImports () {
+        [[packageName, 'Collection'].join('.')] + item.imports
     }
 
     @Override
     Set<String> getReferencedImports () {
-        [getImports ()] + item.referencedImports
+        []
     }
 
 }

@@ -36,13 +36,13 @@ class ListDataType implements DataType {
     }
 
     @Override
-    String getImports () {
-        [packageName, 'List'].join('.')
+    Set<String> getImports () {
+        [[packageName, 'List'].join('.')] + item.imports
     }
 
     @Override
     Set<String> getReferencedImports () {
-        [getImports ()] + item.imports
+        []
     }
 
 }

@@ -36,13 +36,13 @@ class SetDataType implements DataType {
     }
 
     @Override
-    String getImports () {
-        [packageName, 'Set'].join('.')
+    Set<String> getImports () {
+        [[packageName, 'Set'].join('.')] + item.imports
     }
 
     @Override
     Set<String> getReferencedImports () {
-        [getImports ()] + item.referencedImports
+        []
     }
 
 }

@@ -21,6 +21,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  *
  * @author Martin Hauner
  */
+@Deprecated
 class MapDataType implements DataType {
 
     @Override
@@ -34,8 +35,8 @@ class MapDataType implements DataType {
     }
 
     @Override
-    String getImports () {
-        [packageName, 'Map'].join('.')
+    Set<String> getImports () {
+        [[packageName, 'Map'].join('.')]
     }
 
     @Override

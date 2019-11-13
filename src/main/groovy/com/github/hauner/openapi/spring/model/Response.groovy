@@ -28,7 +28,7 @@ class Response {
     String contentType
     DataType responseType
 
-    String getImport () {
+    Set<String> getImports () {
         responseType.imports
     }
 
