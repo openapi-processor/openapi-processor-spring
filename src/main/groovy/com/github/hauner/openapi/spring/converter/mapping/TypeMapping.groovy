@@ -33,6 +33,12 @@ class TypeMapping {
     String sourceTypeName
 
     /**
+     * The OpenAPI format of {@link #sourceTypeName} that should be mapped to the
+     * {@link #targetTypeName} java type.
+     */
+    String sourceTypeFormat
+
+    /**
      * The fully qualified java type name that will replace {@link #sourceTypeName}.
      */
     String targetTypeName

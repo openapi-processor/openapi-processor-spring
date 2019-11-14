@@ -109,7 +109,7 @@ class TypeMappingReader {
     private TypeMapping readTypMapping (Map<String, ?> source) {
         Matcher matcher = source.to =~ GENERIC_INLINE
 
-        String from = source.from
+        def (from, format) = source.from.tokenize (':')
         String to = source.to
         List<String> generics = []
 
@@ -126,7 +126,9 @@ class TypeMappingReader {
             generics = source.generics as List
         }
 
-        new TypeMapping (sourceTypeName: from, targetTypeName: to, genericTypeNames: generics)
+        new TypeMapping (
+            sourceTypeName: from, sourceTypeFormat: format,
+            targetTypeName: to, genericTypeNames: generics)
     }
 
     private boolean isFileName (String name) {
