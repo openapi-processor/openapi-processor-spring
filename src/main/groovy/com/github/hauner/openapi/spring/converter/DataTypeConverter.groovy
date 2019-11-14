@@ -34,6 +34,7 @@ import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 
@@ -194,7 +195,7 @@ class DataTypeConverter {
                         simpleType = new LocalDateDataType ()
                         break
                     case 'string/date-time':
-                        throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
+                        simpleType = new OffsetDateTimeDataType ()
                         break
                     default:
                         throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)

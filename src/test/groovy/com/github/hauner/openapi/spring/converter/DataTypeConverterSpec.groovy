@@ -50,16 +50,17 @@ class DataTypeConverterSpec extends Specification {
         datatype.name == javaType
 
         where:
-        type      | format   | javaType
-        'string'  | null     | 'String'
-        'string'  | 'date'   | 'LocalDate'
-        'integer' | null     | 'Integer'
-        'integer' | 'int32'  | 'Integer'
-        'integer' | 'int64'  | 'Long'
-        'number'  | null     | 'Float'
-        'number'  | 'float'  | 'Float'
-        'number'  | 'double' | 'Double'
-        'boolean' | null     | 'Boolean'
+        type      | format      | javaType
+        'string'  | null        | 'String'
+        'string'  | 'date'      | 'LocalDate'
+        'string'  | 'date-time' | 'OffsetDateTime'
+        'integer' | null        | 'Integer'
+        'integer' | 'int32'     | 'Integer'
+        'integer' | 'int64'     | 'Long'
+        'number'  | null        | 'Float'
+        'number'  | 'float'     | 'Float'
+        'number'  | 'double'    | 'Double'
+        'boolean' | null        | 'Boolean'
     }
 
     void "throws when hitting an unknown data type" () {
