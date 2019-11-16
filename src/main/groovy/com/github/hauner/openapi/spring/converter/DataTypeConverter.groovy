@@ -161,45 +161,52 @@ class DataTypeConverter {
     }
 
     private DataType createSimpleDataType (SchemaInfo schemaInfo) {
-        def simpleType
+
+        TargetType targetType = getSimpleDataType (schemaInfo)
+        if (targetType) {
+            def simpleType = new MappedDataType (
+                type: targetType.name,
+                pkg: targetType.pkg,
+                genericTypes: targetType.genericNames
+            )
+            return simpleType
+        }
 
         def typeFormat = schemaInfo.type
         if (schemaInfo.format) {
             typeFormat += '/' + schemaInfo.format
         }
 
-        switch (getSimpleDataType(schemaInfo)) {
+        def simpleType
+        switch (typeFormat) {
+            case 'integer':
+            case 'integer/int32':
+                simpleType = new IntegerDataType ()
+                break
+            case 'integer/int64':
+                simpleType = new LongDataType ()
+                break
+            case 'number':
+            case 'number/float':
+                simpleType = new FloatDataType ()
+                break
+            case 'number/double':
+                simpleType = new DoubleDataType ()
+                break
+            case 'boolean':
+                simpleType = new BooleanDataType ()
+                break
+            case 'string':
+                simpleType = new StringDataType ()
+                break
+            case 'string/date':
+                simpleType = new LocalDateDataType ()
+                break
+            case 'string/date-time':
+                simpleType = new OffsetDateTimeDataType ()
+                break
             default:
-                switch (typeFormat) {
-                    case 'integer':
-                    case 'integer/int32':
-                        simpleType = new IntegerDataType()
-                        break
-                    case 'integer/int64':
-                        simpleType = new LongDataType ()
-                        break
-                    case 'number':
-                    case 'number/float':
-                        simpleType = new FloatDataType ()
-                        break
-                    case 'number/double':
-                        simpleType = new DoubleDataType ()
-                        break
-                    case 'boolean':
-                        simpleType = new BooleanDataType ()
-                        break
-                    case 'string':
-                        simpleType = new StringDataType ()
-                        break
-                    case 'string/date':
-                        simpleType = new LocalDateDataType ()
-                        break
-                    case 'string/date-time':
-                        simpleType = new OffsetDateTimeDataType ()
-                        break
-                    default:
-                        throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
-                }
+                throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
         }
 
         simpleType
@@ -300,8 +307,26 @@ class DataTypeConverter {
         null
     }
 
-    private String getSimpleDataType(SchemaInfo schemaInfo) {
-        // todo mapping, string date/date-time
+    private TargetType getSimpleDataType(SchemaInfo schemaInfo) {
+        if (options.typeMappings) {
+
+            // check global mapping
+            List<TypeMapping> mappings = getTypeMappings ()
+            List<TypeMapping> matches = mappings.findAll {
+                it.sourceTypeName == schemaInfo.type && it.sourceTypeFormat == schemaInfo.format
+            }
+
+            // no mapping, use default
+            if (matches.isEmpty ()) {
+                return null
+            }
+
+            def match = matches.first ()
+            return new TargetType (
+                typeName: match.targetTypeName,
+                genericNames: match.genericTypeNames ?: [])
+        }
+
         null
     }
 
@@ -314,6 +339,12 @@ class DataTypeConverter {
     private List<EndpointTypeMapping> getEndpointMappings () {
         options.typeMappings.findResults {
             it instanceof EndpointTypeMapping ? it : null
+        }
+    }
+
+    private List<TypeMapping> getTypeMappings () {
+        options.typeMappings.findResults {
+            it instanceof TypeMapping ? it : null
         }
     }
 

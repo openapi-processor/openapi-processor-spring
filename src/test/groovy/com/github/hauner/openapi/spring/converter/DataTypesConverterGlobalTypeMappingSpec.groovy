@@ -110,4 +110,45 @@ components:
         response.responseType.name == 'Page<String>'
     }
 
+    void "converts basic types with format to java type via global type mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /page:
+    get:
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '204':
+          description: none
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new TypeMapping (
+                    sourceTypeName: 'string',
+                    sourceTypeFormat: 'date-time',
+                    targetTypeName: 'java.time.ZonedDateTime')
+            ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def parameter = ep.parameters.first ()
+        parameter.dataType.packageName == 'java.time'
+        parameter.dataType.name == 'ZonedDateTime'
+    }
+
 }
