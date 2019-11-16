@@ -11,7 +11,7 @@ The openapi-generatr-spring is an **interface only** open api generatr. That mea
 generate a java interfaces for the endpoints. It is the projects task to implement them.
 
 Let's take a look at a very simple example. The following open api yaml describes a very simple
-endpoint. A call to the `/ping` endpoint will simply respond with a plain text `pong` string. 
+endpoint. A call to the `/ping` endpoint will simply respond with a plain text string result. 
 
 ```yaml
     openapi: 3.0.2
@@ -35,7 +35,7 @@ endpoint. A call to the `/ping` endpoint will simply respond with a plain text `
                     type: string
 ```
 
-Running the generatr on that open api yaml will only create the following java interface:
+Running the generatr on that open api yaml will create the following java interface:
 
 ```java
     package com.github.hauner.openapi.api;
