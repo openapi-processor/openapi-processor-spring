@@ -36,4 +36,5 @@ class UnknownDataTypeException extends RuntimeException {
     String getMessage () {
         "unknown schema: $type${format ? "/" + format: ''}"
     }
+
 }
