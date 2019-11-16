@@ -36,6 +36,11 @@ A type mapping yaml has multiple sections to define the different kinds of type 
         # the path
         /foo...:
 
+          # list of path specific mappings
+          types:
+            - from: ..
+              to: ..
+
           # list of path specific parameter mappings, mapped by parameter name
           parameters:
             - name: ..
