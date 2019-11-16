@@ -111,4 +111,55 @@ components:
         response.responseType.name == 'Page<String>'
     }
 
+    void "throws when there are multiple global mappings for a named schema" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /page:
+    get:
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            \$ref: '#/components/schemas/Pageable'
+      responses:
+        '204':
+          description: none
+
+components:
+  schemas:
+
+    Pageable:
+      description: minimal Pageable query parameters
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new TypeMapping (
+                    sourceTypeName: 'Pageable',
+                    targetTypeName: 'org.springframework.data.domain.Pageable'),
+                new TypeMapping (
+                    sourceTypeName: 'Pageable',
+                    targetTypeName: 'org.springframework.data.domain.Pageable')
+            ])
+        new ApiConverter (options).convert (openApi)
+
+        then:
+        def e = thrown (AmbiguousTypeMappingException)
+        e.typeMappings == options.typeMappings
+    }
+
 }

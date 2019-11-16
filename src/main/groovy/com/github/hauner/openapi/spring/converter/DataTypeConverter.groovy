@@ -238,22 +238,22 @@ class DataTypeConverter {
             }
 
             // check global mapping
-            List<TypeMapping> mappings = options.typeMappings.findResults {
+            List<TypeMapping> matches = options.typeMappings.findResults {
                 it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
             }
 
-            if (mappings.isEmpty ()) {
+            if (matches.isEmpty ()) {
                 return null
             }
 
-            if (mappings.size () != 1) {
-                // todo throw new DuplicateTypeMapping();
+            if (matches.size () != 1) {
+                throw new AmbiguousTypeMappingException (matches)
             }
 
-            def mapping = mappings.first ()
+            def match = matches.first ()
             return new TargetType (
-                typeName: mapping.targetTypeName,
-                genericNames: mapping.genericTypeNames ?: [])
+                typeName: match.targetTypeName,
+                genericNames: match.genericTypeNames ?: [])
         }
 
         null
