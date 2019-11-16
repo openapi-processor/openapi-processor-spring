@@ -105,7 +105,8 @@ class DataTypeConverter {
         DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        switch (getArrayDataType(schemaInfo)) {
+        TargetType targetType = getArrayDataType (schemaInfo)
+        switch (targetType?.typeName) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
                 break
@@ -258,7 +259,7 @@ class DataTypeConverter {
         null
     }
 
-    private String getArrayDataType(SchemaInfo schemaInfo) {
+    private TargetType getArrayDataType(SchemaInfo schemaInfo) {
         if (options.typeMappings) {
 
             List<EndpointTypeMapping> endpoints = getEndpointMappings ()
@@ -274,7 +275,7 @@ class DataTypeConverter {
 
                     def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
                     if (response) {
-                        return response.targetTypeName
+                        return new TargetType (typeName: response.targetTypeName)
                     }
                 }
 
@@ -282,7 +283,7 @@ class DataTypeConverter {
                 List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
                 def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
                 if (response) {
-                    return response.targetTypeName
+                    return new TargetType (typeName: response.targetTypeName)
                 }
             }
 
@@ -301,7 +302,7 @@ class DataTypeConverter {
             }
 
             def match = matches.first ()
-            return match.targetTypeName
+            return new TargetType (typeName: match.targetTypeName)
         }
 
         null
