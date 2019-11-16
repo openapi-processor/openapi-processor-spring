@@ -190,6 +190,7 @@ paths:
 
         then:
         def e = thrown (AmbiguousTypeMappingException)
+        e.typeMappings == options.typeMappings
     }
 
 }

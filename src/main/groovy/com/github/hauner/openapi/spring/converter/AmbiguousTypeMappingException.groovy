@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+
 /**
  * thrown when the DataTypeConverter finds an ambiguous data type mapping.
  *
@@ -23,17 +25,22 @@ package com.github.hauner.openapi.spring.converter
  */
 class AmbiguousTypeMappingException extends RuntimeException {
 
-    List<?> typeMappings
+    List<TypeMapping> typeMappings
 
-    AmbiguousTypeMappingException(List<?> typeMappings) {
+    AmbiguousTypeMappingException(List<TypeMapping> typeMappings) {
         super()
         this.typeMappings = typeMappings
     }
 
     @Override
     String getMessage () {
-        // todo proper error message, requires common interface
-        "ambiguous type mapping:"
+        def from = typeMappings.first ()
+        def msg = "ambiguous type mapping:\n"
+        msg += "  from: ${from.fullSourceType}\n"
+        typeMappings.each {
+            msg += "  to: ${it.targetTypeName}"
+        }
+        msg
     }
 
 }

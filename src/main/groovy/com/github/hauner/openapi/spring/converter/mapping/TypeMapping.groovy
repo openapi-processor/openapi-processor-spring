@@ -48,4 +48,15 @@ class TypeMapping {
      */
     List<String> genericTypeNames = []
 
+
+    /**
+     * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
+     * by a ':' separator.
+     *
+     * @return the full source type
+     */
+    String getFullSourceType () {
+        "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
+    }
+
 }
