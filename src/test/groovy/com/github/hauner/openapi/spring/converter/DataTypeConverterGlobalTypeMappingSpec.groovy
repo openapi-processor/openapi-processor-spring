@@ -95,7 +95,8 @@ components:
                     targetTypeName: 'org.springframework.data.domain.Pageable'),
                 new TypeMapping (
                     sourceTypeName: 'StringPage',
-                    targetTypeName: 'org.springframework.data.domain.Page<String>')
+                    targetTypeName: 'org.springframework.data.domain.Page',
+                    genericTypeNames: ['java.lang.String'])
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -104,9 +105,9 @@ components:
         def ep = itf.endpoints.first ()
         def parameter = ep.parameters.first ()
         def response = ep.response
-        parameter.dataType.pkg == 'org.springframework.data.domain'
+        parameter.dataType.packageName == 'org.springframework.data.domain'
         parameter.dataType.name == 'Pageable'
-        response.responseType.pkg == 'org.springframework.data.domain'
+        response.responseType.packageName == 'org.springframework.data.domain'
         response.responseType.name == 'Page<String>'
     }
 
