@@ -33,6 +33,12 @@ class TypeMapping {
     String sourceTypeName
 
     /**
+     * The OpenAPI format of {@link #sourceTypeName} that should be mapped to the
+     * {@link #targetTypeName} java type.
+     */
+    String sourceTypeFormat
+
+    /**
      * The fully qualified java type name that will replace {@link #sourceTypeName}.
      */
     String targetTypeName
@@ -41,5 +47,16 @@ class TypeMapping {
      * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
      */
     List<String> genericTypeNames = []
+
+
+    /**
+     * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
+     * by a ':' separator.
+     *
+     * @return the full source type
+     */
+    String getFullSourceType () {
+        "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
+    }
 
 }
