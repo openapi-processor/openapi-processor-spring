@@ -151,4 +151,45 @@ paths:
         parameter.dataType.name == 'ZonedDateTime'
     }
 
+    void "throws when there are multiple global mappings for a simple type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /page:
+    get:
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '204':
+          description: none
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new TypeMapping (
+                    sourceTypeName: 'string',
+                    sourceTypeFormat: 'date-time',
+                    targetTypeName: 'java.time.ZonedDateTime'),
+                new TypeMapping (
+                    sourceTypeName: 'string',
+                    sourceTypeFormat: 'date-time',
+                    targetTypeName: 'java.time.ZonedDateTime')
+            ])
+        new ApiConverter (options).convert (openApi)
+
+        then:
+        def e = thrown (AmbiguousTypeMappingException)
+    }
+
 }

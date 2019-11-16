@@ -307,7 +307,7 @@ class DataTypeConverter {
         null
     }
 
-    private TargetType getSimpleDataType(SchemaInfo schemaInfo) {
+    private TargetType getSimpleDataType (SchemaInfo schemaInfo) {
         if (options.typeMappings) {
 
             // check global mapping
@@ -319,6 +319,10 @@ class DataTypeConverter {
             // no mapping, use default
             if (matches.isEmpty ()) {
                 return null
+            }
+
+            if (matches.size () != 1) {
+                 throw new AmbiguousTypeMappingException (matches)
             }
 
             def match = matches.first ()
