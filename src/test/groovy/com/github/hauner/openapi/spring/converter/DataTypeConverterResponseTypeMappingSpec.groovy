@@ -28,45 +28,6 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterResponseTypeMappingSpec extends Specification {
 
-    @Unroll
-    void "converts simple array schema to #responseTypeName set via global array mapping" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /array-string:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.any:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: none              
-""")
-        when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new TypeMapping (sourceTypeName: 'array', targetTypeName: targetTypeName)
-        ])
-        Api api = new ApiConverter (options).convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        ep.response.responseType.name == responseTypeName
-
-        where:
-        targetTypeName         | responseTypeName
-        'java.util.Collection' | 'Collection<String>'
-        'java.util.List'       | 'List<String>'
-        'java.util.Set'        | 'Set<String>'
-    }
-
     void "converts simple array response schema to Collection<> via endpoint response type array mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2

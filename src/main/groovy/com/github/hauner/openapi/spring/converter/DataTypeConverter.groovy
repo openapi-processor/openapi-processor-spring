@@ -287,21 +287,21 @@ class DataTypeConverter {
             }
 
             // check global mapping
-            List<TypeMapping> arrays = options.typeMappings.findResults {
+            List<TypeMapping> matches = options.typeMappings.findResults {
                 it instanceof TypeMapping && it.sourceTypeName == 'array' ? it : null
             }
 
             // no mapping, use default
-            if (arrays.isEmpty ()) {
+            if (matches.isEmpty ()) {
                 return null
             }
 
-            if (arrays.size () != 1) {
-                // todo throw new DuplicateTypeMapping();
+            if (matches.size () != 1) {
+                throw new AmbiguousTypeMappingException (matches)
             }
 
-            def array = arrays.first ()
-            return array.targetTypeName
+            def match = matches.first ()
+            return match.targetTypeName
         }
 
         null
