@@ -28,7 +28,7 @@ The following table shows the automatic mapping of types from OpenAPI to Java.
 `string`  | `binary`    | not (yet) implemented
 `boolean` |             | `java.lang.Boolean`
 `string`  | `date`      | `java.time.LocalDate`  
-`string`  | `date-time` | not (yet) implemented (`java.time.Instant`, `java.time.ZonedDateTime`, `java.time.OffsetDataTime`)
+`string`  | `date-time` | `java.time.OffsetDataTime` (since 1.0.0.A2)
 `string`  | `password`  | ignored
 
 [openapi-spec-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#dataTypes
