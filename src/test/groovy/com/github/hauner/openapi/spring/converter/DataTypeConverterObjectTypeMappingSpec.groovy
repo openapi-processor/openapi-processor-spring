@@ -22,7 +22,7 @@ import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
-class DataTypeConverterGlobalTypeMappingSpec extends Specification {
+class DataTypeConverterObjectTypeMappingSpec extends Specification {
 
     void "converts named schemas to java type via global type mapping" () {
         def openApi = parse ("""\
