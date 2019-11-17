@@ -1,4 +1,4 @@
-[![CI][badge-ci]][workflow-ci]
+[![][badge-ci]][workflow-ci]
 
 # openapi-generatr-spring
 
@@ -40,7 +40,7 @@ The `mapping.yaml` contains the type mapping information and is an optional file
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
 
-[badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/CI/badge.svg
+[badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3ACI
 
 [openapi]: https://www.openapis.org/
