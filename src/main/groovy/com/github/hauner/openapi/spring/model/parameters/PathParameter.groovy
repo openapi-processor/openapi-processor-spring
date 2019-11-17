@@ -17,22 +17,19 @@
 package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.MapDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
- * OpenAPI query parameter.
+ * OpenAPI path parameter.
  *
  * @author Martin Hauner
  */
-class QueryParameter implements Parameter {
+class PathParameter implements Parameter {
     String name
     boolean required
     DataType dataType
 
     String getAnnotationName () {
-        "RequestParam"
+        "PathVariable"
     }
 
     String getAnnotationWithPackage () {
@@ -53,34 +50,23 @@ class QueryParameter implements Parameter {
      * @return true if the parameter is required, otherwise false.
      */
     boolean isRequired () {
-        if (dataType instanceof MapDataType) {
-            return true
-        }
-
         required
     }
 
     /**
-     * Create annotation? If the query parameter is mapped to a pojo object it should not have a
-     * {@code @RequestParam} annotation.
+     * Create annotation?
      */
     boolean withAnnotation () {
-        ! (
-            dataType instanceof ObjectDataType
-         || dataType instanceof MappedDataType
-        )
+        true
     }
 
     /**
-     * todo this is not right.
-     *
-     * Create annotation with parameters? If the query parameter is mapped to a pojo object it
-     * should not have any parameters.
+     * Create annotation with parameters?
      *
      * @return true if the annotation should have parameters, false otherwise
      */
     boolean withParameters () {
-        ! (dataType instanceof ObjectDataType)
+        true
     }
 
 }

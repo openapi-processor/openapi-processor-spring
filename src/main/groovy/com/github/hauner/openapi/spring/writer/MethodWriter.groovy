@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
 
 /**
@@ -48,11 +48,11 @@ class MethodWriter {
         mapping
     }
 
-    private String createParameterAnnotation (QueryParameter parameter) {
+    private String createParameterAnnotation (Parameter parameter) {
         String param = "${parameter.annotation}"
 
         if (! parameter.withParameters ()) {
-            return param;
+            return param
         }
 
         param += '('
