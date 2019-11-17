@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
+import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
@@ -111,13 +113,21 @@ class ApiConverter {
         }
     }
 
-    private QueryParameter createParameter (Parameter parameter, Api target, resolver) {
+    private ModelParameter createParameter (Parameter parameter, Api target, resolver) {
         def info = new SchemaInfo (parameter.schema, parameter.name)
         info.resolver = resolver
 
         DataType dataType = dataTypeConverter.convert (info, target.models)
 
-        new QueryParameter(name: parameter.name, required: parameter.required, dataType: dataType)
+        switch (parameter.in) {
+            case 'query':
+                return new QueryParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+            case 'path':
+                return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+            default:
+                // todo throw
+                null
+        }
     }
 
     private String getInlineResponseName (String path, String httpStatus) {

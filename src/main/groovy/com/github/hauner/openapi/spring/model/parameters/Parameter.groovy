@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model
-
-import com.github.hauner.openapi.spring.model.parameters.Parameter
+package com.github.hauner.openapi.spring.model.parameters
 
 /**
- * Endpoint properties.
+ * Common parameter interface implemented by all OpenAPI parameter types.
  *
  * @author Martin Hauner
  */
-class Endpoint {
-    String path
-    HttpMethod method
-
-    List<Response> responses = []
-    List<Parameter> parameters = []
-
-    Response getResponse () {
-        responses.first ()
-    }
+interface Parameter {
 
 }
