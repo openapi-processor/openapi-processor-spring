@@ -7,14 +7,14 @@ package generated.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint/{foo}")
-    ResponseEntity<void> getEndpoint(@PathVariable(name = "foo") String foo);
+    ResponseEntity<void> getEndpointFoo(@PathVariable(name = "foo") String foo);
 
     @GetMapping(path = "/endpoint-optional/{foo}")
-    ResponseEntity<void> getEndpointOptional(@PathVariable(name = "foo", required = false) String foo);
+    ResponseEntity<void> getEndpointOptionalFoo(@PathVariable(name = "foo", required = false) String foo);
 
 }
