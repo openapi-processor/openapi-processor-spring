@@ -42,7 +42,6 @@ dependencies {
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
 
-    testIntImplementation 'com.github.hauner.openapi:openapi-generatr-gradle:0.1-SNAPSHOT'
     testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.0'
 }
 
