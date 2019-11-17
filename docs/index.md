@@ -41,6 +41,8 @@ See the [release notes][generatr-releases]{:target="_blank"}.
     compatible. The generatr does not yet generate a `@JsonProperty` name to map the api name to a 
     java property name.
 
+  - <span class="label label-red">caveat</span> no `requestBody:` support at the moment.
+
   - <span class="label label-red">caveat</span> limited parameter support:
      - <span class="label label-green">done</span> query parameters, i.e. `in: query`
      - <span class="label label-red">todo</span> path parameters, i.e. `in: path`
