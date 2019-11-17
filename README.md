@@ -1,3 +1,4 @@
+[![][badge-license]][generatr-license]
 [![][badge-ci]][workflow-ci]
 
 # openapi-generatr-spring
@@ -39,9 +40,10 @@ The `mapping.yaml` contains the type mapping information and is an optional file
 
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
-
+[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
-[workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3ACI
+
+[workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
 
 [openapi]: https://www.openapis.org/
 [openapi-spec]: https://github.com/OAI/OpenAPI-Specification
@@ -52,6 +54,7 @@ See the [existing integration tests][generatr-int-resources] for a couple of exa
 [spring-requestparam]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html
 [spring-responseentity]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
 
+[generatr-license]: https://github.com/hauner/openapi-generatr-spring/blob/master/LICENSE
 [generatr-doc]: https://hauner.github.io/openapi-generatr-spring/
 [generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
