@@ -12,6 +12,8 @@ version '1.0.0.A2'
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
+    generatrApiVersion = '1.0.0.B1'
+
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
     bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'
 }
@@ -34,14 +36,15 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.12'
     implementation 'org.yaml:snakeyaml:1.25'
-    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1'
+    compileOnly "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
 
+    testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
         // avoid conflicts with explicit groovy version
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
 
+    testIntImplementation "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
     testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.0'
 }
 
