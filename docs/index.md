@@ -6,6 +6,9 @@ description: "Home Description"
 permalink: /
 ---
 
+[![][badge-license]][generatr-license]
+[![][badge-ci]][workflow-ci]
+
 # openapi-generatr-spring
 {: .no_toc }
 
@@ -101,11 +104,17 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 {% endfor %}
 </ul>
 
+[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
+
+[workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
+
 [docs-gradle]: /openapi-generatr-spring/gradle.html
 
 [bintray]: https://bintray.com/hauner/openapi-generatr
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [generatr-releases]: https://github.com/hauner/openapi-generatr-spring/releases
+[generatr-license]: https://github.com/hauner/openapi-generatr-spring/blob/master/LICENSE
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot
