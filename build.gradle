@@ -12,8 +12,8 @@ version '1.0.0.A2'
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
-    bintrayUser = BINTRAY_USER ?: 'n/a'
-    bintrayKey = BINTRAY_KEY ?: 'n/a'
+    bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
+    bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'
 }
 
 
