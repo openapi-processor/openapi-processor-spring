@@ -1,6 +1,11 @@
-name: CI
+name: ci
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'build.gradle'
+      - '.github/**'
 
 jobs:
   build:
