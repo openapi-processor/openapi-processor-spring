@@ -104,7 +104,7 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 {% endfor %}
 </ul>
 
-[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 [badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
 
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci

@@ -40,7 +40,7 @@ The `mapping.yaml` contains the type mapping information and is an optional file
 
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
-[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 [badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
 
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
