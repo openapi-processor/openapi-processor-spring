@@ -102,4 +102,44 @@ paths:
         param.annotationWithPackage == 'org.springframework.web.bind.annotation.PathVariable'
     }
 
+    void "converts simple header parameter"() {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: test simple header parameter
+  version: 1.0.0
+
+paths:
+  /endpoint:
+
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: x-foo
+          description: header, required, string
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+""")
+
+        when:
+        def api = new ApiConverter ().convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def param = ep.parameters.first ()
+        param.name == 'x-foo'
+        param.required
+        param.dataType.name == 'String'
+        param.annotation == '@RequestHeader'
+        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestHeader'
+    }
+
 }
