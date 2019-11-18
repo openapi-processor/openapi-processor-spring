@@ -32,6 +32,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -176,6 +177,40 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false) String foo);
+"""
+    }
+
+    void "writes simple (required) header parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new HeaderParameter(name: 'x-foo', required: true, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestHeader(name = "x-foo") String xFoo);
+"""
+    }
+
+    void "writes simple (optional) header parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new HeaderParameter(name: 'x-foo', required: false, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
 """
     }
 
