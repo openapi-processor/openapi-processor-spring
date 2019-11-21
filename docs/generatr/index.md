@@ -8,7 +8,7 @@ has_children: true
 # The generatr
 
 The openapi-generatr-spring is an **interface only** open api generatr. That means it will only
-generate a java interfaces for the endpoints. It is the projects task to implement them.
+generate java interfaces for the endpoints. It is the projects task to implement them.
 
 Let's take a look at a very simple example. The following open api yaml describes a very simple
 endpoint. A call to the `/ping` endpoint will simply respond with a plain text string result. 
