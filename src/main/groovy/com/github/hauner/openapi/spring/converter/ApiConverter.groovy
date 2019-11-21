@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
@@ -127,6 +128,8 @@ class ApiConverter {
                 return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             case 'header':
                 return new HeaderParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+            case 'cookie':
+                return new CookieParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             default:
                 // todo throw
                 null
