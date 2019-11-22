@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
@@ -182,4 +183,38 @@ paths:
         param.annotationWithPackage == 'org.springframework.web.bind.annotation.CookieValue'
     }
 
+    @Ignore("the openapi parser ignores parameters with unknown types")
+    void "throws on unknown parameter"() {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: test unknown parameter type
+  version: 1.0.0
+
+paths:
+  /endpoint:
+
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: foo
+          description: unknown, required, string
+          in: unknown
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+""")
+
+        when:
+        new ApiConverter ().convert (openApi)
+
+        then:
+        def e = thrown (UnknownParameterTypeException)
+        e.name == 'foo'
+        e.type == 'unknown'
+    }
 }

@@ -131,8 +131,8 @@ class ApiConverter {
             case 'cookie':
                 return new CookieParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             default:
-                // todo throw
-                null
+                // should not reach this, the openapi parser ignores parameters with unknown type.
+                throw new UnknownParameterTypeException(parameter.name, parameter.in)
         }
     }
 
