@@ -20,7 +20,7 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 
 /**
- * Endpoint response properties,
+ * Endpoint response properties.
  *
  * @author Martin Hauner
  */
