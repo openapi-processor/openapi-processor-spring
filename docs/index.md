@@ -40,17 +40,17 @@ See the [release notes][generatr-releases]{:target="_blank"}.
   (get/set pojos) for all defined endpoints and schemas to allow (nearly) full control of the endpoint
    implementation. It does not generate any other file. 
   
-  - <span class="label label-red">caveat</span> property names in the openapi description must be java
-    compatible. The generatr does not yet generate a `@JsonProperty` name to map the api name to a 
-    java property name.
+  - <span class="label label-green">done (since 1.0.0.A2)</span> The generatr does now generate model classes
+  with `@JsonProperty` annotated properties, i.e. the schema property names in the OpenAPI description are not limited
+  to valid java identifiers anymore.
 
-  - <span class="label label-red">caveat</span> no `requestBody:` support at the moment.
+  - <span class="label label-green">done (since 1.0.0.A2)</span> support for the OpenAPI `requestBody:` block.
 
-  - <span class="label label-red">caveat</span> limited parameter support:
+  - <span class="label label-green">done</span> full parameter support:
      - <span class="label label-green">done</span> query parameters, i.e. `in: query`
-     - <span class="label label-red">todo</span> path parameters, i.e. `in: path`
-     - <span class="label label-red">todo</span> header parameters, i.e. `in: header`
-     - <span class="label label-red">todo</span> cookie parameters, i.e. `in: cookie`
+     - <span class="label label-green">done (since 1.0.0.A2)</span> path parameters, i.e. `in: path`
+     - <span class="label label-green">done (since 1.0.0.A2)</span> header parameters, i.e. `in: header`
+     - <span class="label label-green">done (since 1.0.0.A2)</span> cookie parameters, i.e. `in: cookie`
 {: .mb-5 }
 
 - <span class="label label-green">partially implemented</span> simple & flexible type mappings with generic support
