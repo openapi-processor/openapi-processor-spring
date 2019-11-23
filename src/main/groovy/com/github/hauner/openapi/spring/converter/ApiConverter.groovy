@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
@@ -88,6 +89,26 @@ class ApiConverter {
                         ep.parameters.addAll (createParameter(parameter, target, resolver))
                     }
 
+                    if (httpOperation.requestBody != null) {
+                        def required = httpOperation.requestBody.required != null ?: false
+                        httpOperation.requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
+                            def contentType = requestBodyEntry.key
+                            def requestBody = requestBodyEntry.value
+
+                            def info = new SchemaInfo (requestBody.schema, getInlineTypeName (path))
+                            info.resolver = resolver
+
+                            DataType dataType = dataTypeConverter.convert (info, target.models)
+
+                            def body = new RequestBody(
+                                contentType: contentType,
+                                requestBodyType: dataType,
+                                required: required)
+
+                            ep.requestBodies.add (body)
+                        }
+                    }
+
                     httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
                         def httpStatus = responseEntry.key
                         def httpResponse = responseEntry.value
@@ -134,6 +155,10 @@ class ApiConverter {
                 // should not reach this, the openapi parser ignores parameters with unknown type.
                 throw new UnknownParameterTypeException(parameter.name, parameter.in)
         }
+    }
+
+    private String getInlineTypeName (String path) {
+        StringUtil.toCamelCase (path.substring (1)) + 'RequestBody'
     }
 
     private String getInlineResponseName (String path, String httpStatus) {
@@ -189,4 +214,5 @@ class ApiConverter {
     private boolean hasTags (op) {
         op.tags && !op.tags.empty
     }
+
 }

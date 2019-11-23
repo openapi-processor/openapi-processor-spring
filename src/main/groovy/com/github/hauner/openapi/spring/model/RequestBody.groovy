@@ -16,27 +16,33 @@
 
 package com.github.hauner.openapi.spring.model
 
-import com.github.hauner.openapi.spring.model.parameters.Parameter
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 
 /**
- * Endpoint properties.
+ * Endpoint request body properties.
  *
  * @author Martin Hauner
  */
-class Endpoint {
-    String path
-    HttpMethod method
+class RequestBody {
 
-    List<Parameter> parameters = []
-    List<RequestBody> requestBodies = []
-    List<Response> responses = []
+    String contentType
+    DataType requestBodyType
+    boolean required
 
-    RequestBody getRequestBody () {
-        requestBodies.first ()
+    Set<String> getImports () {
+        requestBodyType.imports
     }
 
-    Response getResponse () {
-        responses.first ()
+    String getAnnotationName () {
+        "RequestBody"
+    }
+
+    String getAnnotationWithPackage () {
+        "org.springframework.web.bind.annotation.${annotationName}"
+    }
+
+    String getAnnotation () {
+        "@${annotationName}"
     }
 
 }
