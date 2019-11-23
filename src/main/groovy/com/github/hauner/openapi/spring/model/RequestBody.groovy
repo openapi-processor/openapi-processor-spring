@@ -17,22 +17,32 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 
 /**
- * Endpoint response properties.
+ * Endpoint request body properties.
  *
  * @author Martin Hauner
  */
-class Response {
+class RequestBody {
+
     String contentType
-    DataType responseType
+    DataType requestBodyType
+    boolean required
 
     Set<String> getImports () {
-        responseType.imports
+        requestBodyType.imports
     }
 
-    boolean isEmpty() {
-        responseType instanceof NoneDataType
+    String getAnnotationName () {
+        "RequestBody"
     }
+
+    String getAnnotationWithPackage () {
+        "org.springframework.web.bind.annotation.${annotationName}"
+    }
+
+    String getAnnotation () {
+        "@${annotationName}"
+    }
+
 }

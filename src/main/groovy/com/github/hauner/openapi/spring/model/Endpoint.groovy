@@ -27,8 +27,13 @@ class Endpoint {
     String path
     HttpMethod method
 
-    List<Response> responses = []
     List<Parameter> parameters = []
+    List<RequestBody> requestBodies = []
+    List<Response> responses = []
+
+    RequestBody getRequestBody () {
+        requestBodies.first ()
+    }
 
     Response getResponse () {
         responses.first ()
