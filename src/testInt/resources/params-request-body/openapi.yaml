@@ -11,6 +11,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Book'
+        required: true
       responses:
         '201':
           description: created book
