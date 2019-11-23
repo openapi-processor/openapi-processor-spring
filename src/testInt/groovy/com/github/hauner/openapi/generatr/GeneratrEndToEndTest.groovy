@@ -30,13 +30,13 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
+            new TestSet(name: 'ref-into-another-file'),
             new TestSet(name: 'no-response-content'),
             new TestSet(name: 'response-simple-data-types'),
             new TestSet(name: 'response-complex-data-types'),
-            new TestSet(name: 'ref-into-another-file'),
-            new TestSet(name: 'params-simple-data-types'),
             new TestSet(name: 'response-array-data-type-mapping'),
-            new TestSet(name: 'path-params-simple-data-types')
+            new TestSet(name: 'params-simple-data-types'),
+            new TestSet(name: 'params-path-simple-data-types')
         ]
     }
 
