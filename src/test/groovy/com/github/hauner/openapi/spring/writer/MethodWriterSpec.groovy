@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
@@ -319,6 +320,49 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     ResponseEntity<void> getFoo(@RequestParam(name = "_fo-o") String foO);
+"""
+    }
+
+    void "writes required request body parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.POST, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], requestBodies: [
+            new RequestBody(
+                contentType: 'application/json',
+                requestBodyType: new ObjectDataType (type: 'FooRequestBody',
+                    properties: ['foo': new StringDataType ()] as LinkedHashMap),
+                required: true)
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
+    ResponseEntity<void> postFoo(@RequestBody FooRequestBody body);
+"""
+    }
+
+    void "writes optional request body parameter" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.POST, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], requestBodies: [
+            new RequestBody(
+                contentType: 'application/json',
+                requestBodyType: new ObjectDataType (
+                    type: 'FooRequestBody',
+                    properties: ['foo': new StringDataType ()] as LinkedHashMap),
+                required: false)
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
+    ResponseEntity<void> postFoo(@RequestBody(required = false) FooRequestBody body);
 """
     }
 

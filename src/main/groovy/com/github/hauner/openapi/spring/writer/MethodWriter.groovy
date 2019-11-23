@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
 
@@ -38,6 +39,11 @@ class MethodWriter {
         String mapping = "${endpoint.method.mappingAnnotation}"
         mapping += "("
         mapping += 'path = ' + quote(endpoint.path)
+
+        if (!endpoint.requestBodies.empty) {
+            mapping += ", "
+            mapping += 'consumes = {' + quote(endpoint.requestBody.contentType) + '}'
+        }
 
         if (!endpoint.response.empty) {
             mapping += ", "
@@ -68,6 +74,17 @@ class MethodWriter {
         param
     }
 
+    private String createRequestBodyAnnotation (RequestBody requestBody) {
+        String param = "${requestBody.annotation}"
+
+        // required is default, so add required only if the parameter is not required
+        if (!requestBody.required) {
+            param += '(required = false)'
+        }
+
+        param
+    }
+
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
         tokens = tokens.collect { Identifier.fromJson (it).capitalize () }
@@ -84,6 +101,12 @@ class MethodWriter {
                 "${it.dataType.name} ${Identifier.fromJson (it.name)}"
             }
 
+        }
+
+        if (!endpoint.requestBodies.empty) {
+            def body = endpoint.requestBody
+            def param = "${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
+            ps.add (param)
         }
 
         ps.join (', ')
