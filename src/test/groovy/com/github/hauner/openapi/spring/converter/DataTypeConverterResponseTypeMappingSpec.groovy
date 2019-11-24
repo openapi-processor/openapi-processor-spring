@@ -55,8 +55,18 @@ paths:
             typeMappings: [
                 new EndpointTypeMapping (path: '/array-string',
                     typeMappings: [
-                        new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'object', targetTypeName: 'pkg.TargetClass'),
-                        new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'array', targetTypeName: 'java.util.Collection')
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'object',
+                                targetTypeName: 'pkg.TargetClass')
+                        ),
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'array',
+                                targetTypeName: 'java.util.Collection')
+                        )
                     ])
                 ])
         Api api = new ApiConverter (options).convert (openApi)
@@ -92,7 +102,12 @@ paths:
         def options = new ApiOptions(
             packageName: 'pkg',
             typeMappings: [
-                new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'array', targetTypeName: 'java.util.Collection')
+                new ResponseTypeMapping (
+                    contentType: 'application/vnd.any',
+                    mapping: new TypeMapping(
+                        sourceTypeName: 'array',
+                        targetTypeName: 'java.util.Collection')
+                )
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -102,7 +117,7 @@ paths:
         ep.response.responseType.name == 'Collection<String>'
     }
 
-    void "converts simple object response schema to java type via endpoint mapping" () {
+    void "converts object response schema to java type via endpoint mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -130,7 +145,13 @@ paths:
             typeMappings: [
                 new EndpointTypeMapping (path: '/object',
                     typeMappings: [
-                         new ResponseTypeMapping (contentType: 'application/vnd.any', sourceTypeName: 'object', targetTypeName: 'pkg.TargetClass')
+                         new ResponseTypeMapping (
+                             contentType: 'application/vnd.any',
+                             mapping: new TypeMapping(
+                                 sourceTypeName: 'object',
+                                 targetTypeName: 'pkg.TargetClass',
+                                 genericTypeNames: ['java.lang.String'])
+                         )
                     ])
                 ])
         Api api = new ApiConverter (options).convert (openApi)
