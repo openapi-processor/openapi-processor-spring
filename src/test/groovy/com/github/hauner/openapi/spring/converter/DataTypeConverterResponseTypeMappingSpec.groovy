@@ -159,7 +159,8 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'TargetClass'
+        ep.response.responseType.name == 'TargetClass<String>'
+        ep.response.responseType.imports == ['pkg.TargetClass', 'java.lang.String'] as Set
     }
 
 }
