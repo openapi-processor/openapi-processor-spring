@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.spring.converter
+
+import io.swagger.v3.oas.models.media.Schema
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
- * of the given endpoint parameter.
+ * Helper for {@link DataTypeConverter}. A {@link SchemaInfo} of an endpoint parameter.
  *
  * @author Martin Hauner
  */
-class ParameterTypeMapping {
+class ParameterSchemaInfo extends SchemaInfo {
 
     /**
-     * The parameter name of this mapping. Must match 1:1 with what is written in the api.
+     * Endpoint path.
+     */
+    String path
+
+    /**
+     * Parameter name.
      */
     String parameterName
 
-    /**
-     * Type mapping valid only for requests with parameter {@link #parameterName}.
-     */
-    TypeMapping mapping
+    ParameterSchemaInfo (String path, Schema schema, String name) {
+        super (schema, name)
+        this.path = path
+        this.parameterName = name
+    }
 
 }

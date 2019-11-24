@@ -86,7 +86,7 @@ class ApiConverter {
 
                 try {
                     httpOperation.parameters.each { Parameter parameter ->
-                        ep.parameters.addAll (createParameter(parameter, target, resolver))
+                        ep.parameters.addAll (createParameter(path, parameter, target, resolver))
                     }
 
                     if (httpOperation.requestBody != null) {
@@ -136,8 +136,8 @@ class ApiConverter {
         }
     }
 
-    private ModelParameter createParameter (Parameter parameter, Api target, resolver) {
-        def info = new SchemaInfo (parameter.schema, parameter.name)
+    private ModelParameter createParameter (String path, Parameter parameter, Api target, resolver) {
+        def info = new ParameterSchemaInfo (path, parameter.schema, parameter.name)
         info.resolver = resolver
 
         DataType dataType = dataTypeConverter.convert (info, target.models)
