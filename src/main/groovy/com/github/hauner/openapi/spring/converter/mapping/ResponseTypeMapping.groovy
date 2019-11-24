@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that represents the response
- * schema for a content type of the endpoint.
+ * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
+ * schema for the given endpoint content type.
  *
  * @author Martin Hauner
  */
@@ -28,19 +28,6 @@ class ResponseTypeMapping {
      * The content type of this mapping. Must match 1:1 with what is written in the api.
      */
     String contentType
-
-    /**
-     * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
-     */
-    @Deprecated // use mapping
-    String sourceTypeName
-
-    /**
-     * The fully qualified java type name that will be used for {@link #sourceTypeName} in an
-     * {@link #contentType} response.
-     */
-    @Deprecated // use mapping
-    String targetTypeName
 
     /**
      * Type mapping valid only for responses with {@link #contentType}.
