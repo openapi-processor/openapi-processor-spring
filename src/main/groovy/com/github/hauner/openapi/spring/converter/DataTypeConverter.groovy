@@ -242,7 +242,7 @@ class DataTypeConverter {
                 String ep = schemaInfo.path
                 String pn = schemaInfo.name
 
-                // check endpoint response mapping
+                // check endpoint parameter mapping
                 EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
                 if (endpoint) {
                     List<ParameterTypeMapping> parameters = getParameterMappings (endpoint.typeMappings)
