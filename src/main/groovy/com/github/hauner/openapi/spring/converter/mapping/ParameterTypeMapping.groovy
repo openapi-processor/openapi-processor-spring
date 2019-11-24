@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that represents the schema of
- * the parameter of the endpoint.
+ * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
+ * of the given endpoint parameter.
  *
  * @author Martin Hauner
  */
