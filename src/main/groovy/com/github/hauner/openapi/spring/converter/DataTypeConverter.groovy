@@ -228,11 +228,11 @@ class DataTypeConverter {
                 if (endpoint) {
                     List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
 
-                    def response = responses.find { it.contentType == ct && it.sourceTypeName == 'object' }
+                    def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
                     if (response) {
                         return new TargetType (
-                            typeName: response.targetTypeName,
-                            genericNames: []
+                            typeName: response.mapping.targetTypeName,
+                            genericNames: response.mapping.genericTypeNames
                         )
                     }
                 }
@@ -293,17 +293,17 @@ class DataTypeConverter {
                 if (endpoint) {
                     List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
 
-                    def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
+                    def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'array' }
                     if (response) {
-                        return new TargetType (typeName: response.targetTypeName)
+                        return new TargetType (typeName: response.mapping.targetTypeName)
                     }
                 }
 
                 // check global response mapping
                 List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
-                def response = responses.find { it.contentType == ct && it.sourceTypeName == 'array' }
+                def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'array' }
                 if (response) {
-                    return new TargetType (typeName: response.targetTypeName)
+                    return new TargetType (typeName: response.mapping.targetTypeName)
                 }
             }
 

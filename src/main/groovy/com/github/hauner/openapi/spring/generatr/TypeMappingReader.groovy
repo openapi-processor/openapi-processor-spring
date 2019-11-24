@@ -100,10 +100,7 @@ class TypeMappingReader {
     private ResponseTypeMapping readResponseTypeMapping (Map<String, ?> source) {
         def content = source.content
         def mapping = readTypMapping (source)
-        new ResponseTypeMapping(contentType: content, mapping: mapping,
-            sourceTypeName: mapping.sourceTypeName,
-            targetTypeName: mapping.targetTypeName
-        )
+        new ResponseTypeMapping(contentType: content, mapping: mapping)
     }
 
     private TypeMapping readTypMapping (Map<String, ?> source) {
