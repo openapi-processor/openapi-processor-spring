@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -237,6 +238,25 @@ class DataTypeConverter {
                 }
             }
 
+            if (schemaInfo instanceof ParameterSchemaInfo) {
+                String ep = schemaInfo.path
+                String pn = schemaInfo.name
+
+                // check endpoint response mapping
+                EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
+                if (endpoint) {
+                    List<ParameterTypeMapping> parameters = getParameterMappings (endpoint.typeMappings)
+
+                    def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
+                    if (parameter) {
+                        return new TargetType (
+                            typeName: parameter.mapping.targetTypeName,
+                            genericNames: parameter.mapping.genericTypeNames
+                        )
+                    }
+                }
+            }
+
             // check global mapping
             List<TypeMapping> matches = options.typeMappings.findResults {
                 it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
@@ -333,6 +353,12 @@ class DataTypeConverter {
         }
 
         null
+    }
+
+    private List<ParameterTypeMapping> getParameterMappings (List<?> typeMappings) {
+        typeMappings.findResults {
+            it instanceof ParameterTypeMapping ? it : null
+        }
     }
 
     private List<ResponseTypeMapping> getResponseMappings (List<?> typeMappings) {
