@@ -30,12 +30,6 @@ class ParameterTypeMapping {
     String parameterName
 
     /**
-     * The fully qualified java type name that will be used for {@link #parameterName}.
-     */
-    @Deprecated // use mapping
-    String targetTypeName
-
-    /**
      * Type mapping valid only for requests with parameter {@link #parameterName}.
      */
     TypeMapping mapping
