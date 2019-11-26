@@ -236,6 +236,16 @@ class DataTypeConverter {
                         )
                     }
                 }
+
+                // check global response mapping
+                List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
+                def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
+                if (response) {
+                    return new TargetType (
+                        typeName: response.mapping.targetTypeName,
+                        genericNames: response.mapping.genericTypeNames
+                    )
+                }
             }
 
             if (schemaInfo instanceof ParameterSchemaInfo) {
