@@ -117,7 +117,8 @@ paths:
         ep.response.responseType.name == 'Collection<String>'
     }
 
-    void "converts object response schema to java type via endpoint mapping" () {
+    @Unroll
+    void "converts object response schema to java type via #type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -142,18 +143,7 @@ paths:
         when:
         def options = new ApiOptions(
             packageName: 'pkg',
-            typeMappings: [
-                new EndpointTypeMapping (path: '/object',
-                    typeMappings: [
-                         new ResponseTypeMapping (
-                             contentType: 'application/vnd.any',
-                             mapping: new TypeMapping(
-                                 sourceTypeName: 'object',
-                                 targetTypeName: 'pkg.TargetClass',
-                                 genericTypeNames: ['java.lang.String'])
-                         )
-                    ])
-                ])
+            typeMappings: mappings)
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
@@ -161,6 +151,36 @@ paths:
         def ep = itf.endpoints.first ()
         ep.response.responseType.name == 'TargetClass<String>'
         ep.response.responseType.imports == ['pkg.TargetClass', 'java.lang.String'] as Set
+
+        where:
+        type << [
+            'endpoint response mapping',
+            'global response mapping'
+        ]
+
+        mappings << [
+            [
+                new EndpointTypeMapping (path: '/object',
+                    typeMappings: [
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'object',
+                                targetTypeName: 'pkg.TargetClass',
+                                genericTypeNames: ['java.lang.String'])
+                        )
+                    ]
+                )
+            ], [
+                new ResponseTypeMapping (
+                    contentType: 'application/vnd.any',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'object',
+                        targetTypeName: 'pkg.TargetClass',
+                        genericTypeNames: ['java.lang.String'])
+                )
+            ]
+        ]
     }
 
 }
