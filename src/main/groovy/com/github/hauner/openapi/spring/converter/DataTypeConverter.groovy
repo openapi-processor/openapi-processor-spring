@@ -263,6 +263,16 @@ class DataTypeConverter {
                         )
                     }
                 }
+
+                // check global parameter mapping
+                List<ParameterTypeMapping> parameters = getParameterMappings (options.typeMappings)
+                def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
+                if (parameter) {
+                    return new TargetType (
+                        typeName: parameter.mapping.targetTypeName,
+                        genericNames: parameter.mapping.genericTypeNames
+                    )
+                }
             }
 
             // check global mapping
