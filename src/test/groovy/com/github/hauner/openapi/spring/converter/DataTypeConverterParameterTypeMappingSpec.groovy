@@ -21,12 +21,14 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterParameterTypeMappingSpec extends Specification {
 
-    void "converts object parameter schema to java type via endpoint mapping" () {
+    @Unroll
+    void "converts object parameter schema to java type via #type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -53,25 +55,40 @@ paths:
 """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new EndpointTypeMapping (path: '/foobar',
-                    typeMappings: [
-                         new ParameterTypeMapping (
-                             parameterName: 'foobar',
-                             mapping: new TypeMapping(
-                                 sourceTypeName: 'object',
-                                 targetTypeName: 'pkg.TargetClass')
-                             )
-                    ])
-                ])
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         ep.parameters.first ().dataType.name == 'TargetClass'
+
+        where:
+        type << [
+            'endpoint parameter mapping',
+            'global parameter mapping'
+        ]
+
+        mappings << [
+            [
+                new EndpointTypeMapping (path: '/foobar',
+                    typeMappings: [
+                        new ParameterTypeMapping (
+                            parameterName: 'foobar',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'object',
+                                targetTypeName: 'pkg.TargetClass')
+                        )
+                    ])
+            ], [
+                new ParameterTypeMapping (
+                    parameterName: 'foobar',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'object',
+                        targetTypeName: 'pkg.TargetClass')
+                )
+            ]
+        ]
     }
 
 }
