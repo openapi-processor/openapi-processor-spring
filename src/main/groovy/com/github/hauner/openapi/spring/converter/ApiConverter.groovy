@@ -95,7 +95,7 @@ class ApiConverter {
                             def contentType = requestBodyEntry.key
                             def requestBody = requestBodyEntry.value
 
-                            def info = new SchemaInfo (requestBody.schema, getInlineTypeName (path))
+                            def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
                             info.resolver = resolver
 
                             DataType dataType = dataTypeConverter.convert (info, target.models)

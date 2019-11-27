@@ -275,6 +275,20 @@ class DataTypeConverter {
                 }
             }
 
+            // check endpoint type mapping
+            EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
+            if (endpoint) {
+                List<TypeMapping> mappings = getTypeMappings (endpoint.typeMappings)
+
+                def mapping = mappings.find { it.sourceTypeName == schemaInfo.name ? it : null }
+                if (mapping) {
+                    return new TargetType (
+                        typeName: mapping.targetTypeName,
+                        genericNames: mapping.genericTypeNames
+                    )
+                }
+            }
+
             // check global mapping
             List<TypeMapping> matches = options.typeMappings.findResults {
                 it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
@@ -388,6 +402,12 @@ class DataTypeConverter {
     private List<EndpointTypeMapping> getEndpointMappings () {
         options.typeMappings.findResults {
             it instanceof EndpointTypeMapping ? it : null
+        }
+    }
+
+    private List<TypeMapping> getTypeMappings (List<?> typeMappings) {
+        typeMappings.findResults {
+            it instanceof TypeMapping ? it : null
         }
     }
 

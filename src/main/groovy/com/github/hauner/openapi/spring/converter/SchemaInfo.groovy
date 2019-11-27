@@ -26,12 +26,29 @@ import io.swagger.v3.oas.models.media.Schema
  * @author Martin Hauner
  */
 class SchemaInfo {
-    Schema schema
+
+    /**
+     * Endpoint path.
+     */
+    String path
+
+    /**
+     * name of the type/schema.
+     */
     String name
 
+    /**
+     * the OpenAPI schema
+     */
+    Schema schema
+
+    /**
+     * resolver of $ref'erences
+     */
     RefResolver resolver
 
-    SchemaInfo (Schema schema, String name) {
+    SchemaInfo (String path, Schema schema, String name) {
+        this.path = path
         this.schema = schema
         this.name = name
     }
@@ -50,7 +67,7 @@ class SchemaInfo {
     SchemaInfo buildForRef () {
         def refName = getRefName (schema)
         Schema refSchema = resolver.resolve (schema.$ref)
-        def info = new SchemaInfo(refSchema, refName)
+        def info = new SchemaInfo (path, refSchema, refName)
         info.resolver = resolver
         info
     }
@@ -64,7 +81,7 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForNestedType (String nestedName, Schema nestedSchema) {
-        def info = new SchemaInfo (nestedSchema, getNestedTypeName (nestedName))
+        def info = new SchemaInfo (path, nestedSchema, getNestedTypeName (nestedName))
         info.resolver = resolver
         info
     }
@@ -75,7 +92,7 @@ class SchemaInfo {
      * @return s new DataTypeInfo
      */
     SchemaInfo buildForItem () {
-        def info = new SchemaInfo (schema.items, name)
+        def info = new SchemaInfo (path, schema.items, name)
         info.resolver = resolver
         info
     }

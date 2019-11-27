@@ -26,18 +26,12 @@ import io.swagger.v3.oas.models.media.Schema
 class ResponseSchemaInfo extends SchemaInfo {
 
     /**
-     * Endpoint path.
-     */
-    String path
-
-    /**
      * Response content type.
      */
     String contentType
 
     ResponseSchemaInfo (String path, String contentType, Schema schema, String name) {
-        super (schema, name)
-        this.path = path
+        super (path, schema, name)
         this.contentType = contentType
     }
 
