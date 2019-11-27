@@ -260,4 +260,33 @@ map:
         parameter.mapping.genericTypeNames == []
     }
 
+    void "reads endpoint type mapping" () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  paths:
+    /foo:
+      types:
+        - from: array
+          to: java.util.Collection
+"""
+
+        when:
+        def reader = new TypeMappingReader()
+        def mappings = reader.read (yaml)
+
+        then:
+        mappings.size () == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+
+        def type = endpoint.typeMappings.first () as TypeMapping
+        type.sourceTypeName == 'array'
+        type.sourceTypeFormat == null
+        type.targetTypeName == 'java.util.Collection'
+        type.genericTypeNames == []
+    }
 }
