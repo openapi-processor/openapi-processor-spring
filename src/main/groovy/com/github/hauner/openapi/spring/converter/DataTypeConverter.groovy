@@ -218,11 +218,10 @@ class DataTypeConverter {
         if (options.typeMappings) {
 
             if (schemaInfo instanceof ResponseSchemaInfo) {
-                String ep = schemaInfo.path
                 String ct = schemaInfo.contentType
 
                 // check endpoint response mapping
-                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == ep }
+                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
                 if (endpoint) {
                     List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
 
@@ -247,11 +246,10 @@ class DataTypeConverter {
             }
 
             if (schemaInfo instanceof ParameterSchemaInfo) {
-                String ep = schemaInfo.path
                 String pn = schemaInfo.name
 
                 // check endpoint parameter mapping
-                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == ep }
+                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
                 if (endpoint) {
                     List<ParameterTypeMapping> parameters = getParameterMappings (endpoint.typeMappings)
 
