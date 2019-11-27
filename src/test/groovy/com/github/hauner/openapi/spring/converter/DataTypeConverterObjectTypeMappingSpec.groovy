@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
@@ -160,6 +161,75 @@ components:
         then:
         def e = thrown (AmbiguousTypeMappingException)
         e.typeMappings == options.typeMappings
+    }
+
+    void "converts named schemas to java type via endpoint type mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foobar:
+    get:
+      parameters:
+        - in: query
+          name: foo
+          required: false
+          schema:
+            \$ref: '#/components/schemas/Foo'
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema:
+                \$ref: '#/components/schemas/Bar'
+
+components:
+  schemas:
+
+    Foo:
+      description: minimal query parameter object
+      type: object
+      properties:
+        foo:
+          type: string
+
+    Bar:
+      description: minimal response object
+      type: object
+      properties:
+        bar:
+          type: string
+
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/foobar',
+                    typeMappings: [
+                        new TypeMapping (
+                            sourceTypeName: 'Foo',
+                            targetTypeName: 'someA.ObjectA'),
+                        new TypeMapping (
+                            sourceTypeName: 'Bar',
+                            targetTypeName: 'someB.ObjectB')])
+            ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def parameter = ep.parameters.first ()
+        def response = ep.response
+        parameter.dataType.packageName == 'someA'
+        parameter.dataType.name == 'ObjectA'
+        response.responseType.packageName == 'someB'
+        response.responseType.name == 'ObjectB'
     }
 
 }
