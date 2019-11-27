@@ -171,6 +171,38 @@ map:
         response.mapping.genericTypeNames == []
     }
 
+    void "reads endpoint response type mapping " () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  paths:
+    /foo:
+      responses:
+        - content: application/vnd.array
+          from: array
+          to: java.util.List
+"""
+
+        when:
+        def reader = new TypeMappingReader()
+        def mappings = reader.read (yaml)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+
+        def response = endpoint.typeMappings.first () as ResponseTypeMapping
+        response.contentType == 'application/vnd.array'
+        response.mapping.sourceTypeName == 'array'
+        response.mapping.sourceTypeFormat == null
+        response.mapping.targetTypeName == 'java.util.List'
+        response.mapping.genericTypeNames == []
+    }
+
     void "reads global parameter type mapping" () {
         String yaml = """\
 openapi-generatr-spring: v1.0
@@ -197,7 +229,7 @@ map:
         parameter.mapping.genericTypeNames == []
     }
 
-    void "reads path parameter type mapping" () {
+    void "reads endpoint parameter type mapping" () {
         String yaml = """\
 openapi-generatr-spring: v1.0
     
