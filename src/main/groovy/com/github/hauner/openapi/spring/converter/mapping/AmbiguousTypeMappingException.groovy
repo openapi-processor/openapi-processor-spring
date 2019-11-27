@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.converter.mapping
 
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 
