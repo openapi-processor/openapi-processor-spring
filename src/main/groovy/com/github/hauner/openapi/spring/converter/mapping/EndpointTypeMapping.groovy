@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.SchemaInfo
+
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
  * response type mappings on a single endpoint. It can also be used to add parameters that are not
@@ -40,5 +42,17 @@ class EndpointTypeMapping {
      * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
      */
     List<?> typeMappings
+
+    /**
+     * Checks if this endpoint mapping applies to the given schema info.
+     *
+     * @param info the schema info
+     * @return true, if path is equal, false if not
+     */
+    boolean matches (SchemaInfo info) {
+        path == info.path
+    }
+
+
 
 }

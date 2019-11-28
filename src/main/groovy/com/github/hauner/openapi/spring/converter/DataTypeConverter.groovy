@@ -47,24 +47,12 @@ import com.github.hauner.openapi.spring.model.datatypes.StringDataType
  */
 class DataTypeConverter {
 
-    private class TargetType {
-        String typeName
-        List<String> genericNames
-
-        String getName () {
-            typeName.substring (typeName.lastIndexOf ('.') + 1)
-        }
-
-        String getPkg () {
-            typeName.substring (0, typeName.lastIndexOf ('.'))
-        }
-
-    }
-
     private ApiOptions options
+    private DataTypeMapper mapper
 
     DataTypeConverter(ApiOptions options) {
         this.options = options
+        this.mapper = new DataTypeMapper(options.typeMappings)
     }
 
     DataType none() {
@@ -128,7 +116,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = getObjectDataType (schemaInfo)
+        TargetType targetType = mapper.getMappedObjectDataType (schemaInfo)
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,
@@ -213,101 +201,6 @@ class DataTypeConverter {
         }
 
         simpleType
-    }
-
-    private TargetType getObjectDataType(SchemaInfo schemaInfo) {
-        if (options.typeMappings) {
-
-            if (schemaInfo instanceof ResponseSchemaInfo) {
-                String ct = schemaInfo.contentType
-
-                // check endpoint response mapping
-                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
-                if (endpoint) {
-                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
-
-                    def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
-                    if (response) {
-                        return new TargetType (
-                            typeName: response.mapping.targetTypeName,
-                            genericNames: response.mapping.genericTypeNames
-                        )
-                    }
-                }
-
-                // check global response mapping
-                List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
-                def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
-                if (response) {
-                    return new TargetType (
-                        typeName: response.mapping.targetTypeName,
-                        genericNames: response.mapping.genericTypeNames
-                    )
-                }
-            }
-
-            if (schemaInfo instanceof ParameterSchemaInfo) {
-                String pn = schemaInfo.name
-
-                // check endpoint parameter mapping
-                EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
-                if (endpoint) {
-                    List<ParameterTypeMapping> parameters = getParameterMappings (endpoint.typeMappings)
-
-                    def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
-                    if (parameter) {
-                        return new TargetType (
-                            typeName: parameter.mapping.targetTypeName,
-                            genericNames: parameter.mapping.genericTypeNames
-                        )
-                    }
-                }
-
-                // check global parameter mapping
-                List<ParameterTypeMapping> parameters = getParameterMappings (options.typeMappings)
-                def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
-                if (parameter) {
-                    return new TargetType (
-                        typeName: parameter.mapping.targetTypeName,
-                        genericNames: parameter.mapping.genericTypeNames
-                    )
-                }
-            }
-
-            // check endpoint type mapping
-            EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
-            if (endpoint) {
-                List<TypeMapping> mappings = getTypeMappings (endpoint.typeMappings)
-
-                def mapping = mappings.find { it.sourceTypeName == schemaInfo.name ? it : null }
-                if (mapping) {
-                    return new TargetType (
-                        typeName: mapping.targetTypeName,
-                        genericNames: mapping.genericTypeNames
-                    )
-                }
-            }
-
-            // check global mapping
-            List<TypeMapping> matches = options.typeMappings.findResults {
-                it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
-            }
-
-            if (matches.isEmpty ()) {
-                return null
-            }
-
-            if (matches.size () != 1) {
-                throw new AmbiguousTypeMappingException (matches)
-            }
-
-            def match = matches.first ()
-            return new TargetType (
-                typeName: match.targetTypeName,
-                genericNames: match.genericTypeNames ?: [])
-        }
-
-        null
     }
 
     private TargetType getArrayDataType(SchemaInfo schemaInfo) {
@@ -398,10 +291,18 @@ class DataTypeConverter {
         }
     }
 
-    private List<EndpointTypeMapping> getEndpointMappings () {
-        options.typeMappings.findResults {
+    private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
+        typeMappings.findResults {
             it instanceof EndpointTypeMapping ? it : null
         }
+    }
+
+    private List<EndpointTypeMapping> getEndpointMappings () {
+        getEndpointMappings (options.typeMappings)
+    }
+
+    private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
+        getEndpointMappings (options.typeMappings)
     }
 
     private List<TypeMapping> getTypeMappings (List<?> typeMappings) {
