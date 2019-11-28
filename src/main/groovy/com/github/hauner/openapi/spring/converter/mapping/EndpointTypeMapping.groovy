@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.SchemaInfo
 
 /**
@@ -53,6 +54,19 @@ class EndpointTypeMapping {
         path == info.path
     }
 
+    TypeMapping findMatch (ResponseSchemaInfo schemaInfo) {
+        List<ResponseTypeMapping> responses = getResponseMappings ()
 
+        def response = responses.find {
+            it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
+        }
+        response.mapping
+    }
+
+    private List<ResponseTypeMapping> getResponseMappings () {
+        typeMappings.findResults {
+            it instanceof ResponseTypeMapping ? it : null
+        }
+    }
 
 }

@@ -43,14 +43,9 @@ class DataTypeMapper {
             // check endpoint response mapping
             EndpointTypeMapping endpoint = getEndpointMappings ().find { it.matches (schemaInfo) }
             if (endpoint) {
-                List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
-
-                def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
-                if (response) {
-                    return new TargetType (
-                        typeName: response.mapping.targetTypeName,
-                        genericNames: response.mapping.genericTypeNames
-                    )
+                TypeMapping mapping = endpoint.findMatch (schemaInfo)
+                if (mapping) {
+                    return mapping.targetType
                 }
             }
 
