@@ -19,7 +19,6 @@ package com.github.hauner.openapi.spring.converter.mapping
 import com.github.hauner.openapi.spring.converter.ParameterSchemaInfo
 import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.SchemaInfo
-import com.github.hauner.openapi.spring.converter.TargetType
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
@@ -28,6 +27,7 @@ import com.github.hauner.openapi.spring.converter.TargetType
  * controller method.
  *
  * The {@code mappings} list can contain objects of the type
+ * - {@link ParameterTypeMapping}
  * - {@link ResponseTypeMapping}
  *
  * @author Martin Hauner
@@ -56,31 +56,37 @@ class EndpointTypeMapping {
         path == info.path
     }
 
-    TargetType findTargetType (SchemaInfo schemaInfo) {
-
+    /**
+     * Returns type mappings of this endpoint that match the given schema info.
+     *
+     * @param schemaInfo the schema info
+     * @return a list of matching type mappings
+     */
+    List<TypeMapping> findMatches (SchemaInfo schemaInfo) {
         switch(schemaInfo) {
             case ParameterSchemaInfo:
-                return findParameterTargetType (schemaInfo as ParameterSchemaInfo)
+                return findParameterMatches (schemaInfo as ParameterSchemaInfo)
             case ResponseSchemaInfo:
-                return findResponseTargetType (schemaInfo as ResponseSchemaInfo)
+                return findResponseMatches (schemaInfo as ResponseSchemaInfo)
             default:
-                return null
+                return []
         }
     }
 
-    private TargetType findParameterTargetType (ParameterSchemaInfo info) {
-        def parameter = getParameterMappings ().find {
+    private List<TypeMapping> findParameterMatches (ParameterSchemaInfo info) {
+        getParameterMappings ().findAll {
             it.matches (info)
+        }.collect {
+            it.mapping
         }
-
-        parameter.mapping.targetType
     }
 
-    private TargetType findResponseTargetType (ResponseSchemaInfo info) {
-        def response = getResponseMappings ().find {
+    private List<TypeMapping> findResponseMatches (ResponseSchemaInfo info) {
+        getResponseMappings ().find {
             it.matches(info)
+        }.collect {
+            it.mapping
         }
-        response.mapping.targetType
     }
 
     private List<ParameterTypeMapping> getParameterMappings () {

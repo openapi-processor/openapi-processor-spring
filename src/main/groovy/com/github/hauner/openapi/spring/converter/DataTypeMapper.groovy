@@ -40,9 +40,12 @@ class DataTypeMapper {
         // check endpoint mapping (parameter, response)
         List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
         if (!endpoints.empty) {
-            TargetType target = endpoints.first().findTargetType (schemaInfo)
-            if (target) {
-                return target
+            List<TypeMapping> matches = endpoints.first ().findMatches (schemaInfo)
+            if(!matches.empty) {
+                TargetType target = matches.first().targetType
+                if (target) {
+                    return target
+                }
             }
         }
 
