@@ -37,19 +37,20 @@ class DataTypeMapper {
 
     TargetType getMappedObjectDataType (SchemaInfo schemaInfo) {
 
-        if (schemaInfo instanceof ResponseSchemaInfo) {
-            String ct = schemaInfo.contentType
-
-            // check endpoint response mapping
-            EndpointTypeMapping endpoint = getEndpointMappings ().find { it.matches (schemaInfo) }
-            if (endpoint) {
-                TypeMapping mapping = endpoint.findMatch (schemaInfo)
-                if (mapping) {
-                    return mapping.targetType
-                }
+        // check endpoint mapping (parameter, response)
+        List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
+        if (!endpoints.empty) {
+            TargetType target = endpoints.first().findTargetType (schemaInfo)
+            if (target) {
+                return target
             }
+        }
+
+
+        if (schemaInfo instanceof ResponseSchemaInfo) {
 
             // check global response mapping
+            String ct = schemaInfo.contentType
             List<ResponseTypeMapping> responses = getResponseMappings (typeMappings)
             def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
             if (response) {
@@ -61,23 +62,9 @@ class DataTypeMapper {
         }
 
         if (schemaInfo instanceof ParameterSchemaInfo) {
-            String pn = schemaInfo.name
-
-            // check endpoint parameter mapping
-            EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
-            if (endpoint) {
-                List<ParameterTypeMapping> parameters = getParameterMappings (endpoint.typeMappings)
-
-                def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
-                if (parameter) {
-                    return new TargetType (
-                        typeName: parameter.mapping.targetTypeName,
-                        genericNames: parameter.mapping.genericTypeNames
-                    )
-                }
-            }
 
             // check global parameter mapping
+            String pn = schemaInfo.name
             List<ParameterTypeMapping> parameters = getParameterMappings (typeMappings)
             def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
             if (parameter) {
@@ -144,7 +131,7 @@ class DataTypeMapper {
     }
 
     private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
-        getEndpointMappings (typeMappings)
+        getEndpointMappings (typeMappings).findAll { it.matches (info) }
     }
 
     private List<TypeMapping> getTypeMappings (List<?> typeMappings) {

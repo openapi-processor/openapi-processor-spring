@@ -16,8 +16,10 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.ParameterSchemaInfo
 import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.SchemaInfo
+import com.github.hauner.openapi.spring.converter.TargetType
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
@@ -54,13 +56,32 @@ class EndpointTypeMapping {
         path == info.path
     }
 
-    TypeMapping findMatch (ResponseSchemaInfo schemaInfo) {
-        List<ResponseTypeMapping> responses = getResponseMappings ()
+    TargetType findTargetType (SchemaInfo schemaInfo) {
+        if (schemaInfo instanceof ResponseSchemaInfo) {
+            List<ResponseTypeMapping> responses = getResponseMappings ()
 
-        def response = responses.find {
-            it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
+            def response = responses.find {
+                it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
+            }
+
+            return response.mapping.targetType
+        } else if (schemaInfo instanceof ParameterSchemaInfo) {
+            List<ParameterTypeMapping> parameters = getParameterMappings ()
+
+            def parameter = parameters.find {
+                it.parameterName == schemaInfo.name && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
+            }
+
+            return parameter.mapping.targetType
         }
-        response.mapping
+
+        null
+    }
+
+    private List<ParameterTypeMapping> getParameterMappings () {
+        typeMappings.findResults {
+            it instanceof ParameterTypeMapping ? it : null
+        }
     }
 
     private List<ResponseTypeMapping> getResponseMappings () {
