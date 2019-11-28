@@ -59,18 +59,24 @@ class EndpointTypeMapping {
     /**
      * Returns type mappings of this endpoint that match the given schema info.
      *
-     * @param schemaInfo the schema info
+     * @param info the schema info
      * @return a list of matching type mappings
      */
-    List<TypeMapping> findMatches (SchemaInfo schemaInfo) {
-        switch(schemaInfo) {
+    List<TypeMapping> findMatches (SchemaInfo info) {
+        switch(info) {
             case ParameterSchemaInfo:
-                return findParameterMatches (schemaInfo as ParameterSchemaInfo)
+                return findParameterMatches (info as ParameterSchemaInfo)
             case ResponseSchemaInfo:
-                return findResponseMatches (schemaInfo as ResponseSchemaInfo)
+                return findResponseMatches (info as ResponseSchemaInfo)
             default:
-                return []
+                return findTypeMatches (info)
         }
+    }
+
+    private List<TypeMapping> findTypeMatches (SchemaInfo info) {
+       getMappings ().findAll {
+           it.matches (info)
+       }
     }
 
     private List<TypeMapping> findParameterMatches (ParameterSchemaInfo info) {
@@ -82,7 +88,7 @@ class EndpointTypeMapping {
     }
 
     private List<TypeMapping> findResponseMatches (ResponseSchemaInfo info) {
-        getResponseMappings ().find {
+        getResponseMappings ().findAll {
             it.matches(info)
         }.collect {
             it.mapping
@@ -98,6 +104,12 @@ class EndpointTypeMapping {
     private List<ResponseTypeMapping> getResponseMappings () {
         typeMappings.findResults {
             it instanceof ResponseTypeMapping ? it : null
+        }
+    }
+
+    private List<TypeMapping> getMappings () {
+        typeMappings.findResults {
+            it instanceof TypeMapping ? it : null
         }
     }
 

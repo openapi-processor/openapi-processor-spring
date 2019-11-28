@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.SchemaInfo
 import com.github.hauner.openapi.spring.converter.TargetType
 
 /**
@@ -61,6 +62,16 @@ class TypeMapping {
         "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
     }
 
+
+    /**
+     * Checks if it is a mapping for the given schema info
+     *
+     * @param info a schema info
+     * @return true if it is a mapping for info, else false
+     */
+    boolean matches (SchemaInfo info) {
+        sourceTypeName == info.name
+    }
 
     /**
      * Returns the target type of this type mapping.

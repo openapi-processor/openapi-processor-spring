@@ -37,7 +37,7 @@ class DataTypeMapper {
 
     TargetType getMappedObjectDataType (SchemaInfo schemaInfo) {
 
-        // check endpoint mapping (parameter, response)
+        // check endpoint mapping (parameter, response, type)
         List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
         if (!endpoints.empty) {
             List<TypeMapping> matches = endpoints.first ().findMatches (schemaInfo)
@@ -74,20 +74,6 @@ class DataTypeMapper {
                 return new TargetType (
                     typeName: parameter.mapping.targetTypeName,
                     genericNames: parameter.mapping.genericTypeNames
-                )
-            }
-        }
-
-        // check endpoint type mapping
-        EndpointTypeMapping endpoint = getEndpointMappings ().find { it.path == schemaInfo.path }
-        if (endpoint) {
-            List<TypeMapping> mappings = getTypeMappings (endpoint.typeMappings)
-
-            def mapping = mappings.find { it.sourceTypeName == schemaInfo.name ? it : null }
-            if (mapping) {
-                return new TargetType (
-                    typeName: mapping.targetTypeName,
-                    genericNames: mapping.genericTypeNames
                 )
             }
         }

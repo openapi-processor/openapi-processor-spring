@@ -5,9 +5,14 @@
 
 package generated.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Props {
 
+    @JsonProperty("prop1")
     private String prop1;
+
+    @JsonProperty("prop2")
     private String prop2;
 
     public String getProp1 () {

@@ -36,6 +36,7 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
             new TestSet(name: 'response-complex-data-types'),
             new TestSet(name: 'response-array-data-type-mapping'),
             new TestSet(name: 'params-simple-data-types'),
+          //  new TestSet(name: 'params-complex-data-types'),
             new TestSet(name: 'params-path-simple-data-types'),
             new TestSet(name: 'params-request-body'),
             new TestSet(name: 'params-spring-pageable-mapping')
