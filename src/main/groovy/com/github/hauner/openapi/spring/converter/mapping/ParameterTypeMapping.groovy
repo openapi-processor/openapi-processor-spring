@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.ParameterSchemaInfo
+
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
  * of the given endpoint parameter.
@@ -33,5 +35,15 @@ class ParameterTypeMapping {
      * Type mapping valid only for requests with parameter {@link #parameterName}.
      */
     TypeMapping mapping
+
+    /**
+     * Checks if this is a mapping for the given parameter schema info
+     *
+     * @param info a parameter schema info
+     * @return true if it is a mapping for info, else false
+     */
+    boolean matches (ParameterSchemaInfo info) {
+        parameterName == info.name && mapping.sourceTypeName == info.schema.type
+    }
 
 }

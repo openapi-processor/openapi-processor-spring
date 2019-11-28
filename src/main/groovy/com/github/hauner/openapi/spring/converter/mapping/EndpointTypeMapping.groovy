@@ -57,25 +57,30 @@ class EndpointTypeMapping {
     }
 
     TargetType findTargetType (SchemaInfo schemaInfo) {
-        if (schemaInfo instanceof ResponseSchemaInfo) {
-            List<ResponseTypeMapping> responses = getResponseMappings ()
 
-            def response = responses.find {
-                it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
-            }
+        switch(schemaInfo) {
+            case ParameterSchemaInfo:
+                return findParameterTargetType (schemaInfo as ParameterSchemaInfo)
+            case ResponseSchemaInfo:
+                return findResponseTargetType (schemaInfo as ResponseSchemaInfo)
+            default:
+                return null
+        }
+    }
 
-            return response.mapping.targetType
-        } else if (schemaInfo instanceof ParameterSchemaInfo) {
-            List<ParameterTypeMapping> parameters = getParameterMappings ()
-
-            def parameter = parameters.find {
-                it.parameterName == schemaInfo.name && it.mapping.sourceTypeName == schemaInfo.schema.type // 'object' ?
-            }
-
-            return parameter.mapping.targetType
+    private TargetType findParameterTargetType (ParameterSchemaInfo info) {
+        def parameter = getParameterMappings ().find {
+            it.matches (info)
         }
 
-        null
+        parameter.mapping.targetType
+    }
+
+    private TargetType findResponseTargetType (ResponseSchemaInfo info) {
+        def response = getResponseMappings ().find {
+            it.matches(info)
+        }
+        response.mapping.targetType
     }
 
     private List<ParameterTypeMapping> getParameterMappings () {

@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
+
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
  * schema for the given endpoint content type.
@@ -33,5 +35,15 @@ class ResponseTypeMapping {
      * Type mapping valid only for responses with {@link #contentType}.
      */
     TypeMapping mapping
+
+    /**
+     * Checks if it is a mapping for the given response schema info
+     *
+     * @param info a response schema info
+     * @return true if it is a mapping for info, else false
+     */
+    boolean matches (ResponseSchemaInfo info) {
+        contentType == info.contentType && mapping.sourceTypeName == info.schema.type
+    }
 
 }
