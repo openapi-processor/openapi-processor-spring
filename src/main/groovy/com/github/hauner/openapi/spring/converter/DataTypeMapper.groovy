@@ -49,38 +49,16 @@ class DataTypeMapper {
             }
         }
 
-        // check global mappings (parameter, response)
-//        List<?> mappings = getGlobalMappings (schemaInfo)
-
-
-
-        if (schemaInfo instanceof ResponseSchemaInfo) {
-
-            // check global response mapping
-            List<ResponseTypeMapping> responses = getResponseMappings (typeMappings)
-            def response = responses.find { it.contentType == schemaInfo.contentType /*&& it.mapping.sourceTypeName == 'object'*/ }
-            if (response) {
-                return new TargetType (
-                    typeName: response.mapping.targetTypeName,
-                    genericNames: response.mapping.genericTypeNames
-                )
+        // check global parameter & response mappings
+        List<?> matchesX = getGlobalMappings (schemaInfo)
+        if (!matchesX.empty) {
+            TargetType target = matchesX.first().mapping.targetType
+            if (target) {
+                return target
             }
         }
 
-        if (schemaInfo instanceof ParameterSchemaInfo) {
-
-            // check global parameter mapping
-            String pn = schemaInfo.name
-            List<ParameterTypeMapping> parameters = getParameterMappings (typeMappings)
-            def parameter = parameters.find { it.parameterName == pn /*&& it.mapping.sourceTypeName == 'object'*/ }
-            if (parameter) {
-                return new TargetType (
-                    typeName: parameter.mapping.targetTypeName,
-                    genericNames: parameter.mapping.genericTypeNames
-                )
-            }
-        }
-
+        // check global type mappings
         List<TypeMapping> matches = []
         switch(type) {
             case 'array':
@@ -109,28 +87,13 @@ class DataTypeMapper {
             genericNames: match.genericTypeNames ?: [])
     }
 
-    private List<ParameterTypeMapping> getParameterMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof ParameterTypeMapping ? it : null
-        }
-    }
-
-    private List<ResponseTypeMapping> getResponseMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof ResponseTypeMapping ? it : null
-        }
-    }
-
-    /*
     private List<?> getGlobalMappings (SchemaInfo info) {
         typeMappings.findResults {
-            it instanceof EndpointTypeMapping ? it : null
-
-
+            it instanceof ParameterTypeMapping || it instanceof ResponseTypeMapping ? it : null
+        }.findAll {
+            it.matches (info)
         }
-
-//        getEndpointMappings (typeMappings).findAll { it.matches (info) }
-    }*/
+    }
 
     private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
         getEndpointMappings (typeMappings).findAll { it.matches (info) }
