@@ -17,9 +17,6 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
@@ -203,55 +200,6 @@ class DataTypeConverter {
         simpleType
     }
 
-    private TargetType getArrayDataType(SchemaInfo schemaInfo) {
-        if (options.typeMappings) {
-
-            List<EndpointTypeMapping> endpoints = getEndpointMappings ()
-
-            if (schemaInfo instanceof ResponseSchemaInfo) {
-                String ep = schemaInfo.path
-                String ct = schemaInfo.contentType
-
-                // check endpoint response mapping
-                EndpointTypeMapping endpoint = endpoints.find { it.path == ep }
-                if (endpoint) {
-                    List<ResponseTypeMapping> responses = getResponseMappings (endpoint.typeMappings)
-
-                    def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'array' }
-                    if (response) {
-                        return new TargetType (typeName: response.mapping.targetTypeName)
-                    }
-                }
-
-                // check global response mapping
-                List<ResponseTypeMapping> responses = getResponseMappings (options.typeMappings)
-                def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'array' }
-                if (response) {
-                    return new TargetType (typeName: response.mapping.targetTypeName)
-                }
-            }
-
-            // check global mapping
-            List<TypeMapping> matches = options.typeMappings.findResults {
-                it instanceof TypeMapping && it.sourceTypeName == 'array' ? it : null
-            }
-
-            // no mapping, use default
-            if (matches.isEmpty ()) {
-                return null
-            }
-
-            if (matches.size () != 1) {
-                throw new AmbiguousTypeMappingException (matches)
-            }
-
-            def match = matches.first ()
-            return new TargetType (typeName: match.targetTypeName)
-        }
-
-        null
-    }
-
     private TargetType getSimpleDataType (SchemaInfo schemaInfo) {
         if (options.typeMappings) {
 
@@ -277,38 +225,6 @@ class DataTypeConverter {
         }
 
         null
-    }
-
-    private List<ParameterTypeMapping> getParameterMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof ParameterTypeMapping ? it : null
-        }
-    }
-
-    private List<ResponseTypeMapping> getResponseMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof ResponseTypeMapping ? it : null
-        }
-    }
-
-    private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof EndpointTypeMapping ? it : null
-        }
-    }
-
-    private List<EndpointTypeMapping> getEndpointMappings () {
-        getEndpointMappings (options.typeMappings)
-    }
-
-    private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
-        getEndpointMappings (options.typeMappings)
-    }
-
-    private List<TypeMapping> getTypeMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof TypeMapping ? it : null
-        }
     }
 
     private List<TypeMapping> getTypeMappings () {
