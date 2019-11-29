@@ -5,7 +5,7 @@ parent: Type Mapping
 nav_order: 1
 ---
 
-# Basic Mappings
+# Basic (primitive) Mappings
 
 The OpenAPI specification defines a couple of basic [data types][openapi-spec-types]{:target="_blank"}.
 The basic data types are built-in in the generatr. That means the generatr will map the basic types
@@ -13,7 +13,7 @@ automatically to a corresponding java type. There is no explicit type mapping re
 
 ## OpenAPI to Java type mapping
 
-The following table shows the automatic mapping of types from OpenAPI to Java.
+The following table shows the automatic mapping of OpenAPIs primitive types to Java.
 
 `type`    | `format`    | generatr Java type  
 ------    | --------    | ------------------  
