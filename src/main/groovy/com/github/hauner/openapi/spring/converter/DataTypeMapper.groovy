@@ -37,7 +37,7 @@ class DataTypeMapper {
 
     TargetType getMappedObjectDataType (SchemaInfo schemaInfo) {
 
-        // check endpoint mapping (parameter, response, type)
+        // check endpoint mappings
         List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
         if (!endpoints.empty) {
             List<TypeMapping> matches = endpoints.first ().findMatches (schemaInfo)
@@ -49,13 +49,16 @@ class DataTypeMapper {
             }
         }
 
+        // check global mappings (parameter, response)
+//        List<?> mappings = getGlobalMappings (schemaInfo)
+
+
 
         if (schemaInfo instanceof ResponseSchemaInfo) {
 
             // check global response mapping
-            String ct = schemaInfo.contentType
             List<ResponseTypeMapping> responses = getResponseMappings (typeMappings)
-            def response = responses.find { it.contentType == ct && it.mapping.sourceTypeName == 'object' }
+            def response = responses.find { it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == 'object' }
             if (response) {
                 return new TargetType (
                     typeName: response.mapping.targetTypeName,
@@ -109,23 +112,24 @@ class DataTypeMapper {
         }
     }
 
-    private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
+    /*
+    private List<?> getGlobalMappings (SchemaInfo info) {
         typeMappings.findResults {
             it instanceof EndpointTypeMapping ? it : null
-        }
-    }
 
-    private List<EndpointTypeMapping> getEndpointMappings () {
-        getEndpointMappings (typeMappings)
-    }
+
+        }
+
+//        getEndpointMappings (typeMappings).findAll { it.matches (info) }
+    }*/
 
     private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
         getEndpointMappings (typeMappings).findAll { it.matches (info) }
     }
 
-    private List<TypeMapping> getTypeMappings (List<?> typeMappings) {
+    private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
         typeMappings.findResults {
-            it instanceof TypeMapping ? it : null
+            it instanceof EndpointTypeMapping ? it : null
         }
     }
 

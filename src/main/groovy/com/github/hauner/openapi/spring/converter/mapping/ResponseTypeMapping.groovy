@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
+import com.github.hauner.openapi.spring.converter.SchemaInfo
 
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
@@ -42,7 +43,11 @@ class ResponseTypeMapping {
      * @param info a response schema info
      * @return true if it is a mapping for info, else false
      */
-    boolean matches (ResponseSchemaInfo info) {
+    boolean matches (SchemaInfo info) {
+        if (!info instanceof ResponseSchemaInfo) {
+            return false
+        }
+
         contentType == info.contentType && mapping.sourceTypeName == info.schema.type
     }
 

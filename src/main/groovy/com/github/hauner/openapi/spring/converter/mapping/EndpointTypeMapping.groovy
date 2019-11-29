@@ -65,9 +65,18 @@ class EndpointTypeMapping {
     List<TypeMapping> findMatches (SchemaInfo info) {
         switch(info) {
             case ParameterSchemaInfo:
-                return findParameterMatches (info as ParameterSchemaInfo)
+                def matches = findParameterMatches (info as ParameterSchemaInfo)
+                if (!matches.empty) {
+                    return matches
+                }
+                return findTypeMatches (info)
+
             case ResponseSchemaInfo:
-                return findResponseMatches (info as ResponseSchemaInfo)
+                def matches = findResponseMatches (info as ResponseSchemaInfo)
+                if (!matches.empty) {
+                    return matches
+                }
+                return findTypeMatches (info)
             default:
                 return findTypeMatches (info)
         }

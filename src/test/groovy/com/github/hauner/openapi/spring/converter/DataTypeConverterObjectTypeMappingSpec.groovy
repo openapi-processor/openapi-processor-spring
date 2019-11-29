@@ -338,7 +338,9 @@ paths:
         where:
         type << [
             'endpoint response mapping',
-            'global response mapping'
+            'global response mapping',
+            'endpoint response mapping over endpoint type mapping',
+            'endpoint type mapping'
         ]
 
         mappings << [
@@ -361,6 +363,31 @@ paths:
                         sourceTypeName: 'object',
                         targetTypeName: 'pkg.TargetClass',
                         genericTypeNames: ['java.lang.String'])
+                )
+            ], [
+                new EndpointTypeMapping (path: '/object',
+                    typeMappings: [
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'object',
+                                targetTypeName: 'pkg.TargetClass',
+                                genericTypeNames: ['java.lang.String'])
+                        ),
+                        new TypeMapping (
+                            sourceTypeName: 'ObjectResponse200',
+                            targetTypeName: 'pkg.TargetClassType',
+                            genericTypeNames: ['java.lang.StringType'])
+                    ]
+                )
+            ], [
+                new EndpointTypeMapping (path: '/object',
+                    typeMappings: [
+                    new TypeMapping (
+                        sourceTypeName: 'ObjectResponse200',
+                        targetTypeName: 'pkg.TargetClass',
+                        genericTypeNames: ['java.lang.String'])
+                    ]
                 )
             ]
         ]
