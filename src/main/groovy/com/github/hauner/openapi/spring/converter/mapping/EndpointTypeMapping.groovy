@@ -16,9 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.ParameterSchemaInfo
-import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
-import com.github.hauner.openapi.spring.converter.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or

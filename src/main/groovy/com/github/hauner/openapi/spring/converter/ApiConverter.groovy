@@ -16,6 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody

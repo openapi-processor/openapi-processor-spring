@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
 /**
  * Checks if there is a mapping for a given type. Used by DataTypeConverter.

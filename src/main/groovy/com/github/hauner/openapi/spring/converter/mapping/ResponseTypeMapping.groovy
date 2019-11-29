@@ -16,8 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.ResponseSchemaInfo
-import com.github.hauner.openapi.spring.converter.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response

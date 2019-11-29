@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.converter.schema
 
+import com.github.hauner.openapi.spring.converter.RefResolver
 import groovy.transform.stc.ClosureParams
 import io.swagger.v3.oas.models.media.Schema
 
