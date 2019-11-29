@@ -17,6 +17,8 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
@@ -104,6 +106,92 @@ paths:
         then:
         def e = thrown (AmbiguousTypeMappingException)
         e.typeMappings == options.typeMappings
+    }
+
+    void "converts simple array response schema to Collection<> via endpoint response type mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /array-string:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.any:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none              
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/array-string',
+                    typeMappings: [
+//                        new ResponseTypeMapping (
+//                            contentType: 'application/vnd.any',
+//                            mapping: new TypeMapping (
+//                                targetTypeName: 'pkg.TargetClass')
+//                        ),
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                targetTypeName: 'java.util.Collection')
+                        )
+                    ])
+                ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == 'Collection<String>'
+    }
+
+    void "converts simple array response schema to Collection<> via global response type array mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /array-string:
+    get:
+      responses:
+        '200':
+          content:
+            application/vnd.any:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: none              
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new ResponseTypeMapping (
+                    contentType: 'application/vnd.any',
+                    mapping: new TypeMapping(
+                        targetTypeName: 'java.util.Collection')
+                )
+            ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == 'Collection<String>'
     }
 
 }
