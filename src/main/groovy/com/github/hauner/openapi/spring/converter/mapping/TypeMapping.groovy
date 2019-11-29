@@ -17,7 +17,6 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 import com.github.hauner.openapi.spring.converter.SchemaInfo
-import com.github.hauner.openapi.spring.converter.TargetType
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
