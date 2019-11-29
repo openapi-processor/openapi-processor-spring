@@ -28,7 +28,7 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterResponseTypeMappingSpec extends Specification {
 
-    void "converts simple array response schema to Collection<> via endpoint response type array mapping" () {
+    void "converts simple array response schema to Collection<> via endpoint response type mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -55,16 +55,14 @@ paths:
             typeMappings: [
                 new EndpointTypeMapping (path: '/array-string',
                     typeMappings: [
+//                        new ResponseTypeMapping (
+//                            contentType: 'application/vnd.any',
+//                            mapping: new TypeMapping (
+//                                targetTypeName: 'pkg.TargetClass')
+//                        ),
                         new ResponseTypeMapping (
                             contentType: 'application/vnd.any',
                             mapping: new TypeMapping (
-                                sourceTypeName: 'object',
-                                targetTypeName: 'pkg.TargetClass')
-                        ),
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
                                 targetTypeName: 'java.util.Collection')
                         )
                     ])
@@ -105,7 +103,6 @@ paths:
                 new ResponseTypeMapping (
                     contentType: 'application/vnd.any',
                     mapping: new TypeMapping(
-                        sourceTypeName: 'array',
                         targetTypeName: 'java.util.Collection')
                 )
             ])

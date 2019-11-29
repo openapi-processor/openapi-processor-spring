@@ -106,7 +106,7 @@ class TypeMappingReader {
     private TypeMapping readTypMapping (Map<String, ?> source) {
         Matcher matcher = source.to =~ GENERIC_INLINE
 
-        def (from, format) = source.from.tokenize (':')
+        def (from, format) = source.from ? source.from.tokenize (':') : [null,  null]
         String to = source.to
         List<String> generics = []
 

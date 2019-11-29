@@ -48,7 +48,7 @@ class ParameterTypeMapping {
             return false
         }
 
-        parameterName == info.name && mapping.sourceTypeName == info.schema.type
+        parameterName == info.name
     }
 
 }

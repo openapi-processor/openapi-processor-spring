@@ -35,7 +35,7 @@ class DataTypeMapper {
         this.typeMappings = typeMappings ?: []
     }
 
-    TargetType getMappedObjectDataType (SchemaInfo schemaInfo) {
+    TargetType getMappedDataType (SchemaInfo schemaInfo, String type) {
 
         // check endpoint mappings
         List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
@@ -58,7 +58,7 @@ class DataTypeMapper {
 
             // check global response mapping
             List<ResponseTypeMapping> responses = getResponseMappings (typeMappings)
-            def response = responses.find { it.contentType == schemaInfo.contentType && it.mapping.sourceTypeName == 'object' }
+            def response = responses.find { it.contentType == schemaInfo.contentType /*&& it.mapping.sourceTypeName == 'object'*/ }
             if (response) {
                 return new TargetType (
                     typeName: response.mapping.targetTypeName,
@@ -72,7 +72,7 @@ class DataTypeMapper {
             // check global parameter mapping
             String pn = schemaInfo.name
             List<ParameterTypeMapping> parameters = getParameterMappings (typeMappings)
-            def parameter = parameters.find { it.parameterName == pn && it.mapping.sourceTypeName == 'object' }
+            def parameter = parameters.find { it.parameterName == pn /*&& it.mapping.sourceTypeName == 'object'*/ }
             if (parameter) {
                 return new TargetType (
                     typeName: parameter.mapping.targetTypeName,
@@ -81,9 +81,18 @@ class DataTypeMapper {
             }
         }
 
-        // check global mapping
-        List<TypeMapping> matches = typeMappings.findResults {
-            it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
+        List<TypeMapping> matches = []
+        switch(type) {
+            case 'array':
+                matches = typeMappings.findResults {
+                    it instanceof TypeMapping && it.sourceTypeName == 'array' ? it : null
+                }
+                break
+            case 'object':
+                matches = typeMappings.findResults {
+                    it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
+                }
+                break
         }
 
         if (matches.isEmpty ()) {

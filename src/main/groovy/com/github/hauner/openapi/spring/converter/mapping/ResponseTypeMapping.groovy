@@ -48,7 +48,7 @@ class ResponseTypeMapping {
             return false
         }
 
-        contentType == info.contentType && mapping.sourceTypeName == info.schema.type
+        contentType == info.contentType
     }
 
 }

@@ -152,7 +152,6 @@ openapi-generatr-spring: v1.0
 map:
   responses:
     - content: application/vnd.array
-      from: array
       to: java.util.List
 """
 
@@ -165,7 +164,7 @@ map:
 
         def response = mappings.first () as ResponseTypeMapping
         response.contentType == 'application/vnd.array'
-        response.mapping.sourceTypeName == 'array'
+        response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
         response.mapping.genericTypeNames == []
@@ -180,7 +179,6 @@ map:
     /foo:
       responses:
         - content: application/vnd.array
-          from: array
           to: java.util.List
 """
 
@@ -197,7 +195,7 @@ map:
 
         def response = endpoint.typeMappings.first () as ResponseTypeMapping
         response.contentType == 'application/vnd.array'
-        response.mapping.sourceTypeName == 'array'
+        response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
         response.mapping.genericTypeNames == []
@@ -210,7 +208,6 @@ openapi-generatr-spring: v1.0
 map:
   parameters:
     - name: foo
-      from: ApiFoo
       to: mapping.Foo
 """
 
@@ -223,7 +220,7 @@ map:
 
         def parameter = mappings.first () as ParameterTypeMapping
         parameter.parameterName == 'foo'
-        parameter.mapping.sourceTypeName == 'ApiFoo'
+        parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
         parameter.mapping.genericTypeNames == []
@@ -238,7 +235,6 @@ map:
     /foo:
       parameters:
         - name: foo
-          from: ApiFoo
           to: mapping.Foo
 """
 
@@ -254,7 +250,7 @@ map:
         endpoint.typeMappings.size () == 1
         def parameter = endpoint.typeMappings.first () as ParameterTypeMapping
         parameter.parameterName == 'foo'
-        parameter.mapping.sourceTypeName == 'ApiFoo'
+        parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
         parameter.mapping.genericTypeNames == []

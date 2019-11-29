@@ -5,12 +5,10 @@ map:
 
   responses:
     - content: application/vnd.global-response
-      from: array
       to: java.util.List
 
   paths:
     /array-endpoint-response:
       responses:
         - content: application/vnd.any
-          from: array
           to: java.util.Set
