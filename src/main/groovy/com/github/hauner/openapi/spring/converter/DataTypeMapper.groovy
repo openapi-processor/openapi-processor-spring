@@ -67,12 +67,9 @@ class DataTypeMapper {
             throw new AmbiguousTypeMappingException (matches)
         }
 
-        def match = matches.first ()
-        return new TargetType (
-            typeName: match.targetTypeName,
-            genericNames: match.genericTypeNames ?: [])
+        TypeMapping match = matches.first () as TypeMapping
+        return match.targetType
     }
-
 
     private List<EndpointTypeMapping> getEndpointMappings() {
         getEndpointMappings (typeMappings)
