@@ -41,7 +41,7 @@ class DataTypeMapper {
     TargetType getMappedDataType (SchemaInfo schemaInfo, String type, SchemaType schemaType) {
 
         // check endpoint mappings
-        List<?> matchesW = schemaType.findEndpointMappings (getEndpointMappings(), schemaInfo)
+        List<?> matchesW = schemaType.findEndpointMappings (getEndpointMappings ())
         if (!matchesW.empty) {
             TargetType target = matchesW.first().targetType
             if (target) {
@@ -50,7 +50,7 @@ class DataTypeMapper {
         }
 
         // check global parameter & response mappings
-        List<?> matchesX = schemaType.findGlobalMappings (getGlobalMappings(), schemaInfo)
+        List<?> matchesX = schemaType.findGlobalMappings (getGlobalMappings ())
         if (!matchesX.empty) {
             TargetType target = matchesX.first().targetType
             if (target) {
@@ -59,7 +59,7 @@ class DataTypeMapper {
         }
 
         // check global type mapping
-        List<?> matches = schemaType.findGlobalTypeMappings (getGlobalTypeMappings(), schemaInfo)
+        List<?> matches = schemaType.findGlobalTypeMappings (getGlobalTypeMappings ())
         if (matches.isEmpty ()) {
             return null
         }
