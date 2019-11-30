@@ -22,7 +22,6 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 
 /**
@@ -38,7 +37,7 @@ class DataTypeMapper {
         this.typeMappings = typeMappings ?: []
     }
 
-    TargetType getMappedDataType (SchemaInfo schemaInfo, String type, SchemaType schemaType) {
+    TargetType getMappedDataType (SchemaType schemaType) {
 
         // check endpoint mappings
         List<?> matchesW = schemaType.findEndpointMappings (getEndpointMappings ())

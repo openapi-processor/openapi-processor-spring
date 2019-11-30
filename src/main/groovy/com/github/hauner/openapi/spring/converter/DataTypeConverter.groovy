@@ -96,7 +96,7 @@ class DataTypeConverter {
         DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'array', new ArraySchemaType(schemaInfo))
+        TargetType targetType = mapper.getMappedDataType (new ArraySchemaType (schemaInfo))
         switch (targetType?.typeName) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
@@ -117,7 +117,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'object', new ObjectSchemaType(schemaInfo))
+        TargetType targetType = mapper.getMappedDataType (new ObjectSchemaType (schemaInfo))
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,
