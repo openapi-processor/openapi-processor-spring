@@ -44,7 +44,7 @@ class ParameterTypeMapping {
      * @return true if it is a mapping for info, else false
      */
     boolean matches (SchemaInfo info) {
-        if (!info instanceof ParameterSchemaInfo) {
+        if (! (info instanceof ParameterSchemaInfo)) {
             return false
         }
 

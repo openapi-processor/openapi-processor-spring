@@ -19,6 +19,8 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
+import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
@@ -94,7 +96,7 @@ class DataTypeConverter {
         DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'array')
+        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'array', new ArraySchemaType())
         switch (targetType?.typeName) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
@@ -115,7 +117,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'object')
+        TargetType targetType = mapper.getMappedDataType (schemaInfo, 'object', new ObjectSchemaType())
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,

@@ -44,7 +44,7 @@ class ResponseTypeMapping {
      * @return true if it is a mapping for info, else false
      */
     boolean matches (SchemaInfo info) {
-        if (!info instanceof ResponseSchemaInfo) {
+        if (! (info instanceof ResponseSchemaInfo)) {
             return false
         }
 

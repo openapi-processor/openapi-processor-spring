@@ -16,8 +16,6 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
 /**
@@ -54,72 +52,6 @@ class EndpointTypeMapping {
      */
     boolean matches (SchemaInfo info) {
         path == info.path
-    }
-
-    /**
-     * Returns type mappings of this endpoint that match the given schema info.
-     *
-     * @param info the schema info
-     * @return a list of matching type mappings
-     */
-    List<TypeMapping> findMatches (SchemaInfo info) {
-        switch(info) {
-            case ParameterSchemaInfo:
-                def matches = findParameterMatches (info as ParameterSchemaInfo)
-                if (!matches.empty) {
-                    return matches
-                }
-                return findTypeMatches (info)
-
-            case ResponseSchemaInfo:
-                def matches = findResponseMatches (info as ResponseSchemaInfo)
-                if (!matches.empty) {
-                    return matches
-                }
-                return findTypeMatches (info)
-            default:
-                return findTypeMatches (info)
-        }
-    }
-
-    private List<TypeMapping> findTypeMatches (SchemaInfo info) {
-       getMappings ().findAll {
-           it.matches (info)
-       }
-    }
-
-    private List<TypeMapping> findParameterMatches (ParameterSchemaInfo info) {
-        getParameterMappings ().findAll {
-            it.matches (info)
-        }.collect {
-            it.mapping
-        }
-    }
-
-    private List<TypeMapping> findResponseMatches (ResponseSchemaInfo info) {
-        getResponseMappings ().findAll {
-            it.matches(info)
-        }.collect {
-            it.mapping
-        }
-    }
-
-    private List<ParameterTypeMapping> getParameterMappings () {
-        typeMappings.findResults {
-            it instanceof ParameterTypeMapping ? it : null
-        }
-    }
-
-    private List<ResponseTypeMapping> getResponseMappings () {
-        typeMappings.findResults {
-            it instanceof ResponseTypeMapping ? it : null
-        }
-    }
-
-    private List<TypeMapping> getMappings () {
-        typeMappings.findResults {
-            it instanceof TypeMapping ? it : null
-        }
     }
 
 }

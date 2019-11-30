@@ -23,6 +23,7 @@ import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.SchemaType
 
 /**
  * Checks if there is a mapping for a given type. Used by DataTypeConverter.
@@ -37,44 +38,28 @@ class DataTypeMapper {
         this.typeMappings = typeMappings ?: []
     }
 
-    TargetType getMappedDataType (SchemaInfo schemaInfo, String type) {
+    TargetType getMappedDataType (SchemaInfo schemaInfo, String type, SchemaType schemaType) {
 
         // check endpoint mappings
-        List<EndpointTypeMapping> endpoints = getEndpointMappings (schemaInfo)
-        if (!endpoints.empty) {
-            List<TypeMapping> matches = endpoints.first ().findMatches (schemaInfo)
-            if(!matches.empty) {
-                TargetType target = matches.first().targetType
-                if (target) {
-                    return target
-                }
-            }
-        }
-
-        // check global parameter & response mappings
-        List<?> matchesX = getGlobalMappings (schemaInfo)
-        if (!matchesX.empty) {
-            TargetType target = matchesX.first().mapping.targetType
+        List<?> matchesW = schemaType.findEndpointMappings (getEndpointMappings(), schemaInfo)
+        if (!matchesW.empty) {
+            TargetType target = matchesW.first().targetType
             if (target) {
                 return target
             }
         }
 
-        // check global type mappings
-        List<TypeMapping> matches = []
-        switch(type) {
-            case 'array':
-                matches = typeMappings.findResults {
-                    it instanceof TypeMapping && it.sourceTypeName == 'array' ? it : null
-                }
-                break
-            case 'object':
-                matches = typeMappings.findResults {
-                    it instanceof TypeMapping && it.sourceTypeName == schemaInfo.name ? it : null
-                }
-                break
+        // check global parameter & response mappings
+        List<?> matchesX = schemaType.findGlobalMappings (getGlobalMappings(), schemaInfo)
+        if (!matchesX.empty) {
+            TargetType target = matchesX.first().targetType
+            if (target) {
+                return target
+            }
         }
 
+        // check global type mapping
+        List<?> matches = schemaType.findGlobalTypeMappings (getGlobalTypeMappings(), schemaInfo)
         if (matches.isEmpty ()) {
             return null
         }
@@ -89,16 +74,15 @@ class DataTypeMapper {
             genericNames: match.genericTypeNames ?: [])
     }
 
-    private List<?> getGlobalMappings (SchemaInfo info) {
-        typeMappings.findResults {
-            it instanceof ParameterTypeMapping || it instanceof ResponseTypeMapping ? it : null
-        }.findAll {
-            it.matches (info)
-        }
+
+    private List<EndpointTypeMapping> getEndpointMappings() {
+        getEndpointMappings (typeMappings)
     }
 
-    private List<EndpointTypeMapping> getEndpointMappings (SchemaInfo info) {
-        getEndpointMappings (typeMappings).findAll { it.matches (info) }
+    private List<?> getGlobalMappings () {
+        typeMappings.findResults {
+            it instanceof ParameterTypeMapping || it instanceof ResponseTypeMapping ? it : null
+        }
     }
 
     private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
@@ -107,8 +91,8 @@ class DataTypeMapper {
         }
     }
 
-    private List<TypeMapping> getTypeMappings () {
-        options.typeMappings.findResults {
+    private List<TypeMapping> getGlobalTypeMappings () {
+        typeMappings.findResults {
             it instanceof TypeMapping ? it : null
         }
     }
