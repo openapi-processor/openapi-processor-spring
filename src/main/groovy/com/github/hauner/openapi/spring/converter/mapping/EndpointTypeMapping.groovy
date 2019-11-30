@@ -50,8 +50,19 @@ class EndpointTypeMapping implements TypeMappingX {
      * @param info the schema info
      * @return true, if path is equal, false if not
      */
+    @Override
     boolean matches (SchemaInfo info) {
         path == info.path
+    }
+
+    @Override
+    boolean isLevel (MappingLevel level) {
+        MappingLevel.ENDPOINT == level
+    }
+
+    @Override
+    List<TypeMappingX> getChildMappings () {
+        typeMappings
     }
 
 }

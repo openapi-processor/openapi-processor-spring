@@ -17,11 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 
 /**
@@ -31,66 +29,44 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaType
  */
 class DataTypeMapper {
 
-    private List<?> typeMappings
+    private List<TypeMappingX> typeMappings
 
     DataTypeMapper(List<?> typeMappings) {
-        this.typeMappings = typeMappings ?: []
+        this.typeMappings = (typeMappings ?: []) as List<TypeMappingX>
     }
 
     TargetType getMappedDataType (SchemaType schemaType) {
 
         // check endpoint mappings
-        List<?> matchesW = schemaType.findEndpointMappings (getEndpointMappings ())
-        if (!matchesW.empty) {
-            TargetType target = matchesW.first().targetType
+        List<TypeMappingX> endpointMatches = schemaType.matchEndpointMapping (typeMappings)
+        if (!endpointMatches.empty) {
+            TargetType target = endpointMatches.first().targetType
             if (target) {
                 return target
             }
         }
 
         // check global parameter & response mappings
-        List<?> matchesX = schemaType.findGlobalMappings (getGlobalMappings ())
-        if (!matchesX.empty) {
-            TargetType target = matchesX.first().targetType
+        List<TypeMappingX> ioMatches = schemaType.matchIoMapping (typeMappings)
+        if (!ioMatches.empty) {
+            TargetType target = ioMatches.first().targetType
             if (target) {
                 return target
             }
         }
 
         // check global type mapping
-        List<?> matches = schemaType.findGlobalTypeMappings (getGlobalTypeMappings ())
-        if (matches.isEmpty ()) {
+        List<TypeMappingX> typeMatches = schemaType.matchTypeMapping (typeMappings)
+        if (typeMatches.isEmpty ()) {
             return null
         }
 
-        if (matches.size () != 1) {
-            throw new AmbiguousTypeMappingException (matches)
+        if (typeMatches.size () != 1) {
+            throw new AmbiguousTypeMappingException (typeMatches)
         }
 
-        TypeMapping match = matches.first () as TypeMapping
+        TypeMapping match = typeMatches.first () as TypeMapping
         return match.targetType
-    }
-
-    private List<EndpointTypeMapping> getEndpointMappings() {
-        getEndpointMappings (typeMappings)
-    }
-
-    private List<?> getGlobalMappings () {
-        typeMappings.findResults {
-            it instanceof ParameterTypeMapping || it instanceof ResponseTypeMapping ? it : null
-        }
-    }
-
-    private List<EndpointTypeMapping> getEndpointMappings (List<?> typeMappings) {
-        typeMappings.findResults {
-            it instanceof EndpointTypeMapping ? it : null
-        }
-    }
-
-    private List<TypeMapping> getGlobalTypeMappings () {
-        typeMappings.findResults {
-            it instanceof TypeMapping ? it : null
-        }
     }
 
 }

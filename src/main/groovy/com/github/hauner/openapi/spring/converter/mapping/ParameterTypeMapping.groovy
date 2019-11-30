@@ -43,12 +43,23 @@ class ParameterTypeMapping implements TypeMappingX {
      * @param info a parameter schema info
      * @return true if it is a mapping for info, else false
      */
+    @Override
     boolean matches (SchemaInfo info) {
         if (! (info instanceof ParameterSchemaInfo)) {
             return false
         }
 
         parameterName == info.name
+    }
+
+    @Override
+    boolean isLevel (MappingLevel level) {
+        MappingLevel.IO == level
+    }
+
+    @Override
+    List<TypeMappingX> getChildMappings () {
+        [mapping]
     }
 
 }

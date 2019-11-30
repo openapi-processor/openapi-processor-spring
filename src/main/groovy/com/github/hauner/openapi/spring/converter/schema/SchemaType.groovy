@@ -16,15 +16,15 @@
 
 package com.github.hauner.openapi.spring.converter.schema
 
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingLevel
+import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
 
 
 interface SchemaType {
 
-    List<?> findEndpointMappings (List<EndpointTypeMapping> typeMappings)
-    List<?> findGlobalMappings (List<?> typeMappings)
-    List<?> findGlobalTypeMappings (List<?> typeMappings)
+    List<TypeMappingX> matchEndpointMapping (List<TypeMappingX> typeMappings)
+    List<TypeMappingX> matchIoMapping (List<TypeMappingX> typeMappings)
+    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings)
 
 }
 
@@ -37,42 +37,40 @@ abstract class SchemaTypeBase implements SchemaType {
     }
 
     @Override
-    List<?> findEndpointMappings (List<EndpointTypeMapping> typeMappings) {
-        // endpoint mappings matching by path
-        def all = typeMappings.findAll {
-            it.matches (info)
+    List<TypeMappingX> matchEndpointMapping (List<TypeMappingX> typeMappings) {
+        // mappings matching by path
+        List<TypeMappingX> endpoint = typeMappings.findAll {
+            it.isLevel (MappingLevel.ENDPOINT) && it.matches (info)
         }.collect {
-            it.typeMappings
-        }.flatten ()
+            it.childMappings
+        }.flatten () as List<TypeMappingX>
 
-        // find global parameter, response & type mappings
-        def global = all.findAll {
-            it.matches (info)
-        }
-
-        // global parameter or response mappings
-        def mappings = global.findAll {
-            ! (it instanceof TypeMapping)
+        // io mappings
+        List<TypeMappingX> io = endpoint.findAll {
+            it.isLevel (MappingLevel.IO) && it.matches (info)
         }.collect {
-            it.mapping
+            it.childMappings
+        }.flatten () as List<TypeMappingX>
+
+        if (!io.empty) {
+            return io
         }
 
-        if (!mappings.empty) {
-            return mappings
-        }
-
-        global.findAll {
-            it instanceof TypeMapping
-        }
+        // type mappings
+        endpoint.findAll {
+            it.isLevel (MappingLevel.TYPE) && it.matches (info)
+        }.collect {
+            it.childMappings
+        }.flatten () as List<TypeMappingX>
     }
 
-    @Override
-    List<?> findGlobalMappings (List<?> typeMappings) {
+    List<TypeMappingX> matchIoMapping (List<TypeMappingX> typeMappings) {
+        // io mappings
         typeMappings.findAll {
-            it.matches (info)
+            it.isLevel (MappingLevel.IO) && it.matches (info)
         }.collect {
-            it.mapping
-        }
+            it.childMappings
+        }.flatten () as List<TypeMappingX>
     }
 
 }
@@ -84,9 +82,9 @@ class ObjectSchemaType extends SchemaTypeBase {
     }
 
     @Override
-    List<?> findGlobalTypeMappings (List<?> typeMappings) {
+    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
         typeMappings.findAll {
-            it.matches (info)
+            it.isLevel (MappingLevel.TYPE) && it.matches (info)
         }
     }
 
@@ -99,12 +97,12 @@ class ArraySchemaType extends SchemaTypeBase {
     }
 
     @Override
-    List<?> findGlobalTypeMappings (List<?> typeMappings) {
+    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
         typeMappings.findAll () {
-            it.matches (new SchemaInfo (null, null,'array'))
+            it.isLevel (MappingLevel.TYPE) && it.matches (new SchemaInfo (null, null,'array'))
         }
     }
-    
+
 }
 
 

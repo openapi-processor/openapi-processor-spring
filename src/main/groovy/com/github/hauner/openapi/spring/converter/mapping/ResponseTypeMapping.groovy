@@ -43,12 +43,23 @@ class ResponseTypeMapping implements TypeMappingX {
      * @param info a response schema info
      * @return true if it is a mapping for info, else false
      */
+    @Override
     boolean matches (SchemaInfo info) {
         if (! (info instanceof ResponseSchemaInfo)) {
             return false
         }
 
         contentType == info.contentType
+    }
+
+    @Override
+    boolean isLevel (MappingLevel level) {
+        MappingLevel.IO == level
+    }
+
+    @Override
+    List<TypeMappingX> getChildMappings () {
+        [mapping]
     }
 
 }

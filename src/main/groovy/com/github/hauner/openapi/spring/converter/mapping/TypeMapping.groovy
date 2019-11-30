@@ -61,15 +61,25 @@ class TypeMapping implements TypeMappingX {
         "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
     }
 
-
     /**
      * Checks if it is a mapping for the given schema info
      *
      * @param info a schema info
      * @return true if it is a mapping for info, else false
      */
+    @Override
     boolean matches (SchemaInfo info) {
         sourceTypeName == info.name
+    }
+
+    @Override
+    boolean isLevel (MappingLevel level) {
+        MappingLevel.TYPE == level
+    }
+
+    @Override
+    List<TypeMappingX> getChildMappings () {
+        [this]
     }
 
     /**
