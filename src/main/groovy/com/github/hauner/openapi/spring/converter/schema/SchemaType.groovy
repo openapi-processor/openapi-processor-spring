@@ -22,18 +22,16 @@ import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 
 interface SchemaType {
 
-    List<?> findEndpointMappings (List<?> typeMappings, SchemaInfo info)
+    List<?> findEndpointMappings (List<EndpointTypeMapping> typeMappings, SchemaInfo info)
     List<?> findGlobalMappings (List<?> typeMappings, SchemaInfo info)
     List<?> findGlobalTypeMappings (List<?> typeMappings, SchemaInfo info)
 
 }
 
-
-class ObjectSchemaType implements SchemaType {
+abstract class SchemaTypeBase implements SchemaType {
 
     @Override
-    List<?> findEndpointMappings (List<?> typeMappings, SchemaInfo info) {
-
+    List<?> findEndpointMappings (List<EndpointTypeMapping> typeMappings, SchemaInfo info) {
         // endpoint mappings matching by path
         def all = typeMappings.findAll {
             it.matches (info)
@@ -64,79 +62,33 @@ class ObjectSchemaType implements SchemaType {
 
     @Override
     List<?> findGlobalMappings (List<?> typeMappings, SchemaInfo info) {
-
         typeMappings.findAll {
             it.matches (info)
         }.collect {
             it.mapping
         }
-
-    }
-
-    @Override
-    List<?> findGlobalTypeMappings (List<?> typeMappings, SchemaInfo info) {
-
-        typeMappings.findAll {
-            it.matches (info)
-        }
-
     }
 
 }
 
-class ArraySchemaType implements SchemaType {
-
-    @Override
-    List<?> findEndpointMappings (List<?> typeMappings, SchemaInfo info) {
-
-        // endpoint mappings matching by path
-        def all = typeMappings.findAll {
-            it.matches (info)
-        }.collect {
-            it.typeMappings
-        }.flatten()
-
-        // find global parameter, response & type mappings
-        def global = all.findAll {
-            it.matches (info)
-        }
-
-        // global parameter or response mappings
-        def mappings = global.findAll {
-            ! (it instanceof TypeMapping)
-        }.collect {
-            it.mapping
-        }
-
-        if (!mappings.empty) {
-            return mappings
-        }
-
-        global.findAll {
-            it instanceof TypeMapping
-        }
-
-
-    }
-
-    @Override
-    List<?> findGlobalMappings (List<?> typeMappings, SchemaInfo info) {
-
-        typeMappings.findAll {
-            it.matches (info)
-        }.collect {
-            it.mapping
-        }
-
-    }
+class ObjectSchemaType extends SchemaTypeBase {
 
     @Override
     List<?> findGlobalTypeMappings (List<?> typeMappings, SchemaInfo info) {
+        typeMappings.findAll {
+            it.matches (info)
+        }
+    }
 
+}
+
+class ArraySchemaType extends SchemaTypeBase {
+
+    @Override
+    List<?> findGlobalTypeMappings (List<?> typeMappings, SchemaInfo info) {
         typeMappings.findAll () {
             it.matches (new SchemaInfo (null, null,'array'))
         }
-
     }
     
 }
