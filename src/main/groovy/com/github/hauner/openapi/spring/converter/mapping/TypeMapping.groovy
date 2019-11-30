@@ -27,7 +27,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class TypeMapping {
+class TypeMapping implements TypeMappingX {
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.

@@ -30,7 +30,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class EndpointTypeMapping {
+class EndpointTypeMapping implements TypeMappingX {
 
     /**
      * Full path of the endpoint that is configured by this object.

@@ -25,7 +25,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class ResponseTypeMapping {
+class ResponseTypeMapping implements TypeMappingX {
 
     /**
      * The content type of this mapping. Must match 1:1 with what is written in the api.
