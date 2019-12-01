@@ -208,6 +208,11 @@ class DataTypeConverter {
         // check endpoint mappings
         List<TypeMappingX> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
         if (!endpointMatches.empty) {
+
+            if (endpointMatches.size () != 1) {
+                throw new AmbiguousTypeMappingException (endpointMatches)
+            }
+
             TargetType target = endpointMatches.first().targetType
             if (target) {
                 return target
@@ -217,6 +222,11 @@ class DataTypeConverter {
         // check global io (parameter & response) mappings
         List<TypeMappingX> ioMatches = schemaType.matchIoMapping (options.typeMappings)
         if (!ioMatches.empty) {
+
+            if (ioMatches.size () != 1) {
+                throw new AmbiguousTypeMappingException (ioMatches)
+            }
+
             TargetType target = ioMatches.first().targetType
             if (target) {
                 return target

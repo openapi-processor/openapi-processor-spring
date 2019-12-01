@@ -109,6 +109,90 @@ paths:
         e.typeMappings == options.typeMappings
     }
 
+
+    @Unroll
+    void "throws when there are multiple mappings on the same level: #type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      parameters:
+        - in: query
+          name: param
+          required: false
+          schema:
+            type: array
+            items: 
+              type: string
+      responses:
+        '204':
+          description: none
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: mappings)
+        new ApiConverter (options).convert (openApi)
+
+        then:
+        def e = thrown (AmbiguousTypeMappingException)
+
+        where:
+        type << [
+            'global type mappings',
+            'global io mappings',
+            'endpoint mappings'
+        ]
+
+        mappings << [
+            [
+                new TypeMapping (
+                    sourceTypeName: 'array',
+                    targetTypeName: 'java.util.Collection'),
+                new TypeMapping (
+                    sourceTypeName: 'array',
+                    targetTypeName: 'java.util.Collection')
+            ],
+            [
+                new ParameterTypeMapping (
+                    parameterName: 'param',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'array',
+                        targetTypeName: 'java.util.Collection')
+                ),
+                new ParameterTypeMapping (
+                    parameterName: 'param',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'array',
+                        targetTypeName: 'java.util.Collection')
+                )
+            ],
+            [
+                new EndpointTypeMapping (path: '/foo',
+                    typeMappings: [
+                        new ParameterTypeMapping (
+                            parameterName: 'param',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'array',
+                                targetTypeName: 'java.util.Collection')
+                        ),
+                        new ParameterTypeMapping (
+                            parameterName: 'param',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'array',
+                                targetTypeName: 'java.util.Collection')
+                        )
+                    ])
+            ]
+        ]
+    }
+
     void "converts array response schema to #responseTypeName via endpoint type mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
