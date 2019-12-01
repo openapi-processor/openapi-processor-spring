@@ -28,11 +28,11 @@ interface SchemaType {
 
 }
 
-abstract class SchemaTypeBase implements SchemaType {
+abstract class BaseSchemaType implements SchemaType {
 
     protected SchemaInfo info
 
-    SchemaTypeBase(SchemaInfo info) {
+    BaseSchemaType (SchemaInfo info) {
         this.info = info
     }
 
@@ -75,7 +75,7 @@ abstract class SchemaTypeBase implements SchemaType {
 
 }
 
-class ObjectSchemaType extends SchemaTypeBase {
+class ObjectSchemaType extends BaseSchemaType {
 
     ObjectSchemaType (SchemaInfo info) {
         super (info)
@@ -90,7 +90,7 @@ class ObjectSchemaType extends SchemaTypeBase {
 
 }
 
-class ArraySchemaType extends SchemaTypeBase {
+class ArraySchemaType extends BaseSchemaType {
 
     ArraySchemaType (SchemaInfo info) {
         super (info)
