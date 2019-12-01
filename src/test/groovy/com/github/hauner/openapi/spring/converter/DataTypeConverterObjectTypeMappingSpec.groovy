@@ -285,7 +285,6 @@ paths:
                         new ParameterTypeMapping (
                             parameterName: 'foobar',
                             mapping: new TypeMapping (
-                                sourceTypeName: 'object',
                                 targetTypeName: 'pkg.TargetClass')
                         )
                     ])
@@ -293,7 +292,6 @@ paths:
                 new ParameterTypeMapping (
                     parameterName: 'foobar',
                     mapping: new TypeMapping (
-                        sourceTypeName: 'object',
                         targetTypeName: 'pkg.TargetClass')
                 )
             ]

@@ -57,11 +57,7 @@ abstract class BaseSchemaType implements SchemaType {
         }
 
         // type mappings
-        endpoint.findAll {
-            it.isLevel (MappingLevel.TYPE) && it.matches (info)
-        }.collect {
-            it.childMappings
-        }.flatten () as List<TypeMappingX>
+        matchTypeMapping (endpoint)
     }
 
     List<TypeMappingX> matchIoMapping (List<TypeMappingX> typeMappings) {
@@ -98,8 +94,9 @@ class ArraySchemaType extends BaseSchemaType {
 
     @Override
     List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
+        def array = new SchemaInfo (null, null,'array')
         typeMappings.findAll () {
-            it.isLevel (MappingLevel.TYPE) && it.matches (new SchemaInfo (null, null,'array'))
+            it.isLevel (MappingLevel.TYPE) && it.matches (array)
         }
     }
 

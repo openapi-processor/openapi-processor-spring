@@ -214,7 +214,7 @@ class DataTypeConverter {
             }
         }
 
-        // check global parameter & response mappings
+        // check global io (parameter & response) mappings
         List<TypeMappingX> ioMatches = schemaType.matchIoMapping (options.typeMappings)
         if (!ioMatches.empty) {
             TargetType target = ioMatches.first().targetType
