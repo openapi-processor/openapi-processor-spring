@@ -19,9 +19,11 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
 import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
 import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -49,11 +51,9 @@ import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 class DataTypeConverter {
 
     private ApiOptions options
-    private DataTypeMapper mapper
 
     DataTypeConverter(ApiOptions options) {
         this.options = options
-        this.mapper = new DataTypeMapper(options.typeMappings)
     }
 
     DataType none() {
@@ -96,7 +96,7 @@ class DataTypeConverter {
         DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        TargetType targetType = mapper.getMappedDataType (new ArraySchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (new ArraySchemaType (schemaInfo))
         switch (targetType?.typeName) {
             case Collection.name:
                 arrayType = new CollectionDataType (item: item)
@@ -117,7 +117,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = mapper.getMappedDataType (new ObjectSchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,
@@ -204,11 +204,44 @@ class DataTypeConverter {
         simpleType
     }
 
+    TargetType getMappedDataType (SchemaType schemaType) {
+        // check endpoint mappings
+        List<TypeMappingX> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
+        if (!endpointMatches.empty) {
+            TargetType target = endpointMatches.first().targetType
+            if (target) {
+                return target
+            }
+        }
+
+        // check global parameter & response mappings
+        List<TypeMappingX> ioMatches = schemaType.matchIoMapping (options.typeMappings)
+        if (!ioMatches.empty) {
+            TargetType target = ioMatches.first().targetType
+            if (target) {
+                return target
+            }
+        }
+
+        // check global type mapping
+        List<TypeMappingX> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
+        if (typeMatches.isEmpty ()) {
+            return null
+        }
+
+        if (typeMatches.size () != 1) {
+            throw new AmbiguousTypeMappingException (typeMatches)
+        }
+
+        TypeMapping match = typeMatches.first () as TypeMapping
+        return match.targetType
+    }
+
     private TargetType getSimpleDataType (SchemaInfo schemaInfo) {
         if (options.typeMappings) {
 
             // check global mapping
-            List<TypeMapping> mappings = getTypeMappings ()
+            List<TypeMapping> mappings = getTypeMappingsY ()
             List<TypeMapping> matches = mappings.findAll {
                 it.sourceTypeName == schemaInfo.type && it.sourceTypeFormat == schemaInfo.format
             }
@@ -231,7 +264,7 @@ class DataTypeConverter {
         null
     }
 
-    private List<TypeMapping> getTypeMappings () {
+    private List<TypeMapping> getTypeMappingsY () {
         options.typeMappings.findResults {
             it instanceof TypeMapping ? it : null
         }
