@@ -29,6 +29,7 @@ first letter on the next word. The special characters are:
 For properties of model classes, the properties will be annotated with `@JsonProperty` to provide
 the mapping from the OpenAPI identifier to the Java identifier.
 
+```java
     class Example {
 
         @JsonProperty("foo-bar")
@@ -36,8 +37,7 @@ the mapping from the OpenAPI identifier to the Java identifier.
         
         // ...
     }
-
-
+```
 
 [java-char-start]: https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html#isJavaIdentifierStart(char)
 [java-char-part]: https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html#isJavaIdentifierPart(char)
