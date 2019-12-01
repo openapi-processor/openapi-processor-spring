@@ -102,4 +102,19 @@ class ArraySchemaType extends BaseSchemaType {
 
 }
 
+class PrimitiveSchemaType extends BaseSchemaType {
 
+    PrimitiveSchemaType (SchemaInfo info) {
+        super (info)
+    }
+
+    @Override
+    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
+        typeMappings.findAll () {
+            (it.isLevel (MappingLevel.TYPE)
+                && it.sourceTypeName == info.type
+                && it.sourceTypeFormat == info.format)
+        }
+    }
+
+}

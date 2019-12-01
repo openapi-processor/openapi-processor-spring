@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
 import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
 import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
+import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -154,7 +155,7 @@ class DataTypeConverter {
 
     private DataType createSimpleDataType (SchemaInfo schemaInfo) {
 
-        TargetType targetType = getSimpleDataType (schemaInfo)
+        TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
         if (targetType) {
             def simpleType = new MappedDataType (
                 type: targetType.name,
@@ -245,39 +246,6 @@ class DataTypeConverter {
 
         TypeMapping match = typeMatches.first () as TypeMapping
         return match.targetType
-    }
-
-    private TargetType getSimpleDataType (SchemaInfo schemaInfo) {
-        if (options.typeMappings) {
-
-            // check global mapping
-            List<TypeMapping> mappings = getTypeMappingsY ()
-            List<TypeMapping> matches = mappings.findAll {
-                it.sourceTypeName == schemaInfo.type && it.sourceTypeFormat == schemaInfo.format
-            }
-
-            // no mapping, use default
-            if (matches.isEmpty ()) {
-                return null
-            }
-
-            if (matches.size () != 1) {
-                 throw new AmbiguousTypeMappingException (matches)
-            }
-
-            def match = matches.first ()
-            return new TargetType (
-                typeName: match.targetTypeName,
-                genericNames: match.genericTypeNames ?: [])
-        }
-
-        null
-    }
-
-    private List<TypeMapping> getTypeMappingsY () {
-        options.typeMappings.findResults {
-            it instanceof TypeMapping ? it : null
-        }
     }
 
 }

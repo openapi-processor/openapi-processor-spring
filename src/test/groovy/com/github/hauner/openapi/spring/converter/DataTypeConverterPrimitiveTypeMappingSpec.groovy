@@ -17,13 +17,16 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
-class DataTypeConverterSimpleTypeMappingSpec extends Specification {
+class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
 
     void "converts basic types with format to java type via global type mapping" () {
         def openApi = parse ("""\
@@ -106,6 +109,76 @@ paths:
         then:
         def e = thrown (AmbiguousTypeMappingException)
         e.typeMappings == options.typeMappings
+    }
+
+    @Unroll
+    void "converts primitive parameter schema to java type via #type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      parameters:
+        - in: query
+          name: bar
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '204':
+          description: none
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def parameter = ep.parameters.first ()
+        parameter.dataType.packageName == 'java.time'
+        parameter.dataType.name == 'ZonedDateTime'
+
+        where:
+        type << [
+            'endpoint parameter mapping',
+            'global parameter mapping',
+            'global type mapping'
+        ]
+
+        mappings << [
+            [
+                new EndpointTypeMapping (path: '/foo',
+                    typeMappings: [
+                        new ParameterTypeMapping (
+                            parameterName: 'bar',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'string',
+                                sourceTypeFormat: 'date-time',
+                                targetTypeName: 'java.time.ZonedDateTime')
+                        )
+                    ])
+            ], [
+                new ParameterTypeMapping (
+                    parameterName: 'bar',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'string',
+                        sourceTypeFormat: 'date-time',
+                        targetTypeName: 'java.time.ZonedDateTime')
+                )
+            ], [
+                new TypeMapping (
+                    sourceTypeName: 'string',
+                    sourceTypeFormat: 'date-time',
+                    targetTypeName: 'java.time.ZonedDateTime')
+            ]
+        ]
     }
 
 }
