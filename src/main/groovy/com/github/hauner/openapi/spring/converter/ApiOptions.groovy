@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
+
 /**
  * Options of the generatr.
  *
@@ -53,6 +55,6 @@ class ApiOptions {
      * {@link com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping}: used to override
      * parameter, response type mappings or to add additional parameters on a single endpoint.
      */
-    List<?> typeMappings
+    List<TypeMappingX> typeMappings
 
 }
