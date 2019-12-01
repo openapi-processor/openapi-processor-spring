@@ -112,6 +112,7 @@ class PrimitiveSchemaType extends BaseSchemaType {
     List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
         typeMappings.findAll () {
             (it.isLevel (MappingLevel.TYPE)
+                // simple but ignores the interface!
                 && it.sourceTypeName == info.type
                 && it.sourceTypeFormat == info.format)
         }
