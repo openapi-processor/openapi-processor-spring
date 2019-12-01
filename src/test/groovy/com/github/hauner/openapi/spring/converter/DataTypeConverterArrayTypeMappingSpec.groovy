@@ -302,7 +302,7 @@ paths:
     }
 
     @Unroll
-    void "converts array response schema to Collection<> via type" () {
+    void "converts array response schema to Collection<> via #type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
