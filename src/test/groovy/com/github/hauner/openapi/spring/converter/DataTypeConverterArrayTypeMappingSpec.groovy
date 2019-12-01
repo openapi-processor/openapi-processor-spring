@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
@@ -29,7 +30,7 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 class DataTypeConverterArrayTypeMappingSpec extends Specification {
 
     @Unroll
-    void "maps simple array schema to #responseTypeName via global array mapping" () {
+    void "maps array schema to #responseTypeName via global type mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -108,7 +109,7 @@ paths:
         e.typeMappings == options.typeMappings
     }
 
-    void "converts simple array response schema to Collection<> via endpoint response type mapping" () {
+    void "converts array response schema to #responseTypeName via endpoint type mapping" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -116,7 +117,7 @@ info:
   version: 1.0.0
 
 paths:
-  /array-string:
+  /foo:
     get:
       responses:
         '200':
@@ -126,36 +127,98 @@ paths:
                 type: array
                 items:
                   type: string
-          description: none              
+          description: none
 """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new EndpointTypeMapping (path: '/array-string',
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
+            new EndpointTypeMapping (path: '/foo',
+                typeMappings: [
+                    new TypeMapping (
+                        sourceTypeName: 'array',
+                        targetTypeName: targetTypeName)
+                    ])
+        ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        ep.response.responseType.name == responseTypeName
+        ep.response.responseType.packageName == 'java.util'
+
+        where:
+        targetTypeName         | responseTypeName
+        'java.util.Collection' | 'Collection<String>'
+        'java.util.List'       | 'List<String>'
+        'java.util.Set'        | 'Set<String>'
+    }
+
+    @Unroll
+    void "converts array parameter schema to java type via #type" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foobar:
+    get:
+      parameters:
+        - in: query
+          name: foobar
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '204':
+          description: empty
+""")
+
+        when:
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def p = ep.parameters.first ()
+        p.dataType.name == 'Collection<String>'
+        p.dataType.packageName == 'java.util'
+
+        where:
+        type << [
+            'endpoint parameter mapping',
+            'global parameter mapping'
+        ]
+
+        mappings << [
+            [
+                new EndpointTypeMapping (path: '/foobar',
                     typeMappings: [
-//                        new ResponseTypeMapping (
-//                            contentType: 'application/vnd.any',
-//                            mapping: new TypeMapping (
-//                                targetTypeName: 'pkg.TargetClass')
-//                        ),
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
+                        new ParameterTypeMapping (
+                            parameterName: 'foobar',
                             mapping: new TypeMapping (
+                                sourceTypeName: 'array',
                                 targetTypeName: 'java.util.Collection')
                         )
                     ])
-                ])
-        Api api = new ApiConverter (options).convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'Collection<String>'
+            ], [
+                new ParameterTypeMapping (
+                    parameterName: 'foobar',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'array',
+                        targetTypeName: 'java.util.Collection')
+                )
+            ]
+        ]
     }
 
-    void "converts simple array response schema to Collection<> via global response type array mapping" () {
+    @Unroll
+    void "converts array response schema to Collection<> via type" () {
         def openApi = parse ("""\
 openapi: 3.0.2
 info:
@@ -177,21 +240,66 @@ paths:
 """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new ResponseTypeMapping (
-                    contentType: 'application/vnd.any',
-                    mapping: new TypeMapping(
-                        targetTypeName: 'java.util.Collection')
-                )
-            ])
+        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
         Api api = new ApiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         ep.response.responseType.name == 'Collection<String>'
+        ep.response.responseType.imports == ['java.util.Collection', 'java.lang.String'] as Set
+
+        where:
+        type << [
+            'endpoint response mapping',
+            'global response mapping',
+            'endpoint response mapping over endpoint type mapping',
+            'endpoint type mapping'
+        ]
+
+        mappings << [
+            [
+                new EndpointTypeMapping (path: '/array-string',
+                    typeMappings: [
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'array',
+                                targetTypeName: 'java.util.Collection')
+                        )
+                    ]
+                )
+            ], [
+                new ResponseTypeMapping (
+                    contentType: 'application/vnd.any',
+                    mapping: new TypeMapping (
+                        sourceTypeName: 'array',
+                        targetTypeName: 'java.util.Collection')
+                )
+            ], [
+                new EndpointTypeMapping (path: '/array-string',
+                    typeMappings: [
+                        new ResponseTypeMapping (
+                            contentType: 'application/vnd.any',
+                            mapping: new TypeMapping (
+                                sourceTypeName: 'array',
+                                targetTypeName: 'java.util.Collection')
+                        ),
+                        new TypeMapping (
+                            sourceTypeName: 'array',
+                            targetTypeName: 'java.util.Collection')
+                    ]
+                )
+            ], [
+                new EndpointTypeMapping (path: '/array-string',
+                    typeMappings: [
+                        new TypeMapping (
+                            sourceTypeName: 'array',
+                            targetTypeName: 'java.util.Collection')
+                    ]
+                )
+            ]
+        ]
     }
 
 }

@@ -26,7 +26,7 @@ enum MappingLevel {
 }
 
 /**
- *
+ * Common interface for type mappings.
  */
 interface TypeMappingX {
     boolean matches (SchemaInfo info)

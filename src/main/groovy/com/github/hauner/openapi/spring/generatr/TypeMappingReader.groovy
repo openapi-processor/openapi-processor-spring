@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
 import org.yaml.snakeyaml.Yaml
 
 import java.util.regex.Matcher
@@ -33,7 +34,7 @@ import java.util.regex.Pattern
 class TypeMappingReader {
     private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
-    List<?> read (String typeMappings) {
+    List<TypeMappingX> read (String typeMappings) {
         if (typeMappings == null) {
             return []
         }
