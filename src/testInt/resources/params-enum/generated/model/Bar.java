@@ -5,15 +5,15 @@
 
 package generated.model;
 
-public enum Foo {
+public enum Bar {
 
-    FOO("foo"),
-    FOO_2("foo-2"),
-    FOO_FOO("foo-foo");
+    BAR("bar"),
+    BAR_2("bar-2"),
+    BAR_BAR("bar-bar");
 
     private final String value;
 
-    private Foo(String value) {
+    private Bar(String value) {
         this.value = value;
     }
 
@@ -23,8 +23,8 @@ public enum Foo {
     }
 
     @JsonCreator
-    public static Foo fromValue(String value) {
-        for (Foo val: Foo.values()) {
+    public static Bar fromValue(String value) {
+        for (Bar val: Bar.values()) {
             if (val.value.equals(value)) {
                 return val;
             }

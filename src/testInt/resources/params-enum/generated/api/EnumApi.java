@@ -5,14 +5,15 @@
 
 package generated.api;
 
+import generated.model.Bar;
 import generated.model.Foo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-public interface EndpointApi {
+public interface EnumApi {
 
     @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpointFoo(@PathVariable(name = "foo") Foo foo);
+    ResponseEntity<void> getEndpoint(@RequestParam(name = "foo") Foo foo, @RequestParam(name = "bar") Bar bar);
 
 }
