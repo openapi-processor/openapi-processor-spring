@@ -43,7 +43,7 @@ class ApiWriter {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = new DataTypeWriter(headerWriter: new HeaderWriter ())
-        this.enumWriter = new StringEnumWriter()
+        this.enumWriter = new StringEnumWriter(headerWriter: new HeaderWriter ())
     }
 
     ApiWriter(ApiOptions options,

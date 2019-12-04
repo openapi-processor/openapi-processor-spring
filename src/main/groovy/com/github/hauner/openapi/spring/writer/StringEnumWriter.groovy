@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.github.hauner.openapi.support.Identifier
 
 /**
  * Writer for String enum.
@@ -25,7 +26,50 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
  */
 class StringEnumWriter {
 
+    HeaderWriter headerWriter
+
     void write (Writer target, StringEnumDataType dataType) {
+        headerWriter.write (target)
+        target.write ("package ${dataType.packageName};\n\n")
+
+        target.write ("public enum ${dataType.type} {\n\n")
+
+        def values = []
+        dataType.values.each {
+            values.add ("    ${Identifier.toEnum (it)}(\"${it}\")")
+        }
+        target.write (values.join (",\n") + ";\n\n")
+        target.write("    private final String value;\n\n")
+
+        target.write ("""\
+    private ${dataType.type}(String value) {
+        this.value = value;
+    }
+
+""")
+
+        target.write("""\
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
+""")
+
+        target.write("""\
+    @JsonCreator
+    public static ${dataType.type} fromValue(String value) {
+        for (${dataType.type} val: ${dataType.type}.values()) {
+            if (val.value.equals(value)) {
+                return val;
+            }
+        }
+        throw new IllegalArgumentException(value);
+    }
+
+""")
+
+        target.write ("}\n")
     }
 
 }
