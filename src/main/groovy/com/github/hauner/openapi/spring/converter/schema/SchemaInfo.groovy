@@ -152,6 +152,14 @@ class SchemaInfo {
         schema.$ref != null
     }
 
+    boolean isEnum () {
+        schema.enum != null
+    }
+
+    List<?> getEnumValues () {
+        schema.enum
+    }
+
     private boolean hasExtensions () {
         schema.extensions != null
     }

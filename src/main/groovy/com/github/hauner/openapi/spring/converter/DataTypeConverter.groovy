@@ -43,6 +43,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -190,7 +191,7 @@ class DataTypeConverter {
                 simpleType = new BooleanDataType ()
                 break
             case 'string':
-                simpleType = new StringDataType ()
+                simpleType = createStringDataType (schemaInfo)
                 break
             case 'string/date':
                 simpleType = new LocalDateDataType ()
@@ -203,6 +204,17 @@ class DataTypeConverter {
         }
 
         simpleType
+    }
+
+    private DataType createStringDataType (SchemaInfo info) {
+        if (!info.isEnum()) {
+            return new StringDataType ()
+        }
+
+        return new StringEnumDataType (
+            type: info.name,
+            pkg: [options.packageName, 'model'].join ('.'),
+            values: info.enumValues)
     }
 
     TargetType getMappedDataType (SchemaType schemaType) {
