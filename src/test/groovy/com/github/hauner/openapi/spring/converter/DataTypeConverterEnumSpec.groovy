@@ -64,4 +64,57 @@ paths:
         param.dataType.values == ['foo', 'bar', 'foo-bar']
     }
 
+    void "remembers enum data types"() {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: test enum parameters
+  version: 1.0.0
+
+paths:
+
+  /endpoint:
+    get:
+      tags:
+        - enum
+      parameters:
+        - name: foo
+          description: enum parameter
+          in: query
+          schema:
+            type: string
+            enum:
+              - foo
+              - foo-2
+              - foo-foo
+        - name: bar
+          description: enum parameter
+          in: query
+          schema:
+            \$ref: '#/components/schemas/Bar'
+      responses:
+        '204':
+          description: empty
+
+components:
+  schemas:
+
+    Bar:
+      type: string
+      enum:
+        - bar
+        - bar-2
+        - bar-bar
+""")
+
+        when:
+        def api = new ApiConverter ().convert (openApi)
+
+        then:
+        api.models.dataTypes.size () == 2
+        api.models.dataTypes[0].name == 'foo'
+        api.models.dataTypes[1].name == 'Bar'
+    }
+
 }

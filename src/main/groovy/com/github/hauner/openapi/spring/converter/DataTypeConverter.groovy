@@ -89,7 +89,7 @@ class DataTypeConverter {
             createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (dataTypeInfo)
+            createSimpleDataType (dataTypeInfo, dataTypes)
         }
     }
 
@@ -154,7 +154,7 @@ class DataTypeConverter {
         objectType
     }
 
-    private DataType createSimpleDataType (SchemaInfo schemaInfo) {
+    private DataType createSimpleDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
 
         TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
         if (targetType) {
@@ -191,7 +191,7 @@ class DataTypeConverter {
                 simpleType = new BooleanDataType ()
                 break
             case 'string':
-                simpleType = createStringDataType (schemaInfo)
+                simpleType = createStringDataType (schemaInfo, dataTypes)
                 break
             case 'string/date':
                 simpleType = new LocalDateDataType ()
@@ -206,15 +206,19 @@ class DataTypeConverter {
         simpleType
     }
 
-    private DataType createStringDataType (SchemaInfo info) {
+    private DataType createStringDataType (SchemaInfo info, DataTypes dataTypes) {
         if (!info.isEnum()) {
             return new StringDataType ()
         }
 
-        return new StringEnumDataType (
+        def enumType = new StringEnumDataType (
             type: info.name,
             pkg: [options.packageName, 'model'].join ('.'),
             values: info.enumValues)
+
+        dataTypes.add (enumType)
+
+        enumType
     }
 
     TargetType getMappedDataType (SchemaType schemaType) {
