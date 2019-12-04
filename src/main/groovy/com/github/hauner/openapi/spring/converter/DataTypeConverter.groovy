@@ -211,13 +211,14 @@ class DataTypeConverter {
             return new StringDataType ()
         }
 
+        // in case of an inline definition the name may be lowercase, make sure the enum
+        // class gets an uppercase name!
         def enumType = new StringEnumDataType (
-            type: info.name,
+            type: info.name.capitalize (),
             pkg: [options.packageName, 'model'].join ('.'),
             values: info.enumValues)
 
         dataTypes.add (enumType)
-
         enumType
     }
 

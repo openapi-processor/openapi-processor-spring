@@ -60,7 +60,7 @@ paths:
         def ep = itf.endpoints.first ()
         def param = ep.parameters.first ()
         param.name == 'foo'
-        param.dataType.name == 'foo'
+        param.dataType.name == 'Foo'
         param.dataType.values == ['foo', 'bar', 'foo-bar']
     }
 
@@ -113,7 +113,7 @@ components:
 
         then:
         api.models.dataTypes.size () == 2
-        api.models.dataTypes[0].name == 'foo'
+        api.models.dataTypes[0].name == 'Foo'
         api.models.dataTypes[1].name == 'Bar'
     }
 
