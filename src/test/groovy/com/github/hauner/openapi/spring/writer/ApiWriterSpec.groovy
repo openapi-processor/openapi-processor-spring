@@ -160,7 +160,7 @@ Bar class!
         )
 
         def dt = new DataTypes()
-        dt.add ('foo', new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'foo'))
+        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
         dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
         def api = new Api(dt)
 
