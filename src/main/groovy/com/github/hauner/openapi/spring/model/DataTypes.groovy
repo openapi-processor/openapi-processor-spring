@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
 /**
  * Container for Java data types from OpenAPI '#/component/schemas'.
@@ -47,6 +48,18 @@ class DataTypes {
         types.values ().findAll {
           it instanceof ObjectDataType
         } as List<ObjectDataType>
+    }
+
+    /**
+     * provides the enum data types (model classes) used by the api endpoints. For this object
+     * the generatr will create enum classes.
+     *
+     * @return list of enum data types
+     */
+    List<StringEnumDataType> getEnumDataTypes () {
+        types.values ().findAll {
+          it instanceof StringEnumDataType
+        } as List<StringEnumDataType>
     }
 
     void add (List<DataType> dataTypes) {
