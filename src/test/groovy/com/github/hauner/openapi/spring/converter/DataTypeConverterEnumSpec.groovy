@@ -64,7 +64,7 @@ paths:
         param.dataType.values == ['foo', 'bar', 'foo-bar']
     }
 
-    void "remembers enum data types"() {
+    void "remembers inline & named enum schema data types"() {
         def openApi = parse (
 """\
 openapi: 3.0.2
