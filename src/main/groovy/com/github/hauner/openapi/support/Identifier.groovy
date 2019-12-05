@@ -63,6 +63,48 @@ class Identifier {
         sb.toString ()
     }
 
+    /**
+     * converts a Json string as defined by http://www.json.org/ to a valid (upper case) java
+     * enum identifier. One way, ie it is not reversible.
+     *
+     * conversion rules:
+     * characters that are not valid java identifiers will be removed. The characters " ", "_",
+     * "-" (valid or not) are interpreted as word separators and are replaced by "_" and the words
+     * are converted to upper case.
+     *
+     * @param json a valid json "string"
+     *
+     * @return a valid upper case enum java identifier
+     */
+    static String toEnum (String json) {
+        def sb = new StringBuilder()
+
+        def wordSplit = false
+        json.toCharArray ().eachWithIndex { char c, int idx ->
+
+            def cu = c.toUpperCase ()
+            if (idx == 0) {
+                if (isValidStart (c)) {
+                    sb.append (cu)
+                }
+            } else {
+                if (isValidPart (c)) {
+                    if (wordSplit) {
+                        sb.append ("_")
+                        sb.append (cu)
+                        wordSplit = false
+                    } else {
+                        sb.append (cu)
+                    }
+                } else {
+                    wordSplit = true
+                }
+            }
+        }
+
+        sb.toString ()
+    }
+
     private static boolean isValidStart (char c) {
         Character.isJavaIdentifierStart (c) && !isWordSplitPart (c)
     }

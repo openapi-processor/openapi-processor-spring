@@ -19,7 +19,6 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports

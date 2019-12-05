@@ -35,4 +35,17 @@ class IdentifierSpec extends Specification {
         "a_b" | "aB"  // underscore is valid but unwanted
     }
 
+    @Unroll
+    void "convert json string '#json' to valid java enum identifier '#identifier'" () {
+        expect:
+        Identifier.toEnum (json) == identifier
+
+        where:
+        json  | identifier
+        "a"   | "A"
+        "a b" | "A_B"  // space is invalid
+        "a-b" | "A_B"  // dash is invalid
+        "_ab" | "AB"   // underscore is valid but unwanted
+        "a_b" | "A_B"  // underscore is valid but unwanted
+    }
 }

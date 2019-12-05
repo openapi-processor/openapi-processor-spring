@@ -20,9 +20,11 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
+import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MethodWriter
+import com.github.hauner.openapi.spring.writer.StringEnumWriter
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
@@ -63,10 +65,13 @@ class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
         def cv = new ApiConverter(options)
         def api = cv.convert (result.openAPI)
 
+        def headerWriter = new HeaderWriter()
         def writer = new ApiWriter (options,
             new InterfaceWriter(
-                headerWriter: new HeaderWriter(),
-                methodWriter: new MethodWriter())
+                headerWriter: headerWriter,
+                methodWriter: new MethodWriter()),
+            new DataTypeWriter(headerWriter: headerWriter),
+            new StringEnumWriter(headerWriter: headerWriter)
         )
 
         writer.write (api)

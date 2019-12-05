@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import groovy.util.logging.Slf4j
 
 /**
@@ -32,6 +33,7 @@ class ApiWriter {
     private ApiOptions options
     InterfaceWriter interfaceWriter
     DataTypeWriter dataTypeWriter
+    StringEnumWriter enumWriter
 
     File apiFolder
     File modelFolder
@@ -41,12 +43,17 @@ class ApiWriter {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = new DataTypeWriter(headerWriter: new HeaderWriter ())
+        this.enumWriter = new StringEnumWriter(headerWriter: new HeaderWriter ())
     }
 
-    ApiWriter(ApiOptions options, InterfaceWriter interfaceWriter, DataTypeWriter dataTypeWriter) {
+    ApiWriter(ApiOptions options,
+              InterfaceWriter interfaceWriter,
+              DataTypeWriter dataTypeWriter,
+              StringEnumWriter enumWriter) {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = dataTypeWriter
+        this.enumWriter = enumWriter
     }
 
     void write(Api api) {
@@ -63,6 +70,13 @@ class ApiWriter {
             def target = new File (modelFolder, "${it.name}.java")
             def writer = new FileWriter(target)
             dataTypeWriter.write (writer, it as ObjectDataType)
+            writer.close ()
+        }
+
+        api.models.enumDataTypes.each {
+            def target = new File (modelFolder, "${it.name}.java")
+            def writer = new FileWriter(target)
+            enumWriter.write (writer, it as StringEnumDataType)
             writer.close ()
         }
     }

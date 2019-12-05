@@ -86,4 +86,5 @@ class DataTypeWriter {
         new ImportFilter ().filter (packageName, imports)
             .sort ()
     }
+
 }

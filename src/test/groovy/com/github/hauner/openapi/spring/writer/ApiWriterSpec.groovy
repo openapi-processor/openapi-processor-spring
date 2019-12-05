@@ -23,6 +23,7 @@ import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -46,7 +47,7 @@ class ApiWriterSpec extends Specification {
         )
 
         when:
-        new ApiWriter (opts, Stub (InterfaceWriter)).write (new Api())
+        new ApiWriter (opts, Stub (InterfaceWriter), null, null).write (new Api())
 
         then:
         def api = new File([opts.targetDir, 'com', 'github', 'hauner', 'openapi', 'api'].join(File.separator))
@@ -66,7 +67,7 @@ class ApiWriterSpec extends Specification {
         when:
         target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'api')
         target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'model')
-        new ApiWriter (opts, Stub (InterfaceWriter)).write (new Api())
+        new ApiWriter (opts, Stub (InterfaceWriter), null, null).write (new Api())
 
         then:
         0 * log.error (*_)
@@ -94,7 +95,7 @@ class ApiWriterSpec extends Specification {
         ])
 
         when:
-        new ApiWriter (opts, interfaceWriter).write (api)
+        new ApiWriter (opts, interfaceWriter, null, null).write (api)
 
         then:
         def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
@@ -129,7 +130,7 @@ Bar interface!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter).write (api)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter)).write (api)
 
         then:
         def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
@@ -139,6 +140,41 @@ Foo class!
         def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
         barSource.text == """\
 Bar class!
+"""
+    }
+
+    void "generates model enum sources in model target folder"() {
+        def enumWriter = Stub (StringEnumWriter) {
+            write (_ as Writer, _ as StringEnumDataType) >> {
+                Writer writer = it.get(0)
+                writer.write ('Foo enum!\n')
+            } >> {
+                Writer writer = it.get(0)
+                writer.write ('Bar enum!\n')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def dt = new DataTypes()
+        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
+        def api = new Api(dt)
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeWriter), enumWriter).write (api)
+
+        then:
+        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
+        fooSource.text == """\
+Foo enum!
+"""
+        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
+        barSource.text == """\
+Bar enum!
 """
     }
 
@@ -166,7 +202,7 @@ Bar class!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter).write (api)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter)).write (api)
 
         then:
         0 * dataTypeWriter.write (_, dt.find ('simple'))

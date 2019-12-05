@@ -43,6 +43,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -88,7 +89,7 @@ class DataTypeConverter {
             createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (dataTypeInfo)
+            createSimpleDataType (dataTypeInfo, dataTypes)
         }
     }
 
@@ -153,7 +154,7 @@ class DataTypeConverter {
         objectType
     }
 
-    private DataType createSimpleDataType (SchemaInfo schemaInfo) {
+    private DataType createSimpleDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
 
         TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
         if (targetType) {
@@ -190,7 +191,7 @@ class DataTypeConverter {
                 simpleType = new BooleanDataType ()
                 break
             case 'string':
-                simpleType = new StringDataType ()
+                simpleType = createStringDataType (schemaInfo, dataTypes)
                 break
             case 'string/date':
                 simpleType = new LocalDateDataType ()
@@ -203,6 +204,22 @@ class DataTypeConverter {
         }
 
         simpleType
+    }
+
+    private DataType createStringDataType (SchemaInfo info, DataTypes dataTypes) {
+        if (!info.isEnum()) {
+            return new StringDataType ()
+        }
+
+        // in case of an inline definition the name may be lowercase, make sure the enum
+        // class gets an uppercase name!
+        def enumType = new StringEnumDataType (
+            type: info.name.capitalize (),
+            pkg: [options.packageName, 'model'].join ('.'),
+            values: info.enumValues)
+
+        dataTypes.add (enumType)
+        enumType
     }
 
     TargetType getMappedDataType (SchemaType schemaType) {

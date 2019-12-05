@@ -14,11 +14,39 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.model.datatypes
 
-import spock.lang.Specification
+/**
+ * OpenAPI type 'string' with enum constraint maps to enum class.
+ *
+ * @author Martin Hauner
+ */
+class StringEnumDataType implements DataType {
 
+    String type
+    String pkg = 'unknown'
+    List<String> values = []
 
-class ApiConverterSchemaSpec extends Specification {
+    @Override
+    String getName () {
+        type
+    }
+
+    @Override
+    String getPackageName () {
+        pkg
+    }
+
+    @Override
+    Set<String> getImports () {
+        [[packageName, name].join ('.')]
+    }
+
+    @Override
+    Set<String> getReferencedImports () {
+        []
+    }
 
 }
+
+
