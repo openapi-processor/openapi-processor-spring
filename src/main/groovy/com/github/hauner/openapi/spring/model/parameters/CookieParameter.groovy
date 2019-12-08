@@ -16,59 +16,25 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-
 /**
  * OpenAPI cookie parameter.
  *
  * @author Martin Hauner
  */
 class CookieParameter extends Parameter {
-    String name
-    boolean required
-    DataType dataType
 
     String getAnnotationName () {
         "CookieValue"
-    }
-
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
-    String getAnnotation () {
-        "@${annotationName}"
-    }
-
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
-
-    /**
-     * Is the parameter required?
-     *
-     * @return true if the parameter is required, otherwise false.
-     */
-    boolean isRequired () {
-        required
     }
 
     ParameterConstraints getConstraints() {
         null
     }
 
-    /**
-     * Create annotation?
-     */
     boolean withAnnotation () {
         true
     }
 
-    /**
-     * Create annotation with parameters?
-     *
-     * @return true if the annotation should have parameters, false otherwise
-     */
     boolean withParameters () {
         true
     }
