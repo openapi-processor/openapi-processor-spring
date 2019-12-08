@@ -72,7 +72,7 @@ class MethodWriter {
 
         if (!parameter.required && parameter.constraints?.hasDefault()) {
             param += ", "
-            param += "default = ${getDefault(parameter)}"
+            param += "defaultValue = ${getDefault(parameter)}"
         }
 
         param += ')'
