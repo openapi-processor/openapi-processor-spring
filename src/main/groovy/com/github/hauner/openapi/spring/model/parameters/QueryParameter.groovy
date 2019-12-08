@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -26,43 +25,23 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
  *
  * @author Martin Hauner
  */
-class QueryParameter implements Parameter {
-    String name
-    boolean required
-    DataType dataType
+class QueryParameter extends Parameter {
 
     String getAnnotationName () {
         "RequestParam"
     }
 
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
-    String getAnnotation () {
-        "@${annotationName}"
-    }
-
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
-
-    /**
-     * Is the parameter required?
-     *
-     * @return true if the parameter is required, otherwise false.
-     */
     boolean isRequired () {
         if (dataType instanceof MapDataType) {
             return true
         }
 
-        required
+        this.@required
     }
 
     /**
-     * Create annotation? If the query parameter is mapped to a pojo object it should not have a
-     * {@code @RequestParam} annotation.
+     * If the query parameter is mapped to a pojo object it should not have a {@code @RequestParam}
+     * annotation.
      */
     boolean withAnnotation () {
         ! (
@@ -72,12 +51,9 @@ class QueryParameter implements Parameter {
     }
 
     /**
-     * todo this is not right.
+     * todo validate.
      *
-     * Create annotation with parameters? If the query parameter is mapped to a pojo object it
-     * should not have any parameters.
-     *
-     * @return true if the annotation should have parameters, false otherwise
+     * If the query parameter is mapped to a pojo object it should not have any parameters.
      */
     boolean withParameters () {
         ! (dataType instanceof ObjectDataType)

@@ -126,6 +126,15 @@ class SchemaInfo {
     }
 
     /**
+     * get default value.
+     *
+     * @return default value or null
+     */
+    def getDefaultValue() {
+        schema.default
+    }
+
+    /**
      * get the custom Java type (fully qualified) defined via the {@code x-java-type} OpenAPI
      * extension. If no {@code x-java-type} is set the result is {@code null}.
      *

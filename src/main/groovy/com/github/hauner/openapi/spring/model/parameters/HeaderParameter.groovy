@@ -16,55 +16,21 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-
 /**
  * OpenAPI header parameter.
  *
  * @author Martin Hauner
  */
-class HeaderParameter implements Parameter {
-    String name
-    boolean required
-    DataType dataType
+class HeaderParameter extends Parameter {
 
     String getAnnotationName () {
         "RequestHeader"
     }
 
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
-    String getAnnotation () {
-        "@${annotationName}"
-    }
-
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
-
-    /**
-     * Is the parameter required?
-     *
-     * @return true if the parameter is required, otherwise false.
-     */
-    boolean isRequired () {
-        required
-    }
-
-    /**
-     * Create annotation?
-     */
     boolean withAnnotation () {
         true
     }
 
-    /**
-     * Create annotation with parameters?
-     *
-     * @return true if the annotation should have parameters, false otherwise
-     */
     boolean withParameters () {
         true
     }

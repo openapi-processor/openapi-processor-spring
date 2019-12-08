@@ -12,7 +12,20 @@ permalink: /
 # openapi-generatr-spring
 {: .no_toc }
 
-a simple [OpenAPI][openapi] interface only code generator for [Spring Boot][springboot].
+a simple [OpenAPI][openapi] interface only (& model) code generator for [Spring Boot][springboot].
+
+It is useful in an API first approach where you API is explicitly defined by an OpenAPI yaml file
+before it gets implemented. 
+
+The generatr generates java interfaces based on the endpoint description of the API and simple POJO
+classes for parameter or response objects defined in th API. It is **your** task to create the controller
+classes that implement the interfaces. 
+ 
+The interfaces will help to keep the implementation in sync with the API. If anything relevant changes
+in the API the interface changes and the compiler will warn that the interface is not implemented
+correctly.
+
+See the [generatr intro][docs-generatr]{:target="_blank"} for a short example.
 {: .mb-6 }
 
 Note that the generatr is still in an early state of development and not all features are completely implemented.
@@ -110,6 +123,7 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
 
 [docs-gradle]: /openapi-generatr-spring/gradle.html
+[docs-generatr]: /openapi-generatr-spring/generatr/
 
 [bintray]: https://bintray.com/hauner/openapi-generatr
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle

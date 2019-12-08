@@ -29,6 +29,7 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
 import com.github.hauner.openapi.spring.model.datatypes.MapDataType
@@ -171,27 +172,30 @@ class DataTypeConverter {
             typeFormat += '/' + schemaInfo.format
         }
 
+        def defaultValue = schemaInfo.defaultValue
+        def constraints = defaultValue != null ? new DataTypeConstraints(defaultValue: defaultValue) : null
+
         def simpleType
         switch (typeFormat) {
             case 'integer':
             case 'integer/int32':
-                simpleType = new IntegerDataType ()
+                simpleType = new IntegerDataType (constraints: constraints)
                 break
             case 'integer/int64':
-                simpleType = new LongDataType ()
+                simpleType = new LongDataType (constraints: constraints)
                 break
             case 'number':
             case 'number/float':
-                simpleType = new FloatDataType ()
+                simpleType = new FloatDataType (constraints: constraints)
                 break
             case 'number/double':
-                simpleType = new DoubleDataType ()
+                simpleType = new DoubleDataType (constraints: constraints)
                 break
             case 'boolean':
-                simpleType = new BooleanDataType ()
+                simpleType = new BooleanDataType (constraints: constraints)
                 break
             case 'string':
-                simpleType = createStringDataType (schemaInfo, dataTypes)
+                simpleType = createStringDataType (schemaInfo, constraints, dataTypes)
                 break
             case 'string/date':
                 simpleType = new LocalDateDataType ()
@@ -206,9 +210,9 @@ class DataTypeConverter {
         simpleType
     }
 
-    private DataType createStringDataType (SchemaInfo info, DataTypes dataTypes) {
+    private DataType createStringDataType (SchemaInfo info, DataTypeConstraints constraints, DataTypes dataTypes) {
         if (!info.isEnum()) {
-            return new StringDataType ()
+            return new StringDataType (constraints: constraints)
         }
 
         // in case of an inline definition the name may be lowercase, make sure the enum
@@ -216,7 +220,8 @@ class DataTypeConverter {
         def enumType = new StringEnumDataType (
             type: info.name.capitalize (),
             pkg: [options.packageName, 'model'].join ('.'),
-            values: info.enumValues)
+            values: info.enumValues,
+            constraints: constraints)
 
         dataTypes.add (enumType)
         enumType

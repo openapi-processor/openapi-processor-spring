@@ -16,55 +16,21 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-
 /**
  * OpenAPI path parameter.
  *
  * @author Martin Hauner
  */
-class PathParameter implements Parameter {
-    String name
-    boolean required
-    DataType dataType
+class PathParameter extends Parameter {
 
     String getAnnotationName () {
         "PathVariable"
     }
 
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
-    String getAnnotation () {
-        "@${annotationName}"
-    }
-
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
-
-    /**
-     * Is the parameter required?
-     *
-     * @return true if the parameter is required, otherwise false.
-     */
-    boolean isRequired () {
-        required
-    }
-
-    /**
-     * Create annotation?
-     */
     boolean withAnnotation () {
         true
     }
 
-    /**
-     * Create annotation with parameters?
-     *
-     * @return true if the annotation should have parameters, false otherwise
-     */
     boolean withParameters () {
         true
     }

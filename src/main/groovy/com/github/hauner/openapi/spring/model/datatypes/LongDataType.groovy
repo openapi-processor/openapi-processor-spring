@@ -23,6 +23,8 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class LongDataType implements DataType {
 
+    DataTypeConstraints constraints
+
     @Override
     String getName () {
         'Long'
@@ -41,6 +43,11 @@ class LongDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }

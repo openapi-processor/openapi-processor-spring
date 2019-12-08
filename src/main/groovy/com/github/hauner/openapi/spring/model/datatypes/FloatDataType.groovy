@@ -23,6 +23,8 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class FloatDataType implements DataType {
 
+    DataTypeConstraints constraints
+
     @Override
     String getName () {
         'Float'
@@ -41,6 +43,11 @@ class FloatDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }

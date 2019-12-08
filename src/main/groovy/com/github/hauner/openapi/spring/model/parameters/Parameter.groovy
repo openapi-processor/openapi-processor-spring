@@ -16,11 +16,84 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
+import com.github.hauner.openapi.spring.model.datatypes.DataType
+
 /**
- * Common parameter interface implemented by all OpenAPI parameter types.
+ * Parameter description of an OpenAPI parameter.
  *
  * @author Martin Hauner
  */
-interface Parameter {
+abstract class Parameter {
+    String name
+    protected boolean required
+    DataType dataType
+
+    /**
+     * The plain name of the annotation for this parameter (ie. without the @). Possible results
+     * are "RequestParam", "PathVariable", "CookieValue" or "RequestHeader".
+     *
+     * @return the name of the annotation
+     */
+    abstract String getAnnotationName ()
+
+    /**
+     * The fully qualified class name of the annotation.
+     *
+     * @return the fully qualified class name of the annotation
+     */
+    String getAnnotationWithPackage () {
+        "org.springframework.web.bind.annotation.${annotationName}"
+    }
+
+    /**
+     * The full annotation name with a leading @.
+     *
+     * @return the full annotation name with a leading @
+     */
+    String getAnnotation () {
+        "@${annotationName}"
+    }
+
+    /**
+     * The imports required for the parameter data type.
+     *
+     * @return the imports of the parameter type.
+     */
+    Set<String> getDataTypeImports () {
+        dataType.imports
+    }
+
+    /**
+     * Provides the parameters constraint details, if any.
+     *
+     * @return the constraint details or null if the parameter has no constraints
+     */
+    ParameterConstraints getConstraints() {
+        new ParameterConstraints(constraints: dataType.constraints)
+    }
+
+    /**
+     * Required or optional parameter?
+     *
+     * @return true if required, false otherwise
+     */
+    boolean isRequired () {
+        required
+    }
+
+    /**
+     * Create annotation? Some parameters should not have a parameter annotation.
+     *
+     * @return true if the parameter should have an annotation, else false
+     */
+    abstract boolean withAnnotation ()
+
+    /**
+     * Create annotation with parameters? Some parameters should have a parameter annotation but
+     * without any parameters to the annotation.
+     *
+     * @return true if the annotation itself should have parameters, false otherwise
+     */
+    abstract boolean withParameters ()
 
 }

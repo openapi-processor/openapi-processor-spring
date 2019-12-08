@@ -23,6 +23,8 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class IntegerDataType implements DataType {
 
+    DataTypeConstraints constraints
+
     @Override
     String getName () {
         return 'Integer'
@@ -41,6 +43,11 @@ class IntegerDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }

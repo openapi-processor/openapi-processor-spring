@@ -14,45 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.datatypes
+package com.github.hauner.openapi.spring.model.parameters
+
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 
 /**
- * OpenAPI type 'string' with enum constraint maps to enum class.
+ * Constraints of the parameter data type.
  *
  * @author Martin Hauner
  */
-class StringEnumDataType implements DataType {
+class ParameterConstraints {
 
-    String type
-    String pkg = 'unknown'
-    List<String> values = []
     DataTypeConstraints constraints
 
-    @Override
-    String getName () {
-        type
+    boolean hasDefault() {
+        constraints != null
     }
 
-    @Override
-    String getPackageName () {
-        pkg
-    }
-
-    @Override
-    Set<String> getImports () {
-        [[packageName, name].join ('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        []
-    }
-
-    @Override
-    DataTypeConstraints getConstraints() {
-        constraints
+    def getDefault() {
+        constraints.default
     }
 
 }
-
-

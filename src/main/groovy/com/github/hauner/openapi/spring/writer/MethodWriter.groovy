@@ -70,6 +70,11 @@ class MethodWriter {
             param += 'required = false'
         }
 
+        if (!parameter.required && parameter.constraints?.hasDefault()) {
+            param += ", "
+            param += "defaultValue = ${getDefault(parameter)}"
+        }
+
         param += ')'
         param
     }
@@ -114,6 +119,15 @@ class MethodWriter {
 
     private String quote (String content) {
         '"' + content + '"'
+    }
+
+    private def getDefault(Parameter parameter) {
+        def value = parameter.constraints.default
+        if (value instanceof String) {
+            quote(value)
+        } else {
+            value
+        }
     }
 
 }

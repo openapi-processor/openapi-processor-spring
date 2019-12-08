@@ -23,6 +23,8 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class StringDataType implements DataType {
 
+    DataTypeConstraints constraints
+
     @Override
     String getName () {
         'String'
@@ -41,6 +43,11 @@ class StringDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }
