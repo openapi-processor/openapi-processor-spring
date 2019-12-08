@@ -24,9 +24,9 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
  * @author Martin Hauner
  */
 abstract class Parameter {
-    protected String name
+    String name
     protected boolean required
-    protected DataType dataType
+    DataType dataType
 
     /**
      * The plain name of the annotation for this parameter (ie. without the @). Possible results
