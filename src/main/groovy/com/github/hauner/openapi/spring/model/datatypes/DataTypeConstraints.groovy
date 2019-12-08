@@ -17,37 +17,10 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * OpenAPI type 'string' maps to java String.
- *
- * @author Martin Hauner
+ * OpenAPI constraint details of a data type.
  */
-class StringDataType implements DataType {
+interface DataTypeConstraints<T> {
 
-    StringDataTypeConstraints constraints
-
-    @Override
-    String getName () {
-        'String'
-    }
-
-    @Override
-    String getPackageName () {
-        'java.lang'
-    }
-
-    @Override
-    Set<String> getImports () {
-        [[packageName, name].join ('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        []
-    }
-
-    @Override
-    DataTypeConstraints<String> getConstraints() {
-        constraints
-    }
+    T getDefault()
 
 }

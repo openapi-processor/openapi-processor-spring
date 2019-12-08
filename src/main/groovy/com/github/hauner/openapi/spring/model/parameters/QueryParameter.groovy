@@ -60,6 +60,10 @@ class QueryParameter implements Parameter {
         required
     }
 
+    ParameterConstraints getConstraints() {
+        new ParameterConstraints(constraints: dataType.constraints)
+    }
+
     /**
      * Create annotation? If the query parameter is mapped to a pojo object it should not have a
      * {@code @RequestParam} annotation.

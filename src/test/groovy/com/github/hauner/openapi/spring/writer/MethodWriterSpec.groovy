@@ -33,6 +33,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataTypeConstraints
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
@@ -363,6 +364,25 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
     ResponseEntity<void> postFoo(@RequestBody(required = false) FooRequestBody body);
+"""
+    }
+
+    void "writes simple (optional) parameter with default value" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new Response (contentType: 'application/json', responseType: new NoneDataType())
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false,
+                dataType: new StringDataType(
+                    constraints: new StringDataTypeConstraints (dfault: 'bar')))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false, default = "bar") String foo);
 """
     }
 

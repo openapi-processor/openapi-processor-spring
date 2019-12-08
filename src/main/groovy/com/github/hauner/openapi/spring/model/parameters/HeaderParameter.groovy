@@ -53,6 +53,10 @@ class HeaderParameter implements Parameter {
         required
     }
 
+    ParameterConstraints getConstraints() {
+        null
+    }
+
     /**
      * Create annotation?
      */

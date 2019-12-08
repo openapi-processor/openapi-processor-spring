@@ -53,6 +53,10 @@ class PathParameter implements Parameter {
         required
     }
 
+    ParameterConstraints getConstraints() {
+        null
+    }
+
     /**
      * Create annotation?
      */
