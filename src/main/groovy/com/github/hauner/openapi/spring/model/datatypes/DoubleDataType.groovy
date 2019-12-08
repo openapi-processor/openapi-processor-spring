@@ -23,6 +23,8 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class DoubleDataType implements DataType {
 
+    DataTypeConstraints constraints
+
     @Override
     String getName () {
         'Double'
@@ -41,6 +43,11 @@ class DoubleDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }

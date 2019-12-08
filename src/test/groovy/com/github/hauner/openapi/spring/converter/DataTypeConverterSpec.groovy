@@ -63,15 +63,29 @@ class DataTypeConverterSpec extends Specification {
         'boolean' | null        | 'Boolean'
     }
 
-    void "converts primitive schema with default value" () {
-        Schema schema = new Schema(type: 'string', _default: 'bar')
+    @Unroll
+    void "converts schema(#type, #format, #dflt) to javaType with default value" () {
+        Schema schema = new Schema(type: type, format: format, _default: dflt)
 
         when:
-        def datatype = converter.convert (new SchemaInfo (null, schema, 'String'), new DataTypes())
+        def datatype = converter.convert (
+            new SchemaInfo (null, schema, javaType), new DataTypes()
+        )
 
         then:
-        datatype.name == 'String'
-        datatype.constraints.default == 'bar'
+        datatype.name == javaType
+        datatype.constraints.default == dflt
+
+        where:
+        type      | format   | dflt  | javaType
+        'string'  | null     | 'foo' | 'String'
+        'integer' | null     | 101   | 'Integer'
+        'integer' | 'int32'  | 102   | 'Integer'
+        'integer' | 'int64'  | 103   | 'Long'
+        'number'  | null     | 10.1  | 'Float'
+        'number'  | 'float'  | 10.2  | 'Float'
+        'number'  | 'double' | 10.3  | 'Double'
+        'boolean' | null     | false | 'Boolean'
     }
 
     void "throws when hitting an unknown data type" () {

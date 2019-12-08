@@ -23,7 +23,7 @@ class DataTypeConstraints {
 
     def defaultValue
 
-    String getDefault () {
+    def getDefault () {
         defaultValue
     }
 

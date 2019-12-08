@@ -173,26 +173,26 @@ class DataTypeConverter {
         }
 
         def defaultValue = schemaInfo.defaultValue
-        def constraints = defaultValue ? new DataTypeConstraints(defaultValue: defaultValue) : null
+        def constraints = defaultValue != null ? new DataTypeConstraints(defaultValue: defaultValue) : null
 
         def simpleType
         switch (typeFormat) {
             case 'integer':
             case 'integer/int32':
-                simpleType = new IntegerDataType ()
+                simpleType = new IntegerDataType (constraints: constraints)
                 break
             case 'integer/int64':
-                simpleType = new LongDataType ()
+                simpleType = new LongDataType (constraints: constraints)
                 break
             case 'number':
             case 'number/float':
-                simpleType = new FloatDataType ()
+                simpleType = new FloatDataType (constraints: constraints)
                 break
             case 'number/double':
-                simpleType = new DoubleDataType ()
+                simpleType = new DoubleDataType (constraints: constraints)
                 break
             case 'boolean':
-                simpleType = new BooleanDataType ()
+                simpleType = new BooleanDataType (constraints: constraints)
                 break
             case 'string':
                 simpleType = createStringDataType (schemaInfo, constraints, dataTypes)
