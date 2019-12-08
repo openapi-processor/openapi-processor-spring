@@ -21,19 +21,19 @@ package com.github.hauner.openapi.spring.model.datatypes
  *
  * @author Martin Hauner
  */
-interface DataType {
+trait /*interface*/ DataType {
 
     /**
      * The Java type name without package.
      *
      * @return the type name.
      */
-    String getName ()
+    abstract String getName ()
 
     /**
      * The package of this type without class.
      */
-    String getPackageName ()
+    abstract String getPackageName ()
 
     /**
      * Provides the import(s) of this type, usually a single import. If it is a generic type it will
@@ -41,12 +41,22 @@ interface DataType {
      *
      * @return import of this type.
      */
-    Set<String> getImports ()
+    abstract Set<String> getImports ()
 
     /**
      * Provides the list of imports for the types referenced by this this type.
      *
      * @return the referenced import list.
      */
-    Set<String> getReferencedImports ()
+    abstract Set<String> getReferencedImports ()
+
+    /**
+     * Provides the constraint information of the data type.
+     *
+     * @return the constraints or null if there are no constraints.
+     */
+    DataTypeConstraints getConstraints() {
+        null
+    }
+
 }
