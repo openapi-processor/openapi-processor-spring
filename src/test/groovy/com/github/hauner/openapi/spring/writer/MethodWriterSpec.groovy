@@ -382,7 +382,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false, default = "bar") String foo);
+    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 """
     }
 
