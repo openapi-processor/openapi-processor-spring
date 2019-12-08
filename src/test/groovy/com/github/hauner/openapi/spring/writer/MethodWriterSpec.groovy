@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
@@ -33,7 +34,6 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataTypeConstraints
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
@@ -373,7 +373,7 @@ class MethodWriterSpec extends Specification {
         ], parameters: [
             new QueryParameter(name: 'foo', required: false,
                 dataType: new StringDataType(
-                    constraints: new StringDataTypeConstraints (dfault: 'bar')))
+                    constraints: new DataTypeConstraints (defaultValue: 'bar')))
         ])
 
         when:

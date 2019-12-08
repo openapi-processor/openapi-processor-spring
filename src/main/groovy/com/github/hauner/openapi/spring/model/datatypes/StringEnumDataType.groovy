@@ -26,6 +26,7 @@ class StringEnumDataType implements DataType {
     String type
     String pkg = 'unknown'
     List<String> values = []
+    DataTypeConstraints constraints
 
     @Override
     String getName () {
@@ -45,6 +46,11 @@ class StringEnumDataType implements DataType {
     @Override
     Set<String> getReferencedImports () {
         []
+    }
+
+    @Override
+    DataTypeConstraints getConstraints() {
+        constraints
     }
 
 }

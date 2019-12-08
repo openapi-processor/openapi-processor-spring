@@ -19,8 +19,12 @@ package com.github.hauner.openapi.spring.model.datatypes
 /**
  * OpenAPI constraint details of a data type.
  */
-interface DataTypeConstraints<T> {
+class DataTypeConstraints {
 
-    T getDefault()
+    def defaultValue
+
+    String getDefault () {
+        defaultValue
+    }
 
 }
