@@ -27,10 +27,6 @@ class HeaderParameter extends Parameter {
         "RequestHeader"
     }
 
-    ParameterConstraints getConstraints() {
-        null
-    }
-
     boolean withAnnotation () {
         true
     }

@@ -68,8 +68,8 @@ abstract class Parameter {
      *
      * @return the constraint details or null if the parameter has no constraints
      */
-    ParameterConstraints getConstraints () {
-        null
+    ParameterConstraints getConstraints() {
+        new ParameterConstraints(constraints: dataType.constraints)
     }
 
     /**

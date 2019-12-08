@@ -27,10 +27,6 @@ class CookieParameter extends Parameter {
         "CookieValue"
     }
 
-    ParameterConstraints getConstraints() {
-        null
-    }
-
     boolean withAnnotation () {
         true
     }

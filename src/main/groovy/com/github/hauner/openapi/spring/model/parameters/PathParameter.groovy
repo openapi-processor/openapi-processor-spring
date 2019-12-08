@@ -27,10 +27,6 @@ class PathParameter extends Parameter {
         "PathVariable"
     }
 
-    ParameterConstraints getConstraints() {
-        null
-    }
-
     boolean withAnnotation () {
         true
     }
