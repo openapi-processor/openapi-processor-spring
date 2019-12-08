@@ -23,7 +23,7 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
  *
  * @author Martin Hauner
  */
-class PathParameter implements Parameter {
+class PathParameter extends Parameter {
     String name
     boolean required
     DataType dataType

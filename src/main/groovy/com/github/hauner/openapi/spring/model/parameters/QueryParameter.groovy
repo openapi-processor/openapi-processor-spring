@@ -26,7 +26,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
  *
  * @author Martin Hauner
  */
-class QueryParameter implements Parameter {
+class QueryParameter extends Parameter {
     String name
     boolean required
     DataType dataType

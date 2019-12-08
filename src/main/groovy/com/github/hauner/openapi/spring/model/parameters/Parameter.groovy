@@ -17,10 +17,10 @@
 package com.github.hauner.openapi.spring.model.parameters
 
 /**
- * Common parameter interface implemented by all OpenAPI parameter types.
+ * Parameter description of an OpenAPI parameter.
  *
  * @author Martin Hauner
  */
-interface Parameter {
+class Parameter {
 
 }
