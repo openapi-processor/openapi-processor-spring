@@ -1,6 +1,6 @@
 ---
 layout: default
-title: OpenAPI: describing a file download endpoint
+title: OpenAPI - describing a file download endpoint
 parent: HowTo's
 nav_order: 10
 ---

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: OpenAPI: describing a file upload endpoint
+title: OpenAPI - describing a file upload endpoint
 parent: HowTo's
 nav_order: 15
 ---
