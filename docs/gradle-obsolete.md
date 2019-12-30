@@ -1,17 +1,15 @@
 ---
 layout: default
-title: Using Gradle
-nav_order: 9
+title: Using Gradle (obsolete)
+nav_order: 10
 ---
 
-# Using Gradle
+# Using Gradle (obsolete)
 {: .no_toc }
 
-Note: this page is for the gradle plugin since version '1.0.0.M3'. The new plugin provides proper
-up-to-date checking (it does not re-run the generatr when the api yaml is unchanged) and uses a
-simpler configuration.
+Note: this page is out-of-date describing the previous version of the gradle plugin. See the latest
+documentation [here][docs-gradle].
 {: .note .info .mb-6}
-
 
 The [openapi-generatr-gradle][generatr-gradle] is currently the only way to run a **openapi-generatr.** 
 
@@ -37,43 +35,46 @@ configuration:
             id 'com.github.hauner.openapi-generatr' version '<version>'
         }
         
-        
 # adding generatr-spring
 
-The plugin provides a `openapiGeneratr` dependency configuration that is used to add the generatr dependency.
+The plugin will automatically find the generatr in the `buildscript` classpath.
+ 
+If there is no `buildscript` block in the `build.gradle` copy the whole block below to the beginning of the
+`build.gradle` file.
 
-        dependencies {
-            // 'openapiGeneratr' is a custom configuration that is used by the gradle plugin. It allows
-            // to add multiple generatrs.
-            openapiGeneratr 'com.github.hauner.openapi:openapi-generatr-spring:1.0.0.A4'
-            
-            // .... 
-            // normal project dependencies
-            // .... 
+If there is already a `buildscript` add the additional maven repository and generatr-spring as `classpath`
+dependency.
+
+        buildscript {
+          repositories {
+             maven {
+               url  "https://dl.bintray.com/hauner/openapi-generatr"
+            }
+          }
+          
+          dependencies {
+            // adds generatr-spring
+            classpath 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
+          }
         }
-        
+
+
 # configuring generatr-spring
 
-The plugin will add an `openapiGeneratr` configuration block that is used to configure the generatrs.
-Configuration for a specific generatr is placed inside it using the generatr name as configuration
-block name.   
+The plugin will add a `generatrSpring` configuration block that is used to configure the generatr.
 
-        openapiGeneratr {
+        generatrSpring {
+            apiPath = "$projectDir/src/api/openapi.yaml"
+            typeMappings = "$projectDir/openapi-mapping.yaml"
 
-            spring {
-                apiPath = "$projectDir/src/api/openapi.yaml"
-                typeMappings = "$projectDir/openapi-mapping.yaml"
+            targetDir = "$projectDir/build/openapi"
+            packageName = "com.github.hauner.openapi.sample"
     
-                targetDir = "$projectDir/build/openapi"
-                packageName = "com.github.hauner.openapi.sample"
-        
-                showWarnings = true
-            }        
-
+            showWarnings = true
         }
         
-- `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the generatr. If
-set in the top level block it will be used for all configured generatrs.
+        
+- `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the generatr.
 
 - `typeMappings`: (**optional**) defines the type mapping if required. This is either a path to yaml
  file or a yaml string (i.e. the content of the yaml file). See [java type mapping][docs-mapping] for a
@@ -128,4 +129,5 @@ Adding automatic compilation in this way will also automatically include the gen
 
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [docs-mapping]: /openapi-generatr-spring/mapping/
+[docs-gradle]: /openapi-generatr-spring/gradle.html
 [docs-running]: #running-generatr-spring

@@ -29,7 +29,7 @@ See the [generatr intro][docs-generatr]{:target="_blank"} for a short example.
 {: .mb-6 }
 
 Note that the generatr is still in an early state of development and not all features are completely implemented.
-(November 2019)
+(December 2019)
 {: .note .info .mb-6}
 
 
