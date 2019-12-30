@@ -12,7 +12,7 @@ version '1.0.0.A3'
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
-    generatrApiVersion = '1.0.0.B1'
+    generatrApiVersion = '1.0.0.B2'
 
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
     bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'

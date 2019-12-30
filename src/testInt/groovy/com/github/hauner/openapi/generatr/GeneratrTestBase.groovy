@@ -19,7 +19,6 @@ package com.github.hauner.openapi.generatr
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import com.github.hauner.openapi.spring.generatr.SpringGeneratr
-import com.github.hauner.openapi.spring.generatr.SpringGeneratrOptions
 import groovy.io.FileType
 import org.junit.Rule
 import org.junit.Test
@@ -47,11 +46,11 @@ abstract class GeneratrTestBase {
         def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
 
         def generatr = new SpringGeneratr()
-        def options = new SpringGeneratrOptions(
+        def options = [
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root,
             packageName: packageName
-        )
+        ]
 
         def mapping = new File("./src/testInt/resources/${source}/mapping.yaml")
         if(mapping.exists ()) {

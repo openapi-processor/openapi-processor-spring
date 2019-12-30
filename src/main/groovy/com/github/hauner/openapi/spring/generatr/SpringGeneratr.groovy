@@ -34,7 +34,7 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  *
  *  @author Martin Hauner
  */
-class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
+class SpringGeneratr implements OpenApiGeneratr {
 
     @Override
     String getName () {
@@ -42,12 +42,7 @@ class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
     }
 
     @Override
-    Class<SpringGeneratrOptions> getOptionsType () {
-        return SpringGeneratrOptions
-    }
-
-    @Override
-    void run (SpringGeneratrOptions generatrOptions) {
+    void run (Map<String, ?> generatrOptions) {
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
             // external files with $refs to #/components/schema.
@@ -55,7 +50,7 @@ class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
         )
 
         SwaggerParseResult result = new OpenAPIV3Parser ()
-        .readLocation (generatrOptions.apiPath, null, opts)
+        .readLocation (generatrOptions.apiPath as String, null, opts)
 
         if (generatrOptions.showWarnings) {
             printWarnings(result.messages)
@@ -77,13 +72,13 @@ class SpringGeneratr implements OpenApiGeneratr<SpringGeneratrOptions> {
         writer.write (api)
     }
 
-    private ApiOptions convertOptions (SpringGeneratrOptions generatrOptions) {
+    private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
         def options = new ApiOptions()
         def reader = new TypeMappingReader ()
         options.apiPath = generatrOptions.apiPath
         options.targetDir = generatrOptions.targetDir
         options.packageName = generatrOptions.packageName
-        options.typeMappings = reader.read (generatrOptions.typeMappings)
+        options.typeMappings = reader.read (generatrOptions.typeMappings as String)
         options
     }
 
