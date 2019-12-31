@@ -30,7 +30,7 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
- *  Entry point of the openapi-generatr-gradle plugin.
+ *  Entry point of openapi-generatr-spring.
  *
  *  @author Martin Hauner
  */
