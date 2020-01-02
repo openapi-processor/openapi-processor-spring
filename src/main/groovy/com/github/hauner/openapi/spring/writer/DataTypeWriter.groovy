@@ -44,14 +44,14 @@ class DataTypeWriter {
 
         def propertyNames = dataType.properties.keySet ()
         propertyNames.each {
-            def javaPropertyName = Identifier.fromJson (it)
+            def javaPropertyName = Identifier.toCamelCase (it)
             def propDataType = dataType.getObjectProperty (it)
             target.write ("    @JsonProperty(\"$it\")\n")
             target.write ("    private ${propDataType.name} ${javaPropertyName};\n\n")
         }
 
         propertyNames.each {
-            def javaPropertyName = Identifier.fromJson (it)
+            def javaPropertyName = Identifier.toCamelCase (it)
             def propDataType = dataType.getObjectProperty (it)
             target.write (getGetter (javaPropertyName, propDataType))
             target.write (getSetter (javaPropertyName, propDataType))

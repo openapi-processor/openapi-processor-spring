@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,30 +22,48 @@ import spock.lang.Unroll
 class IdentifierSpec extends Specification {
 
     @Unroll
-    void "convert json string '#json' to valid java identifier '#identifier'" () {
+    void "convert source string '#src' to valid java identifier '#identifier'" () {
         expect:
-        Identifier.fromJson (json) == identifier
+        Identifier.toCamelCase (src) == identifier
 
         where:
-        json  | identifier
-        "a"   | "a"
-        "a b" | "aB"  // space is invalid
-        "a-b" | "aB"  // dash is invalid
-        "_ab" | "ab"  // underscore is valid but unwanted
-        "a_b" | "aB"  // underscore is valid but unwanted
+        src              | identifier
+        "a"              | "a"
+        "a b"            | "aB"  // space is invalid
+        "a-b"            | "aB"  // dash is invalid
+        'api/some/thing' | 'apiSomeThing'  // slash is invalid
+        "_ab"            | "ab"  // underscore is valid but unwanted
+        "a_b"            | "aB"  // underscore is valid but unwanted
     }
 
     @Unroll
-    void "convert json string '#json' to valid java enum identifier '#identifier'" () {
+    void "convert source string '#src' to valid java enum identifier '#identifier'" () {
         expect:
-        Identifier.toEnum (json) == identifier
+        Identifier.toEnum (src) == identifier
 
         where:
-        json  | identifier
-        "a"   | "A"
-        "a b" | "A_B"  // space is invalid
-        "a-b" | "A_B"  // dash is invalid
-        "_ab" | "AB"   // underscore is valid but unwanted
-        "a_b" | "A_B"  // underscore is valid but unwanted
+        src             | identifier
+        "a"              | "A"
+        "a b"            | "A_B"  // space is invalid
+        "a-b"            | "A_B"  // dash is invalid
+        'api/some/thing' | 'API_SOME_THING'  // slash is invalid
+        "_ab"            | "AB"   // underscore is valid but unwanted
+        "a_b"            | "A_B"  // underscore is valid but unwanted
     }
+
+    @Unroll
+    void "converts source string '#src' to valid java class identifier '#identifier'" () {
+        expect:
+        Identifier.toClass (src) == identifier
+
+        where:
+        src              | identifier
+        "a"              | "A"
+        "a b"            | "AB"  // space is invalid
+        "a-b"            | "AB"  // dash is invalid
+        'api/some/thing' | 'ApiSomeThing'  // slash is invalid
+        "_ab"            | "Ab"  // underscore is valid but unwanted
+        "a_b"            | "AB"  // underscore is valid but unwanted
+    }
+
 }

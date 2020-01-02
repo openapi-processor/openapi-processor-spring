@@ -30,7 +30,7 @@ import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.support.StringUtil
+import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
@@ -162,11 +162,11 @@ class ApiConverter {
     }
 
     private String getInlineTypeName (String path) {
-        StringUtil.toCamelCase (path.substring (1)) + 'RequestBody'
+        Identifier.toClass (path) + 'RequestBody'
     }
 
     private String getInlineResponseName (String path, String httpStatus) {
-        StringUtil.toCamelCase (path.substring (1)) + 'Response' + httpStatus
+        Identifier.toClass (path) + 'Response' + httpStatus
     }
 
     private Response createEmptyResponse () {

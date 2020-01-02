@@ -92,7 +92,7 @@ class MethodWriter {
 
     private String createMethodName (Endpoint endpoint) {
         def tokens = endpoint.path.tokenize ('/')
-        tokens = tokens.collect { Identifier.fromJson (it).capitalize () }
+        tokens = tokens.collect { Identifier.toCamelCase (it).capitalize () }
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"
     }
@@ -101,9 +101,9 @@ class MethodWriter {
         def ps = endpoint.parameters.collect {
 
             if (it.withAnnotation ()) {
-                "${createParameterAnnotation (it)} ${it.dataType.name} ${Identifier.fromJson (it.name)}"
+                "${createParameterAnnotation (it)} ${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
             } else {
-                "${it.dataType.name} ${Identifier.fromJson (it.name)}"
+                "${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
             }
 
         }

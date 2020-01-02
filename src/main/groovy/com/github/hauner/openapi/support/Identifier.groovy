@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,34 @@
 
 package com.github.hauner.openapi.support
 
+import groovy.transform.CompileStatic
+
 /**
  * Identifier support to create valid java identifiers.
  *
  * @author Martin Hauner
  */
+@CompileStatic
 class Identifier {
 
     /**
-     * converts a Json string as defined by http://www.json.org/ to a valid (camel case) java
-     * identifier. One way, ie it is not reversible.
+     * converts a source string to a valid (camel case) java identifier. One way, ie it is not
+     * reversible.
      *
      * conversion rules:
      * characters that are not valid java identifiers will be removed. The characters " ", "_",
      * "-" (valid or not) are interpreted as word separators and the next character will be
      * converted to upper case.
      *
-     * @param json a valid json "string"
+     * @param src the source "string"
      *
      * @return a valid camel case java identifier
      */
-    static String fromJson (String json) {
+    static String toCamelCase (String src) {
         def sb = new StringBuilder()
 
         def wordSplit = false
-        json.toCharArray ().eachWithIndex { char c, int idx ->
+        src.toCharArray ().eachWithIndex { char c, int idx ->
 
             if (idx == 0) {
                 if (isValidStart (c)) {
@@ -64,23 +67,40 @@ class Identifier {
     }
 
     /**
-     * converts a Json string as defined by http://www.json.org/ to a valid (upper case) java
-     * enum identifier. One way, ie it is not reversible.
+     * converts a source string to a valid (camel case) java class identifier. One way, ie it is
+     * not reversible.
+     *
+     * conversion rules:
+     * characters that are not valid java identifiers will be removed. The characters " ", "_",
+     * "-" (valid or not) are removed and interpreted as word separators. Each words first character
+     * will be converted to upper case.
+     *
+     * @param src the source string
+     *
+     * @return a valid camel case java class identifier
+     */
+    static String toClass (String src) {
+        toCamelCase (src).capitalize ()
+    }
+
+    /**
+     * converts a source string to a valid (all upper case) java enum identifier. One way, ie it is
+     * not reversible.
      *
      * conversion rules:
      * characters that are not valid java identifiers will be removed. The characters " ", "_",
      * "-" (valid or not) are interpreted as word separators and are replaced by "_" and the words
      * are converted to upper case.
      *
-     * @param json a valid json "string"
+     * @param src the source "string"
      *
      * @return a valid upper case enum java identifier
      */
-    static String toEnum (String json) {
+    static String toEnum (String src) {
         def sb = new StringBuilder()
 
         def wordSplit = false
-        json.toCharArray ().eachWithIndex { char c, int idx ->
+        src.toCharArray ().eachWithIndex { char c, int idx ->
 
             def cu = c.toUpperCase ()
             if (idx == 0) {
