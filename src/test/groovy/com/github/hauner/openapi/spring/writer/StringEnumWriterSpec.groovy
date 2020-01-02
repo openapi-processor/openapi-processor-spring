@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -151,6 +151,21 @@ public enum Foo {
         }
         throw new IllegalArgumentException(value);
     }
+
+""")
+    }
+
+    void "writes jackson imports" () {
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 """)
     }
