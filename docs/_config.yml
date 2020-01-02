@@ -14,6 +14,7 @@ remote_theme: pmarsceill/just-the-docs
 exclude:
   - README.md
   - SCRATCH.md
+  - api.md
 
 ##
 ## "just-the-docs" theme options
