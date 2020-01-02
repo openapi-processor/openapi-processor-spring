@@ -64,6 +64,11 @@ class InterfaceWriter {
                 imports.addAll (p.dataTypeImports)
             }
 
+            ep.requestBodies.each { b ->
+                imports.add (b.annotationWithPackage)
+//                imports.addAll (b.imports)
+            }
+
             if (!ep.response.empty) {
                 imports.addAll (ep.response.imports)
             }

@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -156,6 +157,28 @@ import org.springframework.web.bind.annotation.RequestParam;
         def result = extractImports (target.toString ())
         ! result.contains("""\
 import org.springframework.web.bind.annotation.RequestParam;
+""")
+    }
+
+    void "writes @RequestBody import" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
+                requestBodies: [
+                    new RequestBody(
+                        contentType: 'plain/text',
+                        requestBodyType: new StringDataType(),
+                        required: true
+                    )
+                ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.web.bind.annotation.RequestBody;
 """)
     }
 
