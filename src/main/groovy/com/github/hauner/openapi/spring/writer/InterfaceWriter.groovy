@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ class InterfaceWriter {
 
             ep.requestBodies.each { b ->
                 imports.add (b.annotationWithPackage)
-//                imports.addAll (b.imports)
+                imports.addAll (b.imports)
             }
 
             if (!ep.response.empty) {

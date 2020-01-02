@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
@@ -160,28 +161,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 """)
     }
 
-    void "writes @RequestBody import" () {
-        def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
-                requestBodies: [
-                    new RequestBody(
-                        contentType: 'plain/text',
-                        requestBodyType: new StringDataType(),
-                        required: true
-                    )
-                ])
-        ])
-
-        when:
-        writer.write (target, apiItf)
-
-        then:
-        def result = extractImports (target.toString ())
-        result.contains("""\
-import org.springframework.web.bind.annotation.RequestBody;
-""")
-    }
-
     void "writes import of request parameter data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             new Response (contentType: 'application/json', responseType: new NoneDataType())
@@ -203,6 +182,52 @@ import org.springframework.web.bind.annotation.RequestBody;
         def result = extractImports (target.toString ())
         result.contains("""\
 import model.Foo;
+""")
+    }
+
+    void "writes @RequestBody import" () {
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [new EmptyResponse()],
+                requestBodies: [
+                    new RequestBody(
+                        contentType: 'plain/text',
+                        requestBodyType: new StringDataType(),
+                        required: true
+                    )
+                ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import org.springframework.web.bind.annotation.RequestBody;
+""")
+    }
+
+    void "writes import of request body data type" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            new EmptyResponse ()
+        ], requestBodies: [
+            new RequestBody (
+                contentType: 'plain/text',
+                requestBodyType: new MappedDataType (
+                    pkg: 'com.github.hauner.openapi', type: 'Bar'),
+                required: true
+            )
+        ])
+
+        def apiItf = new Interface (name: 'name', endpoints: [endpoint])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import com.github.hauner.openapi.Bar;
 """)
     }
 
