@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,13 @@ class IdentifierSpec extends Specification {
         Identifier.fromJson (json) == identifier
 
         where:
-        json  | identifier
-        "a"   | "a"
-        "a b" | "aB"  // space is invalid
-        "a-b" | "aB"  // dash is invalid
-        "_ab" | "ab"  // underscore is valid but unwanted
-        "a_b" | "aB"  // underscore is valid but unwanted
+        json             | identifier
+        "a"              | "a"
+        "a b"            | "aB"  // space is invalid
+        "a-b"            | "aB"  // dash is invalid
+        'api/some/thing' | 'apiSomeThing'  // slash is invalid
+        "_ab"            | "ab"  // underscore is valid but unwanted
+        "a_b"            | "aB"  // underscore is valid but unwanted
     }
 
     @Unroll
@@ -41,11 +42,28 @@ class IdentifierSpec extends Specification {
         Identifier.toEnum (json) == identifier
 
         where:
-        json  | identifier
-        "a"   | "A"
-        "a b" | "A_B"  // space is invalid
-        "a-b" | "A_B"  // dash is invalid
-        "_ab" | "AB"   // underscore is valid but unwanted
-        "a_b" | "A_B"  // underscore is valid but unwanted
+        json             | identifier
+        "a"              | "A"
+        "a b"            | "A_B"  // space is invalid
+        "a-b"            | "A_B"  // dash is invalid
+        'api/some/thing' | 'API_SOME_THING'  // slash is invalid
+        "_ab"            | "AB"   // underscore is valid but unwanted
+        "a_b"            | "A_B"  // underscore is valid but unwanted
     }
+
+    @Unroll
+    void "converts source string '#src' to valid java class identifier '#identifier'" () {
+        expect:
+        Identifier.toClass (src) == identifier
+
+        where:
+        src              | identifier
+        "a"              | "A"
+        "a b"            | "AB"  // space is invalid
+        "a-b"            | "AB"  // dash is invalid
+        'api/some/thing' | 'ApiSomeThing'  // slash is invalid
+        "_ab"            | "Ab"  // underscore is valid but unwanted
+        "a_b"            | "AB"  // underscore is valid but unwanted
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 
 package com.github.hauner.openapi.support
 
+import groovy.transform.CompileStatic
+
 /**
  * Identifier support to create valid java identifiers.
  *
  * @author Martin Hauner
  */
+@CompileStatic
 class Identifier {
 
     /**
@@ -61,6 +64,23 @@ class Identifier {
         }
 
         sb.toString ()
+    }
+
+    /**
+     * converts a source string to a valid (camel case) java class identifier. One way, ie it is
+     * not reversible.
+     *
+     * conversion rules:
+     * characters that are not valid java identifiers will be removed. The characters " ", "_",
+     * "-" (valid or not) are removed and interpreted as word separators. Each words first character
+     * will be converted to upper case.
+     *
+     * @param src a source string
+     *
+     * @return a valid camel case java class identifier
+     */
+    static String toClass (String src) {
+        fromJson (src).capitalize ()
     }
 
     /**
