@@ -22,12 +22,12 @@ import spock.lang.Unroll
 class IdentifierSpec extends Specification {
 
     @Unroll
-    void "convert json string '#json' to valid java identifier '#identifier'" () {
+    void "convert source string '#src' to valid java identifier '#identifier'" () {
         expect:
-        Identifier.fromJson (json) == identifier
+        Identifier.toCamelCase (src) == identifier
 
         where:
-        json             | identifier
+        src              | identifier
         "a"              | "a"
         "a b"            | "aB"  // space is invalid
         "a-b"            | "aB"  // dash is invalid
@@ -37,12 +37,12 @@ class IdentifierSpec extends Specification {
     }
 
     @Unroll
-    void "convert json string '#json' to valid java enum identifier '#identifier'" () {
+    void "convert source string '#src' to valid java enum identifier '#identifier'" () {
         expect:
-        Identifier.toEnum (json) == identifier
+        Identifier.toEnum (src) == identifier
 
         where:
-        json             | identifier
+        src             | identifier
         "a"              | "A"
         "a b"            | "A_B"  // space is invalid
         "a-b"            | "A_B"  // dash is invalid
