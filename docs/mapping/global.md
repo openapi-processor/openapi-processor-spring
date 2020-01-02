@@ -29,7 +29,9 @@ A single global mapping can have the following properties:
 
 **from** is the type name used in the OpenAPI description and names the type that should be replaced
 by **to**. **to** is the fully qualified class name of the java type that should be used instead of
-**from**. **generics** defines the list of types that should be used as generic type parameters to the 
+**from**. 
+
+**generics** defines the list of types that should be used as generic type parameters to the 
 java type given by **to**.
 
 

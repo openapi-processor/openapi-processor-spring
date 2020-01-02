@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.support.Identifier
 
@@ -31,6 +32,14 @@ class StringEnumWriter {
     void write (Writer target, StringEnumDataType dataType) {
         headerWriter.write (target)
         target.write ("package ${dataType.packageName};\n\n")
+
+        List<String> imports = collectImports (dataType.packageName, dataType)
+        imports.each {
+            target.write ("import ${it};\n")
+        }
+        if (!imports.isEmpty ()) {
+            target.write ("\n")
+        }
 
         target.write ("public enum ${dataType.type} {\n\n")
 
@@ -70,6 +79,16 @@ class StringEnumWriter {
 """)
 
         target.write ("}\n")
+    }
+
+    List<String> collectImports(String packageName, DataType dataType) {
+        Set<String> imports = []
+        imports.add ('com.fasterxml.jackson.annotation.JsonCreator')
+        imports.add ('com.fasterxml.jackson.annotation.JsonValue')
+        imports.addAll (dataType.referencedImports)
+
+        new ImportFilter ().filter (packageName, imports)
+            .sort ()
     }
 
 }
