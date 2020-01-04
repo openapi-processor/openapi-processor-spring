@@ -30,5 +30,5 @@ will generate the following interface method:
 
 ```java
     @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
+    ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
 ```
