@@ -23,7 +23,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.RequestBody
+import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
@@ -40,6 +40,7 @@ import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.parameters.Parameter
+import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 /**
@@ -81,7 +82,6 @@ class ApiConverter {
     }
 
     private Map<String, PathItem> addEndpointsToInterfaces (OpenAPI api, Api target) {
-        def resolver = new RefResolver (api.components)
 
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
             String path = pathEntry.key
@@ -94,24 +94,10 @@ class ApiConverter {
                 Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
 
                 try {
+                    def resolver = new RefResolver (api.components)
+
                     collectParameters (httpOperation.parameters, ep, target.models, resolver)
-
-                    if (httpOperation.requestBody != null) {
-                        def required = httpOperation.requestBody.required != null ?: false
-                        httpOperation.requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
-                            def contentType = requestBodyEntry.key
-                            def requestBody = requestBodyEntry.value
-
-                            def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
-                            info.resolver = resolver
-
-                            if (contentType == MULTIPART) {
-                                ep.parameters.addAll (createMultipartParameter (info, required))
-                            } else {
-                                ep.requestBodies.add (createRequestBody (contentType, info, required, target.models))
-                            }
-                        }
-                    }
+                    collectRequestBody (httpOperation.requestBody, ep, target.models, resolver)
 
                     httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
                         def httpStatus = responseEntry.key
@@ -140,7 +126,29 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, resolver) {
+    private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        if (requestBody == null) {
+            return
+        }
+
+        def required = requestBody.required != null ?: false
+
+        requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
+            def contentType = requestBodyEntry.key
+            def reqBody = requestBodyEntry.value
+
+            def info = new SchemaInfo (ep.path, reqBody.schema, getInlineTypeName (ep.path))
+            info.resolver = resolver
+
+            if (contentType == MULTIPART) {
+                ep.parameters.addAll (createMultipartParameter (info, required))
+            } else {
+                ep.requestBodies.add (createRequestBody (contentType, info, required, dataTypes))
+            }
+        }
+    }
+
+    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
         parameters.each { Parameter parameter ->
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
@@ -157,10 +165,10 @@ class ApiConverter {
         }
     }
 
-    private RequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
+    private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
-        new RequestBody(
+        new ModelRequestBody(
             contentType: contentType,
             requestBodyType: dataType,
             required: required)
