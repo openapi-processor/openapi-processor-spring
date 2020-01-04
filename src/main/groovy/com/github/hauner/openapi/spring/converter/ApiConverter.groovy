@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,13 @@ import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
+import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
@@ -99,17 +102,32 @@ class ApiConverter {
                             def contentType = requestBodyEntry.key
                             def requestBody = requestBodyEntry.value
 
-                            def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
-                            info.resolver = resolver
+                            if (contentType == "multipart/form-data") {
+                                def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
+                                info.resolver = resolver
 
-                            DataType dataType = dataTypeConverter.convert (info, target.models)
+                                DataType dataType = dataTypeConverter.convert (info, new DataTypes())
+                                if (! (dataType instanceof ObjectDataType)) {
+                                    throw new MultipartResponseBodyException(path)
+                                }
 
-                            def body = new RequestBody(
-                                contentType: contentType,
-                                requestBodyType: dataType,
-                                required: required)
+                                dataType.getObjectProperties ().each {
+                                    def rbp = new MultipartParameter (name: it.key, required: required, dataType: it.value)
+                                    ep.parameters.add (rbp)
+                                }
+                            } else {
+                                def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
+                                info.resolver = resolver
 
-                            ep.requestBodies.add (body)
+                                DataType dataType = dataTypeConverter.convert (info, target.models)
+
+                                def body = new RequestBody(
+                                    contentType: contentType,
+                                    requestBodyType: dataType,
+                                    required: required)
+
+                                ep.requestBodies.add (body)
+                            }
                         }
                     }
 
