@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.spring.model.parameters
 
-import org.junit.Ignore
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+/**
+ * OpenAPI multipart request body is passed as {@code @RequestParam}
+ *
+ * @author Martin Hauner
+ */
+class MultipartParameter extends Parameter {
 
-//@Ignore
-@RunWith(Parameterized)
-class GeneratrPendingTest extends GeneratrTestBase {
-
-    @Parameterized.Parameters(name = "{0}")
-    static Collection<TestSet> sources () {
-        return [
-            new TestSet(name: 'params-request-body-multipart-form-data')
-        ]
+    String getAnnotationName () {
+        "RequestParam"
     }
 
-    GeneratrPendingTest (TestSet testSet) {
-        super (testSet)
+    boolean withAnnotation () {
+        true
+    }
+
+    boolean withParameters () {
+        true
     }
 
 }

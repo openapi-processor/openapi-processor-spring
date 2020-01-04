@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.spring.converter
 
-import org.junit.Ignore
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+/**
+ * thrown when the ApiConverter hits a multipart/form-data response body where
+ * the schema is not an object.
+ *
+ * @author Martin Hauner
+ */
+class MultipartResponseBodyException extends RuntimeException {
 
-//@Ignore
-@RunWith(Parameterized)
-class GeneratrPendingTest extends GeneratrTestBase {
+    String path
 
-    @Parameterized.Parameters(name = "{0}")
-    static Collection<TestSet> sources () {
-        return [
-            new TestSet(name: 'params-request-body-multipart-form-data')
-        ]
+    MultipartResponseBodyException(String path) {
+        super()
+        this.path = path
     }
 
-    GeneratrPendingTest (TestSet testSet) {
-        super (testSet)
+    @Override
+    String getMessage () {
+        "the schema of the multipart response body of ${path} should be an object!"
     }
 
 }

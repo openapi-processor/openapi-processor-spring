@@ -1,0 +1,43 @@
+openapi: 3.0.2
+info:
+  title: params-request-body-multipart-form-data
+  version: 1.0.0
+
+paths:
+  /multipart/single-file:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                other:
+                  type: string
+      responses:
+        '204':
+          description: empty
+
+  /multipart/multiple-files:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                other:
+                  type: string
+      responses:
+        '204':
+          description: empty
