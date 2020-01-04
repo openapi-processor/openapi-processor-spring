@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpoint(@RequestParam(name = "foo") String foo);
+    ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo") String foo);
 
     @GetMapping(path = "/endpoint-optional")
-    ResponseEntity<void> getEndpointOptional(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+    ResponseEntity<Void> getEndpointOptional(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 
 }

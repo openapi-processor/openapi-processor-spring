@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint-object")
-    ResponseEntity<void> getEndpointObject(@RequestParam Props props);
+    ResponseEntity<Void> getEndpointObject(@RequestParam Props props);
 
     @GetMapping(path = "/endpoint-map")
-    ResponseEntity<void> getEndpointMap(@RequestParam(name = "props") Map props);
+    ResponseEntity<Void> getEndpointMap(@RequestParam(name = "props") Map props);
 
 }

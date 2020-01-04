@@ -55,7 +55,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getPing();
+    ResponseEntity<Void> getPing();
 """
     }
 
@@ -162,7 +162,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo") String foo);
+    ResponseEntity<Void> getFoo(@RequestParam(name = "foo") String foo);
 """
     }
 
@@ -179,7 +179,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false) String foo);
+    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false) String foo);
 """
     }
 
@@ -196,7 +196,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestHeader(name = "x-foo") String xFoo);
+    ResponseEntity<Void> getFoo(@RequestHeader(name = "x-foo") String xFoo);
 """
     }
 
@@ -213,7 +213,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
+    ResponseEntity<Void> getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
 """
     }
 
@@ -230,7 +230,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@CookieValue(name = "foo") String foo);
+    ResponseEntity<Void> getFoo(@CookieValue(name = "foo") String foo);
 """
     }
 
@@ -247,7 +247,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@CookieValue(name = "foo", required = false) String foo);
+    ResponseEntity<Void> getFoo(@CookieValue(name = "foo", required = false) String foo);
 """
     }
 
@@ -269,7 +269,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(Foo foo);
+    ResponseEntity<Void> getFoo(Foo foo);
 """
     }
 
@@ -286,7 +286,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo") Map foo);
+    ResponseEntity<Void> getFoo(@RequestParam(name = "foo") Map foo);
 """
     }
 
@@ -303,7 +303,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFOOooBARrr(@RequestParam(name = "foo") String foo);
+    ResponseEntity<Void> getFOOooBARrr(@RequestParam(name = "foo") String foo);
 """
     }
 
@@ -320,7 +320,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "_fo-o") String foO);
+    ResponseEntity<Void> getFoo(@RequestParam(name = "_fo-o") String foO);
 """
     }
 
@@ -341,7 +341,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    ResponseEntity<void> postFoo(@RequestBody FooRequestBody body);
+    ResponseEntity<Void> postFoo(@RequestBody FooRequestBody body);
 """
     }
 
@@ -363,7 +363,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    ResponseEntity<void> postFoo(@RequestBody(required = false) FooRequestBody body);
+    ResponseEntity<Void> postFoo(@RequestBody(required = false) FooRequestBody body);
 """
     }
 
@@ -382,7 +382,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 """
     }
 

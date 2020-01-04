@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint")
-    ResponseEntity<void> getEndpoint();
+    ResponseEntity<Void> getEndpoint();
 
     @PutMapping(path = "/endpoint")
-    ResponseEntity<void> putEndpoint();
+    ResponseEntity<Void> putEndpoint();
 
     @PostMapping(path = "/endpoint")
-    ResponseEntity<void> postEndpoint();
+    ResponseEntity<Void> postEndpoint();
 
     @PatchMapping(path = "/endpoint")
-    ResponseEntity<void> patchEndpoint();
+    ResponseEntity<Void> patchEndpoint();
 
 }
