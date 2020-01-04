@@ -36,12 +36,12 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.parameters.Parameter
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
+import io.swagger.v3.oas.models.responses.ApiResponses
 
 /**
  * Converts the open api model to a new model that is better suited for generating source files
@@ -98,30 +98,33 @@ class ApiConverter {
 
                     collectParameters (httpOperation.parameters, ep, target.models, resolver)
                     collectRequestBody (httpOperation.requestBody, ep, target.models, resolver)
-
-                    httpOperation.responses.each { Map.Entry<String, ApiResponse> responseEntry ->
-                        def httpStatus = responseEntry.key
-                        def httpResponse = responseEntry.value
-
-                        if (!httpResponse.content) {
-                            ep.responses.add (createEmptyResponse ())
-                        } else {
-                            List<Response> responses = createResponses (
-                                path,
-                                httpResponse,
-                                getInlineResponseName (path, httpStatus),
-                                target,
-                            resolver)
-
-                            ep.responses.addAll (responses)
-                        }
-                    }
+                    collectResponses (httpOperation.responses, ep, target.models, resolver)
 
                     itf.endpoints.add (ep)
 
                 } catch (UnknownDataTypeException e) {
                     log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message)
                 }
+            }
+        }
+    }
+
+    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+            def httpStatus = responseEntry.key
+            def httpResponse = responseEntry.value
+
+            if (!httpResponse.content) {
+                ep.responses.add (createEmptyResponse ())
+            } else {
+                List<Response> results = createResponses (
+                    ep.path,
+                    httpResponse,
+                    getInlineResponseName (ep.path, httpStatus),
+                    dataTypes,
+                    resolver)
+
+                ep.responses.addAll (results)
             }
         }
     }
@@ -207,7 +210,7 @@ class ApiConverter {
         new Response (responseType: dataTypeConverter.none ())
     }
 
-    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, Api target, RefResolver resolver) {
+    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, DataTypes dataTypes, RefResolver resolver) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
@@ -222,9 +225,7 @@ class ApiConverter {
                 inlineName)
             info.resolver = resolver
 
-            DataType dataType = dataTypeConverter.convert (
-                info,
-                target.models)
+            DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
             def response = new Response (
                 contentType: contentType,
