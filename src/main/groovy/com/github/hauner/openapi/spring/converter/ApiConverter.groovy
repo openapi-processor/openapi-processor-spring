@@ -49,6 +49,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
  */
 @Slf4j
 class ApiConverter {
+    public static final String MULTIPART = "multipart/form-data"
 
     private DataTypeConverter dataTypeConverter
     private ApiOptions options
@@ -93,7 +94,7 @@ class ApiConverter {
 
                 try {
                     httpOperation.parameters.each { Parameter parameter ->
-                        ep.parameters.addAll (createParameter(path, parameter, target, resolver))
+                        ep.parameters.add (createParameter(path, parameter, target, resolver))
                     }
 
                     if (httpOperation.requestBody != null) {
@@ -102,31 +103,13 @@ class ApiConverter {
                             def contentType = requestBodyEntry.key
                             def requestBody = requestBodyEntry.value
 
-                            if (contentType == "multipart/form-data") {
-                                def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
-                                info.resolver = resolver
+                            def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
+                            info.resolver = resolver
 
-                                DataType dataType = dataTypeConverter.convert (info, new DataTypes())
-                                if (! (dataType instanceof ObjectDataType)) {
-                                    throw new MultipartResponseBodyException(path)
-                                }
-
-                                dataType.getObjectProperties ().each {
-                                    def rbp = new MultipartParameter (name: it.key, required: required, dataType: it.value)
-                                    ep.parameters.add (rbp)
-                                }
+                            if (contentType == MULTIPART) {
+                                ep.parameters.addAll (createMultipartParameter (info, required))
                             } else {
-                                def info = new SchemaInfo (path, requestBody.schema, getInlineTypeName (path))
-                                info.resolver = resolver
-
-                                DataType dataType = dataTypeConverter.convert (info, target.models)
-
-                                def body = new RequestBody(
-                                    contentType: contentType,
-                                    requestBodyType: dataType,
-                                    required: required)
-
-                                ep.requestBodies.add (body)
+                                ep.requestBodies.add (createRequestBody (contentType, info, required, target.models))
                             }
                         }
                     }
@@ -156,6 +139,26 @@ class ApiConverter {
                 }
             }
         }
+    }
+
+    private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {
+        DataType dataType = dataTypeConverter.convert (info, new DataTypes())
+        if (! (dataType instanceof ObjectDataType)) {
+            throw new MultipartResponseBodyException(info.path)
+        }
+
+        dataType.getObjectProperties ().collect {
+            new MultipartParameter (name: it.key, required: required, dataType: it.value)
+        }
+    }
+
+    private RequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
+        DataType dataType = dataTypeConverter.convert (info, dataTypes)
+
+        new RequestBody(
+            contentType: contentType,
+            requestBodyType: dataType,
+            required: required)
     }
 
     private ModelParameter createParameter (String path, Parameter parameter, Api target, resolver) {
