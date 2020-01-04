@@ -109,23 +109,9 @@ class ApiConverter {
         }
     }
 
-    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
-        responses.each { Map.Entry<String, ApiResponse> responseEntry ->
-            def httpStatus = responseEntry.key
-            def httpResponse = responseEntry.value
-
-            if (!httpResponse.content) {
-                ep.responses.add (createEmptyResponse ())
-            } else {
-                List<Response> results = createResponses (
-                    ep.path,
-                    httpResponse,
-                    getInlineResponseName (ep.path, httpStatus),
-                    dataTypes,
-                    resolver)
-
-                ep.responses.addAll (results)
-            }
+    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        parameters.each { Parameter parameter ->
+            ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
     }
 
@@ -151,30 +137,24 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
-        parameters.each { Parameter parameter ->
-            ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
+    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+            def httpStatus = responseEntry.key
+            def httpResponse = responseEntry.value
+
+            if (!httpResponse.content) {
+                ep.responses.add (createEmptyResponse ())
+            } else {
+                List<Response> results = createResponses (
+                    ep.path,
+                    httpResponse,
+                    getInlineResponseName (ep.path, httpStatus),
+                    dataTypes,
+                    resolver)
+
+                ep.responses.addAll (results)
+            }
         }
-    }
-
-    private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {
-        DataType dataType = dataTypeConverter.convert (info, new DataTypes())
-        if (! (dataType instanceof ObjectDataType)) {
-            throw new MultipartResponseBodyException(info.path)
-        }
-
-        dataType.getObjectProperties ().collect {
-            new MultipartParameter (name: it.key, required: required, dataType: it.value)
-        }
-    }
-
-    private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
-        DataType dataType = dataTypeConverter.convert (info, dataTypes)
-
-        new ModelRequestBody(
-            contentType: contentType,
-            requestBodyType: dataType,
-            required: required)
     }
 
     private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
@@ -198,16 +178,24 @@ class ApiConverter {
         }
     }
 
-    private String getInlineTypeName (String path) {
-        Identifier.toClass (path) + 'RequestBody'
+    private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
+        DataType dataType = dataTypeConverter.convert (info, dataTypes)
+
+        new ModelRequestBody(
+            contentType: contentType,
+            requestBodyType: dataType,
+            required: required)
     }
 
-    private String getInlineResponseName (String path, String httpStatus) {
-        Identifier.toClass (path) + 'Response' + httpStatus
-    }
+    private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {
+        DataType dataType = dataTypeConverter.convert (info, new DataTypes())
+        if (! (dataType instanceof ObjectDataType)) {
+            throw new MultipartResponseBodyException(info.path)
+        }
 
-    private Response createEmptyResponse () {
-        new Response (responseType: dataTypeConverter.none ())
+        dataType.getObjectProperties ().collect {
+            new MultipartParameter (name: it.key, required: required, dataType: it.value)
+        }
     }
 
     private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, DataTypes dataTypes, RefResolver resolver) {
@@ -235,6 +223,18 @@ class ApiConverter {
         }
 
         responses
+    }
+
+    private String getInlineTypeName (String path) {
+        Identifier.toClass (path) + 'RequestBody'
+    }
+
+    private String getInlineResponseName (String path, String httpStatus) {
+        Identifier.toClass (path) + 'Response' + httpStatus
+    }
+
+    private Response createEmptyResponse () {
+        new Response (responseType: dataTypeConverter.none ())
     }
 
     private void collectInterfaces (OpenAPI api, Api target) {
