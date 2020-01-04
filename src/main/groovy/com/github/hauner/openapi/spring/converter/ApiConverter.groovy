@@ -36,6 +36,7 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.parameters.Parameter
@@ -93,9 +94,7 @@ class ApiConverter {
                 Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
 
                 try {
-                    httpOperation.parameters.each { Parameter parameter ->
-                        ep.parameters.add (createParameter(path, parameter, target, resolver))
-                    }
+                    collectParameters (httpOperation.parameters, ep, target.models, resolver)
 
                     if (httpOperation.requestBody != null) {
                         def required = httpOperation.requestBody.required != null ?: false
@@ -141,6 +140,12 @@ class ApiConverter {
         }
     }
 
+    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, resolver) {
+        parameters.each { Parameter parameter ->
+            ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
+        }
+    }
+
     private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {
         DataType dataType = dataTypeConverter.convert (info, new DataTypes())
         if (! (dataType instanceof ObjectDataType)) {
@@ -161,11 +166,11 @@ class ApiConverter {
             required: required)
     }
 
-    private ModelParameter createParameter (String path, Parameter parameter, Api target, resolver) {
+    private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
         def info = new ParameterSchemaInfo (path, parameter.schema, parameter.name)
         info.resolver = resolver
 
-        DataType dataType = dataTypeConverter.convert (info, target.models)
+        DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
         switch (parameter.in) {
             case 'query':
