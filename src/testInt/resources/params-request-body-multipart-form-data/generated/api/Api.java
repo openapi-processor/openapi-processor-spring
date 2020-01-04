@@ -5,17 +5,17 @@
 
 package generated.api;
 
-import generated.model.Book;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface Api {
 
-    @PostMapping(path = "/multipart/single-file", consumes = {"multipart/form-data"})
+    @PostMapping(path = "/multipart/single-file")
     ResponseEntity<void> postMultipartSingleFile(@RequestParam(name = "file") MultipartFile file, @RequestParam(name = "other") String other);
 
-    @PostMapping(path = "/multipart/multiple-files", consumes = {"multipart/form-data"})
+    @PostMapping(path = "/multipart/multiple-files")
     ResponseEntity<void> postMultipartMultipleFiles(@RequestParam(name = "files") MultipartFile[] files, @RequestParam(name = "other") String other);
 
 }
