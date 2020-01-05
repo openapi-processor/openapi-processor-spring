@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,21 +118,21 @@ import java.util.List;
 
         then:
         target.toString ().contains ("""\
-    public String getIsbn () {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn (String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
 """)
         target.toString ().contains ("""\
-    public String getTitle () {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle (String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 

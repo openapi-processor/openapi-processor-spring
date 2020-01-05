@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ class DataTypeWriter {
 
     private String getGetter (String propertyName, DataType propDataType) {
         """\
-    public ${propDataType.name} get${propertyName.capitalize ()} () {
+    public ${propDataType.name} get${propertyName.capitalize ()}() {
         return ${propertyName};
     }
 
@@ -71,7 +71,7 @@ class DataTypeWriter {
 
     private String getSetter (String propertyName, DataType propDataType) {
         """\
-    public void set${propertyName.capitalize ()} (${propDataType.name} ${propertyName}) {
+    public void set${propertyName.capitalize ()}(${propDataType.name} ${propertyName}) {
         this.${propertyName} = ${propertyName};
     }
 
