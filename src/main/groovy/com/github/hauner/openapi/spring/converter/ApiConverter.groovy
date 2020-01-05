@@ -126,7 +126,7 @@ class ApiConverter {
             def contentType = requestBodyEntry.key
             def reqBody = requestBodyEntry.value
 
-            def info = new SchemaInfo (ep.path, reqBody.schema, getInlineTypeName (ep.path))
+            def info = new SchemaInfo (ep.path, reqBody.schema, getInlineRequestBodyName (ep.path))
             info.resolver = resolver
 
             if (contentType == MULTIPART) {
@@ -225,7 +225,7 @@ class ApiConverter {
         responses
     }
 
-    private String getInlineTypeName (String path) {
+    private String getInlineRequestBodyName (String path) {
         Identifier.toClass (path) + 'RequestBody'
     }
 
