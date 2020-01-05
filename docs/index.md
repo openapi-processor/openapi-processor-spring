@@ -59,6 +59,8 @@ See the [release notes][generatr-releases]{:target="_blank"}.
    
   it is possible to define the mapping globally or for a specific response or parameter or even only for a specific
   endpoint. 
+
+- generates human readable code.
     
 - gradle support via [openapi-generatr-gradle][generatr-gradle] plugin (the plugin is currently the only option
  to run the generatr).
@@ -70,8 +72,6 @@ See the [release notes][generatr-releases]{:target="_blank"}.
   each response content type.
  
 - <span class="label label-yellow">planned</span> WebFlux support, may need its own generatr. 
-
-- <span class="label label-yellow">planned</span> nicely formatted source code by running a code formatter.
 
 - the generated code does not use swagger annotations. There is no need to generate the documentation from the code
   when the code is generated from the documentation (i.e. an openapi.yaml). 
