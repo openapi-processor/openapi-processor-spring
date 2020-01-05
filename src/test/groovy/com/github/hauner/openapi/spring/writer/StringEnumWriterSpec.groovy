@@ -75,7 +75,6 @@ public enum Foo {
         then:
         target.toString ().contains ("""\
 public enum Foo {
-
     FOO("foo"),
     FOO_2("_foo-2"),
     FOO_FOO("foo-foo");
@@ -144,7 +143,7 @@ public enum Foo {
 
     @JsonCreator
     public static Foo fromValue(String value) {
-        for (Foo val: Foo.values()) {
+        for (Foo val : Foo.values()) {
             if (val.value.equals(value)) {
                 return val;
             }

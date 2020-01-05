@@ -15,6 +15,7 @@ public interface EndpointApi {
     ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo") String foo);
 
     @GetMapping(path = "/endpoint-optional")
-    ResponseEntity<Void> getEndpointOptional(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+    ResponseEntity<Void> getEndpointOptional(
+            @RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 
 }

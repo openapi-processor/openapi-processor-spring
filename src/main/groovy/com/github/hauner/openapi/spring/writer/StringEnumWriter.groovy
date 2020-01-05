@@ -41,7 +41,7 @@ class StringEnumWriter {
             target.write ("\n")
         }
 
-        target.write ("public enum ${dataType.type} {\n\n")
+        target.write ("public enum ${dataType.type} {\n")
 
         def values = []
         dataType.values.each {
@@ -68,7 +68,7 @@ class StringEnumWriter {
         target.write("""\
     @JsonCreator
     public static ${dataType.type} fromValue(String value) {
-        for (${dataType.type} val: ${dataType.type}.values()) {
+        for (${dataType.type} val : ${dataType.type}.values()) {
             if (val.value.equals(value)) {
                 return val;
             }

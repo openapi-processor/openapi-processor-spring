@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface Api {
 
-    @PostMapping(path = "/book", consumes = {"application/json"}, produces = {"application/json"})
+    @PostMapping(
+            path = "/book",
+            consumes = {"application/json"},
+            produces = {"application/json"})
     ResponseEntity<Book> postBook(@RequestBody Book body);
 
 }

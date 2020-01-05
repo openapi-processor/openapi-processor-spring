@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface EnumApi {
 
     @GetMapping(path = "/endpoint")
-    ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo") Foo foo, @RequestParam(name = "bar") Bar bar);
+    ResponseEntity<Void> getEndpoint(
+            @RequestParam(name = "foo") Foo foo, @RequestParam(name = "bar") Bar bar);
 
 }

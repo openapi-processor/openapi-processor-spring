@@ -13,13 +13,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface Api {
 
-    @GetMapping(path = "/array-global", produces = {"application/vnd.any"})
+    @GetMapping(
+            path = "/array-global",
+            produces = {"application/vnd.any"})
     ResponseEntity<Collection<String>> getArrayGlobal();
 
-    @GetMapping(path = "/array-global-response", produces = {"application/vnd.global-response"})
+    @GetMapping(
+            path = "/array-global-response",
+            produces = {"application/vnd.global-response"})
     ResponseEntity<List<String>> getArrayGlobalResponse();
 
-    @GetMapping(path = "/array-endpoint-response", produces = {"application/vnd.any"})
+    @GetMapping(
+            path = "/array-endpoint-response",
+            produces = {"application/vnd.any"})
     ResponseEntity<Set<String>> getArrayEndpointResponse();
 
 }

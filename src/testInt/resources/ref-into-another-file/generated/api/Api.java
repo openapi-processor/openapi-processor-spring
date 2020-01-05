@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface Api {
 
-    @GetMapping(path = "/book", produces = {"application/json"})
+    @GetMapping(
+            path = "/book",
+            produces = {"application/json"})
     ResponseEntity<Book> getBook();
 
 }

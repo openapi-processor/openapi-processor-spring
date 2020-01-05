@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Foo {
-
     FOO("foo"),
     FOO_2("foo-2"),
     FOO_FOO("foo-foo");
@@ -27,7 +26,7 @@ public enum Foo {
 
     @JsonCreator
     public static Foo fromValue(String value) {
-        for (Foo val: Foo.values()) {
+        for (Foo val : Foo.values()) {
             if (val.value.equals(value)) {
                 return val;
             }

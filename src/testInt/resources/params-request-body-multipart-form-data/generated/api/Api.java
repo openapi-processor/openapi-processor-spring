@@ -13,9 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 public interface Api {
 
     @PostMapping(path = "/multipart/single-file")
-    ResponseEntity<Void> postMultipartSingleFile(@RequestParam(name = "file") MultipartFile file, @RequestParam(name = "other") String other);
+    ResponseEntity<Void> postMultipartSingleFile(
+            @RequestParam(name = "file") MultipartFile file,
+            @RequestParam(name = "other") String other);
 
     @PostMapping(path = "/multipart/multiple-files")
-    ResponseEntity<Void> postMultipartMultipleFiles(@RequestParam(name = "files") MultipartFile[] files, @RequestParam(name = "other") String other);
+    ResponseEntity<Void> postMultipartMultipleFiles(
+            @RequestParam(name = "files") MultipartFile[] files,
+            @RequestParam(name = "other") String other);
 
 }
