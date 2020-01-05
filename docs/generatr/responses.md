@@ -2,7 +2,7 @@
 layout: default
 title: Responses
 parent: The generatr
-nav_order: 10
+nav_order: 20
 ---
 
 ## Responses

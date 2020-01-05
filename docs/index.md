@@ -28,8 +28,8 @@ correctly.
 See the [generatr intro][docs-generatr]{:target="_blank"} for a short example.
 {: .mb-6 }
 
-Note that the generatr is still in an early state of development and not all features are completely implemented.
-(December 2019)
+January 2020: The generatr is ready to try but note that the generatr is still in an early state of
+development and may not generate the correct code yet in all cases. See [feedback](#feedback).
 {: .note .info .mb-6}
 
 
@@ -49,41 +49,19 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 
 ## Features
 
-- <span class="label label-green">partially implemented</span> generates only java interfaces and java model classes
-  (get/set pojos) for all defined endpoints and schemas to allow (nearly) full control of the endpoint
-   implementation. It does not generate any other file. 
-  
-  - <span class="label label-green">done (since 1.0.0.A2)</span> The generatr does now generate model classes
-  with `@JsonProperty` annotated properties, i.e. the schema property names in the OpenAPI description are not limited
-  to valid java identifiers anymore.
+- generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints and schemas to
+ allow (nearly) full control of the endpoint implementation. It does not generate any other file. See
+ [generatr][docs-generatr].
 
-  - <span class="label label-green">done (since 1.0.0.A2)</span> support for the OpenAPI `requestBody:` block.
-
-  - <span class="label label-green">done</span> full parameter support:
-     - <span class="label label-green">done</span> query parameters, i.e. `in: query`
-     - <span class="label label-green">done (since 1.0.0.A2)</span> path parameters, i.e. `in: path`
-     - <span class="label label-green">done (since 1.0.0.A2)</span> header parameters, i.e. `in: header`
-     - <span class="label label-green">done (since 1.0.0.A2)</span> cookie parameters, i.e. `in: cookie`
-{: .mb-5 }
-
-- <span class="label label-green">partially implemented</span> simple & flexible type mappings with generic support
-  (one level) to map schemas defined in the openapi.yaml to existing java types. For example to map the openapi
-  `array` type to different java collections or to map paging parameters and results to Spring types like `Page<>`
-   & `Pageable`.
+- powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml to
+  existing java types. For example to map the openapi `array` type to different java collections or to
+  map paging parameters and results to Spring types like `Page<>` & `Pageable`. See [type mapping][docs-mapping].
    
   it is possible to define the mapping globally or for a specific response or parameter or even only for a specific
   endpoint. 
-
-  - <span class="label label-red">caveat</span> the mapping can be defined at all levels but is not yet honored
-    at all places.
-{: .mb-5 }
     
-- <span class="label label-green">implemented</span> gradle support via [openapi-generatr-gradle][generatr-gradle] plugin.
-
-  - <span class="label label-red">caveat</span> the gradle plugin is currently the only option to run the
-  generatr.
-{: .mb-5 }
-
+- gradle support via [openapi-generatr-gradle][generatr-gradle] plugin (the plugin is currently the only option
+ to run the generatr).
 
 - <span class="label label-yellow">planned</span> add additional parameters to an endpoint which are not defined in
   the openapi description. For example to pass a `HttpServletRequest` to the endpoint implementation.
@@ -102,6 +80,30 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 The generated source code has to be included in a project to compile it. This is easily done
 with the [openapi-generatr-gradle][generatr-gradle] plugin. See [Using Gradle][docs-gradle].
 {: .note .info .mb-6}
+
+## Feedback
+
+In case some feature is missing or the generated code is not 100% what you would expect create an [issue][generatr-issues]
+preferably with a test case. Providing a test case will help significantly :-) 
+
+A test case is a single folder with an openapi.yaml file and the expected Java files the generatr should create.
+The structure looks like this:
+
+    my-new-test-case/
+        openapi.yaml
+        mapping.yaml
+        generated/
+           api/
+               AnEndpointInterface.java
+               .. more api interfaces ..
+           model/
+               AModelClass.java
+               AnotherModelClass.java
+               .. more model files ..
+
+The `mapping.yaml` contains the type mapping information and is an optional file.
+
+See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 
 ## License
 
@@ -124,11 +126,14 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 
 [docs-gradle]: /openapi-generatr-spring/gradle.html
 [docs-generatr]: /openapi-generatr-spring/generatr/
+[docs-mapping]: /openapi-generatr-spring/mapping/
 
 [bintray]: https://bintray.com/hauner/openapi-generatr
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [generatr-releases]: https://github.com/hauner/openapi-generatr-spring/releases
 [generatr-license]: https://github.com/hauner/openapi-generatr-spring/blob/master/LICENSE
+[generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
+[generatr-issues]: https://github.com/hauner/openapi-generatr-spring/issues
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot

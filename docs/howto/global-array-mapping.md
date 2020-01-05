@@ -5,7 +5,7 @@ parent: HowTo's
 nav_order: 1
 ---
 
-# map openapi array (globally) to a java collection type 
+# generatr: map openapi array (globally) to a java collection type 
 
 By default the OpenAPI `array` is mapped to a simple java array. It is possible to change that default 
 mapping for example to `java.util.Collection` by adding a type mapping to the [`mapping.yaml`][docs-mapping].
