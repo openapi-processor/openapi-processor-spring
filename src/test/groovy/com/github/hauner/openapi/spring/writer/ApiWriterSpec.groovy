@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,8 @@ class ApiWriterSpec extends Specification {
         ])
 
         when:
-        new ApiWriter (opts, interfaceWriter, null, null).write (api)
+        new ApiWriter (opts, interfaceWriter, null, null, false)
+            .write (api)
 
         then:
         def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
@@ -130,7 +131,8 @@ Bar interface!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter)).write (api)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter), false)
+            .write (api)
 
         then:
         def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
@@ -165,7 +167,8 @@ Bar class!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeWriter), enumWriter).write (api)
+        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeWriter), enumWriter, false)
+            .write (api)
 
         then:
         def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
@@ -202,11 +205,99 @@ Bar enum!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter)).write (api)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter), false)
+            .write (api)
 
         then:
         0 * dataTypeWriter.write (_, dt.find ('simple'))
         0 * dataTypeWriter.write (_, dt.find ('Type'))
+    }
+
+    void "re-formats interface sources"() {
+        def interfaceWriter = Stub (InterfaceWriter) {
+            write (_ as Writer, _ as Interface) >> {
+                Writer writer = it.get(0)
+                writer.write ('  interface   Foo   {    }\n')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def api = new Api(interfaces: [
+            new Interface(pkg: "${opts.packageName}.api", name: 'Foo')
+        ])
+
+        when:
+        new ApiWriter (opts, interfaceWriter, null, null)
+            .write (api)
+
+        then:
+        def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
+        fooSource.text == """\
+interface Foo {
+}
+"""
+    }
+
+    void "re-formats model sources"() {
+        def dataTypeWriter = Stub (DataTypeWriter) {
+            write (_ as Writer, _ as ObjectDataType) >> {
+                Writer writer = it.get(0)
+                writer.write ('      class Foo {  }')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def dt = new DataTypes()
+        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        def api = new Api(dt)
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter))
+            .write (api)
+
+        then:
+        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
+        fooSource.text == """\
+class Foo {
+}
+"""
+    }
+
+    void "re-formats model enum sources"() {
+        def enumWriter = Stub (StringEnumWriter) {
+            write (_ as Writer, _ as StringEnumDataType) >> {
+                Writer writer = it.get(0)
+                writer.write ('    enum   Foo   {   }')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def dt = new DataTypes()
+        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        def api = new Api(dt)
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeWriter), enumWriter)
+            .write (api)
+
+        then:
+        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
+        fooSource.text == """\
+enum Foo {
+}
+"""
     }
 
     String getApiPath(String targetFolder, String clazzName) {
@@ -216,4 +307,5 @@ Bar enum!
     String getModelPath(String targetFolder, String clazzName) {
         ([targetFolder] + apiModelPath + [clazzName]).join(File.separator)
     }
+
 }

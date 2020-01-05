@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.google.googlejavaformat.java.Formatter
+import com.google.googlejavaformat.java.JavaFormatterOptions
 import groovy.util.logging.Slf4j
 
 /**
@@ -38,22 +41,25 @@ class ApiWriter {
     File apiFolder
     File modelFolder
 
-    @Deprecated
-    ApiWriter(ApiOptions options, InterfaceWriter interfaceWriter) {
-        this.options = options
-        this.interfaceWriter = interfaceWriter
-        this.dataTypeWriter = new DataTypeWriter(headerWriter: new HeaderWriter ())
-        this.enumWriter = new StringEnumWriter(headerWriter: new HeaderWriter ())
-    }
+    Formatter formatter
 
-    ApiWriter(ApiOptions options,
-              InterfaceWriter interfaceWriter,
-              DataTypeWriter dataTypeWriter,
-              StringEnumWriter enumWriter) {
+    ApiWriter (ApiOptions options,
+               InterfaceWriter interfaceWriter,
+               DataTypeWriter dataTypeWriter,
+               StringEnumWriter enumWriter,
+                 boolean enableFormatter = true) {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = dataTypeWriter
         this.enumWriter = enumWriter
+
+        if (enableFormatter) {
+            formatter = new Formatter (
+                JavaFormatterOptions
+                    .builder ()
+                    .style (JavaFormatterOptions.Style.AOSP)
+                    .build ())
+        }
     }
 
     void write(Api api) {
@@ -62,23 +68,58 @@ class ApiWriter {
         api.interfaces.each {
             def target = new File (apiFolder, "${it.interfaceName}.java")
             def writer = new FileWriter(target)
-            interfaceWriter.write (writer, it)
+            writeInterface (writer, it)
             writer.close ()
         }
 
         api.models.objectDataTypes.each {
             def target = new File (modelFolder, "${it.name}.java")
             def writer = new FileWriter(target)
-            dataTypeWriter.write (writer, it as ObjectDataType)
+            writeDataType (writer, it)
             writer.close ()
         }
 
         api.models.enumDataTypes.each {
             def target = new File (modelFolder, "${it.name}.java")
             def writer = new FileWriter(target)
-            enumWriter.write (writer, it as StringEnumDataType)
+            writeEnumDataType (writer, it)
             writer.close ()
         }
+    }
+
+    private void writeInterface (Writer writer, Interface itf) {
+        def raw = new StringWriter ()
+        interfaceWriter.write (raw, itf)
+        writer.write (format (raw.toString ()))
+    }
+
+    private void writeDataType (Writer writer, ObjectDataType dataType) {
+        def raw = new StringWriter ()
+        dataTypeWriter.write (raw, dataType)
+        writer.write (format (raw.toString ()))
+    }
+
+    private void writeEnumDataType (Writer writer, StringEnumDataType enumDataType) {
+        def raw = new StringWriter ()
+        enumWriter.write (raw, enumDataType)
+        writer.write (format (raw.toString ()))
+    }
+
+    private String format (String raw) {
+        if (formatter == null) {
+            return raw
+        }
+        correctLineFeed (formatter.formatSource (raw))
+    }
+
+    private String correctLineFeed (String formatted) {
+        int index = formatted.findLastIndexOf (0) {
+            it == '}'
+        }
+
+        new StringBuilder ()
+            .append (formatted.substring (0, index))
+            .append ("\n}\n")
     }
 
     private void createTargetFolders () {
