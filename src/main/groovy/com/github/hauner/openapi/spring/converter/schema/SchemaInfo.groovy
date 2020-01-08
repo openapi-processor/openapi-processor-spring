@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,14 @@ class SchemaInfo {
     String path
 
     /**
-     * name of the type/schema.
+     * name of the type/schema or parameter name.
      */
     String name
+
+    /**
+     * response content type.
+     */
+    String contentType
 
     /**
      * the OpenAPI schema
@@ -47,12 +52,6 @@ class SchemaInfo {
      * resolver of $ref'erences
      */
     RefResolver resolver
-
-    SchemaInfo (String path, Schema schema, String name) {
-        this.path = path
-        this.schema = schema
-        this.name = name
-    }
 
     void eachProperty (@ClosureParams({"String,DataTypeInfo"}) Closure closure) {
         schema.properties.each { Map.Entry<String, Schema> entry ->
@@ -66,11 +65,11 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForRef () {
-        def refName = getRefName (schema)
-        Schema refSchema = resolver.resolve (schema.$ref)
-        def info = new SchemaInfo (path, refSchema, refName)
-        info.resolver = resolver
-        info
+        new SchemaInfo (
+            path: path,
+            name: getRefName (schema),
+            schema: resolver.resolve (schema.$ref),
+            resolver: resolver)
     }
 
     /**
@@ -82,9 +81,11 @@ class SchemaInfo {
      * @return a new DataTypeInfo
      */
     SchemaInfo buildForNestedType (String nestedName, Schema nestedSchema) {
-        def info = new SchemaInfo (path, nestedSchema, getNestedTypeName (nestedName))
-        info.resolver = resolver
-        info
+        new SchemaInfo (
+            path: path,
+            name: getNestedTypeName (nestedName),
+            schema: nestedSchema,
+            resolver: resolver)
     }
 
     /**
@@ -93,9 +94,11 @@ class SchemaInfo {
      * @return s new DataTypeInfo
      */
     SchemaInfo buildForItem () {
-        def info = new SchemaInfo (path, schema.items, name)
-        info.resolver = resolver
-        info
+        new SchemaInfo (
+            path: path,
+            name: name,
+            schema: schema.items,
+           resolver: resolver)
     }
 
     /**

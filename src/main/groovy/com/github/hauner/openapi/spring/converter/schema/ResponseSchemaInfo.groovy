@@ -23,6 +23,7 @@ import io.swagger.v3.oas.models.media.Schema
  *
  * @author Martin Hauner
  */
+@Deprecated
 class ResponseSchemaInfo extends SchemaInfo {
 
     /**
@@ -31,7 +32,9 @@ class ResponseSchemaInfo extends SchemaInfo {
     String contentType
 
     ResponseSchemaInfo (String path, String contentType, Schema schema, String name) {
-        super (path, schema, name)
+        this.path = path
+        this.name = name
+        this.schema = schema
         this.contentType = contentType
     }
 

@@ -23,6 +23,7 @@ import io.swagger.v3.oas.models.media.Schema
  *
  * @author Martin Hauner
  */
+@Deprecated
 class ParameterSchemaInfo extends SchemaInfo {
 
     /**
@@ -31,7 +32,9 @@ class ParameterSchemaInfo extends SchemaInfo {
     String parameterName
 
     ParameterSchemaInfo (String path, Schema schema, String name) {
-        super (path, schema, name)
+        this.path = path
+        this.name = name
+        this.schema = schema
         this.parameterName = name
     }
 

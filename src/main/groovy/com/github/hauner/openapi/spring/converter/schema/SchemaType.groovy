@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ class ArraySchemaType extends BaseSchemaType {
 
     @Override
     List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
-        def array = new SchemaInfo (null, null,'array')
+        def array = new SchemaInfo (name: 'array')
         typeMappings.findAll () {
             it.isLevel (MappingLevel.TYPE) && it.matches (array)
         }

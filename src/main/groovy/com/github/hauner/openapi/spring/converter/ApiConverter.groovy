@@ -126,8 +126,11 @@ class ApiConverter {
             def contentType = requestBodyEntry.key
             def reqBody = requestBodyEntry.value
 
-            def info = new SchemaInfo (ep.path, reqBody.schema, getInlineRequestBodyName (ep.path))
-            info.resolver = resolver
+            def info = new SchemaInfo (
+                path: ep.path,
+                name: getInlineRequestBodyName (ep.path),
+                schema: reqBody.schema,
+                resolver: resolver)
 
             if (contentType == MULTIPART) {
                 ep.parameters.addAll (createMultipartParameter (info, required))
