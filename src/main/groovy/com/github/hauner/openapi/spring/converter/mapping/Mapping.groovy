@@ -19,17 +19,15 @@ package com.github.hauner.openapi.spring.converter.mapping
 import com.github.hauner.openapi.spring.converter.schema.MatchValues
 
 /**
- * Type mapping levels
- */
-enum MappingLevel {
-    ENDPOINT, IO, TYPE
-}
-
-/**
  * Common interface for type mappings.
  */
 interface Mapping {
+    // mapping levels
+    enum Level {
+        ENDPOINT, IO, TYPE
+    }
+
     boolean matches (MatchValues match)
-    boolean isLevel (MappingLevel level)
+    boolean isLevel (Level level)
     List<Mapping> getChildMappings ()
 }

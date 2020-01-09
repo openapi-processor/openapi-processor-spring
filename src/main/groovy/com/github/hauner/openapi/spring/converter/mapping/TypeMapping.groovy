@@ -73,8 +73,8 @@ class TypeMapping implements Mapping {
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.TYPE == level
+    boolean isLevel (Level level) {
+        Level.TYPE == level
     }
 
     @Override

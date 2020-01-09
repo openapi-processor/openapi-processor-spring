@@ -48,8 +48,8 @@ class ParameterTypeMapping implements Mapping {
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.IO == level
+    boolean isLevel (Level level) {
+        Level.IO == level
     }
 
     @Override

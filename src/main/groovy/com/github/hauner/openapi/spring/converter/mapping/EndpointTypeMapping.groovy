@@ -56,8 +56,8 @@ class EndpointTypeMapping implements Mapping {
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.ENDPOINT == level
+    boolean isLevel (Level level) {
+        Level.ENDPOINT == level
     }
 
     @Override
