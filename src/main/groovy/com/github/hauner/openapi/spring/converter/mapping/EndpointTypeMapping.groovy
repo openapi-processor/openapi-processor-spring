@@ -30,7 +30,7 @@ import com.github.hauner.openapi.spring.converter.schema.MatchValues
  *
  * @author Martin Hauner
  */
-class EndpointTypeMapping implements TypeMappingX {
+class EndpointTypeMapping implements Mapping {
 
     /**
      * Full path of the endpoint that is configured by this object.
@@ -61,7 +61,7 @@ class EndpointTypeMapping implements TypeMappingX {
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         typeMappings
     }
 

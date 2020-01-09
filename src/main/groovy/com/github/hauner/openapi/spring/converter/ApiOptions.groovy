@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
 
 /**
  * Options of the generatr.
@@ -49,12 +49,13 @@ class ApiOptions {
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
-     * {@link com.github.hauner.openapi.spring.converter.mapping.TypeMapping}: used to globally override
-     * the mapping of an OpenAPI schema to a specific java type.
+     * {@link com.github.hauner.openapi.spring.converter.mapping.TypeMapping}: used to globally
+     * override the mapping of an OpenAPI schema to a specific java type.
      *
-     * {@link com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping}: used to override
-     * parameter, response type mappings or to add additional parameters on a single endpoint.
+     * {@link com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping}: used to
+     * override parameter/response type mappings or to add additional parameters on a single
+     * endpoint.
      */
-    List<TypeMappingX> typeMappings
+    List<Mapping> typeMappings
 
 }

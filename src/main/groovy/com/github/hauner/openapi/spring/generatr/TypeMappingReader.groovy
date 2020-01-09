@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import org.yaml.snakeyaml.Yaml
 
 import java.util.regex.Matcher
@@ -34,7 +34,7 @@ import java.util.regex.Pattern
 class TypeMappingReader {
     private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
-    List<TypeMappingX> read (String typeMappings) {
+    List<Mapping> read (String typeMappings) {
         if (typeMappings == null) {
             return []
         }

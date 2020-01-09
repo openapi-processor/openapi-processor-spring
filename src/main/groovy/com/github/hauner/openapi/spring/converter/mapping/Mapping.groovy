@@ -28,8 +28,8 @@ enum MappingLevel {
 /**
  * Common interface for type mappings.
  */
-interface TypeMappingX {
+interface Mapping {
     boolean matches (MatchValues match)
     boolean isLevel (MappingLevel level)
-    List<TypeMappingX> getChildMappings ()
+    List<Mapping> getChildMappings ()
 }

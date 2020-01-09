@@ -24,7 +24,7 @@ import com.github.hauner.openapi.spring.converter.schema.MatchValues
  *
  * @author Martin Hauner
  */
-class ResponseTypeMapping implements TypeMappingX {
+class ResponseTypeMapping implements Mapping {
 
     /**
      * The content type of this mapping. Must match 1:1 with what is written in the api.
@@ -53,7 +53,7 @@ class ResponseTypeMapping implements TypeMappingX {
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         [mapping]
     }
 

@@ -17,7 +17,6 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 import com.github.hauner.openapi.spring.converter.schema.MatchValues
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
@@ -28,7 +27,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class TypeMapping implements TypeMappingX {
+class TypeMapping implements Mapping {
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
@@ -79,7 +78,7 @@ class TypeMapping implements TypeMappingX {
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         [this]
     }
 

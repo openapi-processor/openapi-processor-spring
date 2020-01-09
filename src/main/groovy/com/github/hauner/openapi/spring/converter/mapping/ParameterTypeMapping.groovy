@@ -24,7 +24,7 @@ import com.github.hauner.openapi.spring.converter.schema.MatchValues
  *
  * @author Martin Hauner
  */
-class ParameterTypeMapping implements TypeMappingX {
+class ParameterTypeMapping implements Mapping {
 
     /**
      * The parameter name of this mapping. Must match 1:1 with what is written in the api.
@@ -53,7 +53,7 @@ class ParameterTypeMapping implements TypeMappingX {
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         [mapping]
     }
 
