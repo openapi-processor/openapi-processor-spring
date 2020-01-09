@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.MatchValues
 
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
@@ -40,16 +39,12 @@ class ResponseTypeMapping implements TypeMappingX {
     /**
      * Checks if it is a mapping for the given response schema info
      *
-     * @param info a response schema info
+     * @param match the match info
      * @return true if it is a mapping for info, else false
      */
     @Override
-    boolean matches (SchemaInfo info) {
-        if (! (info instanceof ResponseSchemaInfo)) {
-            return false
-        }
-
-        contentType == info.contentType
+    boolean matches (MatchValues match) {
+        contentType == match.matchContentType
     }
 
     @Override

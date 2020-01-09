@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.MatchValues
 
 /**
  * Type mapping levels
@@ -29,7 +29,7 @@ enum MappingLevel {
  * Common interface for type mappings.
  */
 interface TypeMappingX {
-    boolean matches (SchemaInfo info)
+    boolean matches (MatchValues match)
     boolean isLevel (MappingLevel level)
     List<TypeMappingX> getChildMappings ()
 }

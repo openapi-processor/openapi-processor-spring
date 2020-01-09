@@ -16,9 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.RefResolver
-import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -161,8 +159,11 @@ class ApiConverter {
     }
 
     private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
-        def info = new ParameterSchemaInfo (path, parameter.schema, parameter.name)
-        info.resolver = resolver
+        def info = new SchemaInfo (
+            path: path,
+            name: parameter.name,
+            schema: parameter.schema,
+            resolver: resolver)
 
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
@@ -209,12 +210,12 @@ class ApiConverter {
             def mediaType = contentEntry.value
             def schema = mediaType.schema
 
-            def info = new ResponseSchemaInfo (
-                path,
-                contentType,
-                schema,
-                inlineName)
-            info.resolver = resolver
+            def info = new SchemaInfo (
+                path: path,
+                contentType: contentType,
+                name: inlineName,
+                schema: schema,
+                resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
 

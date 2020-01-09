@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
+import com.github.hauner.openapi.spring.converter.schema.MatchValues
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
@@ -47,12 +47,12 @@ class EndpointTypeMapping implements TypeMappingX {
     /**
      * Checks if this endpoint mapping applies to the given schema info.
      *
-     * @param info the schema info
+     * @param match the match info
      * @return true, if path is equal, false if not
      */
     @Override
-    boolean matches (SchemaInfo info) {
-        path == info.path
+    boolean matches (MatchValues match) {
+        path == match.matchPath
     }
 
     @Override
