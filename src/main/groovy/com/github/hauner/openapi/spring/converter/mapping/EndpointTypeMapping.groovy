@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.MatchValues
-
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
  * response type mappings on a single endpoint. It can also be used to add parameters that are not
@@ -42,22 +39,16 @@ class EndpointTypeMapping implements Mapping {
      *
      * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
      */
-    List<?> typeMappings
+    List<Mapping> typeMappings
 
-    /**
-     * Checks if this endpoint mapping applies to the given schema info.
-     *
-     * @param match the match info
-     * @return true, if path is equal, false if not
-     */
     @Override
-    boolean matches (MatchValues match) {
-        path == match.matchPath
+    boolean matches (Level level, MappingSchema schema) {
+        Level.ENDPOINT == level && path == schema.path
     }
 
     @Override
-    boolean isLevel (Level level) {
-        Level.ENDPOINT == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override

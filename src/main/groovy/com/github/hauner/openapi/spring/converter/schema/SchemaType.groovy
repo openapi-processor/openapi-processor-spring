@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter.schema
 
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchemaType
 
 import static com.github.hauner.openapi.spring.converter.mapping.Mapping.Level.*
 
@@ -39,35 +40,37 @@ abstract class BaseSchemaType implements SchemaType {
 
     @Override
     List<Mapping> matchEndpointMapping (List<Mapping> typeMappings) {
-        // mappings matching by path
-        List<Mapping> endpoint = typeMappings.findAll {
-            it.isLevel (ENDPOINT) && it.matches (info)
-        }.collect {
-            it.childMappings
-        }.flatten () as List<Mapping>
+        List<Mapping> ep = findEndpointMappings (typeMappings)
 
-        // io mappings
-        List<Mapping> io = endpoint.findAll {
-            it.isLevel (IO) && it.matches (info)
-        }.collect {
-            it.childMappings
-        }.flatten () as List<Mapping>
-
+        List<Mapping> io = findIoMappings (ep)
         if (!io.empty) {
             return io
         }
 
-        // type mappings
-        matchTypeMapping (endpoint)
+        matchTypeMapping (ep)
     }
 
     List<Mapping> matchIoMapping (List<Mapping> typeMappings) {
-        // io mappings
-        typeMappings.findAll {
-            it.isLevel (IO) && it.matches (info)
-        }.collect {
+        findIoMappings (typeMappings)
+    }
+
+    private List<Mapping> findEndpointMappings (List<Mapping> typeMappings) {
+        typeMappings
+            .findAll {
+                it.matches (ENDPOINT, info)
+            }
+            .collectMany {
+                it.childMappings
+            }
+    }
+
+    private List<Mapping> findIoMappings (List<Mapping> typeMappings) {
+        typeMappings
+            .findAll {
+                it.matches (IO, info)
+            }.collectMany {
             it.childMappings
-        }.flatten () as List<Mapping>
+        }
     }
 
 }
@@ -81,7 +84,7 @@ class ObjectSchemaType extends BaseSchemaType {
     @Override
     List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
         typeMappings.findAll {
-            it.isLevel (TYPE) && it.matches (info)
+            it.matches (TYPE, info)
         }
     }
 
@@ -97,7 +100,7 @@ class ArraySchemaType extends BaseSchemaType {
     List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
         def array = new SchemaInfo (name: 'array')
         typeMappings.findAll () {
-            it.isLevel (TYPE) && it.matches (array)
+            it.matches (TYPE, array)
         }
     }
 
@@ -111,11 +114,21 @@ class PrimitiveSchemaType extends BaseSchemaType {
 
     @Override
     List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
+        def schemaType = new MappingSchemaType () {
+
+            @Override
+            String getType () {
+                return info.type
+            }
+
+            @Override
+            String getFormat () {
+                return info.format
+            }
+        }
+
         typeMappings.findAll () {
-            (it.isLevel (TYPE)
-                // simple but ignores the interface!
-                && it.sourceTypeName == info.type
-                && it.sourceTypeFormat == info.format)
+            it.matches (TYPE, schemaType)
         }
     }
 

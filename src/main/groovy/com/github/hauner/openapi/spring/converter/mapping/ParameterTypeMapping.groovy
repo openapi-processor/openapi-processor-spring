@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.MatchValues
-
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
  * of the given endpoint parameter.
@@ -36,20 +33,14 @@ class ParameterTypeMapping implements Mapping {
      */
     TypeMapping mapping
 
-    /**
-     * Checks if this is a mapping for the given parameter schema info
-     *
-     * @param match the match info
-     * @return true if it is a mapping for info, else false
-     */
     @Override
-    boolean matches (MatchValues match) {
-        parameterName == match.matchName
+    boolean matches (Level level, MappingSchema schema) {
+        Level.IO == level && parameterName == schema.name
     }
 
     @Override
-    boolean isLevel (Level level) {
-        Level.IO == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override

@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.MatchValues
-
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
  * OpenAPI schema to a java type.
@@ -50,7 +47,6 @@ class TypeMapping implements Mapping {
      */
     List<String> genericTypeNames = []
 
-
     /**
      * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
      * by a ':' separator.
@@ -62,33 +58,28 @@ class TypeMapping implements Mapping {
     }
 
     /**
-     * Checks if it is a mapping for the given schema info
-     *
-     * @param match the match info
-     * @return true if it is a mapping for info, else false
-     */
-    @Override
-    boolean matches (MatchValues match) {
-        sourceTypeName == match.matchName
-    }
-
-    @Override
-    boolean isLevel (Level level) {
-        Level.TYPE == level
-    }
-
-    @Override
-    List<Mapping> getChildMappings () {
-        [this]
-    }
-
-    /**
      * Returns the target type of this type mapping.
      *
      * @return the target type
      */
     TargetType getTargetType () {
         new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+    }
+
+    @Override
+    boolean matches (Level level, MappingSchema schema) {
+        Level.TYPE == level && sourceTypeName == schema.name
+    }
+
+    @Override
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        Level.TYPE == level &&
+            sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
+    }
+
+    @Override
+    List<Mapping> getChildMappings () {
+        [this]
     }
 
 }

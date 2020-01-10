@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.MatchValues
-
 /**
  * Common interface for type mappings.
  */
@@ -27,7 +24,32 @@ interface Mapping {
         ENDPOINT, IO, TYPE
     }
 
-    boolean matches (MatchValues match)
-    boolean isLevel (Level level)
+    /**
+     * Checks if this endpoint mapping applies to the given level and schema.
+     *
+     * @param level the level to match
+     * @param schema the schema to match
+     * @return true, if the mapping applies, false if not
+     */
+    boolean matches (Level level, MappingSchema schema)
+
+    /**
+     * Checks if this endpoint mapping applied to the given schema type.
+     *
+     * @param level the level to match
+     * @param schemaType the schema type to match
+     * @return true, if the mapping applies, false if not
+     */
+    boolean matches (Level level, MappingSchemaType schemaType)
+
+    /**
+     * Returns the inner mappings.
+     * In case of an ENDPOINT mapping the IO or TYPE mappings.
+     * In case of an IO mappings its type mappings.
+     * In case of a TYPE mapping itself.
+     *
+     * @return the inner type mappings.
+     */
     List<Mapping> getChildMappings ()
+
 }

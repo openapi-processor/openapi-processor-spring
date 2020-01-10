@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.MatchValues
-
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
  * schema for the given endpoint content type.
@@ -36,20 +33,14 @@ class ResponseTypeMapping implements Mapping {
      */
     TypeMapping mapping
 
-    /**
-     * Checks if it is a mapping for the given response schema info
-     *
-     * @param match the match info
-     * @return true if it is a mapping for info, else false
-     */
     @Override
-    boolean matches (MatchValues match) {
-        contentType == match.matchContentType
+    boolean matches (Level level, MappingSchema schema) {
+        Level.IO == level && contentType == schema.contentType
     }
 
     @Override
-    boolean isLevel (Level level) {
-        Level.IO == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override

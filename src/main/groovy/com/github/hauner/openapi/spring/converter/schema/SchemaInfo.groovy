@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter.schema
 
-
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import groovy.transform.stc.ClosureParams
 import io.swagger.v3.oas.models.media.Schema
 
@@ -26,7 +26,7 @@ import io.swagger.v3.oas.models.media.Schema
  *
  * @author Martin Hauner
  */
-class SchemaInfo implements MatchValues {
+class SchemaInfo implements MappingSchema {
 
     /**
      * Endpoint path.
@@ -184,18 +184,4 @@ class SchemaInfo implements MatchValues {
         name + propName.capitalize ()
     }
 
-    @Override
-    String getMatchPath () {
-        path
-    }
-
-    @Override
-    String getMatchName () {
-        name
-    }
-
-    @Override
-    String getMatchContentType () {
-        contentType
-    }
 }
