@@ -5,7 +5,7 @@ parent: HowTo's
 nav_order: 10
 ---
 
-Describing an endpoint to download file attachments.
+# Describing an endpoint to download files
 
 ```yaml
     /v1/attachments/{id}:
