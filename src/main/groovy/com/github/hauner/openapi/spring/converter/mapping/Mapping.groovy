@@ -15,13 +15,14 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
+
 /**
  * Common interface for type mappings.
  */
 interface Mapping {
     // mapping levels
     enum Level {
-        ENDPOINT, IO, TYPE
+        ENDPOINT, IO, TYPE, ADD
     }
 
     /**

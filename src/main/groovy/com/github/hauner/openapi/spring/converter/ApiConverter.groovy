@@ -16,13 +16,20 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
+import com.github.hauner.openapi.spring.converter.mapping.TargetType
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
@@ -53,6 +60,25 @@ class ApiConverter {
 
     private DataTypeConverter dataTypeConverter
     private ApiOptions options
+
+    class MappingSchemaEndpoint implements MappingSchema {
+        Endpoint endpoint
+
+        @Override
+        String getPath () {
+            endpoint.path
+        }
+
+        @Override
+        String getName () {
+            null
+        }
+
+        @Override
+        String getContentType () {
+            null
+        }
+    }
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -110,6 +136,18 @@ class ApiConverter {
     private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
         parameters.each { Parameter parameter ->
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
+        }
+
+        def addMappings = options.typeMappings.findAll {
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (endpoint: ep))
+        }.collectMany {
+            it.childMappings
+        }.findAll {
+            it.matches (Mapping.Level.ADD, null as MappingSchema)
+        }
+
+        addMappings.each {
+            ep.parameters.add (createAdditionalParameter(ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
         }
     }
 
@@ -180,6 +218,19 @@ class ApiConverter {
                 // should not reach this, the openapi parser ignores parameters with unknown type.
                 throw new UnknownParameterTypeException(parameter.name, parameter.in)
         }
+    }
+
+    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, RefResolver resolver) {
+        TypeMapping tm = mapping.childMappings.first ()
+        TargetType tt = tm.targetType
+
+        def addType = new MappedDataType (
+            type: tt.name,
+            pkg: tt.pkg,
+            genericTypes: tt.genericNames
+        )
+
+        new AdditionalParameter (name: mapping.parameterName, required: true, dataType: addType)
     }
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
