@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class MethodWriter {
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
     ${createMappingAnnotation (endpoint)}
-    ResponseEntity<${endpoint.response.responseType.name}> ${createMethodName (endpoint)}(${createParameter(endpoint)});
+    ResponseEntity<${endpoint.response.responseType.name}> ${createMethodName (endpoint)}(${createParameters(endpoint)});
 """)
     }
 
@@ -97,7 +97,7 @@ class MethodWriter {
         "${endpoint.method.method}${name}"
     }
 
-    private String createParameter (Endpoint endpoint) {
+    private String createParameters (Endpoint endpoint) {
         def ps = endpoint.parameters.collect {
 
             if (it.withAnnotation ()) {
