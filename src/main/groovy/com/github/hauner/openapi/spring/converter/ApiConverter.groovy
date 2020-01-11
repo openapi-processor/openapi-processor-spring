@@ -138,16 +138,9 @@ class ApiConverter {
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
 
-        def addMappings = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (endpoint: ep))
-        }.collectMany {
-            it.childMappings
-        }.findAll {
-            it.matches (Mapping.Level.ADD, null as MappingSchema)
-        }
-
+        List<Mapping> addMappings = findAdditionalParameter (ep)
         addMappings.each {
-            ep.parameters.add (createAdditionalParameter(ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
+            ep.parameters.add (createAdditionalParameter (ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
         }
     }
 
@@ -278,6 +271,17 @@ class ApiConverter {
         }
 
         responses
+    }
+
+    private List<Mapping> findAdditionalParameter (Endpoint ep) {
+        def addMappings = options.typeMappings.findAll {
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (endpoint: ep))
+        }.collectMany {
+            it.childMappings
+        }.findAll {
+            it.matches (Mapping.Level.ADD, null as MappingSchema)
+        }
+        addMappings
     }
 
     private String getInlineRequestBodyName (String path) {
