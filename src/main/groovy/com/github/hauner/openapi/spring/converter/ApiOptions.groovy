@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
  * Options of the generatr.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class ApiOptions {
 
@@ -56,5 +57,10 @@ class ApiOptions {
      * parameter, response type mappings or to add additional parameters on a single endpoint.
      */
     List<TypeMappingX> typeMappings
+
+    /**
+     * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
+     */
+    boolean beanValidation = false;
 
 }
