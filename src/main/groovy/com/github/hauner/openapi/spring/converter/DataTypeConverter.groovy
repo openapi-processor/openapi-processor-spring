@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
 import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
 import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
@@ -229,7 +229,7 @@ class DataTypeConverter {
 
     TargetType getMappedDataType (SchemaType schemaType) {
         // check endpoint mappings
-        List<TypeMappingX> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
+        List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
         if (!endpointMatches.empty) {
 
             if (endpointMatches.size () != 1) {
@@ -243,7 +243,7 @@ class DataTypeConverter {
         }
 
         // check global io (parameter & response) mappings
-        List<TypeMappingX> ioMatches = schemaType.matchIoMapping (options.typeMappings)
+        List<Mapping> ioMatches = schemaType.matchIoMapping (options.typeMappings)
         if (!ioMatches.empty) {
 
             if (ioMatches.size () != 1) {
@@ -257,7 +257,7 @@ class DataTypeConverter {
         }
 
         // check global type mapping
-        List<TypeMappingX> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
+        List<Mapping> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
         if (typeMatches.isEmpty ()) {
             return null
         }

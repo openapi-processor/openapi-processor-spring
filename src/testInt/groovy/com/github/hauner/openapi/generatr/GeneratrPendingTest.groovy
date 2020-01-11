@@ -20,14 +20,15 @@ import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-@Ignore
+//@Ignore
 @RunWith(Parameterized)
 class GeneratrPendingTest extends GeneratrTestBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-            new TestSet(name: 'params-request-body-multipart-form-data')
+            //  new TestSet(name: 'params-complex-data-types') // todo
+            new TestSet(name: 'params-additional')
         ]
     }
 

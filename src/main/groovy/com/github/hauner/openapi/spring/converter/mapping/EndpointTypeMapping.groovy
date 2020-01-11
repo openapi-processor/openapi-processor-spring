@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
  * response type mappings on a single endpoint. It can also be used to add parameters that are not
@@ -30,7 +27,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class EndpointTypeMapping implements TypeMappingX {
+class EndpointTypeMapping implements Mapping {
 
     /**
      * Full path of the endpoint that is configured by this object.
@@ -42,26 +39,20 @@ class EndpointTypeMapping implements TypeMappingX {
      *
      * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
      */
-    List<?> typeMappings
+    List<Mapping> typeMappings
 
-    /**
-     * Checks if this endpoint mapping applies to the given schema info.
-     *
-     * @param info the schema info
-     * @return true, if path is equal, false if not
-     */
     @Override
-    boolean matches (SchemaInfo info) {
-        path == info.path
+    boolean matches (Level level, MappingSchema schema) {
+        Level.ENDPOINT == level && path == schema.path
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.ENDPOINT == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         typeMappings
     }
 

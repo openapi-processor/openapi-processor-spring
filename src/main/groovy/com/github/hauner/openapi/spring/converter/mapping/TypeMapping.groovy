@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
-
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
  * OpenAPI schema to a java type.
@@ -27,7 +24,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
  *
  * @author Martin Hauner
  */
-class TypeMapping implements TypeMappingX {
+class TypeMapping implements Mapping {
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
@@ -50,7 +47,6 @@ class TypeMapping implements TypeMappingX {
      */
     List<String> genericTypeNames = []
 
-
     /**
      * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
      * by a ':' separator.
@@ -62,33 +58,28 @@ class TypeMapping implements TypeMappingX {
     }
 
     /**
-     * Checks if it is a mapping for the given schema info
-     *
-     * @param info a schema info
-     * @return true if it is a mapping for info, else false
-     */
-    @Override
-    boolean matches (SchemaInfo info) {
-        sourceTypeName == info.name
-    }
-
-    @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.TYPE == level
-    }
-
-    @Override
-    List<TypeMappingX> getChildMappings () {
-        [this]
-    }
-
-    /**
      * Returns the target type of this type mapping.
      *
      * @return the target type
      */
     TargetType getTargetType () {
         new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+    }
+
+    @Override
+    boolean matches (Level level, MappingSchema schema) {
+        Level.TYPE == level && sourceTypeName == schema.name
+    }
+
+    @Override
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        Level.TYPE == level &&
+            sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
+    }
+
+    @Override
+    List<Mapping> getChildMappings () {
+        [this]
     }
 
 }

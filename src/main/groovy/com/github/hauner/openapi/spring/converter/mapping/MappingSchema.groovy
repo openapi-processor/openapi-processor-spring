@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
 /**
- * Type mapping levels
+ * Provides the properties required to check if a {@link Mapping} applies to a
+ * {@link com.github.hauner.openapi.spring.converter.schema.SchemaType}.
+ *
+ * @author Martin Hauner
  */
-enum MappingLevel {
-    ENDPOINT, IO, TYPE
-}
+interface MappingSchema {
 
-/**
- * Common interface for type mappings.
- */
-interface TypeMappingX {
-    boolean matches (SchemaInfo info)
-    boolean isLevel (MappingLevel level)
-    List<TypeMappingX> getChildMappings ()
+    String getPath ()
+    String getName ()
+    String getContentType ()
+
+    // getMatchType ()
+    // getMatchFormat ()
+
 }

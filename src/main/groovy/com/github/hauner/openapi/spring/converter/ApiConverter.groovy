@@ -16,15 +16,20 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
+import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
+import com.github.hauner.openapi.spring.converter.mapping.TargetType
+import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.RefResolver
-import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
@@ -55,6 +60,25 @@ class ApiConverter {
 
     private DataTypeConverter dataTypeConverter
     private ApiOptions options
+
+    class MappingSchemaEndpoint implements MappingSchema {
+        Endpoint endpoint
+
+        @Override
+        String getPath () {
+            endpoint.path
+        }
+
+        @Override
+        String getName () {
+            null
+        }
+
+        @Override
+        String getContentType () {
+            null
+        }
+    }
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -113,6 +137,11 @@ class ApiConverter {
         parameters.each { Parameter parameter ->
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
+
+        List<Mapping> addMappings = findAdditionalParameter (ep)
+        addMappings.each {
+            ep.parameters.add (createAdditionalParameter (ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
+        }
     }
 
     private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
@@ -161,8 +190,11 @@ class ApiConverter {
     }
 
     private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
-        def info = new ParameterSchemaInfo (path, parameter.schema, parameter.name)
-        info.resolver = resolver
+        def info = new SchemaInfo (
+            path: path,
+            name: parameter.name,
+            schema: parameter.schema,
+            resolver: resolver)
 
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
@@ -179,6 +211,19 @@ class ApiConverter {
                 // should not reach this, the openapi parser ignores parameters with unknown type.
                 throw new UnknownParameterTypeException(parameter.name, parameter.in)
         }
+    }
+
+    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, RefResolver resolver) {
+        TypeMapping tm = mapping.childMappings.first ()
+        TargetType tt = tm.targetType
+
+        def addType = new MappedDataType (
+            type: tt.name,
+            pkg: tt.pkg,
+            genericTypes: tt.genericNames
+        )
+
+        new AdditionalParameter (name: mapping.parameterName, required: true, dataType: addType)
     }
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
@@ -209,12 +254,12 @@ class ApiConverter {
             def mediaType = contentEntry.value
             def schema = mediaType.schema
 
-            def info = new ResponseSchemaInfo (
-                path,
-                contentType,
-                schema,
-                inlineName)
-            info.resolver = resolver
+            def info = new SchemaInfo (
+                path: path,
+                contentType: contentType,
+                name: inlineName,
+                schema: schema,
+                resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
@@ -226,6 +271,17 @@ class ApiConverter {
         }
 
         responses
+    }
+
+    private List<Mapping> findAdditionalParameter (Endpoint ep) {
+        def addMappings = options.typeMappings.findAll {
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (endpoint: ep))
+        }.collectMany {
+            it.childMappings
+        }.findAll {
+            it.matches (Mapping.Level.ADD, null as MappingSchema)
+        }
+        addMappings
     }
 
     private String getInlineRequestBodyName (String path) {

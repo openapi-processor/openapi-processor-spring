@@ -16,17 +16,17 @@
 
 package com.github.hauner.openapi.spring.converter.schema
 
-
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import groovy.transform.stc.ClosureParams
 import io.swagger.v3.oas.models.media.Schema
 
 /**
- * Helper for {@link DataTypeConverter}. Holds an OpenAPI schema and context information, i.e. name
- * and if this is an inline type with a generated name.
+ * Helper for {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}. Holds an OpenAPI
+ * schema with context information, i.e. name and if this is an inline type with a generated name.
  *
  * @author Martin Hauner
  */
-class SchemaInfo {
+class SchemaInfo implements MappingSchema {
 
     /**
      * Endpoint path.
@@ -96,7 +96,7 @@ class SchemaInfo {
     SchemaInfo buildForItem () {
         new SchemaInfo (
             path: path,
-            name: name,
+            name: schema.items.type,
             schema: schema.items,
            resolver: resolver)
     }
