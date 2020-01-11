@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.generatr
 
+import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
@@ -54,7 +55,7 @@ class TypeMappingReader {
         parse (props)
     }
 
-    private List<?> parse (Map<String, ?> props) {
+    private List<Mapping> parse (Map<String, ?> props) {
         //def version = props.get ('openapi-generatr-spring')
 
         def root = props.get ('map') as Map<String, ?>
@@ -64,14 +65,15 @@ class TypeMappingReader {
         def paths = root.get ('paths') as Map<String, ?>
         paths.each {
             def epm = new EndpointTypeMapping(path: it.key)
-            epm.typeMappings = readTypeMappings (it.value as Map<String, ?>)
+            def types = readTypeMappings (it.value as Map<String, ?>)
+            epm.typeMappings = types
             mappings.add (epm)
         }
 
         mappings
     }
 
-    private List<?> readTypeMappings (Map<String, ?> root) {
+    private List<Mapping> readTypeMappings (Map<String, ?> root) {
         def mappings = []
 
         def types = root.get ('types') as List<Map<String, ?> >
@@ -92,10 +94,28 @@ class TypeMappingReader {
         return mappings
     }
 
-    private ParameterTypeMapping readParameterTypeMapping (Map<String, ?> source) {
-        def name = source.name
-        def mapping = readTypMapping (source)
-        new ParameterTypeMapping (parameterName: name, mapping: mapping)
+    private Mapping readParameterTypeMapping (Map<String, ?> source) {
+        if (isParameterMappings (source)) {
+            def name = source.name
+            def mapping = readTypMapping (source)
+            new ParameterTypeMapping (parameterName: name, mapping: mapping)
+
+        } else if (isParameterAddition (source)) {
+            def name = source.add
+            def mapping = readTypMapping (source, 'as')
+            new AddParameterTypeMapping (parameterName: name, mapping: mapping)
+
+        } else {
+            throw new Exception("unknown parameter mapping $source")
+        }
+    }
+
+    private boolean isParameterAddition (Map<String, ?> source) {
+        source.containsKey ('add') && source.containsKey ('as')
+    }
+
+    private boolean isParameterMappings (Map<String, ?> source) {
+        source.containsKey ('name') && source.containsKey ('to')
     }
 
     private ResponseTypeMapping readResponseTypeMapping (Map<String, ?> source) {
@@ -104,11 +124,11 @@ class TypeMappingReader {
         new ResponseTypeMapping(contentType: content, mapping: mapping)
     }
 
-    private TypeMapping readTypMapping (Map<String, ?> source) {
+    private TypeMapping readTypMapping (Map<String, ?> source, String target = 'to') {
         Matcher matcher = source.to =~ GENERIC_INLINE
 
         def (from, format) = source.from ? source.from.tokenize (':') : [null,  null]
-        String to = source.to
+        String to = source[target]
         List<String> generics = []
 
         // has inline generics
