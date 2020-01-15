@@ -22,10 +22,10 @@ import com.github.hauner.openapi.spring.generatr.SpringGeneratr
 import groovy.io.FileType
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TemporaryFolder
 
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals
 
 abstract class GeneratrTestBase {
 
