@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.InlineObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
@@ -87,8 +86,12 @@ class MethodWriterSpec extends Specification {
 
     void "writes parameter less method with inline object response type" () {
         def endpoint = new Endpoint (path: '/inline', method: HttpMethod.GET, responses: [
-            new Response(contentType: 'application/json',
-                responseType: new InlineObjectDataType())
+            new Response (contentType: 'application/json',
+                responseType: new ObjectDataType (
+                    type: 'GetInlineResponse', properties: [
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
+                ]))
         ])
 
         when:
@@ -97,7 +100,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
-    ResponseEntity<Map<String, Object>> getInline();
+    ResponseEntity<GetInlineResponse> getInline();
 """
     }
 
