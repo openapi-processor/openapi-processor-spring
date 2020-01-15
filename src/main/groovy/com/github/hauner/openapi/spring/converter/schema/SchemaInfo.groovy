@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter.schema
 
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import groovy.transform.stc.ClosureParams
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 
 /**
@@ -96,8 +97,8 @@ class SchemaInfo implements MappingSchema {
     SchemaInfo buildForItem () {
         new SchemaInfo (
             path: path,
-            name: schema.items.type,
-            schema: schema.items,
+            name: (schema as ArraySchema).items.type,
+            schema: (schema as ArraySchema).items,
            resolver: resolver)
     }
 
