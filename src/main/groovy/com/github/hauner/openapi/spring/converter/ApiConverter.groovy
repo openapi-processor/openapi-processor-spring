@@ -115,7 +115,8 @@ class ApiConverter {
             operations.each { httpOperation ->
                 def itf = target.getInterface (getInterfaceName (httpOperation))
 
-                Endpoint ep = new Endpoint (path: path, method: httpOperation.httpMethod)
+                Endpoint ep = new Endpoint (path: path,
+                    method: (httpOperation as HttpMethodTrait).httpMethod)
 
                 try {
                     def resolver = new RefResolver (api.components)
