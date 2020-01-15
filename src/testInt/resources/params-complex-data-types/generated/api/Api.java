@@ -5,16 +5,13 @@
 
 package generated.api;
 
+import generated.model.Props;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-public interface EndpointApi {
+public interface Api {
 
     @GetMapping(path = "/endpoint-object")
-    ResponseEntity<Void> getEndpointObject(@RequestParam Props props);
-
-    @GetMapping(path = "/endpoint-map")
-    ResponseEntity<Void> getEndpointMap(@RequestParam(name = "props") Map props);
+    ResponseEntity<Void> getEndpointObject(Props props);
 
 }
