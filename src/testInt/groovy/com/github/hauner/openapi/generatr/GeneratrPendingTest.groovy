@@ -27,8 +27,7 @@ class GeneratrPendingTest extends GeneratrTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-            //  new TestSet(name: 'params-complex-data-types') // todo
-            new TestSet(name: 'params-additional')
+              new TestSet(name: 'params-complex-data-types')
         ]
     }
 
