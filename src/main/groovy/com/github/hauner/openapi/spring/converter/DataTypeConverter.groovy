@@ -236,7 +236,7 @@ class DataTypeConverter {
                 throw new AmbiguousTypeMappingException (endpointMatches)
             }
 
-            TargetType target = endpointMatches.first().targetType
+            TargetType target = (endpointMatches.first() as TypeMapping).targetType
             if (target) {
                 return target
             }
@@ -250,7 +250,7 @@ class DataTypeConverter {
                 throw new AmbiguousTypeMappingException (ioMatches)
             }
 
-            TargetType target = ioMatches.first().targetType
+            TargetType target = (ioMatches.first() as TypeMapping).targetType
             if (target) {
                 return target
             }
