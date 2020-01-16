@@ -57,9 +57,7 @@ abstract class GeneratrTestBase {
             options.typeMappings = mapping
         }
         def beanValidation = new File ("./src/testInt/resources/${source}/beanvalidation")
-        if(beanValidation.exists ()){
-            options.beanValidation = beanValidation
-        }
+        options.beanValidation = beanValidation.exists ()
 
         when:
         generatr.run (options)
