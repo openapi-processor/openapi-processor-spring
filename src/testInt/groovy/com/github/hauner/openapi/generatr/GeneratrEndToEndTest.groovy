@@ -41,7 +41,8 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
             new TestSet(name: 'params-request-body'),
             new TestSet(name: 'params-request-body-multipart-form-data'),
             new TestSet(name: 'params-spring-pageable-mapping'),
-            new TestSet(name: 'params-enum')
+            new TestSet(name: 'params-enum'),
+//            new TestSet(name: 'bean-validation'),
         ]
     }
 
