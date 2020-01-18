@@ -1,0 +1,14 @@
+map:
+
+  paths:
+
+    /endpoint-map:
+      types:
+        - from: Props
+          to: java.util.Map<java.lang.String, java.lang.String>
+
+    /endpoint-multi-map:
+      types:
+        - from: Props
+          to: org.springframework.util.MultiValueMap<java.lang.String, java.lang.String>
+

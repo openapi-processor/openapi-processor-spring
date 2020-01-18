@@ -9,12 +9,40 @@ paths:
     get:
       description: <
         should be mapped to a `Props` pojo without `@RequestParam` annotation
+
+          /endpoint-object?prop1=foo&prop2=bar
+
       parameters:
         - name: props
           description: query parameter object
           in: query
-          required: false
-          explode: true
+          schema:
+            $ref: '#/components/schemas/Props'
+      responses:
+        '204':
+          description: empty
+
+  /endpoint-map:
+    get:
+      description: <
+        should be mapped to a `Map` (from mapping) with `@RequestParam` annotation
+      parameters:
+        - name: props
+          description: query parameter object
+          in: query
+          schema:
+            $ref: '#/components/schemas/Props'
+      responses:
+        '204':
+          description: empty
+
+  /endpoint-multi-map:
+    get:
+      parameters:
+        - name: props
+          description: <
+            should be mapped to a `MultiValueMap` (from mapping) with `@RequestParam` annotation
+          in: query
           schema:
             $ref: '#/components/schemas/Props'
       responses:
