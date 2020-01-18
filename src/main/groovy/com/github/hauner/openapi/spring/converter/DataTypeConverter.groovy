@@ -32,8 +32,8 @@ import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
-import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
@@ -74,17 +74,11 @@ class DataTypeConverter {
      */
     DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
 
-        if (dataTypeInfo.isArray ()) {
+        if (dataTypeInfo.isRefObject ()) {
+            createRefDataType(dataTypeInfo, dataTypes)
+
+        } else if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
-
-        } else if (dataTypeInfo.isRefObject ()) {
-            def datatype = dataTypes.findRef (dataTypeInfo.ref)
-            if (datatype) {
-                return datatype
-            }
-
-            def refTypeInfo = dataTypeInfo.buildForRef ()
-            convert (refTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isObject ()) {
             createObjectDataType (dataTypeInfo, dataTypes)
@@ -117,41 +111,48 @@ class DataTypeConverter {
         arrayType
     }
 
+    private DataType createRefDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
+        convert (schemaInfo.buildForRef (), dataTypes)
+    }
+
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
         TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
         if (targetType) {
-            objectType = new MappedDataType (
-                type: targetType.name,
-                pkg: targetType.pkg,
-                genericTypes: targetType.genericNames
-            )
+            switch (targetType?.typeName) {
+                case Map.name:
+                case 'org.springframework.util.MultiValueMap':
+                    objectType = new MappedMapDataType (
+                        type: targetType.name,
+                        pkg: targetType.pkg,
+                        genericTypes: targetType.genericNames
+                    )
+                    return objectType
+                default:
+                    objectType = new MappedDataType (
+                        type: targetType.name,
+                        pkg: targetType.pkg,
+                        genericTypes: targetType.genericNames
+                    )
 
-            dataTypes.add (schemaInfo.name, objectType)
-            return objectType
+                    // probably not required anymore
+                    dataTypes.add (schemaInfo.name, objectType)
+                    return objectType
+            }
         }
 
-        switch (schemaInfo.getXJavaType ()) {
-            case Map.name:
-                objectType = new MapDataType ()
-                dataTypes.add (schemaInfo.name, objectType)
-                break
+        objectType = new ObjectDataType (
+            type: schemaInfo.name,
+            pkg: [options.packageName, 'model'].join ('.')
+        )
 
-            default:
-                objectType = new ObjectDataType (
-                    type: schemaInfo.name,
-                    pkg: [options.packageName, 'model'].join ('.')
-                )
-
-                schemaInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
-                    def propType = convert (propDataTypeInfo, dataTypes)
-                    objectType.addObjectProperty (propName, propType)
-                }
-
-                dataTypes.add (objectType)
+        schemaInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
+            def propType = convert (propDataTypeInfo, dataTypes)
+            objectType.addObjectProperty (propName, propType)
         }
 
+        dataTypes.add (objectType)
         objectType
     }
 

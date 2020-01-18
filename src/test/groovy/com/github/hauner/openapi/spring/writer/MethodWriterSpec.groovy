@@ -28,7 +28,7 @@ import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
-import com.github.hauner.openapi.spring.model.datatypes.MapDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
@@ -280,7 +280,11 @@ class MethodWriterSpec extends Specification {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             new Response (contentType: 'application/json', responseType: new NoneDataType())
         ], parameters: [
-            new QueryParameter(name: 'foo', required: false, dataType: new MapDataType ())
+            new QueryParameter(name: 'foo', required: false, dataType: new MappedMapDataType (
+                type: 'Map',
+                pkg: 'java.util',
+                genericTypes: ['java.lang.String', 'java.lang.String']
+            ))
         ])
 
         when:
@@ -289,7 +293,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "foo") Map foo);
+    ResponseEntity<Void> getFoo(@RequestParam Map<String, String> foo);
 """
     }
 

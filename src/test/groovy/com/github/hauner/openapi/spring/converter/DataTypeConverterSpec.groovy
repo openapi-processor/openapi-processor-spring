@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -115,9 +116,16 @@ class DataTypeConverterSpec extends Specification {
             bar: new ObjectSchema ($ref: "#/components/schemas/Bar")
         ])
 
+        def resolver = new RefResolver (null) {
+            @Override
+            Schema resolve (String ref) {
+                barSchema
+            }
+        }
+
         when:
         converter.convert (new SchemaInfo (name: 'Bar', schema: barSchema), dt)
-        converter.convert (new SchemaInfo (name: 'Foo', schema: fooSchema), dt)
+        converter.convert (new SchemaInfo (name: 'Foo', schema: fooSchema, resolver: resolver), dt)
 
         then:
         assert dt.size () == 2
@@ -155,89 +163,6 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         ep.response.responseType.name == 'String[]'
-    }
-
-    @Deprecated
-    void "converts object schema to Map<> set via x-java-type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /endpoint-map:
-    get:
-      parameters:
-        - name: props
-          description: query, map from single property
-          in: query
-          required: false
-          schema:
-            type: object
-            x-java-type: java.util.Map
-            properties:
-              prop1:
-                type: string
-              prop2:
-                type: string
-      responses:
-        '204':
-          description: empty
-""")
-
-        when:
-        def options = new ApiOptions(packageName: 'pkg')
-        Api api = new ApiConverter (options).convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        ep.parameters.first ().dataType.name == 'Map'
-    }
-
-    @Deprecated
-    void "converts ref object schema to Map<> set via x-java-type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /endpoint-map:
-    get:
-      parameters:
-        - name: props
-          description: query, map from single property
-          in: query
-          required: false
-          schema:
-            \$ref: '#/components/schemas/SinglePropMap'
-      responses:
-        '204':
-          description: empty
-
-components:
-  schemas:
-    SinglePropMap:
-      type: object
-      x-java-type: java.util.Map
-      properties:
-        prop1:
-          type: string
-        prop2:
-          type: string
-""")
-
-        when:
-        def options = new ApiOptions(packageName: 'pkg')
-        Api api = new ApiConverter (options).convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        ep.parameters.first ().dataType.name == 'Map'
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
@@ -31,32 +31,44 @@ class QueryParameter extends Parameter {
         "RequestParam"
     }
 
-    boolean isRequired () {
-        if (dataType instanceof MapDataType) {
-            return true
-        }
-
-        this.@required
-    }
-
     /**
      * If the query parameter is mapped to a pojo object it should not have a {@code @RequestParam}
      * annotation.
      */
     boolean withAnnotation () {
-        ! (
-            dataType instanceof ObjectDataType
-         || dataType instanceof MappedDataType
-        )
+        // Map should be annotated
+        if (dataType instanceof MappedMapDataType) {
+            return true
+        }
+
+        // Pojo's should NOT be annotated
+        if (dataType instanceof ObjectDataType) {
+            return false
+        }
+
+        // usually a pojo....
+        if (dataType instanceof MappedDataType) {
+            return false
+        }
+
+        true
     }
 
     /**
-     * todo validate.
-     *
      * If the query parameter is mapped to a pojo object it should not have any parameters.
      */
     boolean withParameters () {
-        ! (dataType instanceof ObjectDataType)
+        // Map should not have parameters
+        if (dataType instanceof MappedMapDataType) {
+            return false
+        }
+
+        // Pojo should not have parameters
+        if (dataType instanceof ObjectDataType) {
+            return false
+        }
+
+        true
     }
 
 }
