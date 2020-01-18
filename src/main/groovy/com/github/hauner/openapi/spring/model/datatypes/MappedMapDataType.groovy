@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,31 +17,9 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * OpenAPI type 'object' with 'x-type-java': java.util.Map extension.
+ * OpenAPI schema mapped to a map java type.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class MapDataType implements DataType {
-
-    @Override
-    String getName () {
-        'Map'
-    }
-
-    @Override
-    String getPackageName () {
-        'java.util'
-    }
-
-    @Override
-    Set<String> getImports () {
-        [[packageName, 'Map'].join('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        ['java.util.Map', 'java.lang.String']
-    }
-
+class MappedMapDataType extends MappedDataType {
 }

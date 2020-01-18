@@ -23,7 +23,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  */
 class MappedDataType implements DataType {
 
-    private String type
+    protected String type
     String pkg = 'unknown'
     List<String> genericTypes = []
 
@@ -57,7 +57,7 @@ class MappedDataType implements DataType {
         }
     }
 
-    private String getClassName (String ref) {
+    protected String getClassName (String ref) {
         ref.substring (ref.lastIndexOf ('.') + 1)
     }
 

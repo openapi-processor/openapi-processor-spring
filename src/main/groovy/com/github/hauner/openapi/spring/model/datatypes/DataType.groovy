@@ -55,7 +55,7 @@ trait /*interface*/ DataType {
      *
      * @return the constraints or null if there are no constraints.
      */
-    DataTypeConstraints getConstraints() {
+    DataTypeConstraints getConstraints () {
         null
     }
 
