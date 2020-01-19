@@ -16,13 +16,26 @@
 
 package com.github.hauner.openapi.spring.generatr
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import org.yaml.snakeyaml.Yaml
+import com.github.hauner.openapi.spring.generatr.mapping.AdditionalParameter
+import com.github.hauner.openapi.spring.generatr.mapping.Mapping as YamlMapping
+import com.github.hauner.openapi.spring.generatr.mapping.Parameter
+import com.github.hauner.openapi.spring.generatr.mapping.Parameter as YamlParameter
+import com.github.hauner.openapi.spring.generatr.mapping.ParameterDeserializer
+import com.github.hauner.openapi.spring.generatr.mapping.Path as YamlPath
+import com.github.hauner.openapi.spring.generatr.mapping.RequestParameter
+import com.github.hauner.openapi.spring.generatr.mapping.Response as YamlResponse
+import com.github.hauner.openapi.spring.generatr.mapping.Type as YamlType
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -36,7 +49,7 @@ class TypeMappingReader {
     private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
     List<Mapping> read (String typeMappings) {
-        if (typeMappings == null) {
+        if (typeMappings == null || typeMappings.empty) {
             return []
         }
 
@@ -45,64 +58,69 @@ class TypeMappingReader {
             mapping = new File(typeMappings).text
         }
 
-        Yaml yaml = new Yaml()
-        Map props = yaml.load (mapping)
+        def mapper = createYamlParser()
+        def props = mapper.readValue (mapping, YamlMapping)
 
-        if (props == null) {
-            return null
-        }
-
-        parse (props)
+        convert (props)
     }
 
-    private List<Mapping> parse (Map<String, ?> props) {
-        //def version = props.get ('openapi-generatr-spring')
+    private List<Mapping> convert (YamlMapping source) {
+        def result = new ArrayList<Mapping>()
 
-        def root = props.get ('map') as Map<String, ?>
-
-        def mappings = readTypeMappings (root)
-
-        def paths = root.get ('paths') as Map<String, ?>
-        paths.each {
-            def epm = new EndpointTypeMapping(path: it.key)
-            def types = readTypeMappings (it.value as Map<String, ?>)
-            epm.typeMappings = types
-            mappings.add (epm)
+        source.map.types.each {
+            result.add (convert (it))
         }
 
-        mappings
+        source.map.parameters.each {
+            result.add (convert (it))
+        }
+
+        source.map.responses.each {
+            result.add (convert (it))
+        }
+
+        source.map.paths.each {
+            result.add(convert (it.key, it.value))
+        }
+
+        result
     }
 
-    private List<Mapping> readTypeMappings (Map<String, ?> root) {
-        def mappings = []
+    private EndpointTypeMapping convert (String path, YamlPath source) {
+        def result = new ArrayList<Mapping>()
 
-        def types = root.get ('types') as List<Map<String, ?> >
-        types.each { Map<String, ?> it ->
-            mappings.add (readTypMapping (it))
+        source.types.each {
+            result.add (convert (it))
         }
 
-        def responses = root.get ('responses') as List<Map<String, ?> >
-        responses.each {
-            mappings.add (readResponseTypeMapping (it))
+        source.parameters.each {
+            result.add (convert (it))
         }
 
-        def parameters = root.get ('parameters') as List<Map<String, ?> >
-        parameters.each {
-            mappings.add (readParameterTypeMapping (it))
+        source.responses.each {
+            result.add (convert (it))
         }
 
-        return mappings
+        new EndpointTypeMapping(path: path, typeMappings: result)
     }
 
-    private Mapping readParameterTypeMapping (Map<String, ?> source) {
-        if (isParameterMappings (source)) {
+    private Mapping convert (YamlParameter source) {
+        if (source instanceof RequestParameter) {
             def name = source.name
-            def mapping = readTypMapping (source)
+            def mapping = convert (new YamlType(
+                from: null,
+                to: source.to,
+                generics: source.generics
+            ))
             new ParameterTypeMapping (parameterName: name, mapping: mapping)
 
-        } else if (isParameterAddition (source)) {
+        } else if (source instanceof  AdditionalParameter) {
             def name = source.add
-            def mapping = readTypMapping (source, 'as')
+            def mapping = convert (new YamlType(
+                from: null,
+                to: source.to,
+                generics: source.generics
+            ))
             new AddParameterTypeMapping (parameterName: name, mapping: mapping)
 
         } else {
@@ -110,25 +128,21 @@ class TypeMappingReader {
         }
     }
 
-    private boolean isParameterAddition (Map<String, ?> source) {
-        source.containsKey ('add') && source.containsKey ('as')
-    }
-
-    private boolean isParameterMappings (Map<String, ?> source) {
-        source.containsKey ('name') && source.containsKey ('to')
-    }
-
-    private ResponseTypeMapping readResponseTypeMapping (Map<String, ?> source) {
+    private ResponseTypeMapping convert (YamlResponse source) {
         def content = source.content
-        def mapping = readTypMapping (source)
+        def mapping = convert (new YamlType(
+            from: null,
+            to: source.to,
+            generics: source.generics
+        ))
         new ResponseTypeMapping(contentType: content, mapping: mapping)
     }
 
-    private TypeMapping readTypMapping (Map<String, ?> source, String target = 'to') {
-        Matcher matcher = source.to =~ GENERIC_INLINE
+    private TypeMapping convert (YamlType type) {
+        Matcher matcher = type.to =~ GENERIC_INLINE
 
-        def (from, format) = source.from ? (source.from as String).tokenize (':') : [null,  null]
-        String to = source[target]
+        def (from, format) = type.from ? (type.from as String).tokenize (':') : [null,  null]
+        String to = type.to
         List<String> generics = []
 
         // has inline generics
@@ -140,13 +154,23 @@ class TypeMappingReader {
                 .collect { it.trim () }
 
         // has explicit generic list
-        } else if (source.containsKey ('generics')) {
-            generics = source.generics as List
+        } else if (type.generics) {
+            generics = type.generics
         }
 
         new TypeMapping (
             sourceTypeName: from, sourceTypeFormat: format,
             targetTypeName: to, genericTypeNames: generics)
+    }
+
+    private ObjectMapper createYamlParser () {
+        SimpleModule module = new SimpleModule ()
+        module.addDeserializer (Parameter, new ParameterDeserializer ())
+
+        new ObjectMapper (new YAMLFactory ())
+            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
+            .registerModule (module)
     }
 
     private boolean isFileName (String name) {
