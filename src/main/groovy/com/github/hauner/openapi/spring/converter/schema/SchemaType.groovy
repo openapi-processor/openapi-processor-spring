@@ -16,15 +16,17 @@
 
 package com.github.hauner.openapi.spring.converter.schema
 
-import com.github.hauner.openapi.spring.converter.mapping.MappingLevel
-import com.github.hauner.openapi.spring.converter.mapping.TypeMappingX
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchemaType
+
+import static com.github.hauner.openapi.spring.converter.mapping.Mapping.Level.*
 
 
 interface SchemaType {
 
-    List<TypeMappingX> matchEndpointMapping (List<TypeMappingX> typeMappings)
-    List<TypeMappingX> matchIoMapping (List<TypeMappingX> typeMappings)
-    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings)
+    List<Mapping> matchEndpointMapping (List<Mapping> typeMappings)
+    List<Mapping> matchIoMapping (List<Mapping> typeMappings)
+    List<Mapping> matchTypeMapping (List<Mapping> typeMappings)
 
 }
 
@@ -37,36 +39,38 @@ abstract class BaseSchemaType implements SchemaType {
     }
 
     @Override
-    List<TypeMappingX> matchEndpointMapping (List<TypeMappingX> typeMappings) {
-        // mappings matching by path
-        List<TypeMappingX> endpoint = typeMappings.findAll {
-            it.isLevel (MappingLevel.ENDPOINT) && it.matches (info)
-        }.collect {
-            it.childMappings
-        }.flatten () as List<TypeMappingX>
+    List<Mapping> matchEndpointMapping (List<Mapping> typeMappings) {
+        List<Mapping> ep = findEndpointMappings (typeMappings)
 
-        // io mappings
-        List<TypeMappingX> io = endpoint.findAll {
-            it.isLevel (MappingLevel.IO) && it.matches (info)
-        }.collect {
-            it.childMappings
-        }.flatten () as List<TypeMappingX>
-
+        List<Mapping> io = findIoMappings (ep)
         if (!io.empty) {
             return io
         }
 
-        // type mappings
-        matchTypeMapping (endpoint)
+        matchTypeMapping (ep)
     }
 
-    List<TypeMappingX> matchIoMapping (List<TypeMappingX> typeMappings) {
-        // io mappings
-        typeMappings.findAll {
-            it.isLevel (MappingLevel.IO) && it.matches (info)
-        }.collect {
+    List<Mapping> matchIoMapping (List<Mapping> typeMappings) {
+        findIoMappings (typeMappings)
+    }
+
+    private List<Mapping> findEndpointMappings (List<Mapping> typeMappings) {
+        typeMappings
+            .findAll {
+                it.matches (ENDPOINT, info)
+            }
+            .collectMany {
+                it.childMappings
+            }
+    }
+
+    private List<Mapping> findIoMappings (List<Mapping> typeMappings) {
+        typeMappings
+            .findAll {
+                it.matches (IO, info)
+            }.collectMany {
             it.childMappings
-        }.flatten () as List<TypeMappingX>
+        }
     }
 
 }
@@ -78,9 +82,9 @@ class ObjectSchemaType extends BaseSchemaType {
     }
 
     @Override
-    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
+    List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
         typeMappings.findAll {
-            it.isLevel (MappingLevel.TYPE) && it.matches (info)
+            it.matches (TYPE, info)
         }
     }
 
@@ -93,10 +97,10 @@ class ArraySchemaType extends BaseSchemaType {
     }
 
     @Override
-    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
+    List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
         def array = new SchemaInfo (name: 'array')
         typeMappings.findAll () {
-            it.isLevel (MappingLevel.TYPE) && it.matches (array)
+            it.matches (TYPE, array)
         }
     }
 
@@ -109,12 +113,22 @@ class PrimitiveSchemaType extends BaseSchemaType {
     }
 
     @Override
-    List<TypeMappingX> matchTypeMapping (List<TypeMappingX> typeMappings) {
+    List<Mapping> matchTypeMapping (List<Mapping> typeMappings) {
+        def schemaType = new MappingSchemaType () {
+
+            @Override
+            String getType () {
+                return info.type
+            }
+
+            @Override
+            String getFormat () {
+                return info.format
+            }
+        }
+
         typeMappings.findAll () {
-            (it.isLevel (MappingLevel.TYPE)
-                // simple but ignores the interface!
-                && it.sourceTypeName == info.type
-                && it.sourceTypeFormat == info.format)
+            it.matches (TYPE, schemaType)
         }
     }
 

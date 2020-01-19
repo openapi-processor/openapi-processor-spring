@@ -1,0 +1,7 @@
+map:
+  paths:
+    /foo:
+
+      parameters:
+        - add: request
+          as: javax.servlet.http.HttpServletRequest

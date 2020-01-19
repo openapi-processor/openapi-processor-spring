@@ -8,7 +8,7 @@ nav_order: 1
 # Basic (primitive) Mappings
 
 The OpenAPI specification defines a couple of basic [data types][openapi-spec-types]{:target="_blank"}.
-The basic data types are built-in in the generatr. That means the generatr will map the basic types
+The basic data types are built-in into the generatr. That means the generatr will map the basic types
 automatically to a corresponding java type. There is no explicit type mapping required.
 
 ## OpenAPI to Java type mapping

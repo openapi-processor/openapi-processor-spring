@@ -65,8 +65,8 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 - gradle support via [openapi-generatr-gradle][generatr-gradle] plugin (the plugin is currently the only option
  to run the generatr).
 
-- <span class="label label-yellow">planned</span> add additional parameters to an endpoint which are not defined in
-  the openapi description. For example to pass a `HttpServletRequest` to the endpoint implementation.
+- add additional parameters to an endpoint which are not defined in the OpenAPI description. For example to pass
+ a `HttpServletRequest` to the endpoint implementation. <span class="label label-green">since 1.0.0.M6</span>
  
 - <span class="label label-yellow">planned</span> handle multiple responses by generating one endpoint method for
   each response content type.

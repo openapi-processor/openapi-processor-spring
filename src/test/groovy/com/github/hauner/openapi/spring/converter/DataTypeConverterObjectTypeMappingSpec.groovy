@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -389,6 +390,116 @@ paths:
                 )
             ]
         ]
+    }
+
+    void "converts query param object schema to Map<> set via mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint-map:
+    get:
+      parameters:
+        - name: props
+          description: query, map from single property
+          in: query
+          required: false
+          schema:
+            \$ref: '#/components/schemas/Props'
+      responses:
+        '204':
+          description: empty
+          
+components:
+
+  schemas:
+
+    Props:
+      type: object
+      properties:
+        prop1:
+          type: string
+        prop2:
+          type: string
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/endpoint-map',
+                    typeMappings: [
+                        new TypeMapping (
+                            sourceTypeName: 'Props',
+                            targetTypeName: 'java.util.Map',
+                            genericTypeNames: ['java.lang.String', 'java.lang.String'])
+                        ])
+            ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def p = ep.parameters.first ()
+        p.dataType.name == 'Map<String, String>'
+    }
+
+    void "converts query param object schema to MultiValueMap<> set via mapping" () {
+        def openApi = parse ("""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /endpoint-map:
+    get:
+      parameters:
+        - name: props
+          description: query, map from single property
+          in: query
+          required: false
+          schema:
+            \$ref: '#/components/schemas/Props'
+      responses:
+        '204':
+          description: empty
+          
+components:
+
+  schemas:
+
+    Props:
+      type: object
+      properties:
+        prop1:
+          type: string
+        prop2:
+          type: string
+""")
+
+        when:
+        def options = new ApiOptions(
+            packageName: 'pkg',
+            typeMappings: [
+                new EndpointTypeMapping (path: '/endpoint-map',
+                    typeMappings: [
+                        new TypeMapping (
+                            sourceTypeName: 'Props',
+                            targetTypeName: 'org.springframework.util.MultiValueMap',
+                            genericTypeNames: ['java.lang.String', 'java.lang.String'])
+                        ])
+            ])
+        Api api = new ApiConverter (options).convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def p = ep.parameters.first ()
+        p.dataType.name == 'MultiValueMap<String, String>'
     }
 
 }

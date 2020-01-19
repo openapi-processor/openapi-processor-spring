@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.model
 
-import com.github.hauner.openapi.spring.model.datatypes.DataType;
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 
 /**
  * Root of the internal model used to generate the api.

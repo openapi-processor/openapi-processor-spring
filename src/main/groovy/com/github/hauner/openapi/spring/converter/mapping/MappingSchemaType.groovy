@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,34 +14,17 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.datatypes
+package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * OpenAPI type 'object' with 'x-type-java': java.util.Map extension.
+ * Provides properties required to check if a {@link Mapping} applies to a
+ * {@link com.github.hauner.openapi.spring.converter.schema.SchemaType}.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class MapDataType implements DataType {
+interface MappingSchemaType {
 
-    @Override
-    String getName () {
-        'Map'
-    }
-
-    @Override
-    String getPackageName () {
-        'java.util'
-    }
-
-    @Override
-    Set<String> getImports () {
-        [[packageName, 'Map'].join('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        ['java.util.Map', 'java.lang.String']
-    }
+    String getType ()
+    String getFormat ()
 
 }

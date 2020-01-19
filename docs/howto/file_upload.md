@@ -5,7 +5,7 @@ parent: HowTo's
 nav_order: 15
 ---
 
-Describing and endpoint for uploading a singe file:
+# Describing and endpoint for uploading a singe file
 
 ```yaml
     /attachments:
@@ -30,7 +30,7 @@ Describing and endpoint for uploading a singe file:
                   format: int64
 ```
 
-Describing an endpoint for uploading multiple files:
+# Describing an endpoint for uploading multiple files
 
 ```yaml
     /attachments:

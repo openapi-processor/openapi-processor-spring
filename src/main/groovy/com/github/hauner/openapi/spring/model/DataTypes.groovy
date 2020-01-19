@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
@@ -28,6 +29,7 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 class DataTypes {
 
     private Map<String, DataType> types = [:]
+    private Map<String, MappedDataType> mappedTypes = [:]
 
     /**
      * provides all named data types (including simple data types) used by the api endpoint.
@@ -74,7 +76,7 @@ class DataTypes {
      * @param dataType the source data type
      */
     void add (DataType dataType) {
-        types.put (dataType.name, dataType)
+        add (dataType.name, dataType)
     }
 
     /**
@@ -84,7 +86,11 @@ class DataTypes {
      * @param dataType the source data type
      */
     void add (String name, DataType dataType) {
-        types.put (name, dataType)
+        if (dataType instanceof MappedDataType) {
+            mappedTypes.put (name, dataType)
+        } else {
+            types.put (name, dataType)
+        }
     }
 
     /**
@@ -94,7 +100,12 @@ class DataTypes {
      * @return the data type or null if not found
      */
     DataType find (String name) {
-        types.get (name)
+        def type = types.get (name)
+        if (type) {
+            return type
+        } else {
+            return mappedTypes.get (name)
+        }
     }
 
     /**

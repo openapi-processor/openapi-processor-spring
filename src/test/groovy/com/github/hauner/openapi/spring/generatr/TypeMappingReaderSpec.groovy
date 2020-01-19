@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.generatr
 
+import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
@@ -285,4 +286,39 @@ map:
         type.targetTypeName == 'java.util.Collection'
         type.genericTypeNames == []
     }
+
+    void "reads endpoint add mapping" () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  paths:
+    /foo:
+      parameters:
+        - add: request
+          as: javax.servlet.http.HttpServletRequest
+          
+        - name: bar
+          to: Bar
+"""
+
+        when:
+        def reader = new TypeMappingReader()
+        def mappings = reader.read (yaml)
+
+        then:
+        mappings.size () == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 2
+
+        def parameter = endpoint.typeMappings.first () as AddParameterTypeMapping
+        parameter.parameterName == 'request'
+        parameter.mapping.sourceTypeName == null
+        parameter.mapping.sourceTypeFormat == null
+        parameter.mapping.targetTypeName == 'javax.servlet.http.HttpServletRequest'
+        parameter.mapping.genericTypeNames == []
+    }
+
 }

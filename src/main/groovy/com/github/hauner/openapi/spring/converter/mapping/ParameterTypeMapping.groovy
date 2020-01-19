@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,13 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.ParameterSchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
  * of the given endpoint parameter.
  *
  * @author Martin Hauner
  */
-class ParameterTypeMapping implements TypeMappingX {
+class ParameterTypeMapping implements Mapping {
 
     /**
      * The parameter name of this mapping. Must match 1:1 with what is written in the api.
@@ -37,28 +34,18 @@ class ParameterTypeMapping implements TypeMappingX {
      */
     TypeMapping mapping
 
-    /**
-     * Checks if this is a mapping for the given parameter schema info
-     *
-     * @param info a parameter schema info
-     * @return true if it is a mapping for info, else false
-     */
     @Override
-    boolean matches (SchemaInfo info) {
-        if (! (info instanceof ParameterSchemaInfo)) {
-            return false
-        }
-
-        parameterName == info.name
+    boolean matches (Level level, MappingSchema schema) {
+        Level.IO == level && parameterName == schema.name
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.IO == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         [mapping]
     }
 

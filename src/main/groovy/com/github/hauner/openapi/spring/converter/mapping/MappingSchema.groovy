@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.schema
-
-import io.swagger.v3.oas.models.media.Schema
+package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Helper for {@link DataTypeConverter}. A {@link SchemaInfo} of an endpoint response.
+ * Provides the properties required to check if a {@link Mapping} applies to a
+ * {@link com.github.hauner.openapi.spring.converter.schema.SchemaType}.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class ResponseSchemaInfo extends SchemaInfo {
+interface MappingSchema {
 
-    /**
-     * Response content type.
-     */
-    String contentType
+    String getPath ()
+    String getName ()
+    String getContentType ()
 
-    ResponseSchemaInfo (String path, String contentType, Schema schema, String name) {
-        this.path = path
-        this.name = name
-        this.schema = schema
-        this.contentType = contentType
-    }
+    // getMatchType ()
+    // getMatchFormat ()
 
 }

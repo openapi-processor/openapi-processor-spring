@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.schema
-
-import io.swagger.v3.oas.models.media.Schema
+package com.github.hauner.openapi.spring.model.parameters
 
 /**
- * Helper for {@link DataTypeConverter}. A {@link SchemaInfo} of an endpoint parameter.
+ * Additional parameter, not defined in api but in type mapping.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class ParameterSchemaInfo extends SchemaInfo {
+class AdditionalParameter extends Parameter {
 
-    /**
-     * Parameter name.
-     */
-    String parameterName
+    String getAnnotationName () {
+        throw new IllegalStateException()
+    }
 
-    ParameterSchemaInfo (String path, Schema schema, String name) {
-        this.path = path
-        this.name = name
-        this.schema = schema
-        this.parameterName = name
+    boolean withAnnotation () {
+        false
+    }
+
+    boolean withParameters () {
+        false
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,13 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
-import com.github.hauner.openapi.spring.converter.schema.ResponseSchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
 /**
  * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
  * schema for the given endpoint content type.
  *
  * @author Martin Hauner
  */
-class ResponseTypeMapping implements TypeMappingX {
+class ResponseTypeMapping implements Mapping {
 
     /**
      * The content type of this mapping. Must match 1:1 with what is written in the api.
@@ -37,28 +34,18 @@ class ResponseTypeMapping implements TypeMappingX {
      */
     TypeMapping mapping
 
-    /**
-     * Checks if it is a mapping for the given response schema info
-     *
-     * @param info a response schema info
-     * @return true if it is a mapping for info, else false
-     */
     @Override
-    boolean matches (SchemaInfo info) {
-        if (! (info instanceof ResponseSchemaInfo)) {
-            return false
-        }
-
-        contentType == info.contentType
+    boolean matches (Level level, MappingSchema schema) {
+        Level.IO == level && contentType == schema.contentType
     }
 
     @Override
-    boolean isLevel (MappingLevel level) {
-        MappingLevel.IO == level
+    boolean matches (Level level, MappingSchemaType schemaType) {
+        false
     }
 
     @Override
-    List<TypeMappingX> getChildMappings () {
+    List<Mapping> getChildMappings () {
         [mapping]
     }
 

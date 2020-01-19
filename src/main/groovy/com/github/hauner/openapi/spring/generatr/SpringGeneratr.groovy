@@ -50,7 +50,7 @@ class SpringGeneratr implements OpenApiGeneratr {
         )
 
         SwaggerParseResult result = new OpenAPIV3Parser ()
-        .readLocation (generatrOptions.apiPath as String, null, opts)
+            .readLocation (generatrOptions.apiPath as String, null, opts)
 
         if (generatrOptions.showWarnings) {
             printWarnings(result.messages)
