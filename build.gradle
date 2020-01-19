@@ -47,7 +47,7 @@ dependencies {
     }
 
     testIntImplementation "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
-    testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.0'
+    testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.5'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
