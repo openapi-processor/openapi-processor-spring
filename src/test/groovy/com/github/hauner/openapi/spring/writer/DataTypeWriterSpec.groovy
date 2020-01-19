@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
@@ -25,8 +26,9 @@ import static com.github.hauner.openapi.spring.support.AssertHelper.extractImpor
 
 class DataTypeWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
+    def options = new ApiOptions()
 
-    def writer = new DataTypeWriter(headerWriter: headerWriter)
+    def writer = new DataTypeWriter(headerWriter: headerWriter, apiOptions: options)
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {

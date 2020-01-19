@@ -26,6 +26,7 @@ import io.swagger.v3.oas.models.media.Schema
  * schema with context information, i.e. name and if this is an inline type with a generated name.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class SchemaInfo implements MappingSchema {
 
@@ -136,6 +137,87 @@ class SchemaInfo implements MappingSchema {
      */
     def getDefaultValue() {
         schema.default
+    }
+
+    /**
+     * get nullable value.
+     *
+     * @return nullable value or null
+     */
+    def getNullable() {
+        schema.nullable
+    }
+
+    /**
+     * get minLength value.
+     *
+     * @return minLength value or null
+     */
+    def getMinLength() {
+        schema.minLength
+    }
+
+    /**
+     * get maxLength value.
+     *
+     * @return maxLength value or null
+     */
+    def getMaxLength() {
+        schema.maxLength
+    }
+
+    /**
+     * get minItems value.
+     *
+     * @return minItems value or null
+     */
+    def getMinItems() {
+        schema.minItems
+    }
+
+    /**
+     * get maxItems value.
+     *
+     * @return maxItems value or null
+     */
+    def getMaxItems() {
+        schema.maxItems
+    }
+
+    /**
+     * get maximum value.
+     *
+     * @return maximum value or null
+     */
+    def getMaximum() {
+        schema.maximum
+    }
+
+    /**
+     * get exclusiveMaximum value.
+     *
+     * @return exclusiveMaximum value or null
+     */
+    def getExclusiveMaximum() {
+        schema.exclusiveMaximum
+    }
+
+    /**
+     * get minimum value.
+     *
+     * @return minimum value or null
+     */
+    def getMinimum() {
+        schema.minimum
+    }
+
+    /**
+     * get exclusiveMinimum value.
+     *
+     * @return exclusiveMinimum value or null
+     */
+    def getExclusiveMinimum() {
+        schema.exclusiveMinimum
     }
 
     /**

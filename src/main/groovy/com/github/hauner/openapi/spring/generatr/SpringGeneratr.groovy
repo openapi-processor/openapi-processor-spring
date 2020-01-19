@@ -20,6 +20,7 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
+import com.github.hauner.openapi.spring.writer.BeanValidationWriter
 import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -33,6 +34,7 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  *  Entry point of openapi-generatr-spring.
  *
  *  @author Martin Hauner
+ *  @author Bastian Wilhelm
  */
 class SpringGeneratr implements OpenApiGeneratr {
 
@@ -61,11 +63,20 @@ class SpringGeneratr implements OpenApiGeneratr {
         def api = cv.convert (result.openAPI)
 
         def headerWriter = new HeaderWriter()
+        def beanValidationWriter = new BeanValidationWriter()
         def writer = new ApiWriter (options,
             new InterfaceWriter(
                 headerWriter: headerWriter,
-                methodWriter: new MethodWriter()),
-            new DataTypeWriter(headerWriter: headerWriter),
+                methodWriter: new MethodWriter(
+                    apiOptions: options,
+                    beanValidationWriter: beanValidationWriter
+                ),
+                beanValidationWriter: beanValidationWriter,
+                apiOptions: options),
+            new DataTypeWriter(
+                headerWriter: headerWriter,
+                apiOptions: options,
+                beanValidationWriter: beanValidationWriter),
             new StringEnumWriter(headerWriter: headerWriter)
         )
 
@@ -79,6 +90,7 @@ class SpringGeneratr implements OpenApiGeneratr {
         options.targetDir = generatrOptions.targetDir
         options.packageName = generatrOptions.packageName
         options.typeMappings = reader.read (generatrOptions.typeMappings as String)
+        options.beanValidation = generatrOptions.beanValidation != null && generatrOptions.beanValidation == true
         options
     }
 

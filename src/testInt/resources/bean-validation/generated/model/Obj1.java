@@ -6,17 +6,18 @@
 package generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.*;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
 
 public class Obj1 {
 
-    @JsonProperty("pro1")
+    @JsonProperty("prop1")
     @NotNull
     private String prop1;
 
     @JsonProperty("prop2")
-    @DecimalMax(value = 3)
+    @DecimalMax(value = "3")
     private Integer prop2;
 
     @JsonProperty("prop3")

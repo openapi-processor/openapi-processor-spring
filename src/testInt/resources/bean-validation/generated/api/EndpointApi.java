@@ -6,14 +6,16 @@
 package generated.api;
 
 import generated.model.Obj1;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 public interface EndpointApi {
 
@@ -26,22 +28,34 @@ public interface EndpointApi {
     ResponseEntity<Void> getEndpointLength(
             @Size(min = 2) @RequestParam(name = "min-length", required = false) String minLength,
             @Size(max = 4) @RequestParam(name = "max-length", required = false) String maxLength,
-            @Size(min = 2, max = 4) @RequestParam(name = "min-max-length", required = false) String minMaxLength);
+            @Size(min = 2, max = 4) @RequestParam(name = "min-max-length", required = false)
+                    String minMaxLength);
 
     @GetMapping(path = "/endpoint/minmax")
     ResponseEntity<Void> getEndpointMinmax(
-            @DecimalMin(value = 10) @RequestParam(name = "min", required = false) Integer min,
-            @DecimalMin(value = 10, inclusive = false) @RequestParam(name = "min-ex", required = false) Integer minEx,
-            @DecimalMax(value = 20) @RequestParam(name = "max", required = false) Integer max,
-            @DecimalMax(value = 20, inclusive = false) @RequestParam(name = "max-ex", required = false) Integer maxEx,
-            @DecimalMin(value = 10) @DecimalMax(value = 20) @RequestParam(name = "min-max", required = false) Integer minMax,
-            @DecimalMin(value = 10, inclusive = false) @DecimalMax(value = 20, inclusive = false) @RequestParam(name = "min-max-ex", required = false) Integer minMaxEx);
+            @DecimalMin(value = "10") @RequestParam(name = "min", required = false) Integer min,
+            @DecimalMin(value = "10", inclusive = false)
+                    @RequestParam(name = "min-ex", required = false)
+                    Integer minEx,
+            @DecimalMax(value = "20") @RequestParam(name = "max", required = false) Integer max,
+            @DecimalMax(value = "20", inclusive = false)
+                    @RequestParam(name = "max-ex", required = false)
+                    Integer maxEx,
+            @DecimalMin(value = "10")
+                    @DecimalMax(value = "20")
+                    @RequestParam(name = "min-max", required = false)
+                    Integer minMax,
+            @DecimalMin(value = "10", inclusive = false)
+                    @DecimalMax(value = "20", inclusive = false)
+                    @RequestParam(name = "min-max-ex", required = false)
+                    Integer minMaxEx);
 
     @GetMapping(path = "/endpoint/items")
     ResponseEntity<Void> getEndpointItems(
-            @Size(min = 2) @RequestParam(name = "min", required = false) List<String> min,
-            @Size(max = 4) @RequestParam(name = "max", required = false) List<String> max,
-            @Size(min = 2, max = 4) @RequestParam(name = "min-max", required = false) List<String> minMax);
+            @Size(min = 2) @RequestParam(name = "min", required = false) String[] min,
+            @Size(max = 4) @RequestParam(name = "max", required = false) String[] max,
+            @Size(min = 2, max = 4) @RequestParam(name = "min-max", required = false)
+                    String[] minMax);
 
     @PostMapping(
             path = "/endpoint/obj",

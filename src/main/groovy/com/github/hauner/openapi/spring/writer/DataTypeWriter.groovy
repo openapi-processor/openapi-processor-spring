@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
@@ -24,15 +25,26 @@ import com.github.hauner.openapi.support.Identifier
  * Writer for POJO classes.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class DataTypeWriter {
+    ApiOptions apiOptions
     HeaderWriter headerWriter
+    BeanValidationWriter beanValidationWriter
 
     void write (Writer target, ObjectDataType dataType) {
         headerWriter.write (target)
         target.write ("package ${dataType.packageName};\n\n")
 
         List<String> imports = collectImports (dataType.packageName, dataType)
+        if(apiOptions.beanValidation){
+            for (DataType propDataType  : dataType.properties.values ()) {
+                imports.addAll (beanValidationWriter.collectImports (propDataType))
+            }
+        }
+
+        imports.sort ()
+
         imports.each {
             target.write ("import ${it};\n")
         }
@@ -47,6 +59,9 @@ class DataTypeWriter {
             def javaPropertyName = Identifier.toCamelCase (it)
             def propDataType = dataType.getObjectProperty (it)
             target.write ("    @JsonProperty(\"$it\")\n")
+            if(apiOptions.beanValidation){
+                target.write (beanValidationWriter.createAnnotations (propDataType))
+            }
             target.write ("    private ${propDataType.name} ${javaPropertyName};\n\n")
         }
 
@@ -78,9 +93,14 @@ class DataTypeWriter {
 """
     }
 
-    List<String> collectImports(String packageName, DataType dataType) {
+    List<String> collectImports (String packageName, DataType dataType) {
         Set<String> imports = []
         imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
+
+//        if (apiOptions.beanValidation) {
+//            imports.addAll (beanValidationWriter.collectImports ());
+//        }
+
         imports.addAll (dataType.referencedImports)
 
         new ImportFilter ().filter (packageName, imports)

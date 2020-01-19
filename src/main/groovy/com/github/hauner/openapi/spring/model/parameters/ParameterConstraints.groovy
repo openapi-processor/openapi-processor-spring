@@ -22,13 +22,14 @@ import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
  * Constraints of the parameter data type.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class ParameterConstraints {
 
     DataTypeConstraints constraints
 
     boolean hasDefault() {
-        constraints != null
+        constraints?.defaultValue != null
     }
 
     def getDefault() {
