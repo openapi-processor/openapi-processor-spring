@@ -52,9 +52,7 @@ class DataTypeWriter {
             def javaPropertyName = Identifier.toCamelCase (it)
             def propDataType = dataType.getObjectProperty (it)
             target.write ("    @JsonProperty(\"$it\")\n")
-            if(apiOptions.beanValidation){
-                target.write (beanValidationWriter.createAnnotations (propDataType))
-            }
+            target.write(getBeanValidations(propDataType))
             target.write ("    private ${propDataType.name} ${javaPropertyName};\n\n")
         }
 
@@ -66,6 +64,14 @@ class DataTypeWriter {
         }
 
         target.write ("}\n")
+    }
+
+    private String getBeanValidations(DataType propDataType) {
+        if (apiOptions.beanValidation) {
+            beanValidationWriter.createAnnotations(propDataType)
+        } else {
+            ''
+        }
     }
 
     private String getGetter (String propertyName, DataType propDataType) {
