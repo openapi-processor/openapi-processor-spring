@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: test simple path parameters
+  title: test bean-validation cases
   version: 1.0.0
 
 paths:
