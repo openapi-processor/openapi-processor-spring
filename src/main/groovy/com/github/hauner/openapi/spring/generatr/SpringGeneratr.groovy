@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,11 +74,16 @@ class SpringGeneratr implements OpenApiGeneratr {
 
     private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
         def options = new ApiOptions()
-        def reader = new TypeMappingReader ()
         options.apiPath = generatrOptions.apiPath
         options.targetDir = generatrOptions.targetDir
         options.packageName = generatrOptions.packageName
-        options.typeMappings = reader.read (generatrOptions.typeMappings as String)
+
+        def reader = new MappingReader ()
+        def converter = new MappingConverter()
+        def mapping = reader.read (generatrOptions.typeMappings as String)
+        if (mapping) {
+            options.typeMappings = converter.convert (mapping)
+        }
         options
     }
 
