@@ -22,8 +22,14 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import spock.lang.Specification
+import spock.lang.Subject
 
-class TypeMappingReaderSpec extends Specification {
+class MappingConverterSpec extends Specification {
+
+    def reader = new MappingReader()
+
+    @Subject
+    def converter = new MappingConverter()
 
     void "reads global type mapping" () {
         String yaml = """\
@@ -36,8 +42,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -67,8 +73,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 2
@@ -97,8 +103,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -120,8 +126,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -147,8 +153,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -176,8 +182,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -203,8 +209,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -233,8 +239,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -266,8 +272,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
