@@ -1,0 +1,4 @@
+map:
+  paths:
+    /endpoint-skipme/{foo}:
+      exclude: true
