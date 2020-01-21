@@ -61,12 +61,12 @@ class InterfaceWriter {
             imports.add (ep.method.classNameWithPackage)
 
             ep.parameters.each { p ->
+                if (apiOptions.beanValidation) {
+                    imports.addAll(beanValidationWriter.collectImports (p.dataType))
+                }
+
                 if (p.withAnnotation()) {
                     imports.add (p.annotationWithPackage)
-
-                    if (apiOptions.beanValidation) {
-                        imports.addAll(beanValidationWriter.collectImports (p.dataType))
-                    }
                 }
 
                 imports.addAll (p.dataTypeImports)

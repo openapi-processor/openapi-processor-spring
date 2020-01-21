@@ -107,11 +107,11 @@ class MethodWriter {
 
             def methodDefinition = ''
 
-            if (it.withAnnotation ()) {
-                if(apiOptions.beanValidation){
-                    methodDefinition += " ${beanValidationWriter.createAnnotations(it.dataType)}"
-                }
+            if(apiOptions.beanValidation){
+                methodDefinition += " ${beanValidationWriter.createAnnotations(it.dataType)}"
+            }
 
+            if (it.withAnnotation ()) {
                 methodDefinition += " ${createParameterAnnotation (it)}"
             }
 
