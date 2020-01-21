@@ -30,7 +30,7 @@ class InterfaceWriter {
     ApiOptions apiOptions
     HeaderWriter headerWriter
     MethodWriter methodWriter
-    BeanValidationWriter beanValidationWriter
+    BeanValidationFactory beanValidationWriter
 
     void write (Writer target, Interface itf) {
         headerWriter.write (target)

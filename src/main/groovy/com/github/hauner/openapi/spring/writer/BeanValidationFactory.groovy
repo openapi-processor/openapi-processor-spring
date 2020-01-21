@@ -32,7 +32,7 @@ import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 /**
  * @author Bastian Wilhelm
  */
-class BeanValidationWriter {
+class BeanValidationFactory {
     Set<String> collectImports (DataType dataType) {
         Set<String> imports = []
 

@@ -30,7 +30,7 @@ import com.github.hauner.openapi.support.Identifier
 class DataTypeWriter {
     ApiOptions apiOptions
     HeaderWriter headerWriter
-    BeanValidationWriter beanValidationWriter
+    BeanValidationFactory beanValidationWriter
 
     void write (Writer target, ObjectDataType dataType) {
         headerWriter.write (target)

@@ -20,7 +20,7 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
-import com.github.hauner.openapi.spring.writer.BeanValidationWriter
+import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -63,7 +63,7 @@ class SpringGeneratr implements OpenApiGeneratr {
         def api = cv.convert (result.openAPI)
 
         def headerWriter = new HeaderWriter()
-        def beanValidationWriter = new BeanValidationWriter()
+        def beanValidationWriter = new BeanValidationFactory()
         def writer = new ApiWriter (options,
             new InterfaceWriter(
                 headerWriter: headerWriter,

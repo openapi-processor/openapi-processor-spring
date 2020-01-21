@@ -31,7 +31,7 @@ import com.github.hauner.openapi.support.Identifier
 class MethodWriter {
 
     ApiOptions apiOptions
-    BeanValidationWriter beanValidationWriter
+    BeanValidationFactory beanValidationWriter
 
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
