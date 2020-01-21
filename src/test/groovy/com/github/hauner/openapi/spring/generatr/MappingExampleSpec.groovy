@@ -17,8 +17,16 @@
 package com.github.hauner.openapi.spring.generatr
 
 import spock.lang.Specification
+import spock.lang.Subject
 
-class TypeMappingReaderExampleSpec extends Specification {
+class MappingExampleSpec extends Specification {
+
+    @Subject
+    def reader = new MappingReader()
+
+    @Subject
+    def converter = new MappingConverter()
+
 
     String yaml = """
 map:
@@ -73,8 +81,8 @@ map:
 
     void "parses mapping yaml" () {
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings
