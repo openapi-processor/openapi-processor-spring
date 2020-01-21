@@ -3,12 +3,14 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'org.unbroken-dome.test-sets' version '2.1.1'
+    id 'org.unbroken-dome.test-sets' version '2.2.1'
+    id "com.github.ben-manes.versions" version "0.27.0"
 }
 
 group 'com.github.hauner.openapi'
 version '1.0.0.M5'
 
+sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
@@ -34,8 +36,7 @@ check.dependsOn testInt
 
 dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.4'
-    implementation 'io.swagger.parser.v3:swagger-parser:2.0.12'
-    implementation 'org.yaml:snakeyaml:1.25'
+    implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
 

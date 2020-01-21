@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,15 @@ class TypeMappingReaderSpec extends Specification {
     TemporaryFolder folder
 
     void "ignores empty type mapping" () {
-        def yaml = ""
-
         when:
         def reader = new TypeMappingReader()
         def mappings = reader.read (yaml)
 
         then:
-        mappings == null
+        mappings == []
+
+        where:
+        yaml << [null, ""]
     }
 
     void "reads mapping from file" () {
@@ -171,7 +172,7 @@ map:
         response.mapping.genericTypeNames == []
     }
 
-    void "reads endpoint response type mapping " () {
+    void "reads endpoint response type mapping" () {
         String yaml = """\
 openapi-generatr-spring: v1.0
     
