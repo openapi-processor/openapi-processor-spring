@@ -21,8 +21,6 @@ import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 class TypeMappingReaderSpec extends Specification {
