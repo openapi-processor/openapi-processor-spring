@@ -290,4 +290,30 @@ map:
         parameter.mapping.genericTypeNames == []
     }
 
+    void "reads endpoint exclude flag" () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  paths:
+    /foo:
+      exclude: ${exclude.toString ()}
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.exclude == exclude
+        endpoint.typeMappings.empty
+
+        where:
+        exclude << [true, false]
+    }
+
 }

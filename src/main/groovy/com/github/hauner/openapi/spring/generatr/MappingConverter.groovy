@@ -138,7 +138,7 @@ class MappingConverter {
             result.add (convertResponse (it))
         }
 
-        new EndpointTypeMapping(path: path, typeMappings: result)
+        new EndpointTypeMapping(path: path, exclude: source.exclude, typeMappings: result)
     }
 
 }
