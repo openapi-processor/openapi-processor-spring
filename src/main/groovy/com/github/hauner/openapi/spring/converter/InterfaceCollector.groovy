@@ -16,6 +16,10 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.model.Interface
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
@@ -31,6 +35,25 @@ class InterfaceCollector {
     public static final String INTERFACE_DEFAULT_NAME = ''
 
     private ApiOptions options
+
+    class MappingSchemaEndpoint implements MappingSchema {
+        String path
+
+        @Override
+        String getPath () {
+            path
+        }
+
+        @Override
+        String getName () {
+            null
+        }
+
+        @Override
+        String getContentType () {
+            null
+        }
+    }
 
     InterfaceCollector(ApiOptions options) {
         this.options = options
@@ -49,7 +72,11 @@ class InterfaceCollector {
         paths.each { Map.Entry<String, PathItem> entry ->
             def operations = collectOperations (entry.value)
             operations.each { op ->
-                String targetInterfaceName = getInterfaceName (op)
+                String targetInterfaceName = getInterfaceName (op, isExcluded (entry.key))
+
+                if (interfaces.containsKey (targetInterfaceName)) {
+                    return
+                }
 
                 def itf = new Interface (
                     pkg: [options.packageName, 'api'].join ('.'),
@@ -63,15 +90,36 @@ class InterfaceCollector {
         interfaces.values () as List
     }
 
+    private boolean isExcluded (String path) {
+        def endpointMatches = options.typeMappings.findAll {
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint(path: path))
+        }
+
+        if (!endpointMatches.empty) {
+            if (endpointMatches.size () != 1) {
+                throw new AmbiguousTypeMappingException (endpointMatches)
+            }
+
+            def match = endpointMatches.first () as EndpointTypeMapping
+            return match.exclude
+        }
+
+        false
+    }
+
     private List<Operation> collectOperations(PathItem item) {
         new OperationCollector ().collect (item)
     }
 
-    private String getInterfaceName (def op) {
+    private String getInterfaceName (def op, boolean excluded) {
         String targetInterfaceName = INTERFACE_DEFAULT_NAME
 
         if (hasTags (op)) {
             targetInterfaceName = op.tags.first ()
+        }
+
+        if (excluded) {
+            targetInterfaceName += 'Excluded'
         }
 
         targetInterfaceName

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
@@ -52,4 +52,25 @@ class InterfaceCollectorSpec extends Specification {
         then:
         result.first ().interfaceName == 'Api'
     }
+
+    void "creates 'Excluded' interface when an endpoint should be skipped" () {
+        def options = new ApiOptions(typeMappings: [
+            new EndpointTypeMapping (path: '/foo', exclude: true, typeMappings: [])
+        ])
+
+        def collector = new InterfaceCollector(options)
+
+        def paths = new Paths()
+        paths.put ('/bar', new PathItem(get: new Operation()))
+        paths.put ('/foo', new PathItem(get: new Operation()))
+
+        when:
+        def result = collector.collect (paths)
+
+        then:
+        result.size () == 2
+        result[0].interfaceName == 'Api'
+        result[1].interfaceName == 'ExcludedApi'
+    }
+
 }
