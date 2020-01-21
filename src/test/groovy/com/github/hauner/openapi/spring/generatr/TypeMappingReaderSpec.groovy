@@ -27,42 +27,6 @@ import spock.lang.Specification
 
 class TypeMappingReaderSpec extends Specification {
 
-    @Rule
-    TemporaryFolder folder
-
-    void "ignores empty type mapping" () {
-        when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
-
-        then:
-        mappings == []
-
-        where:
-        yaml << [null, ""]
-    }
-
-    void "reads mapping from file" () {
-        def yaml = """\
-openapi-generatr-spring: v1.0
-    
-map:
-  types:
-    - from: array
-      to: java.util.Collection
-"""
-
-        def yamlFile = folder.newFile ("openapi-generatr-spring.yaml")
-        yamlFile.text = yaml
-
-        when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yamlFile.absolutePath)
-
-        then:
-        mappings.size () == 1
-    }
-
     void "reads global type mapping" () {
         String yaml = """\
 openapi-generatr-spring: v1.0
