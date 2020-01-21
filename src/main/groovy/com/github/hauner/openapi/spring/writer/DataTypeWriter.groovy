@@ -37,13 +37,6 @@ class DataTypeWriter {
         target.write ("package ${dataType.packageName};\n\n")
 
         List<String> imports = collectImports (dataType.packageName, dataType)
-        if(apiOptions.beanValidation){
-            for (DataType propDataType  : dataType.properties.values ()) {
-                imports.addAll (beanValidationWriter.collectImports (propDataType))
-            }
-        }
-
-        imports.sort ()
 
         imports.each {
             target.write ("import ${it};\n")
@@ -93,15 +86,17 @@ class DataTypeWriter {
 """
     }
 
-    List<String> collectImports (String packageName, DataType dataType) {
+    List<String> collectImports (String packageName, ObjectDataType dataType) {
         Set<String> imports = []
         imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
 
-//        if (apiOptions.beanValidation) {
-//            imports.addAll (beanValidationWriter.collectImports ());
-//        }
-
         imports.addAll (dataType.referencedImports)
+
+        if(apiOptions.beanValidation){
+            for (DataType propDataType  : dataType.properties.values ()) {
+                imports.addAll (beanValidationWriter.collectImports (propDataType))
+            }
+        }
 
         new ImportFilter ().filter (packageName, imports)
             .sort ()
