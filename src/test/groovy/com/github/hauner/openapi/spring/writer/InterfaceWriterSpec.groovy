@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
@@ -37,8 +38,9 @@ import static com.github.hauner.openapi.spring.support.AssertHelper.extractImpor
 class InterfaceWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
     def methodWriter = Stub MethodWriter
+    def apiOptions = new ApiOptions()
 
-    def writer = new InterfaceWriter(headerWriter: headerWriter, methodWriter: methodWriter)
+    def writer = new InterfaceWriter(headerWriter: headerWriter, methodWriter: methodWriter, apiOptions: apiOptions)
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {

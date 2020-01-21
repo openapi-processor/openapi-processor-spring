@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.RequestBody
@@ -40,7 +41,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class MethodWriterSpec extends Specification {
-    def writer = new MethodWriter ()
+    def apiOptions = new ApiOptions()
+    def writer = new MethodWriter (apiOptions: apiOptions)
     def target = new StringWriter ()
 
     void "writes parameter less method without response" () {

@@ -109,24 +109,24 @@ class MethodWriter {
 
             if (it.withAnnotation ()) {
                 if(apiOptions.beanValidation){
-                    methodDefinition += " ${beanValidationWriter.createAnnotations(it.dataType)} "
+                    methodDefinition += " ${beanValidationWriter.createAnnotations(it.dataType)}"
                 }
 
-                methodDefinition += " ${createParameterAnnotation (it)} "
+                methodDefinition += " ${createParameterAnnotation (it)}"
             }
 
-            methodDefinition += " ${it.dataType.name} ${Identifier.toCamelCase (it.name)} "
-            methodDefinition
+            methodDefinition += " ${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
+            methodDefinition.trim()
         }
 
         if (!endpoint.requestBodies.empty) {
             def body = endpoint.requestBody
             def beanValidationAnnotations = ''
             if(apiOptions.beanValidation){
-                beanValidationAnnotations += " ${beanValidationWriter.createAnnotations(body.requestBodyType)} "
+                beanValidationAnnotations += " ${beanValidationWriter.createAnnotations(body.requestBodyType)}"
             }
             def param = "${beanValidationAnnotations} ${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
-            ps.add (param)
+            ps.add (param.trim())
         }
 
         ps.join (', ')
