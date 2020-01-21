@@ -49,15 +49,14 @@ abstract class GeneratrTestBase {
         def options = [
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root,
-            packageName: packageName
+            packageName: packageName,
+            beanValidation: testSet.beanValidation
         ]
 
         def mapping = new File("./src/testInt/resources/${source}/mapping.yaml")
         if(mapping.exists ()) {
             options.typeMappings = mapping
         }
-        def beanValidation = new File ("./src/testInt/resources/${source}/beanvalidation")
-        options.beanValidation = beanValidation.exists ()
 
         when:
         generatr.run (options)
