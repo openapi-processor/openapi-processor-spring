@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-public interface ApiSkipped {
+public interface ExcludedApi {
 
     @GetMapping(path = "/endpoint-exclude/{foo}")
     ResponseEntity<Void> getEndpointExcludeFoo(@PathVariable(name = "foo") String foo);
