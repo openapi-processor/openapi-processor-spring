@@ -45,6 +45,7 @@ import java.util.regex.Pattern
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class TypeMappingReader {
     private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
