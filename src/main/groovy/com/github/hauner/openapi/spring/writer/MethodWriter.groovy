@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.parameters.Parameter
@@ -25,8 +26,12 @@ import com.github.hauner.openapi.support.Identifier
  * Writer for Java interface methods, i.e. endpoints.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class MethodWriter {
+
+    ApiOptions apiOptions
+    BeanValidationFactory beanValidationFactory
 
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
@@ -100,18 +105,28 @@ class MethodWriter {
     private String createParameters (Endpoint endpoint) {
         def ps = endpoint.parameters.collect {
 
-            if (it.withAnnotation ()) {
-                "${createParameterAnnotation (it)} ${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
-            } else {
-                "${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
+            def methodDefinition = ''
+
+            if (apiOptions.beanValidation) {
+                methodDefinition += " ${beanValidationFactory.createAnnotations (it.dataType)}"
             }
 
+            if (it.withAnnotation ()) {
+                methodDefinition += " ${createParameterAnnotation (it)}"
+            }
+
+            methodDefinition += " ${it.dataType.name} ${Identifier.toCamelCase (it.name)}"
+            methodDefinition.trim()
         }
 
         if (!endpoint.requestBodies.empty) {
             def body = endpoint.requestBody
-            def param = "${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
-            ps.add (param)
+            def beanValidationAnnotations = ''
+            if (apiOptions.beanValidation) {
+                beanValidationAnnotations += " ${beanValidationFactory.createAnnotations (body.requestBodyType)}"
+            }
+            def param = "${beanValidationAnnotations} ${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
+            ps.add (param.trim())
         }
 
         ps.join (', ')

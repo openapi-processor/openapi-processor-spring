@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
@@ -24,15 +25,19 @@ import com.github.hauner.openapi.support.Identifier
  * Writer for POJO classes.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class DataTypeWriter {
+    ApiOptions apiOptions
     HeaderWriter headerWriter
+    BeanValidationFactory beanValidationFactory
 
     void write (Writer target, ObjectDataType dataType) {
         headerWriter.write (target)
         target.write ("package ${dataType.packageName};\n\n")
 
         List<String> imports = collectImports (dataType.packageName, dataType)
+
         imports.each {
             target.write ("import ${it};\n")
         }
@@ -46,8 +51,7 @@ class DataTypeWriter {
         propertyNames.each {
             def javaPropertyName = Identifier.toCamelCase (it)
             def propDataType = dataType.getObjectProperty (it)
-            target.write ("    @JsonProperty(\"$it\")\n")
-            target.write ("    private ${propDataType.name} ${javaPropertyName};\n\n")
+            target.write (getProp (it, javaPropertyName, propDataType))
         }
 
         propertyNames.each {
@@ -58,6 +62,21 @@ class DataTypeWriter {
         }
 
         target.write ("}\n")
+    }
+
+    private String getProp (String propertyName, String javaPropertyName, DataType propDataType) {
+        String result
+        result = "    @JsonProperty(\"${propertyName}\")\n"
+
+        if (apiOptions.beanValidation) {
+            def beanValidationAnnotations = beanValidationFactory.createAnnotations (propDataType)
+            if (!beanValidationAnnotations.empty) {
+                result += "    $beanValidationAnnotations\n"
+            }
+        }
+
+        result += "    private ${propDataType.name} ${javaPropertyName};\n\n"
+        result
     }
 
     private String getGetter (String propertyName, DataType propDataType) {
@@ -78,10 +97,17 @@ class DataTypeWriter {
 """
     }
 
-    List<String> collectImports(String packageName, DataType dataType) {
+    List<String> collectImports (String packageName, ObjectDataType dataType) {
         Set<String> imports = []
         imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
+
         imports.addAll (dataType.referencedImports)
+
+        if (apiOptions.beanValidation) {
+            for (DataType propDataType : dataType.properties.values ()) {
+                imports.addAll (beanValidationFactory.collectImports (propDataType))
+            }
+        }
 
         new ImportFilter ().filter (packageName, imports)
             .sort ()

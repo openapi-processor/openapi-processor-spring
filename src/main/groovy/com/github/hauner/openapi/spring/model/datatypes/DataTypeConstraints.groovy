@@ -18,10 +18,22 @@ package com.github.hauner.openapi.spring.model.datatypes
 
 /**
  * OpenAPI constraint details of a data type.
+ *
+ * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class DataTypeConstraints {
 
     def defaultValue
+    def nullable
+    def minLength
+    def maxLength
+    def minimum
+    def exclusiveMinimum
+    def maximum
+    def exclusiveMaximum
+    def minItems
+    def maxItems
 
     def getDefault () {
         defaultValue

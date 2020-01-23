@@ -49,7 +49,8 @@ abstract class GeneratrTestBase {
         def options = [
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root,
-            packageName: packageName
+            packageName: packageName,
+            beanValidation: testSet.beanValidation
         ]
 
         def mapping = new File("./src/testInt/resources/${source}/mapping.yaml")

@@ -42,7 +42,8 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
             new TestSet(name: 'response-complex-data-types'),
             new TestSet(name: 'response-simple-data-types'),
             new TestSet(name: 'params-simple-data-types'),
-            new TestSet(name: 'params-complex-data-types')
+            new TestSet(name: 'params-complex-data-types'),
+            new TestSet(name: 'bean-validation', beanValidation: true),
         ]
     }
 

@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 
@@ -23,10 +24,13 @@ import com.github.hauner.openapi.spring.model.Interface
  * Writer for Java interfaces.
  *
  * @author Martin Hauner
+ * @authro Bastian Wilhelm
  */
 class InterfaceWriter {
+    ApiOptions apiOptions
     HeaderWriter headerWriter
     MethodWriter methodWriter
+    BeanValidationFactory beanValidationFactory
 
     void write (Writer target, Interface itf) {
         headerWriter.write (target)
@@ -57,6 +61,10 @@ class InterfaceWriter {
             imports.add (ep.method.classNameWithPackage)
 
             ep.parameters.each { p ->
+                if (apiOptions.beanValidation) {
+                    imports.addAll (beanValidationFactory.collectImports (p.dataType))
+                }
+
                 if (p.withAnnotation()) {
                     imports.add (p.annotationWithPackage)
                 }
@@ -67,6 +75,9 @@ class InterfaceWriter {
             ep.requestBodies.each { b ->
                 imports.add (b.annotationWithPackage)
                 imports.addAll (b.imports)
+                if (apiOptions.beanValidation) {
+                    imports.addAll (beanValidationFactory.collectImports (b.requestBodyType))
+                }
             }
 
             if (!ep.response.empty) {

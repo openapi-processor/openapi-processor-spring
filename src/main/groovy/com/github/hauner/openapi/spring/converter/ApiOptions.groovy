@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
  * Options of the generatr.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class ApiOptions {
 
@@ -57,5 +58,10 @@ class ApiOptions {
      * endpoint.
      */
     List<Mapping> typeMappings
+
+    /**
+     * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
+     */
+    boolean beanValidation = false;
 
 }

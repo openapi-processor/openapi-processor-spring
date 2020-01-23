@@ -20,11 +20,14 @@ package com.github.hauner.openapi.spring.model.datatypes
  * OpenAPI named #/component/schemas type or an inline type.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class ObjectDataType implements DataType {
 
     String type
     String pkg = 'unknown'
+    private DataTypeConstraints constraints
+
 
     // must preserve the insertion order
     Map<String, DataType> properties = new LinkedHashMap<> ()
@@ -65,4 +68,8 @@ class ObjectDataType implements DataType {
         properties
     }
 
+    @Override
+    DataTypeConstraints getConstraints () {
+        constraints
+    }
 }

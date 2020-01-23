@@ -20,10 +20,12 @@ package com.github.hauner.openapi.spring.model.datatypes
  * OpenAPI type 'array' maps to Collection<>.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class CollectionDataType implements DataType {
 
     private DataType item
+    private DataTypeConstraints constraints
 
     @Override
     String getName () {
@@ -45,4 +47,8 @@ class CollectionDataType implements DataType {
         []
     }
 
+    @Override
+    DataTypeConstraints getConstraints () {
+        constraints
+    }
 }
