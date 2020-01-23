@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -101,6 +102,95 @@ paths:
 
         where:
         method << ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
+    }
+
+    void "sets interface package from generatr options with 'api' sub package" () {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '204':
+          description: no content
+""")
+
+        def options = new ApiOptions(
+            packageName: 'a.package.name'
+        )
+
+        when:
+        def api = new ApiConverter (options)
+            .convert (openApi)
+
+        then:
+        api.interfaces.first ().packageName == [options.packageName, 'api'].join ('.')
+    }
+
+    void "sets empty interface name when no interface name tag was provided" () {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '204':
+          description: no content
+""")
+
+        when:
+        def api = new ApiConverter ()
+            .convert (openApi)
+
+        then:
+        api.interfaces.first ().interfaceName == 'Api'
+    }
+
+    void "creates 'Excluded' interface when an endpoint should be skipped" () {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: API
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '204':
+          description: no content
+
+  /bar:
+    get:
+      responses:
+        '204':
+          description: no content
+""")
+
+        def options = new ApiOptions(typeMappings: [
+            new EndpointTypeMapping (path: '/foo', exclude: true, typeMappings: [])
+        ])
+
+        when:
+        def api = new ApiConverter (options)
+            .convert (openApi)
+
+        then:
+        def result = api.interfaces
+        result.size () == 2
+        result[0].interfaceName == 'Api'
+        result[1].interfaceName == 'ExcludedApi'
     }
 
 }

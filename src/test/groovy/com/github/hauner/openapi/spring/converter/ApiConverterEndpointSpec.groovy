@@ -159,7 +159,7 @@ paths:
         api = new ApiConverter ().convert (openApi)
 
         then:
-        api.interfaces.get (0).name == InterfaceCollector.INTERFACE_DEFAULT_NAME
+        api.interfaces.get (0).name == ApiConverter.INTERFACE_DEFAULT_NAME
     }
 
     void "keeps order of endpoints"() {
