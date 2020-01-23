@@ -24,6 +24,11 @@ package com.github.hauner.openapi.spring.generatr.mapping
 class Path {
 
     /**
+     * path should be excluded
+     */
+    boolean exclude = false
+
+    /**
      * path limited type mappings
      */
     List<Type> types

@@ -17,6 +17,8 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
@@ -26,6 +28,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -57,16 +60,17 @@ import io.swagger.v3.oas.models.responses.ApiResponses
 @Slf4j
 class ApiConverter {
     public static final String MULTIPART = "multipart/form-data"
+    public static final String INTERFACE_DEFAULT_NAME = ''
 
     private DataTypeConverter dataTypeConverter
     private ApiOptions options
 
     class MappingSchemaEndpoint implements MappingSchema {
-        Endpoint endpoint
+        String path
 
         @Override
         String getPath () {
-            endpoint.path
+            path
         }
 
         @Override
@@ -98,40 +102,62 @@ class ApiConverter {
      */
     Api convert (OpenAPI api) {
         def target = new Api ()
-
-        collectInterfaces (api, target)
-        addEndpointsToInterfaces (api, target)
-
+        createInterfaces (api, target)
         target
     }
 
-    private Map<String, PathItem> addEndpointsToInterfaces (OpenAPI api, Api target) {
+    private void createInterfaces (OpenAPI api, Api target) {
+        def resolver = new RefResolver (api.components)
+        Map<String, Interface>interfaces = new HashMap<> ()
 
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
             String path = pathEntry.key
             PathItem pathItem = pathEntry.value
 
-            def operations = new OperationCollector ().collect (pathItem)
+            def operations = new OperationCollector ()
+                .collect (pathItem)
+
             operations.each { httpOperation ->
-                def itf = target.getInterface (getInterfaceName (httpOperation))
-
-                Endpoint ep = new Endpoint (path: path,
-                    method: (httpOperation as HttpMethodTrait).httpMethod)
-
-                try {
-                    def resolver = new RefResolver (api.components)
-
-                    collectParameters (httpOperation.parameters, ep, target.models, resolver)
-                    collectRequestBody (httpOperation.requestBody, ep, target.models, resolver)
-                    collectResponses (httpOperation.responses, ep, target.models, resolver)
-
+                Interface itf = createInterface (path, httpOperation, interfaces)
+                Endpoint ep = createEndpoint (path, httpOperation, target.models, resolver)
+                if (ep) {
                     itf.endpoints.add (ep)
-
-                } catch (UnknownDataTypeException e) {
-                    log.error ("failed to parse endpoint {} {} because of: '{}'",
-                        ep.path, ep.method, e.message)
                 }
             }
+        }
+
+        target.interfaces = interfaces.values () as List<Interface>
+    }
+
+    private Interface createInterface (String path, def operation, Map<String, Interface> interfaces) {
+        def targetInterfaceName = getInterfaceName (operation, isExcluded (path))
+
+        def itf = interfaces.get (targetInterfaceName)
+        if (itf) {
+            return itf
+        }
+
+        itf = new Interface (
+            pkg: [options.packageName, 'api'].join ('.'),
+            name: targetInterfaceName
+        )
+
+        interfaces.put (targetInterfaceName, itf)
+        itf
+    }
+
+    private Endpoint createEndpoint (String path, def operation, DataTypes dataTypes, RefResolver resolver) {
+        Endpoint ep = new Endpoint (path: path, method: (operation as HttpMethodTrait).httpMethod)
+
+        try {
+            collectParameters (operation.parameters, ep, dataTypes, resolver)
+            collectRequestBody (operation.requestBody, ep, dataTypes, resolver)
+            collectResponses (operation.responses, ep, dataTypes, resolver)
+            ep
+
+        } catch (UnknownDataTypeException e) {
+            log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message)
+            null
         }
     }
 
@@ -277,13 +303,13 @@ class ApiConverter {
 
     private List<Mapping> findAdditionalParameter (Endpoint ep) {
         def addMappings = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (endpoint: ep))
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (path: ep.path))
         }.collectMany {
             it.childMappings
         }.findAll {
             it.matches (Mapping.Level.ADD, null as MappingSchema)
         }
-        addMappings
+        addMappings as List<Mapping>
     }
 
     private String getInlineRequestBodyName (String path) {
@@ -298,17 +324,35 @@ class ApiConverter {
         new Response (responseType: dataTypeConverter.none ())
     }
 
-    private void collectInterfaces (OpenAPI api, Api target) {
-        target.interfaces = new InterfaceCollector (options)
-            .collect (api.paths)
-    }
-
-    private String getInterfaceName(def operation) {
-        if (!hasTags (operation)) {
-            return InterfaceCollector.INTERFACE_DEFAULT_NAME
+    private boolean isExcluded (String path) {
+        def endpointMatches = options.typeMappings.findAll {
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint(path: path))
         }
 
-        operation.tags.first ()
+        if (!endpointMatches.empty) {
+            if (endpointMatches.size () != 1) {
+                throw new AmbiguousTypeMappingException (endpointMatches)
+            }
+
+            def match = endpointMatches.first () as EndpointTypeMapping
+            return match.exclude
+        }
+
+        false
+    }
+
+    private String getInterfaceName (def op, boolean excluded) {
+        String targetInterfaceName = INTERFACE_DEFAULT_NAME
+
+        if (hasTags (op)) {
+            targetInterfaceName = op.tags.first ()
+        }
+
+        if (excluded) {
+            targetInterfaceName += 'Excluded'
+        }
+
+        targetInterfaceName
     }
 
     private boolean hasTags (op) {

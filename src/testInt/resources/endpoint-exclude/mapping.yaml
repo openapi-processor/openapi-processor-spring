@@ -1,0 +1,4 @@
+map:
+  paths:
+    /endpoint-exclude/{foo}:
+      exclude: true

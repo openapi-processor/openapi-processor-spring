@@ -35,6 +35,11 @@ class EndpointTypeMapping implements Mapping {
     String path
 
     /**
+     * Exclude endpoint.
+     */
+    boolean exclude
+
+    /**
      * Provides type mappings for the endpoint. The list can contain the following mappings:
      *
      * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
