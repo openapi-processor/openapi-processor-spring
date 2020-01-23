@@ -30,6 +30,7 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
+            new TestSet(name: 'endpoint-exclude'),
             new TestSet(name: 'no-response-content'),
             new TestSet(name: 'params-additional'),
             new TestSet(name: 'params-enum'),
