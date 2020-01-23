@@ -10,6 +10,7 @@ paths:
         - name: foo
           description: dummy paramter
           in: path
+          required: true
           schema:
             type: string
       responses:
@@ -22,6 +23,7 @@ paths:
         - name: foo
           description: dummy parameter
           in: path
+          required: true
           schema:
             type: string
       responses:
