@@ -30,7 +30,7 @@ class InterfaceWriter {
     ApiOptions apiOptions
     HeaderWriter headerWriter
     MethodWriter methodWriter
-    BeanValidationFactory beanValidationWriter
+    BeanValidationFactory beanValidationFactory
 
     void write (Writer target, Interface itf) {
         headerWriter.write (target)
@@ -62,7 +62,7 @@ class InterfaceWriter {
 
             ep.parameters.each { p ->
                 if (apiOptions.beanValidation) {
-                    imports.addAll(beanValidationWriter.collectImports (p.dataType))
+                    imports.addAll (beanValidationFactory.collectImports (p.dataType))
                 }
 
                 if (p.withAnnotation()) {
@@ -76,7 +76,7 @@ class InterfaceWriter {
                 imports.add (b.annotationWithPackage)
                 imports.addAll (b.imports)
                 if (apiOptions.beanValidation) {
-                    imports.addAll(beanValidationWriter.collectImports (b.requestBodyType))
+                    imports.addAll (beanValidationFactory.collectImports (b.requestBodyType))
                 }
             }
 

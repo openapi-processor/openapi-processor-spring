@@ -31,7 +31,7 @@ import com.github.hauner.openapi.support.Identifier
 class MethodWriter {
 
     ApiOptions apiOptions
-    BeanValidationFactory beanValidationWriter
+    BeanValidationFactory beanValidationFactory
 
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
@@ -107,8 +107,8 @@ class MethodWriter {
 
             def methodDefinition = ''
 
-            if(apiOptions.beanValidation){
-                methodDefinition += " ${beanValidationWriter.createAnnotations(it.dataType)}"
+            if (apiOptions.beanValidation) {
+                methodDefinition += " ${beanValidationFactory.createAnnotations (it.dataType)}"
             }
 
             if (it.withAnnotation ()) {
@@ -122,8 +122,8 @@ class MethodWriter {
         if (!endpoint.requestBodies.empty) {
             def body = endpoint.requestBody
             def beanValidationAnnotations = ''
-            if(apiOptions.beanValidation){
-                beanValidationAnnotations += " ${beanValidationWriter.createAnnotations(body.requestBodyType)}"
+            if (apiOptions.beanValidation) {
+                beanValidationAnnotations += " ${beanValidationFactory.createAnnotations (body.requestBodyType)}"
             }
             def param = "${beanValidationAnnotations} ${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
             ps.add (param.trim())

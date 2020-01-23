@@ -63,20 +63,23 @@ class SpringGeneratr implements OpenApiGeneratr {
         def api = cv.convert (result.openAPI)
 
         def headerWriter = new HeaderWriter()
-        def beanValidationWriter = new BeanValidationFactory()
+        def beanValidationFactory = new BeanValidationFactory()
+
         def writer = new ApiWriter (options,
             new InterfaceWriter(
                 headerWriter: headerWriter,
                 methodWriter: new MethodWriter(
-                    apiOptions: options,
-                    beanValidationWriter: beanValidationWriter
+                    beanValidationFactory: beanValidationFactory,
+                    apiOptions: options
                 ),
-                beanValidationWriter: beanValidationWriter,
-                apiOptions: options),
+                beanValidationFactory: beanValidationFactory,
+                apiOptions: options
+            ),
             new DataTypeWriter(
                 headerWriter: headerWriter,
+                beanValidationFactory: beanValidationFactory,
                 apiOptions: options,
-                beanValidationWriter: beanValidationWriter),
+            ),
             new StringEnumWriter(headerWriter: headerWriter)
         )
 
