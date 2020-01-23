@@ -33,17 +33,17 @@ class GeneratrEndToEndTest extends GeneratrTestBase {
             new TestSet(name: 'endpoint-exclude'),
             new TestSet(name: 'no-response-content'),
             new TestSet(name: 'params-additional'),
+            new TestSet(name: 'params-complex-data-types'),
             new TestSet(name: 'params-enum'),
             new TestSet(name: 'params-path-simple-data-types'),
             new TestSet(name: 'params-request-body'),
             new TestSet(name: 'params-request-body-multipart-form-data'),
+            new TestSet(name: 'params-simple-data-types'),
             new TestSet(name: 'params-spring-pageable-mapping'),
             new TestSet(name: 'ref-into-another-file'),
             new TestSet(name: 'response-array-data-type-mapping'),
             new TestSet(name: 'response-complex-data-types'),
-            new TestSet(name: 'response-simple-data-types'),
-            new TestSet(name: 'params-simple-data-types'),
-            new TestSet(name: 'params-complex-data-types')
+            new TestSet(name: 'response-simple-data-types')
         ]
     }
 
