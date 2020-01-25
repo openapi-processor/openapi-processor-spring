@@ -62,11 +62,8 @@ block name.
 
             spring {
                 apiPath = "$projectDir/src/api/openapi.yaml"
-                typeMappings = "$projectDir/openapi-mapping.yaml"
-    
                 targetDir = "$projectDir/build/openapi"
-                packageName = "com.github.hauner.openapi.sample"
-        
+                mapping = "$projectDir/openapi-mapping.yaml"
                 showWarnings = true
             }        
 
@@ -75,15 +72,29 @@ block name.
 - `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the generatr. If
 set in the top level block it will be used for all configured generatrs.
 
-- `typeMappings`: (**optional**) defines the type mapping if required. This is either a path to yaml
- file or a yaml string (i.e. the content of the yaml file). See [java type mapping][docs-mapping] for a
- description of the mapping yaml.
-
 - `targetDir`: (**required**) the output folder for generating interfaces & models. This is the parent
  of the `packageName` folder tree. It is recommended to set this to a subfolder of gradle's standard `build`
 directory so it is cleared by the `clean` task and does not pollute the sources directory.
  
   See [running the generatr][docs-running] how to include the `targetDir` in compilation & packing.  
+
+- `mapping`: (**required**, since 1.0.0.M6) provides the generatr mapping options. This is a path
+ to yaml file. See [Configuration][docs-configuration] for a description of the mapping yaml. This replaces
+ the `typeMappings` option. 
+
+- `showWarnings`: (**optional**) `true` to show warnings from the open api parser or `false` (default) to
+ show no warnings.
+
+
+   **Deprecated** the following options are deprecated starting with '1.0.0.M6'
+   See [Configuration][docs-configuration].  
+   {: .note .deprecated .mb-6}
+
+- `typeMappings`: (**optional**) defines the type mapping if required. This is either a path to yaml
+ file or a yaml string (i.e. the content of the yaml file). See [java type mapping][docs-mapping] for a
+ description of the mapping yaml. 
+ 
+  starting with '1.0.0.M6' this is replaced by the `mapping` option.
 
 - `packageName`: (**required**) the root package name of the generated interfaces & models. The package folder
  tree will be created inside `targetDir`. 
@@ -92,11 +103,11 @@ directory so it is cleared by the `clean` task and does not pollute the sources 
 
   - so the final package name of the generated interfaces will be `"${packageName}.api"`  
   - and the final package name of the generated models will be `"${packageName}.model"`  
-{: .mb-5 }
+  {: .mb-5 }
 
-- `showWarnings`: (**optional**) `true` to show warnings from the open api parser or `false` (default) to
- show no warnings.
-
+  starting with '1.0.0.M6' it is recommended to provide this in the mapping yaml. See
+  [Configuration][docs-configuration].
+  {: .mb-5 }
 
 # running generatr-spring
 
@@ -128,4 +139,5 @@ Adding automatic compilation in this way will also automatically include the gen
 
 [generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
 [docs-mapping]: /openapi-generatr-spring/mapping/
+[docs-configuration]: /openapi-generatr-spring/generatr/configuration.html
 [docs-running]: #running-generatr-spring
