@@ -89,7 +89,15 @@ class SpringGeneratr implements OpenApiGeneratr {
     private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
         def reader = new MappingReader ()
         def converter = new MappingConverter ()
-        def mapping = reader.read (generatrOptions.typeMappings as String)
+        def mapping
+
+        if (generatrOptions.containsKey ('mapping')) {
+            mapping = reader.read (generatrOptions.mapping as String)
+
+        } else if (generatrOptions.containsKey ('typeMappings')) {
+            mapping = reader.read (generatrOptions.typeMappings as String)
+            println "warning: 'typeMappings' option is deprecated, use 'mapping'!"
+        }
 
         def options = new ApiOptions ()
         options.apiPath = generatrOptions.apiPath
