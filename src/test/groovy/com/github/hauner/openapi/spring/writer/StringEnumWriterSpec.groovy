@@ -116,7 +116,7 @@ class StringEnumWriterSpec extends Specification {
         methods.size () == 1
         methods [0].modifiers.contains (Modifier.PUBLIC)
         methods [0].modifiers.contains (Modifier.STATIC)
-        methods [0].returnType.canonicalName == typeSpec.name
+        methods [0].returnType.canonicalName == "${pkg}.${typeSpec.name}"
         methods [0].parameters.size () == 1
         methods [0].parameters [0].name == 'value'
         methods [0].parameters [0].type.canonicalName == 'java.lang.String'
