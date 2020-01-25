@@ -17,158 +17,137 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.squareup.javapoet.TypeSpec
 import spock.lang.Specification
 
-class StringEnumWriterSpec extends Specification {
-    def headerWriter = Mock HeaderWriter
+import javax.lang.model.element.Modifier
+import java.util.stream.Collectors
 
-    def writer = new StringEnumGenerator(headerWriter: headerWriter)
+class StringEnumWriterSpec extends Specification {
+    def writer = new StringEnumGenerator ()
     def target = new StringWriter ()
 
-    void "writes 'generated' comment" () {
-        def dataType = new StringEnumDataType(type: 'Foo', values: [])
-
-        when:
-        writer.generateTypeSpec (target, dataType)
-
-        then:
-        1 * headerWriter.write (target)
-    }
-
-    void "writes 'package'" () {
+    void "generate enum class" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
+        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
 
         when:
-        writer.generateTypeSpec (target, dataType)
+        def typeSpec = writer.generateTypeSpec (dataType)
 
         then:
-        target.toString ().contains ("""\
-package $pkg;
-
-""")
+        typeSpec != null
+        typeSpec.name == 'Foo'
+        typeSpec.kind == TypeSpec.Kind.ENUM
+        typeSpec.modifiers.contains (Modifier.PUBLIC)
     }
 
-    void "writes enum class"() {
+    void "generate enum value Filed" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
+        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
 
         when:
-        writer.generateTypeSpec (target, dataType)
+        def typeSpec = writer.generateTypeSpec (dataType)
 
         then:
-        target.toString ().contains ("""\
-public enum Foo {
-""")
-        target.toString ().contains ("""\
-}
-""")
+        typeSpec.fieldSpecs.size () == 1
+        typeSpec.fieldSpecs [0].name == 'value'
+        typeSpec.fieldSpecs [0].type.canonicalName () == 'java.lang.String'
     }
 
-    void "writes enum values"() {
+    void "generate enum constructor" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType(type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
+        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
 
         when:
-        writer.generateTypeSpec (target, dataType)
+        def typeSpec = writer.generateTypeSpec (dataType)
 
         then:
-        target.toString ().contains ("""\
-public enum Foo {
-    FOO("foo"),
-    FOO_2("_foo-2"),
-    FOO_FOO("foo-foo");
+        // Constructor Definition
+        def constructors = typeSpec.methodSpecs.findAll { it.isConstructor () }
+        constructors.size () == 1
+        constructors [0].modifiers.contains (Modifier.PRIVATE)
+        constructors [0].parameters.size () == 1
+        constructors [0].parameters [0].modifiers.isEmpty ()
+        constructors [0].parameters [0].name == 'value'
+        constructors [0].parameters [0].type.canonicalName () == 'java.lang.String'
 
-""")
+        and:
+        // Constructor Code
+        def lines = constructors [0].code.toString ().lines ().collect (Collectors.toList ())
+        lines.size () == 1
+        lines [0].trim () == 'this.value = value;'
     }
 
-    void "writes value member"() {
+    void "generate enum getValue" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType(type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
+        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
 
         when:
-        writer.generateTypeSpec (target, dataType)
+        def typeSpec = writer.generateTypeSpec (dataType)
 
         then:
-        target.toString ().contains ("""\
-    private final String value;
+        // getValue Definition
+        def methods = typeSpec.methodSpecs.findAll { it.name == "getValue" }
+        methods.size () == 1
+        methods [0].modifiers.contains (Modifier.PUBLIC)
+        methods [0].returnType.canonicalName == 'java.lang.String'
+        methods [0].parameters.isEmpty ()
+        methods [0].annotations.size () == 1
+        methods [0].annotations [0].type.canonicalName == 'com.fasterxml.jackson.annotation.JsonValue'
+        methods [0].annotations [0].members.isEmpty ()
 
-""")
+        and:
+        // getValue Code
+        def lines = methods [0].code.toString ().lines ().collect (Collectors.toList ())
+        lines.size () == 1
+        lines[0] == 'return this.value;'
     }
 
-    void "writes enum constructor"() {
+    void "generate enum fromValue" () {
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+
+        when:
+        def typeSpec = writer.generateTypeSpec (dataType)
+
+        then:
+        // fromValue Definition
+        def methods = typeSpec.methodSpecs.findAll { it.name == "fromValue" }
+        methods.size () == 1
+        methods [0].modifiers.contains (Modifier.PUBLIC)
+        methods [0].modifiers.contains (Modifier.STATIC)
+        methods [0].returnType.canonicalName == typeSpec.name
+        methods [0].parameters.size () == 1
+        methods [0].parameters [0].name == 'value'
+        methods [0].parameters [0].type.canonicalName == 'java.lang.String'
+        methods [0].annotations.size () == 1
+        methods [0].annotations [0].type.canonicalName == 'com.fasterxml.jackson.annotation.JsonCreator'
+        methods [0].annotations [0].members.isEmpty ()
+
+        and:
+        // fromValue Code
+        def lines = methods [0].code.toString ().lines ().collect (Collectors.toList ())
+        lines.size () == 6
+        lines [0].trim () == ("for (${typeSpec.name} val : ${typeSpec.name}.values()) {")
+        lines [1].trim () == ('if (val.value.equals(value)) {')
+        lines [2].trim () == ('return val;')
+        lines [3].trim () == ('}')
+        lines [4].trim () == ('}')
+        lines [5].trim () == ('throw new java.lang.IllegalArgumentException(value);')
+    }
+
+    void "generate enum values" () {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.generateTypeSpec (target, dataType)
+        def typeSpec = writer.generateTypeSpec (dataType)
 
         then:
-        target.toString ().contains ("""\
-
-    private Foo(String value) {
-        this.value = value;
+        typeSpec.enumConstants.get ("FOO").anonymousTypeArguments.toString () == '"foo"'
+        typeSpec.enumConstants.get ("FOO_2").anonymousTypeArguments.toString () == '"_foo-2"'
+        typeSpec.enumConstants.get ("FOO_FOO").anonymousTypeArguments.toString () == '"foo-foo"'
     }
-
-""")
-    }
-
-    void "writes @JsonValue method for serialization"() {
-        def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
-
-        when:
-        writer.generateTypeSpec (target, dataType)
-
-        then:
-        target.toString ().contains ("""\
-
-    @JsonValue
-    public String getValue() {
-        return this.value;
-    }
-
-""")
-    }
-
-    void "writes @JsonCreator method for de-serialization"() {
-        def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
-
-        when:
-        writer.generateTypeSpec (target, dataType)
-
-        then:
-        target.toString ().contains ("""\
-
-    @JsonCreator
-    public static Foo fromValue(String value) {
-        for (Foo val : Foo.values()) {
-            if (val.value.equals(value)) {
-                return val;
-            }
-        }
-        throw new IllegalArgumentException(value);
-    }
-
-""")
-    }
-
-    void "writes jackson imports" () {
-        def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
-
-        when:
-        writer.generateTypeSpec (target, dataType)
-
-        then:
-        target.toString ().contains ("""\
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-""")
-    }
-
 }
 
 
