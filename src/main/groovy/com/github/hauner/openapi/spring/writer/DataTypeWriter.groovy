@@ -20,6 +20,14 @@ import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterSpec
+import com.squareup.javapoet.TypeSpec
+
+import javax.lang.model.element.Modifier
 
 /**
  * Writer for POJO classes.
@@ -29,88 +37,56 @@ import com.github.hauner.openapi.support.Identifier
  */
 class DataTypeWriter {
     ApiOptions apiOptions
-    HeaderWriter headerWriter
     BeanValidationFactory beanValidationFactory
 
-    void write (Writer target, ObjectDataType dataType) {
-        headerWriter.write (target)
-        target.write ("package ${dataType.packageName};\n\n")
+    TypeSpec generateTypeSpec (ObjectDataType objectDataType) {
+        def typeSpecBuilder = TypeSpec.classBuilder (objectDataType.type)
+            .addModifiers (Modifier.PUBLIC)
 
-        List<String> imports = collectImports (dataType.packageName, dataType)
-
-        imports.each {
-            target.write ("import ${it};\n")
-        }
-        if (!imports.isEmpty ()) {
-            target.write ("\n")
-        }
-
-        target.write ("public class ${dataType.type} {\n\n")
-
-        def propertyNames = dataType.properties.keySet ()
-        propertyNames.each {
+        objectDataType.properties.keySet ().each {
+            def propDataType = objectDataType.getObjectProperty (it)
+            def propertyClassName = ClassName.get (propDataType.packageName, propDataType.name)
             def javaPropertyName = Identifier.toCamelCase (it)
-            def propDataType = dataType.getObjectProperty (it)
-            target.write (getProp (it, javaPropertyName, propDataType))
+
+            typeSpecBuilder
+                .addField (generateFieldSpec (it, propDataType, javaPropertyName, propertyClassName))
+                .addMethod (generateGetterMethodSpec (javaPropertyName, propertyClassName))
+                .addMethod (generateSetterMethodSpec (javaPropertyName, propertyClassName))
         }
 
-        propertyNames.each {
-            def javaPropertyName = Identifier.toCamelCase (it)
-            def propDataType = dataType.getObjectProperty (it)
-            target.write (getGetter (javaPropertyName, propDataType))
-            target.write (getSetter (javaPropertyName, propDataType))
+        typeSpecBuilder.build ()
+    }
+
+    private MethodSpec generateGetterMethodSpec (String propertyName, ClassName propertyClassName) {
+        MethodSpec.methodBuilder ("get${propertyName.capitalize ()}")
+            .addModifiers (Modifier.PUBLIC)
+            .returns (propertyClassName)
+            .addStatement ("return ${propertyName}")
+            .build ()
+    }
+
+    private MethodSpec generateSetterMethodSpec (String propertyName, ClassName propertyClassName) {
+        MethodSpec.methodBuilder ("set${propertyName.capitalize ()}")
+            .addModifiers (Modifier.PUBLIC)
+            .addParameter (ParameterSpec.builder (propertyClassName, propertyName).build ())
+            .addStatement ("this.${propertyName} = ${propertyName}")
+            .build ()
+    }
+
+    private FieldSpec generateFieldSpec (String propertyName, DataType dataType, String javaPropertyName, ClassName propertyClassName) {
+        def fieldBuilder = FieldSpec.builder (propertyClassName, javaPropertyName, Modifier.PRIVATE)
+            .addAnnotation (
+                AnnotationSpec.builder (
+                    ClassName.get ('com.fasterxml.jackson.annotation', 'JsonProperty')
+                )
+                .addMember ('value', '$S', propertyName)
+                .build ()
+            )
+
+        if( apiOptions.beanValidation) {
+            fieldBuilder.addAnnotations (beanValidationFactory.generateAnnotations (dataType))
         }
 
-        target.write ("}\n")
+        fieldBuilder.build ()
     }
-
-    private String getProp (String propertyName, String javaPropertyName, DataType propDataType) {
-        String result
-        result = "    @JsonProperty(\"${propertyName}\")\n"
-
-        if (apiOptions.beanValidation) {
-            def beanValidationAnnotations = beanValidationFactory.createAnnotations (propDataType)
-            if (!beanValidationAnnotations.empty) {
-                result += "    $beanValidationAnnotations\n"
-            }
-        }
-
-        result += "    private ${propDataType.name} ${javaPropertyName};\n\n"
-        result
-    }
-
-    private String getGetter (String propertyName, DataType propDataType) {
-        """\
-    public ${propDataType.name} get${propertyName.capitalize ()}() {
-        return ${propertyName};
-    }
-
-"""
-    }
-
-    private String getSetter (String propertyName, DataType propDataType) {
-        """\
-    public void set${propertyName.capitalize ()}(${propDataType.name} ${propertyName}) {
-        this.${propertyName} = ${propertyName};
-    }
-
-"""
-    }
-
-    List<String> collectImports (String packageName, ObjectDataType dataType) {
-        Set<String> imports = []
-        imports.add ('com.fasterxml.jackson.annotation.JsonProperty')
-
-        imports.addAll (dataType.referencedImports)
-
-        if (apiOptions.beanValidation) {
-            for (DataType propDataType : dataType.properties.values ()) {
-                imports.addAll (beanValidationFactory.collectImports (propDataType))
-            }
-        }
-
-        new ImportFilter ().filter (packageName, imports)
-            .sort ()
-    }
-
 }

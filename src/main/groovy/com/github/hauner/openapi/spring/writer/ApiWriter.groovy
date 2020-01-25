@@ -75,10 +75,8 @@ class ApiWriter {
         }
 
         api.models.objectDataTypes.each {
-            def target = new File (modelFolder, "${it.name}.java")
-            def writer = new FileWriter (target)
-            writeDataType (writer, it)
-            writer.close ()
+            def typeSpec = dataTypeWriter.generateTypeSpec(it)
+            writeJavaFile (it.packageName, typeSpec)
         }
 
         api.models.enumDataTypes.each {

@@ -85,7 +85,7 @@ class StringEnumGenerator {
             .addModifiers (Modifier.PUBLIC, Modifier.STATIC)
             .addAnnotation (ClassName.get ('com.fasterxml.jackson.annotation', 'JsonCreator'))
             .addParameter (ParameterSpec.builder (String.class, 'value').build ())
-            .returns (ClassName.get ('', dataType.type))
+            .returns (ClassName.get (dataType.packageName, dataType.type))
             .beginControlFlow ('for ($1N val : $1N.values())', typeName)
             .beginControlFlow ('if (val.value.equals(value))')
             .addStatement ('return val')

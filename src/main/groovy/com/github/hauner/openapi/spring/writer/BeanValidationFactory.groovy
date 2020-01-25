@@ -28,6 +28,8 @@ import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.ClassName
 
 /**
  * @author Bastian Wilhelm
@@ -173,16 +175,103 @@ class BeanValidationFactory {
             maxLength = dataType.constraints.maxItems
         }
 
-        createSize(minLength, maxLength)
+        createSize (minLength, maxLength)
     }
 
     private static String createSize (def min, def max) {
-        if(min && max) {
+        if (min && max) {
             "@Size(min = ${min}, max = ${max})"
         } else if (min) {
             "@Size(min = ${min})"
         } else {
             "@Size(max = ${max})"
         }
+    }
+
+    List<AnnotationSpec> generateAnnotations (DataType dataType) {
+        List<AnnotationSpec> annotations = []
+
+        if (useValid (dataType)) {
+            annotations.add (generateValidAnnotation ())
+        }
+
+        if (useNotNull (dataType)) {
+            annotations.add (generateNotNullAnnotation ())
+        }
+
+        if (useSize (dataType)) {
+            annotations.add (generateSize (dataType))
+        }
+
+        if (useDecimalMin (dataType)) {
+            annotations.add (generateDecimalMinAnnotation (dataType))
+        }
+
+        if (useDecimalMax (dataType)) {
+            annotations.add (generateDecimalMaxAnnotation (dataType))
+        }
+
+        annotations
+    }
+
+    private static AnnotationSpec generateValidAnnotation () {
+        AnnotationSpec.builder (ClassName.get ('javax.validation', 'Valid'))
+            .build ()
+    }
+
+    private static AnnotationSpec generateNotNullAnnotation () {
+        AnnotationSpec.builder (ClassName.get ('javax.validation.constraints', 'NotNull'))
+            .build ()
+    }
+
+    private static AnnotationSpec generateSize (DataType dataType) {
+        def annotationSpecBuilder = AnnotationSpec.builder (ClassName.get ('javax.validation.constraints', 'Size'))
+        final def minLength
+        final def maxLength
+        if (dataType instanceof StringDataType) {
+            if (dataType.constraints.minLength) {
+                annotationSpecBuilder.addMember ('min', '$L', dataType.constraints.minLength)
+            }
+            if (dataType.constraints.maxLength) {
+                annotationSpecBuilder.addMember ('max', '$L', dataType.constraints.maxLength)
+            }
+        } else {
+            if (dataType.constraints.minItems) {
+                annotationSpecBuilder.addMember ('min', '$L', dataType.constraints.minItems)
+            }
+            if (dataType.constraints.maxItems) {
+                annotationSpecBuilder.addMember ('max', '$L', dataType.constraints.maxItems)
+            }
+        }
+
+        annotationSpecBuilder.build ()
+    }
+
+    private static AnnotationSpec generateDecimalMinAnnotation (DataType dataType) {
+        def annotationSpecBuilder = AnnotationSpec.builder (
+            ClassName.get ('javax.validation.constraints', 'DecimalMin')
+        )
+
+        annotationSpecBuilder.addMember ('value', '$S', dataType.constraints.minimum)
+
+        if (dataType.constraints.exclusiveMinimum) {
+            annotationSpecBuilder.addMember ('inclusive', '$L', false)
+        }
+
+        annotationSpecBuilder.build ()
+    }
+
+    private static AnnotationSpec generateDecimalMaxAnnotation (DataType dataType) {
+        def annotationSpecBuilder = AnnotationSpec.builder (
+            ClassName.get ('javax.validation.constraints', 'DecimalMax')
+        )
+
+        annotationSpecBuilder.addMember ('value', '$S', dataType.constraints.maximum)
+
+        if (dataType.constraints.exclusiveMaximum) {
+            annotationSpecBuilder.addMember ('inclusive', '$L', false)
+        }
+
+        annotationSpecBuilder.build ()
     }
 }
