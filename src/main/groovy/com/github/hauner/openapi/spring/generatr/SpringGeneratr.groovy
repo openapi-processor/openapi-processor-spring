@@ -87,18 +87,36 @@ class SpringGeneratr implements OpenApiGeneratr {
     }
 
     private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
-        def options = new ApiOptions()
+        def reader = new MappingReader ()
+        def converter = new MappingConverter ()
+        def mapping = reader.read (generatrOptions.typeMappings as String)
+
+        def options = new ApiOptions ()
         options.apiPath = generatrOptions.apiPath
         options.targetDir = generatrOptions.targetDir
-        options.packageName = generatrOptions.packageName
 
-        def reader = new MappingReader ()
-        def converter = new MappingConverter()
-        def mapping = reader.read (generatrOptions.typeMappings as String)
+        if (generatrOptions.packageName) {
+            options.packageName = generatrOptions.packageName
+            println "warning: 'options:package-name' should be set in the mapping yaml!"
+        }
+
+        if (generatrOptions.containsKey ('beanValidation')) {
+            options.beanValidation = generatrOptions.beanValidation
+            println "warning: 'options:bean-validation' should be set in the mapping yaml!"
+        }
+
         if (mapping) {
+            if (mapping?.options?.packageName != null) {
+                options.packageName = mapping.options.packageName
+            }
+
+            if (mapping?.options?.beanValidation != null) {
+                options.beanValidation = mapping.options.beanValidation
+            }
+
             options.typeMappings = converter.convert (mapping)
         }
-        options.beanValidation = generatrOptions.beanValidation != null && generatrOptions.beanValidation == true
+
         options
     }
 

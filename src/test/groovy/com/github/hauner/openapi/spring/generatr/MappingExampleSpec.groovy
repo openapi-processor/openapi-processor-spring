@@ -29,6 +29,10 @@ class MappingExampleSpec extends Specification {
 
 
     String yaml = """
+options:
+    package-name: com.github.hauner.openapi
+    bean-validation: true 
+
 map:
   types:
     - from: array
@@ -55,7 +59,6 @@ map:
       to: com.github.hauner.openapi.FooBar  
 
   paths:
-    # not implemented
     /first:
       exclude: true
 
