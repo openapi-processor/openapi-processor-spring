@@ -25,7 +25,7 @@ import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MethodWriter
-import com.github.hauner.openapi.spring.writer.StringEnumWriter
+import com.github.hauner.openapi.spring.writer.StringEnumGenerator
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
@@ -80,7 +80,7 @@ class SpringGeneratr implements OpenApiGeneratr {
                 beanValidationFactory: beanValidationFactory,
                 apiOptions: options,
             ),
-            new StringEnumWriter(headerWriter: headerWriter)
+            new StringEnumGenerator()
         )
 
         writer.write (api)

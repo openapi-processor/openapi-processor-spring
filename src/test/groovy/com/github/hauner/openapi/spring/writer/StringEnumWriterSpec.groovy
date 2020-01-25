@@ -22,14 +22,14 @@ import spock.lang.Specification
 class StringEnumWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
 
-    def writer = new StringEnumWriter(headerWriter: headerWriter)
+    def writer = new StringEnumGenerator(headerWriter: headerWriter)
     def target = new StringWriter ()
 
     void "writes 'generated' comment" () {
         def dataType = new StringEnumDataType(type: 'Foo', values: [])
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         1 * headerWriter.write (target)
@@ -40,7 +40,7 @@ class StringEnumWriterSpec extends Specification {
         def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -54,7 +54,7 @@ package $pkg;
         def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -70,7 +70,7 @@ public enum Foo {
         def dataType = new StringEnumDataType(type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -87,7 +87,7 @@ public enum Foo {
         def dataType = new StringEnumDataType(type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -101,7 +101,7 @@ public enum Foo {
         def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -118,7 +118,7 @@ public enum Foo {
         def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -136,7 +136,7 @@ public enum Foo {
         def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\
@@ -159,7 +159,7 @@ public enum Foo {
         def dataType = new StringEnumDataType(type: 'Foo', values: [], pkg: pkg)
 
         when:
-        writer.write (target, dataType)
+        writer.generateTypeSpec (target, dataType)
 
         then:
         target.toString ().contains ("""\

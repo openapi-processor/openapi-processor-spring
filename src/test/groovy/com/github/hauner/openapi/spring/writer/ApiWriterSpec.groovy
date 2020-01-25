@@ -131,7 +131,7 @@ Bar interface!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter), false)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator), false)
             .write (api)
 
         then:
@@ -146,8 +146,8 @@ Bar class!
     }
 
     void "generates model enum sources in model target folder"() {
-        def enumWriter = Stub (StringEnumWriter) {
-            write (_ as Writer, _ as StringEnumDataType) >> {
+        def enumWriter = Stub (StringEnumGenerator) {
+            generateTypeSpec (_ as Writer, _ as StringEnumDataType) >> {
                 Writer writer = it.get(0)
                 writer.write ('Foo enum!\n')
             } >> {
@@ -205,7 +205,7 @@ Bar enum!
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter), false)
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator), false)
             .write (api)
 
         then:
@@ -260,7 +260,7 @@ interface Foo {
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumWriter))
+        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator))
             .write (api)
 
         then:
@@ -272,8 +272,8 @@ class Foo {
     }
 
     void "re-formats model enum sources"() {
-        def enumWriter = Stub (StringEnumWriter) {
-            write (_ as Writer, _ as StringEnumDataType) >> {
+        def enumWriter = Stub (StringEnumGenerator) {
+            generateTypeSpec (_ as Writer, _ as StringEnumDataType) >> {
                 Writer writer = it.get(0)
                 writer.write ('    enum   Foo   {   }')
             }
