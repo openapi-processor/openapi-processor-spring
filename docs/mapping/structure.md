@@ -5,10 +5,11 @@ parent: Type Mapping
 nav_order: 5
 ---
 
-# mapping.yaml structure
+# type mapping structure
 
-A type mapping yaml has multiple sections to define the different kinds of type mappings. All sections
- are optional.
+The type mapping is part of the mapping yaml (see [Configuration][docs-configuration]) and configured under
+the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
+ All sections are optional.
 
 ```yaml
     map:
@@ -50,3 +51,5 @@ A type mapping yaml has multiple sections to define the different kinds of type 
               to: ..
 
 ```
+
+[docs-configuration]: /openapi-generatr-spring/generatr/configuration.html

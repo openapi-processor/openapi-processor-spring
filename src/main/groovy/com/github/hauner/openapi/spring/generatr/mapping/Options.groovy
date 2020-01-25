@@ -17,25 +17,24 @@
 package com.github.hauner.openapi.spring.generatr.mapping
 
 /**
- * *the* Schema of the mapping yaml
+ * general options
  *
  *  @author Martin Hauner
  */
-class Mapping {
+class Options {
 
     /**
-     * version (currently optional)
+     * the root package name of the generated interfaces & models (required)
+     *
+     * Interfaces and models will be generated into the `api` and `model` subpackages of `packageName`.
+     * - so the final package name of the generated interfaces will be `"${packageName}.api"`
+     * - and the final package name of the generated models will be `"${packageName}.model"`
      */
-    String openapiGeneratrSpring
+    String packageName
 
     /**
-     * general options
+     * bean validation (optional)
      */
-    Options options
-
-    /**
-     * the type mappings
-     */
-    Map map
+    Boolean beanValidation
 
 }

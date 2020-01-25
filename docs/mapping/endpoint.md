@@ -37,6 +37,8 @@ be placed in the `map/paths` section as properties to an endpoint given by its p
 
         # another path
         /foo2:
+          # excluding an endpoint
+          exclude: true
 
           # list of path specific mappings
           types:
@@ -57,3 +59,21 @@ be placed in the `map/paths` section as properties to an endpoint given by its p
 
 The mappings defined as properties of an endpoint will be used only for this endpoint. They don't
 have any effect on other endpoints.
+
+## excluding endpoints
+
+(Since 1.0.0.M6) It is possible to exclude endpoints from generation so it is possible to create a
+hand written interface for the excluded endpoint.
+
+Excluding does not completely ignore the endpoint. Instead of generating it into the normal interface
+it is generated to a new interface with `Excluded` attached to its name. Type mappings still apply.
+
+That way the the generated code is still available for reference but it can be skipped by not
+implementing the `Excluded` interface.
+
+ ```yaml
+   map:
+     /foo:
+       # excluding an endpoint
+       exclude: true
+ ```

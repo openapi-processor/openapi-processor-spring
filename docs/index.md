@@ -67,6 +67,13 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 
 - add additional parameters to an endpoint which are not defined in the OpenAPI description. For example to pass
  a `HttpServletRequest` to the endpoint implementation. <span class="label label-green">since 1.0.0.M6</span>
+
+- supports bean validations. The constraints of the openapi description are mapped to java bean validation
+ annotations. <span class="label label-green">since 1.0.0.M6</span>
+ 
+- allows to exclude endpoints from generation. This is useful if the generatr does not create the correct code for
+ an endpoint. That way the generatr can still be used for all the other endpoints.
+   <span class="label label-green">since 1.0.0.M6</span>
  
 - <span class="label label-yellow">planned</span> handle multiple responses by generating one endpoint method for
   each response content type.

@@ -47,6 +47,11 @@ class ApiOptions {
     String packageName
 
     /**
+     * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
+     */
+    boolean beanValidation = false
+
+    /**
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
@@ -58,10 +63,5 @@ class ApiOptions {
      * endpoint.
      */
     List<Mapping> typeMappings
-
-    /**
-     * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
-     */
-    boolean beanValidation = false;
 
 }
