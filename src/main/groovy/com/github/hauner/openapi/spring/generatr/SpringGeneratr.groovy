@@ -78,7 +78,7 @@ class SpringGeneratr implements OpenApiGeneratr {
             new DataTypeWriter(
                 headerWriter: headerWriter,
                 beanValidationFactory: beanValidationFactory,
-                apiOptions: options,
+                apiOptions: options
             ),
             new StringEnumWriter(headerWriter: headerWriter)
         )
