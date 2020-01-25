@@ -23,9 +23,8 @@ import spock.lang.Specification
 import javax.lang.model.element.Modifier
 import java.util.stream.Collectors
 
-class StringEnumWriterSpec extends Specification {
+class StringEnumGeneratorSpec extends Specification {
     def writer = new StringEnumGenerator ()
-    def target = new StringWriter ()
 
     void "generate enum class" () {
         def pkg = 'com.github.hauner.openapi'

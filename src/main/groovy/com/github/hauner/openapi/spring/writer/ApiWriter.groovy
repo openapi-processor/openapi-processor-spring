@@ -20,7 +20,6 @@ import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import com.squareup.javapoet.JavaFile
@@ -37,7 +36,7 @@ class ApiWriter {
 
     private ApiOptions options
     InterfaceWriter interfaceWriter
-    DataTypeWriter dataTypeWriter
+    DataTypeGenerator dataTypeWriter
     StringEnumGenerator enumWriter
 
     File apiFolder
@@ -47,7 +46,7 @@ class ApiWriter {
 
     ApiWriter (ApiOptions options,
                InterfaceWriter interfaceWriter,
-               DataTypeWriter dataTypeWriter,
+               DataTypeGenerator dataTypeWriter,
                StringEnumGenerator enumWriter,
                boolean enableFormatter = true) {
         this.options = options

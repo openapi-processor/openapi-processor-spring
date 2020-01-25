@@ -35,7 +35,7 @@ import javax.lang.model.element.Modifier
  * @author Martin Hauner
  * @author Bastian Wilhelm
  */
-class DataTypeWriter {
+class DataTypeGenerator {
     ApiOptions apiOptions
     BeanValidationFactory beanValidationFactory
 
