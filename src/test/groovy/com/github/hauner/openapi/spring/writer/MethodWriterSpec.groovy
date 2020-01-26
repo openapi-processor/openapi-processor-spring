@@ -47,7 +47,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes parameter less method without response" () {
         def endpoint = new Endpoint (path: '/ping', method: HttpMethod.GET, responses: [
-            '200': [new Response(responseType: new NoneDataType())]
+            '204': [new Response(responseType: new NoneDataType())]
         ])
 
         when:
@@ -163,9 +163,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (required) query parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType ())
-            ]
+            '204': [new Response (responseType: new NoneDataType ())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
         ])
@@ -182,9 +180,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (optional) query parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType ())
-            ]
+            '204': [new Response (responseType: new NoneDataType ())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new StringDataType())
         ])
@@ -201,8 +197,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (required) header parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
+            '204': [new Response (responseType: new NoneDataType())
             ]
         ], parameters: [
             new HeaderParameter(name: 'x-foo', required: true, dataType: new StringDataType())
@@ -220,9 +215,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (optional) header parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new HeaderParameter(name: 'x-foo', required: false, dataType: new StringDataType())
         ])
@@ -239,9 +232,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (required) cookie parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '200': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new CookieParameter(name: 'foo', required: true, dataType: new StringDataType())
         ])
@@ -258,9 +249,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (optional) cookie parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new CookieParameter(name: 'foo', required: false, dataType: new StringDataType())
         ])
@@ -277,9 +266,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes object query parameter without @RequestParam annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 type: 'Foo', properties: [
@@ -301,9 +288,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes map from single query parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new MappedMapDataType (
                 type: 'Map',
@@ -324,9 +309,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes method name from path with valid java identifiers" () {
         def endpoint = new Endpoint (path: '/f_o-ooo/b_a-rrr', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
         ])
@@ -343,9 +326,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes method parameter with valid java identifiers" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: '_fo-o', required: true, dataType: new StringDataType())
         ])
@@ -362,9 +343,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes required request body parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.POST, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], requestBodies: [
             new RequestBody(
                 contentType: 'application/json',
@@ -385,9 +364,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes optional request body parameter" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.POST, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], requestBodies: [
             new RequestBody(
                 contentType: 'application/json',
@@ -409,9 +386,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes simple (optional) parameter with default value" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json', responseType: new NoneDataType())
-            ]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false,
                 dataType: new StringDataType(
@@ -425,6 +400,49 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+"""
+    }
+
+    void "writes mapping annotation with multiple result content types" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200'    : [
+                new Response (contentType: 'application/json',
+                    responseType: new CollectionDataType (item: new StringDataType ()))
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new CollectionDataType (item: new StringDataType ()))
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString ().contains ("""\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
+""")
+    }
+
+    void "writes method with any response type when it has multiple result contents" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200'    : [
+                new Response (contentType: 'application/json',
+                    responseType: new CollectionDataType (item: new StringDataType ()))
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new CollectionDataType (item: new StringDataType ()))
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
+    ResponseEntity<?> getFoo();
 """
     }
 

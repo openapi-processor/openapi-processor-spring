@@ -51,4 +51,29 @@ class Endpoint {
         responses.values ().first ().first ()
     }
 
+    /**
+     * checks if the endpoint contains multiple http status with responses, e.g. for status 200 and
+     * default (or a specific error code).
+     *
+     * @return true if condition is met, else false
+     */
+    boolean hasMultiStatusResponses () {
+        responses.size () > 1
+    }
+
+    boolean hasResponseContentTypes () {
+        !responseContentTypes.empty
+    }
+
+    List<String> getResponseContentTypes () {
+        def results = []
+        responses.each {
+            def contentType = it.value.first ().contentType
+            if (contentType) {
+                results.add (contentType)
+            }
+        }
+        results
+    }
+
 }
