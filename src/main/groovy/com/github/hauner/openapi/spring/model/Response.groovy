@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
  * @author Martin Hauner
  */
 class Response {
+    static Response EMPTY = new Response(responseType: new NoneDataType())
+
     String contentType
     DataType responseType
 
@@ -35,4 +37,5 @@ class Response {
     boolean isEmpty() {
         responseType instanceof NoneDataType
     }
+
 }

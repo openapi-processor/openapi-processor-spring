@@ -203,7 +203,7 @@ class ApiConverter {
             def httpResponse = responseEntry.value
 
             if (!httpResponse.content) {
-                ep.addResponses (httpStatus, createEmptyResponse ())
+                ep.addResponses (httpStatus, [Response.EMPTY])
             } else {
                 List<Response> results = createResponses (
                     ep.path,
@@ -320,9 +320,6 @@ class ApiConverter {
         Identifier.toClass (path) + 'Response' + httpStatus
     }
 
-    private List<Response> createEmptyResponse () {
-        [new Response (responseType: dataTypeConverter.none ())]
-    }
 
     private boolean isExcluded (String path) {
         def endpointMatches = options.typeMappings.findAll {
