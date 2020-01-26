@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,26 @@ class Endpoint {
 
     List<Parameter> parameters = []
     List<RequestBody> requestBodies = []
-    List<Response> responses = []
+    LinkedHashMap<String, List<Response>> responses = [:]
+
+    void addResponses (String httpStatus, List<Response> statusResponses) {
+        responses.put (httpStatus, statusResponses)
+    }
+
+    Set<String> getResponseImports () {
+        responses
+            .values ()
+            .flatten ()
+            .collect { it.imports }
+            .flatten () as Set<String>
+    }
 
     RequestBody getRequestBody () {
         requestBodies.first ()
     }
 
     Response getResponse () {
-        responses.first ()
+        responses.values ().first ().first ()
     }
 
 }

@@ -203,7 +203,7 @@ class ApiConverter {
             def httpResponse = responseEntry.value
 
             if (!httpResponse.content) {
-                ep.responses.add (createEmptyResponse ())
+                ep.addResponses (httpStatus, createEmptyResponse ())
             } else {
                 List<Response> results = createResponses (
                     ep.path,
@@ -212,7 +212,7 @@ class ApiConverter {
                     dataTypes,
                     resolver)
 
-                ep.responses.addAll (results)
+                ep.addResponses (httpStatus, results)
             }
         }
     }
@@ -320,8 +320,8 @@ class ApiConverter {
         Identifier.toClass (path) + 'Response' + httpStatus
     }
 
-    private Response createEmptyResponse () {
-        new Response (responseType: dataTypeConverter.none ())
+    private List<Response> createEmptyResponse () {
+        [new Response (responseType: dataTypeConverter.none ())]
     }
 
     private boolean isExcluded (String path) {

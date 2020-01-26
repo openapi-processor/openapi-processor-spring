@@ -70,7 +70,8 @@ package $pkg;
 
     void "writes GetMapping import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
+                '200': [new EmptyResponse()]])
         ])
 
         when:
@@ -85,9 +86,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
     void "writes mapping imports" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.POST, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.POST, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -108,7 +109,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
     void "writes ResponseEntity import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -123,7 +124,7 @@ import org.springframework.http.ResponseEntity;
 
     void "writes @RequestParam import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]],
                 parameters: [
                     new QueryParameter(name: 'any', dataType: new StringDataType())
                 ])
@@ -141,7 +142,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
     void "does not write @RequestParam annotation import of parameter that does not want the annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: new NoneDataType())
+            '200': [new Response (contentType: 'application/json', responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 type: 'Foo', properties: [
@@ -165,7 +166,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
     void "writes import of request parameter data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: new NoneDataType())
+            '200': [new Response (contentType: 'application/json', responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 pkg: 'model', type: 'Foo', properties: [
@@ -189,14 +190,15 @@ import model.Foo;
 
     void "writes @RequestBody import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [new EmptyResponse()],
-                requestBodies: [
-                    new RequestBody(
-                        contentType: 'plain/text',
-                        requestBodyType: new StringDataType(),
-                        required: true
-                    )
-                ])
+            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [
+                '200': [new EmptyResponse()]
+            ], requestBodies: [
+                new RequestBody (
+                    contentType: 'plain/text',
+                    requestBodyType: new StringDataType (),
+                    required: true
+                )
+            ])
         ])
 
         when:
@@ -211,7 +213,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
     void "writes import of request body data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new EmptyResponse ()
+            '200': [new EmptyResponse ()]
         ], requestBodies: [
             new RequestBody (
                 contentType: 'plain/text',
@@ -239,10 +241,12 @@ import com.github.hauner.openapi.Bar;
 
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
-                new Response(
-                    contentType: 'application/json',
-                    responseType: new ObjectDataType (type: type, pkg: pkg))
-            ]),
+                '200': [
+                    new Response (
+                        contentType: 'application/json',
+                        responseType: new ObjectDataType (type: type, pkg: pkg))
+                ]
+            ])
         ])
 
         when:
@@ -257,9 +261,9 @@ import ${pkg}.${type};
 
     void "sorts imports as strings"() {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.POST, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.POST, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -278,7 +282,7 @@ import org.springframework.web.bind.annotation.PutMapping;
     void "filters unnecessary 'java.lang' imports"() {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
-                new Response(contentType: 'plain/text', responseType: new StringDataType())
+                '200': [new Response(contentType: 'plain/text', responseType: new StringDataType())]
             ])
         ])
 
@@ -308,8 +312,8 @@ public interface NameApi {
 
     void "writes methods" () {
         def endpoints = [
-            new Endpoint(path: 'path1', method: HttpMethod.GET, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path2', method: HttpMethod.GET, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path1', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path2', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
         ]
 
         writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
