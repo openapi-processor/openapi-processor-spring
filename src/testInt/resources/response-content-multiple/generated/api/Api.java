@@ -12,12 +12,12 @@ public interface Api {
 
     @GetMapping(
             path = "/foo",
-            produces = {"application/json"})
+            produces = {"application/json", "application/xml"})
     ResponseEntity<?> getFooApplicationJson();
 
     @GetMapping(
             path = "/foo",
-            produces = {"text/plain"})
+            produces = {"text/plain", "application/xml"})
     ResponseEntity<?> getFooTextPlain();
 
 }
