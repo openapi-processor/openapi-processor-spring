@@ -37,6 +37,7 @@ check.dependsOn testInt
 dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.2'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
 
