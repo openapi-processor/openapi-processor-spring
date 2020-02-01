@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 
 /**
  * Endpoint response properties.
@@ -28,11 +28,7 @@ class Response {
     String contentType
     DataType responseType
 
-    Set<String> getImports () {
-        responseType.imports
-    }
-
     boolean isEmpty() {
-        responseType instanceof NoneDataType
+        DataTypeHelper.isVoid (responseType)
     }
 }

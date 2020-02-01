@@ -42,20 +42,6 @@ class ObjectDataType implements DataType {
         pkg
     }
 
-    @Override
-    Set<String> getImports () {
-        [[packageName, name].join ('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        List<String> imports = []
-        properties.values ().each {
-            imports.addAll (it.imports)
-        }
-        imports
-    }
-
     void addObjectProperty (String name, DataType type) {
         properties.put (name, type)
     }

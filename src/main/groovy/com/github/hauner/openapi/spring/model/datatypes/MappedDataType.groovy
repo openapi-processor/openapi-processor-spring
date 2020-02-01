@@ -41,16 +41,6 @@ class MappedDataType implements DataType {
         pkg
     }
 
-    @Override
-    Set<String> getImports () {
-        [[packageName, type].join ('.')] + genericTypes
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-         []
-    }
-
     private List<String> getGenericTypeNames () {
         genericTypes.collect {
             getClassName (it)

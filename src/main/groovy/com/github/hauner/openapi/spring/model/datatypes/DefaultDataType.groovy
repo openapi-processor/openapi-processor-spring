@@ -16,38 +16,8 @@
 
 package com.github.hauner.openapi.spring.model.datatypes
 
-/**
- * OpenAPI type 'integer' with format 'int32' maps to java Integer.
- *
- * @author Martin Hauner
- */
-class IntegerDataType implements DataType {
-
+class DefaultDataType implements DataType {
+    String packageName;
+    String name;
     DataTypeConstraints constraints
-
-    @Override
-    String getName () {
-        return 'Integer'
-    }
-
-    @Override
-    String getPackageName () {
-        'java.lang'
-    }
-
-    @Override
-    Set<String> getImports () {
-        [[packageName, name].join ('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        []
-    }
-
-    @Override
-    DataTypeConstraints getConstraints() {
-        constraints
-    }
-
 }

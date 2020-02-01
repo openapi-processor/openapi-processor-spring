@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -59,6 +60,7 @@ class QueryParameter extends Parameter {
      */
     boolean withParameters () {
         // Map should not have parameters
+        DataTypeHelper.isMap ()
         if (dataType instanceof MappedMapDataType) {
             return false
         }

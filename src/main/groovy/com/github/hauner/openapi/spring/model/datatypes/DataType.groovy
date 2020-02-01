@@ -35,20 +35,9 @@ trait /*interface*/ DataType {
      */
     abstract String getPackageName ()
 
-    /**
-     * Provides the import(s) of this type, usually a single import. If it is a generic type it will
-     * add another import for each generic parameter.
-     *
-     * @return import of this type.
-     */
-    abstract Set<String> getImports ()
+    List<DataType> generics = []
 
-    /**
-     * Provides the list of imports for the types referenced by this this type.
-     *
-     * @return the referenced import list.
-     */
-    abstract Set<String> getReferencedImports ()
+    boolean isMap = false
 
     /**
      * Provides the constraint information of the data type.

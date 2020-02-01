@@ -29,10 +29,6 @@ class RequestBody {
     DataType requestBodyType
     boolean required
 
-    Set<String> getImports () {
-        requestBodyType.imports
-    }
-
     String getAnnotationName () {
         "RequestBody"
     }

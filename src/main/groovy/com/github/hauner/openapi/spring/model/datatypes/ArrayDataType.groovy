@@ -38,16 +38,6 @@ class ArrayDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
-        item.imports
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        item.referencedImports
-    }
-
-    @Override
     DataTypeConstraints getConstraints () {
         constraints
     }

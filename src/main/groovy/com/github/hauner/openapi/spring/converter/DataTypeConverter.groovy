@@ -27,23 +27,13 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
-import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
-import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
-import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
-import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
-import com.github.hauner.openapi.spring.model.datatypes.LongDataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
 /**
@@ -61,7 +51,7 @@ class DataTypeConverter {
     }
 
     DataType none() {
-        new NoneDataType()
+        DataTypeHelper.createVoid ()
     }
 
     /**
@@ -105,13 +95,13 @@ class DataTypeConverter {
 
         switch (targetType?.typeName) {
             case Collection.name:
-                arrayType = new CollectionDataType (item: item, constraints: constraints)
+                arrayType = DataTypeHelper.createCollection (constraints, item)
                 break
             case List.name:
-                arrayType = new ListDataType (item: item, constraints: constraints)
+                arrayType = DataTypeHelper.createList (constraints, item)
                 break
             case Set.name:
-                arrayType = new SetDataType (item: item, constraints: constraints)
+                arrayType = DataTypeHelper.createSet (constraints, item)
                 break
             default:
                 arrayType = new ArrayDataType (item: item, constraints: constraints)
@@ -202,29 +192,29 @@ class DataTypeConverter {
         switch (typeFormat) {
             case 'integer':
             case 'integer/int32':
-                simpleType = new IntegerDataType (constraints: constraints)
+                simpleType = DataTypeHelper.createInteger (constraints)
                 break
             case 'integer/int64':
-                simpleType = new LongDataType (constraints: constraints)
+                simpleType = DataTypeHelper.createLong (constraints)
                 break
             case 'number':
             case 'number/float':
-                simpleType = new FloatDataType (constraints: constraints)
+                simpleType = DataTypeHelper.createFloat (constraints)
                 break
             case 'number/double':
-                simpleType = new DoubleDataType (constraints: constraints)
+                simpleType = DataTypeHelper.createDouble (constraints)
                 break
             case 'boolean':
-                simpleType = new BooleanDataType (constraints: constraints)
+                simpleType = DataTypeHelper.createBoolean (constraints)
                 break
             case 'string':
                 simpleType = createStringDataType (schemaInfo, constraints, dataTypes)
                 break
             case 'string/date':
-                simpleType = new LocalDateDataType ()
+                simpleType = DataTypeHelper.create('java.time', 'LocalDate', constraints)
                 break
             case 'string/date-time':
-                simpleType = new OffsetDateTimeDataType ()
+                simpleType = DataTypeHelper.create('java.time', 'OffsetDateTime', constraints)
                 break
             default:
                 throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
@@ -235,7 +225,7 @@ class DataTypeConverter {
 
     private DataType createStringDataType (SchemaInfo info, DataTypeConstraints constraints, DataTypes dataTypes) {
         if (!info.isEnum()) {
-            return new StringDataType (constraints: constraints)
+            return DataTypeHelper.createString (constraints)
         }
 
         // in case of an inline definition the name may be lowercase, make sure the enum

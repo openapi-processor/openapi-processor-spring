@@ -17,17 +17,9 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
-import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
-import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
-import com.github.hauner.openapi.spring.model.datatypes.LongDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 
@@ -46,18 +38,19 @@ class BeanValidationGenerator {
     private static useSize (DataType dataType) {
         ( // Lists
             (
-                dataType instanceof CollectionDataType
-                    || dataType instanceof ListDataType
-                    || dataType instanceof SetDataType
+
+                DataTypeHelper.isCollection (dataType)
+                    || DataTypeHelper.isList (dataType)
+                    || DataTypeHelper.isSet (dataType)
                     || dataType instanceof ArrayDataType
-                    || dataType instanceof MappedMapDataType
+                    || DataTypeHelper.isMap (dataType)
             ) && (
                 dataType.constraints?.maxItems
                     || dataType.constraints?.minItems
             )
         ) || ( // String
             (
-                dataType instanceof StringDataType
+                DataTypeHelper.isString (dataType)
             ) && (
                 dataType.constraints?.maxLength
                     || dataType.constraints?.minLength
@@ -67,10 +60,10 @@ class BeanValidationGenerator {
 
     private static useDecimalMax (DataType dataType) {
         (
-            dataType instanceof DoubleDataType
-                || dataType instanceof FloatDataType
-                || dataType instanceof IntegerDataType
-                || dataType instanceof LongDataType
+            DataTypeHelper.isDouble (dataType)
+                || DataTypeHelper.isFloat (dataType)
+                || DataTypeHelper.isInteger (dataType)
+                || DataTypeHelper.isLong (dataType)
         ) && (
             dataType.constraints?.maximum
         )
@@ -78,10 +71,10 @@ class BeanValidationGenerator {
 
     private static useDecimalMin (DataType dataType) {
         (
-            dataType instanceof DoubleDataType
-                || dataType instanceof FloatDataType
-                || dataType instanceof IntegerDataType
-                || dataType instanceof LongDataType
+            DataTypeHelper.isDouble (dataType)
+                || DataTypeHelper.isFloat (dataType)
+                || DataTypeHelper.isInteger (dataType)
+                || DataTypeHelper.isLong (dataType)
         ) && (
             dataType.constraints?.minimum
         )
@@ -125,9 +118,7 @@ class BeanValidationGenerator {
 
     private static AnnotationSpec generateSize (DataType dataType) {
         def annotationSpecBuilder = AnnotationSpec.builder (ClassName.get ('javax.validation.constraints', 'Size'))
-        final def minLength
-        final def maxLength
-        if (dataType instanceof StringDataType) {
+        if (DataTypeHelper.isString (dataType)) {
             if (dataType.constraints.minLength) {
                 annotationSpecBuilder.addMember ('min', '$L', dataType.constraints.minLength)
             }

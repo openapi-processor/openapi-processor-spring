@@ -21,5 +21,6 @@ package com.github.hauner.openapi.spring.model.datatypes
  *
  * @author Martin Hauner
  */
+@Deprecated
 class MappedMapDataType extends MappedDataType {
 }

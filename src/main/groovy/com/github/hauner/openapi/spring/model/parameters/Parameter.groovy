@@ -59,15 +59,6 @@ abstract class Parameter {
     }
 
     /**
-     * The imports required for the parameter data type.
-     *
-     * @return the imports of the parameter type.
-     */
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
-
-    /**
      * Provides the parameters constraint details, if any.
      *
      * @return the constraint details or null if the parameter has no constraints

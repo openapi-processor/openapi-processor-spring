@@ -39,16 +39,6 @@ class StringEnumDataType implements DataType {
     }
 
     @Override
-    Set<String> getImports () {
-        [[packageName, name].join ('.')]
-    }
-
-    @Override
-    Set<String> getReferencedImports () {
-        []
-    }
-
-    @Override
     DataTypeConstraints getConstraints() {
         constraints
     }

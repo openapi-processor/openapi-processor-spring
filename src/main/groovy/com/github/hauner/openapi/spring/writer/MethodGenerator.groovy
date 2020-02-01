@@ -27,6 +27,7 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeName
 
 import javax.lang.model.element.Modifier
 
@@ -52,17 +53,24 @@ class MethodGenerator {
     }
 
     private ParameterizedTypeName generateReturnType (DataType responseType) {
-        if(responseType.getPackageName () != null){
-            ParameterizedTypeName.get (
-                ClassName.get ('org.springframework.http', 'ResponseEntity'),
-                ClassName.get (responseType.packageName, responseType.name)
-            )
-        } else {
-            ParameterizedTypeName.get (
-                ClassName.get ('org.springframework.http', 'ResponseEntity'),
-                ClassName.get ('java.lang', responseType.name)
-            )
+        ParameterizedTypeName.get (
+            ClassName.get ('org.springframework.http', 'ResponseEntity'),
+            createTypeName(responseType)
+        )
+    }
+
+    private TypeName createTypeName (DataType dataType) {
+        def className = ClassName.get (dataType.packageName, dataType.name)
+
+        if(dataType.generics.empty){
+            return className
         }
+
+        TypeName[] genericTypeNames =  dataType.generics.collect {
+            createTypeName (it)
+        }.toArray (new TypeName[0])
+
+        return ParameterizedTypeName.get (className, genericTypeNames)
     }
 
     private Iterable<ParameterSpec> createParameters (Endpoint endpoint) {
