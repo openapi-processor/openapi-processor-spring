@@ -86,12 +86,12 @@ class StringEnumGenerator {
             .addAnnotation (ClassName.get ('com.fasterxml.jackson.annotation', 'JsonCreator'))
             .addParameter (ParameterSpec.builder (String.class, 'value').build ())
             .returns (ClassName.get (dataType.packageName, dataType.type))
-            .beginControlFlow ('for ($1N val : $1N.values())', typeName)
-            .beginControlFlow ('if (val.value.equals(value))')
-            .addStatement ('return val')
-            .endControlFlow ()
-            .endControlFlow ()
-            .addStatement ('throw new $T(value)', IllegalArgumentException.class)
+                .beginControlFlow ('for ($1N val : $1N.values())', typeName)
+                    .beginControlFlow ('if (val.value.equals(value))')
+                        .addStatement ('return val')
+                    .endControlFlow ()
+                .endControlFlow ()
+                .addStatement ('throw new $T(value)', IllegalArgumentException.class)
             .build ()
     }
 }
