@@ -20,11 +20,11 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
-import com.github.hauner.openapi.spring.writer.BeanValidationFactory
+import com.github.hauner.openapi.spring.writer.BeanValidationGenerator
 import com.github.hauner.openapi.spring.writer.DataTypeGenerator
-import com.github.hauner.openapi.spring.writer.HeaderWriter
-import com.github.hauner.openapi.spring.writer.InterfaceWriter
-import com.github.hauner.openapi.spring.writer.MethodWriter
+
+import com.github.hauner.openapi.spring.writer.InterfaceGenerator
+import com.github.hauner.openapi.spring.writer.MethodGenerator
 import com.github.hauner.openapi.spring.writer.StringEnumGenerator
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
@@ -62,13 +62,11 @@ class SpringGeneratr implements OpenApiGeneratr {
         def cv = new ApiConverter(options)
         def api = cv.convert (result.openAPI)
 
-        def headerWriter = new HeaderWriter()
-        def beanValidationFactory = new BeanValidationFactory()
+        def beanValidationFactory = new BeanValidationGenerator()
 
         def writer = new ApiWriter (options,
-            new InterfaceWriter(
-                headerWriter: headerWriter,
-                methodWriter: new MethodWriter(
+            new InterfaceGenerator(
+                methodWriter: new MethodGenerator(
                     beanValidationFactory: beanValidationFactory,
                     apiOptions: options
                 ),

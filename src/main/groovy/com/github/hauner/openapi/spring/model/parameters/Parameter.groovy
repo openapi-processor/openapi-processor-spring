@@ -36,13 +36,17 @@ abstract class Parameter {
      */
     abstract String getAnnotationName ()
 
+    String getPackage () {
+        'org.springframework.web.bind.annotation'
+    }
+
     /**
      * The fully qualified class name of the annotation.
      *
      * @return the fully qualified class name of the annotation
      */
     String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
+        "${getPackage ()}.${annotationName}"
     }
 
     /**

@@ -37,8 +37,12 @@ class RequestBody {
         "RequestBody"
     }
 
+    String getPackage() {
+        'org.springframework.web.bind.annotation'
+    }
+
     String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
+        "${getPackage ()}.${annotationName}"
     }
 
     String getAnnotation () {

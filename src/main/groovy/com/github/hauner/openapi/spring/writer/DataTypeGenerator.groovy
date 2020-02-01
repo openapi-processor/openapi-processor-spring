@@ -37,7 +37,7 @@ import javax.lang.model.element.Modifier
  */
 class DataTypeGenerator {
     ApiOptions apiOptions
-    BeanValidationFactory beanValidationFactory
+    BeanValidationGenerator beanValidationFactory
 
     TypeSpec generateTypeSpec (ObjectDataType objectDataType) {
         def typeSpecBuilder = TypeSpec.classBuilder (objectDataType.type)

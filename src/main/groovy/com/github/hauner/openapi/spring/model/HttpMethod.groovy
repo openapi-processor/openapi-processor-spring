@@ -51,8 +51,12 @@ enum HttpMethod {
         method.capitalize () + "Mapping"
     }
 
+    String getPackage () {
+        'org.springframework.web.bind.annotation'
+    }
+
     String getClassNameWithPackage () {
-        "org.springframework.web.bind.annotation.${className}"
+        "${getPackage ()}.${className}"
     }
 
     String getMappingAnnotation () {
