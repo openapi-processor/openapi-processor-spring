@@ -63,7 +63,10 @@ class TypeMapping implements Mapping {
      * @return the target type
      */
     TargetType getTargetType () {
-        new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+        new TargetType (
+            typeName: targetTypeName,
+            genericTypes: genericTypeNames.collect({new TargetType (typeName: it)})
+        )
     }
 
     @Override

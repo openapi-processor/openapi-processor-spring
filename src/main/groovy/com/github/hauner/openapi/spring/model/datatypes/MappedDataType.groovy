@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,35 +20,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  * OpenAPI schema mapped to a java type.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
-class MappedDataType implements DataType {
-
-    protected String type
-    String pkg = 'unknown'
-    List<String> genericTypes = []
-
-    @Override
-    String getName () {
-        if (genericTypes.empty) {
-            "${type}"
-        } else {
-            "${type}<${getGenericTypeNames().join (', ')}>"
-        }
-    }
-
-    @Override
-    String getPackageName () {
-        pkg
-    }
-
-    private List<String> getGenericTypeNames () {
-        genericTypes.collect {
-            getClassName (it)
-        }
-    }
-
-    protected String getClassName (String ref) {
-        ref.substring (ref.lastIndexOf ('.') + 1)
-    }
-
+class MappedDataType extends DefaultDataType {
 }

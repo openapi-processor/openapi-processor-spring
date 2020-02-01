@@ -20,29 +20,10 @@ package com.github.hauner.openapi.spring.model.datatypes
  * OpenAPI type 'string' with enum constraint maps to enum class.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
-class StringEnumDataType implements DataType {
-
-    String type
-    String pkg = 'unknown'
+class StringEnumDataType extends DefaultDataType {
     List<String> values = []
-    DataTypeConstraints constraints
-
-    @Override
-    String getName () {
-        type
-    }
-
-    @Override
-    String getPackageName () {
-        pkg
-    }
-
-    @Override
-    DataTypeConstraints getConstraints() {
-        constraints
-    }
-
 }
 
 

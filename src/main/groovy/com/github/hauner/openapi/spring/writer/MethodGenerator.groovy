@@ -20,9 +20,11 @@ import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
 import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
@@ -60,17 +62,19 @@ class MethodGenerator {
     }
 
     private TypeName createTypeName (DataType dataType) {
-        def className = ClassName.get (dataType.packageName, dataType.name)
-
         if(dataType.generics.empty){
-            return className
+            return ClassName.get (dataType.packageName, dataType.name)
+        }
+
+        if(DataTypeHelper.isArray (dataType)){
+            return ArrayTypeName.of (createTypeName (dataType.generics[0]))
         }
 
         TypeName[] genericTypeNames =  dataType.generics.collect {
             createTypeName (it)
         }.toArray (new TypeName[0])
 
-        return ParameterizedTypeName.get (className, genericTypeNames)
+        return ParameterizedTypeName.get (ClassName.get (dataType.packageName, dataType.name), genericTypeNames)
     }
 
     private Iterable<ParameterSpec> createParameters (Endpoint endpoint) {
@@ -78,7 +82,7 @@ class MethodGenerator {
 
         endpoint.parameters.each {
             def parameterSpecBuilder = ParameterSpec.builder (
-                ClassName.get (it.dataType.packageName, it.dataType.name),
+                createTypeName (it.dataType),
                 Identifier.toCamelCase (it.name)
             )
 
@@ -97,7 +101,7 @@ class MethodGenerator {
             def body = endpoint.requestBody
 
             def parameterSpecBuilder = ParameterSpec.builder (
-                ClassName.get (body.requestBodyType.packageName, body.requestBodyType.name),
+                createTypeName (body.requestBodyType),
                 'body'
             )
 

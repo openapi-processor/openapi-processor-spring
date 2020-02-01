@@ -26,12 +26,9 @@ import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
-import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
@@ -104,7 +101,7 @@ class DataTypeConverter {
                 arrayType = DataTypeHelper.createSet (constraints, item)
                 break
             default:
-                arrayType = new ArrayDataType (item: item, constraints: constraints)
+                arrayType = DataTypeHelper.createArray(constraints, item)
         }
 
         arrayType
@@ -119,26 +116,24 @@ class DataTypeConverter {
 
         TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
         if (targetType) {
-            switch (targetType?.typeName) {
-                case Map.name:
-                case 'org.springframework.util.MultiValueMap':
-                    objectType = new MappedMapDataType (
-                        type: targetType.name,
-                        pkg: targetType.pkg,
-                        genericTypes: targetType.genericNames
-                    )
-                    return objectType
-                default:
-                    objectType = new MappedDataType (
-                        type: targetType.name,
-                        pkg: targetType.pkg,
-                        genericTypes: targetType.genericNames
-                    )
+            objectType = DataTypeHelper.create (
+                targetType.pkg,
+                targetType.name,
+                null,
+                targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
+            )
 
-                    // probably not required anymore
-                    dataTypes.add (schemaInfo.name, objectType)
-                    return objectType
+            // If it is no Map, it is a mapped data type
+            if(!DataTypeHelper.isMap (objectType)) {
+                objectType = DataTypeHelper.createMapped (
+                    targetType.pkg,
+                    targetType.name,
+                    null,
+                    targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
+                )
             }
+
+            return objectType
         }
 
         def constraints = new DataTypeConstraints(
@@ -146,14 +141,14 @@ class DataTypeConverter {
         )
 
         objectType = new ObjectDataType (
-            type: schemaInfo.name,
-            pkg: [options.packageName, 'model'].join ('.'),
+            name: schemaInfo.name,
+            packageName: [options.packageName, 'model'].join ('.'),
             constraints: constraints
         )
 
         schemaInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
             def propType = convert (propDataTypeInfo, dataTypes)
-            objectType.addObjectProperty (propName, propType)
+            objectType.properties.put (propName, propType)
         }
 
         dataTypes.add (objectType)
@@ -164,10 +159,11 @@ class DataTypeConverter {
 
         TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
         if (targetType) {
-            def simpleType = new MappedDataType (
-                type: targetType.name,
-                pkg: targetType.pkg,
-                genericTypes: targetType.genericNames
+            def simpleType = DataTypeHelper.createMapped (
+                targetType.pkg,
+                targetType.name,
+                null,
+                targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
             )
             return simpleType
         }
@@ -231,8 +227,8 @@ class DataTypeConverter {
         // in case of an inline definition the name may be lowercase, make sure the enum
         // class gets an uppercase name!
         def enumType = new StringEnumDataType (
-            type: info.name.capitalize (),
-            pkg: [options.packageName, 'model'].join ('.'),
+            name: info.name.capitalize (),
+            packageName: [options.packageName, 'model'].join ('.'),
             values: info.enumValues,
             constraints: constraints)
 

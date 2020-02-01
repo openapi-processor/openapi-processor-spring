@@ -40,11 +40,11 @@ class DataTypeGenerator {
     BeanValidationGenerator beanValidationFactory
 
     TypeSpec generateTypeSpec (ObjectDataType objectDataType) {
-        def typeSpecBuilder = TypeSpec.classBuilder (objectDataType.type)
+        def typeSpecBuilder = TypeSpec.classBuilder (objectDataType.name)
             .addModifiers (Modifier.PUBLIC)
 
         objectDataType.properties.keySet ().each {
-            def propDataType = objectDataType.getObjectProperty (it)
+            def propDataType = objectDataType.properties.get (it)
             def propertyClassName = ClassName.get (propDataType.packageName, propDataType.name)
             def javaPropertyName = Identifier.toCamelCase (it)
 

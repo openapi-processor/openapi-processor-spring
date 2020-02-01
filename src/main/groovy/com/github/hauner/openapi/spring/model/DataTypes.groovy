@@ -17,7 +17,6 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
@@ -29,16 +28,6 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 class DataTypes {
 
     private Map<String, DataType> types = [:]
-    private Map<String, MappedDataType> mappedTypes = [:]
-
-    /**
-     * provides all named data types (including simple data types) used by the api endpoint.
-     *
-     * @return list of object data types
-     */
-    List<DataType> getDataTypes () {
-        types.values () as List<DataType>
-    }
 
     /**
      * provides the object data types (model classes) used by the api endpoints. For this object
@@ -86,48 +75,6 @@ class DataTypes {
      * @param dataType the source data type
      */
     void add (String name, DataType dataType) {
-        if (dataType instanceof MappedDataType) {
-            mappedTypes.put (name, dataType)
-        } else {
-            types.put (name, dataType)
-        }
+        types.put (name, dataType)
     }
-
-    /**
-     * find data type by name.
-     *
-     * @param name the name
-     * @return the data type or null if not found
-     */
-    DataType find (String name) {
-        def type = types.get (name)
-        if (type) {
-            return type
-        } else {
-            return mappedTypes.get (name)
-        }
-    }
-
-    /**
-     * find data type by $ref name.
-     *
-     * @param ref the OpenAPI $ref
-     * @return the data type or null if not found
-     */
-    DataType findRef (String ref) {
-        def idx = ref.lastIndexOf ('/')
-        def path = ref.substring (0, idx + 1)
-        def name = ref.substring (idx + 1)
-
-        if (path != '#/components/schemas/') {
-            return null
-        }
-
-        types.get (name)
-    }
-
-    int size () {
-        types.size ()
-    }
-
 }

@@ -20,8 +20,9 @@ package com.github.hauner.openapi.spring.model.datatypes
  * Data type description of a Java data type.
  *
  * @author Martin Hauner
+ * @authro Bastian Wilhelm
  */
-trait /*interface*/ DataType {
+trait DataType {
 
     /**
      * The Java type name without package.
@@ -35,17 +36,17 @@ trait /*interface*/ DataType {
      */
     abstract String getPackageName ()
 
-    List<DataType> generics = []
-
-    boolean isMap = false
+    /**
+     * DataTypes of generic parameters of the DataType
+     *
+     * @return DataTypes of generic parameters
+     */
+    abstract List<DataType> getGenerics()
 
     /**
      * Provides the constraint information of the data type.
      *
      * @return the constraints or null if there are no constraints.
      */
-    DataTypeConstraints getConstraints () {
-        null
-    }
-
+    abstract DataTypeConstraints getConstraints ();
 }

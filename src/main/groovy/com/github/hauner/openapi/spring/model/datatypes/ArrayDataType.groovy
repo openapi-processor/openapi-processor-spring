@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,17 @@ package com.github.hauner.openapi.spring.model.datatypes
  * @author Bastian Wilhelm
  */
 class ArrayDataType implements DataType {
-
-    private DataType item
-    private DataTypeConstraints constraints
+    // ArrayType should have one generic parameter
+    List<DataType> generics
+    DataTypeConstraints constraints
 
     @Override
     String getName () {
-        "${item.name}[]"
+        return null
     }
 
     @Override
     String getPackageName () {
-        item.packageName
-    }
-
-    @Override
-    DataTypeConstraints getConstraints () {
-        constraints
+        return null
     }
 }

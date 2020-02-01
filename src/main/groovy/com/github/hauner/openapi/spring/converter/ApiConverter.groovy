@@ -30,7 +30,7 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
@@ -50,6 +50,8 @@ import io.swagger.v3.oas.models.parameters.Parameter
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
+
+import javax.xml.crypto.Data
 
 /**
  * Converts the open api model to a new model that is better suited for generating source files
@@ -245,11 +247,11 @@ class ApiConverter {
         TypeMapping tm = mapping.childMappings.first ()
         TargetType tt = tm.targetType
 
-        def addType = new MappedDataType (
-            type: tt.name,
-            pkg: tt.pkg,
-            genericTypes: tt.genericNames
-        )
+        def addType = DataTypeHelper.createMapped (
+            tt.pkg,
+            tt.name,
+            null,
+            tt.genericTypes.collect {DataTypeHelper.create (it.pkg, it.name, null)}.toArray (new DataType [0]) as DataType[])
 
         new AdditionalParameter (name: mapping.parameterName, required: true, dataType: addType)
     }
@@ -269,7 +271,7 @@ class ApiConverter {
             throw new MultipartResponseBodyException(info.path)
         }
 
-        dataType.getObjectProperties ().collect {
+        dataType.properties.collect {
             new MultipartParameter (name: it.key, required: required, dataType: it.value)
         }
     }

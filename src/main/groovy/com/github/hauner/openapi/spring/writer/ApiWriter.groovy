@@ -18,8 +18,6 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
-import com.google.googlejavaformat.java.Formatter
-import com.google.googlejavaformat.java.JavaFormatterOptions
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import groovy.util.logging.Slf4j
@@ -28,6 +26,7 @@ import groovy.util.logging.Slf4j
  * Root writer for the generated api files.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 @Slf4j
 class ApiWriter {
@@ -40,25 +39,14 @@ class ApiWriter {
     File apiFolder
     File modelFolder
 
-    Formatter formatter
-
     ApiWriter (ApiOptions options,
                InterfaceGenerator interfaceWriter,
                DataTypeGenerator dataTypeWriter,
-               StringEnumGenerator enumWriter,
-               boolean enableFormatter = true) {
+               StringEnumGenerator enumWriter) {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = dataTypeWriter
         this.enumWriter = enumWriter
-
-//        if (enableFormatter) {
-//            formatter = new Formatter (
-//                JavaFormatterOptions
-//                    .builder ()
-//                    .style (JavaFormatterOptions.Style.AOSP)
-//                    .build ())
-//        }
     }
 
     void write (Api api) {

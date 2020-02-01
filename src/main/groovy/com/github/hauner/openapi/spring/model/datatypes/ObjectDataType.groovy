@@ -22,40 +22,6 @@ package com.github.hauner.openapi.spring.model.datatypes
  * @author Martin Hauner
  * @author Bastian Wilhelm
  */
-class ObjectDataType implements DataType {
-
-    String type
-    String pkg = 'unknown'
-    private DataTypeConstraints constraints
-
-
-    // must preserve the insertion order
+class ObjectDataType extends DefaultDataType {
     Map<String, DataType> properties = new LinkedHashMap<> ()
-
-    @Override
-    String getName () {
-        type
-    }
-
-    @Override
-    String getPackageName () {
-        pkg
-    }
-
-    void addObjectProperty (String name, DataType type) {
-        properties.put (name, type)
-    }
-
-    DataType getObjectProperty (String name) {
-        properties.get (name)
-    }
-
-    Map<String, DataType> getObjectProperties () {
-        properties
-    }
-
-    @Override
-    DataTypeConstraints getConstraints () {
-        constraints
-    }
 }

@@ -22,7 +22,7 @@ package com.github.hauner.openapi.spring.converter.mapping
 class TargetType {
 
     String typeName
-    List<String> genericNames
+    List<TargetType> genericTypes = []
 
     /**
      * Returns the class name without the package name.

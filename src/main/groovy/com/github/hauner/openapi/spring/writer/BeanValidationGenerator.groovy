@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -42,7 +41,7 @@ class BeanValidationGenerator {
                 DataTypeHelper.isCollection (dataType)
                     || DataTypeHelper.isList (dataType)
                     || DataTypeHelper.isSet (dataType)
-                    || dataType instanceof ArrayDataType
+                    || DataTypeHelper.isArray (dataType)
                     || DataTypeHelper.isMap (dataType)
             ) && (
                 dataType.constraints?.maxItems

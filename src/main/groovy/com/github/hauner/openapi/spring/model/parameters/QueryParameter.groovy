@@ -18,13 +18,13 @@ package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
 /**
  * OpenAPI query parameter.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class QueryParameter extends Parameter {
 
@@ -38,7 +38,7 @@ class QueryParameter extends Parameter {
      */
     boolean withAnnotation () {
         // Map should be annotated
-        if (dataType instanceof MappedMapDataType) {
+        if (DataTypeHelper.isMap (dataType)) {
             return true
         }
 
@@ -60,8 +60,7 @@ class QueryParameter extends Parameter {
      */
     boolean withParameters () {
         // Map should not have parameters
-        DataTypeHelper.isMap ()
-        if (dataType instanceof MappedMapDataType) {
+        if (DataTypeHelper.isMap (dataType)) {
             return false
         }
 

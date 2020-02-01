@@ -1,5 +1,24 @@
+/*
+ * Copyright 2020 the original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.hauner.openapi.spring.model.datatypes
 
+/**
+ * @author Bastian Wilhelm
+ */
 class DataTypeHelper {
     static DataType createBoolean(DataTypeConstraints constraints) {
         create ('java.lang', 'Boolean', constraints)
@@ -81,22 +100,35 @@ class DataTypeHelper {
         dataType != null && dataType.packageName == 'java.util' && dataType.name == 'Set'
     }
 
-    static DataType createMap(String packageName, String name, DataTypeConstraints constraints, DataType... generics) {
-        new DefaultDataType(
-            packageName: packageName,
-            name: name,
-            constraints: constraints,
-            generics: generics,
-            isMap: true
+    static boolean isMap (DataType dataType) {
+        dataType != null && (
+            (dataType.packageName == 'java.util' && dataType.name == 'Map')
+            || (dataType.packageName == 'org.springframework.util' && dataType.name == 'MultiValueMap')
         )
     }
 
-    static boolean isMap (DataType dataType) {
-        dataType != null && dataType.isMap
+    static DataType createArray(DataTypeConstraints constraints, DataType genericType) {
+        new ArrayDataType (
+            constraints: constraints,
+            generics: [genericType]
+        )
+    }
+
+    static boolean isArray(DataType dataType) {
+        dataType != null && dataType instanceof ArrayDataType
     }
 
     static DataType create(String packageName, String name, DataTypeConstraints constraints, DataType... generics) {
         new DefaultDataType(
+            packageName: packageName,
+            name: name,
+            constraints: constraints,
+            generics: generics
+        )
+    }
+
+    static DataType createMapped(String packageName, String name, DataTypeConstraints constraints, DataType... generics) {
+        new MappedDataType (
             packageName: packageName,
             name: name,
             constraints: constraints,
