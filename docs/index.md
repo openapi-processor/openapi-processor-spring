@@ -14,8 +14,8 @@ permalink: /
 
 a simple [OpenAPI][openapi] interface only (& model) code generator for [Spring Boot][springboot].
 
-It is useful in an API first approach where you API is explicitly defined and documented by an OpenAPI
- yaml file before it gets implemented. 
+It is useful in an API first approach where you API is explicitly defined and documented with OpenAPI
+ before it gets implemented. 
 
 The generatr generates java interfaces based on the endpoint description of the API and simple POJO
 classes for parameter or response objects defined in th API. It is **your** task to create the controller
