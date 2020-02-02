@@ -41,7 +41,37 @@ class Endpoint {
 
     @Deprecated
     Response getResponse () {
-        responses.values ().first ().first ()
+        singleResponse
+    }
+
+    /**
+     * all possible responses for an openapi status ('200', '2xx',... or 'default'). If the given
+     * status has no responses the result is an empty list.
+     *
+     * @param status the response status
+     * @return the list of responses
+     */
+    List<Response> getResponses (String status) {
+        if (!responses.containsKey (status)) {
+            []
+        }
+        responses[status]
+    }
+
+    /**
+     * return the first response assuming there is only a single successful response.
+     *
+     * @return the first response
+     */
+    Response getSingleResponse () {
+        if (hasMultiStatusResponses ()) {
+            println "warning: Endpoint::getSingleResponse() called on a multi status response!"
+        }
+
+        responses
+            .values ()
+            .first ()
+            .first ()
     }
 
     Set<String> getResponseImports () {

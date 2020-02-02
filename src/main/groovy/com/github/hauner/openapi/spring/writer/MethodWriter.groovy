@@ -44,7 +44,7 @@ class MethodWriter {
         if (endpoint.hasMultiStatusResponses ()) {
             '?'
         } else {
-            endpoint.response.responseType.name
+            endpoint.singleResponse.responseType.name
         }
     }
 
