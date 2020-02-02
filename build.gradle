@@ -48,6 +48,8 @@ dependencies {
 
     testIntImplementation "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
     testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.5'
+    testIntRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
+//    testIntRuntimeOnly 'org.slf4j:slf4j-nop:1.6.1'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
