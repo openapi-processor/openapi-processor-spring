@@ -57,13 +57,13 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
+    archiveClassifier.set ('sources')
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: groovydoc) {
-    archiveClassifier = 'javadoc'
-    from groovydoc.destinationDir
+task javadocJar(type: Jar, dependsOn: [groovydoc, dokka]) {
+    archiveClassifier.set ('javadoc')
+    from "$buildDir/docs"
 }
 
 artifacts {
@@ -71,6 +71,14 @@ artifacts {
     archives javadocJar
 }
 
+groovydoc {
+    destinationDir file("$buildDir/docs/groovy")
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/docs/kotlin"
+}
 
 bintray {
     user = bintrayUser
