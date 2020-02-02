@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import spock.lang.Specification
@@ -33,7 +33,7 @@ class DataTypeGeneratorSpec extends Specification {
 
     void "generate class" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new ObjectDataType (type: 'Book', properties: [:] as Map, pkg: pkg)
+        def dataType = new ObjectDataType (name: 'Book', properties: [:] as Map, packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -50,10 +50,10 @@ class DataTypeGeneratorSpec extends Specification {
     void "generate properties with @JsonProperty annotation" () {
         def pkg = 'com.github.hauner.openapi'
 
-        def dataType = new ObjectDataType (type: 'Book', properties: [
-            'isbn': new StringDataType (),
-            'title': new StringDataType ()
-        ], pkg: pkg)
+        def dataType = new ObjectDataType (name: 'Book', properties: [
+            'isbn': DataTypeHelper.createString (null),
+            'title': DataTypeHelper.createString (null)
+        ], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -80,10 +80,10 @@ class DataTypeGeneratorSpec extends Specification {
     void "generate valid java properties with @JsonProperty annotation" () {
         def pkg = 'com.github.hauner.openapi'
 
-        def dataType = new ObjectDataType (type: 'Book', properties: [
-            'a-isbn': new StringDataType (),
-            'a-title': new StringDataType ()
-        ], pkg: pkg)
+        def dataType = new ObjectDataType (name: 'Book', properties: [
+            'a-isbn': DataTypeHelper.createString (null),
+            'a-title': DataTypeHelper.createString (null)
+        ], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -110,10 +110,10 @@ class DataTypeGeneratorSpec extends Specification {
     void "generate property getters & setters" () {
         def pkg = 'com.github.hauner.openapi'
 
-        def dataType = new ObjectDataType (type: 'Book', properties: [
-            'a-isbn': new StringDataType (),
-            'a-title': new StringDataType ()
-        ], pkg: pkg)
+        def dataType = new ObjectDataType (name: 'Book', properties: [
+            'a-isbn': DataTypeHelper.createString (null),
+            'a-title': DataTypeHelper.createString (null)
+        ], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -160,8 +160,8 @@ class DataTypeGeneratorSpec extends Specification {
     void "generate imports of nested types" () {
         def pkg = 'external'
 
-        def dataType = new ObjectDataType (type: 'Book', properties: [
-            'isbn': new ObjectDataType (type: 'Isbn', properties: [:] as LinkedHashMap, pkg: pkg)
+        def dataType = new ObjectDataType (name: 'Book', properties: [
+            'isbn': new ObjectDataType (name: 'Isbn', properties: [:] as LinkedHashMap, packageName: pkg)
         ])
 
         when:
@@ -179,8 +179,8 @@ class DataTypeGeneratorSpec extends Specification {
     }
 
     void "generate import of generic list type" () {
-        def dataType = new ObjectDataType (type: 'Book', properties: [
-            'authors': new ListDataType (item: new StringDataType())
+        def dataType = new ObjectDataType (name: 'Book', properties: [
+            'authors': DataTypeHelper.createList (null, DataTypeHelper.createString (null))
         ])
 
         when:
@@ -188,12 +188,14 @@ class DataTypeGeneratorSpec extends Specification {
 
         then:
         typeSpec.fieldSpecs.size () == 1
-        def isbnField = typeSpec.fieldSpecs.find { it.name == 'authors' }
-        isbnField.modifiers.contains (Modifier.PRIVATE)
-        isbnField.type.canonicalName == 'java.util.List<String>'
-        isbnField.annotations.size () == 1
-        isbnField.annotations[0].type.canonicalName == 'com.fasterxml.jackson.annotation.JsonProperty'
-        isbnField.annotations[0].members.size () == 1
-        isbnField.annotations[0].members.get ('value')[0] as String == '"authors"'
+        def authorField = typeSpec.fieldSpecs.find { it.name == 'authors' }
+        authorField.modifiers.contains (Modifier.PRIVATE)
+        authorField.type.rawType.canonicalName == 'java.util.List'
+        authorField.type.typeArguments.size() == 1
+        authorField.type.typeArguments[0].canonicalName == 'java.lang.String'
+        authorField.annotations.size () == 1
+        authorField.annotations[0].type.canonicalName == 'com.fasterxml.jackson.annotation.JsonProperty'
+        authorField.annotations[0].members.size () == 1
+        authorField.annotations[0].members.get ('value')[0] as String == '"authors"'
     }
 }

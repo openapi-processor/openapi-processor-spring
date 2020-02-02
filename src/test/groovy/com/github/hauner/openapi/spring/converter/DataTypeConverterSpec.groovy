@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
@@ -129,9 +130,9 @@ class DataTypeConverterSpec extends Specification {
 
         then:
         assert dt.size () == 2
-        def bar = dt.find ('Bar')
+        def bar = dt.getObjectDataTypes().find {it.name == 'Bar'}
         bar.properties['val'].name == 'String'
-        def foo = dt.find ('Foo')
+        def foo = dt.getObjectDataTypes().find {it.name == 'Foo'}
         foo.properties['bar'] == bar
     }
 
@@ -162,7 +163,10 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'String[]'
+        ep.response.responseType instanceof ArrayDataType
+        ep.response.responseType.generics.size () == 1
+        ep.response.responseType.generics[0].packageName == 'java.lang'
+        ep.response.responseType.generics[0].name == 'String'
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {
@@ -195,7 +199,8 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        def props = ep.response.responseType.properties
+        ep.response.responseType instanceof ObjectDataType
+        def props = (ep.response.responseType as ObjectDataType).properties
         ep.response.responseType.name == 'InlineResponse200'
         ep.response.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
@@ -204,7 +209,7 @@ paths:
 
         and:
         api.models.size () == 1
-        api.models.find ('InlineResponse200') is ep.response.responseType
+        api.models.getObjectDataTypes().find {it.name == 'InlineResponse200'} is ep.response.responseType
     }
 
     void "creates model for component schema object" () {
@@ -244,7 +249,7 @@ components:
 
         and:
         def dataTypes = api.models
-        def book = dataTypes.find ('Book')
+        def book = dataTypes.getObjectDataTypes().find {it.name == 'Book'}
         assert book.name == 'Book'
         assert book.packageName == "${options.packageName}.model"
         assert book.properties.size () == 2
@@ -298,7 +303,7 @@ components:
 
         and:
         def dataTypes = api.models
-        assert dataTypes.find ('Book')
+        assert dataTypes.getObjectDataTypes().find {it.name =='Book'} != null
     }
 
     void "skips named array data types from #/components/schemas" () {
@@ -349,9 +354,9 @@ components:
 
         and:
         def dataTypes = api.models
-        def book = dataTypes.find ('Book')
+        def book = dataTypes.getObjectDataTypes().find {it.name == 'Book'}
         assert book != null
-        def author = dataTypes.find ('Author')
+        def author = dataTypes.getObjectDataTypes().find {it.name == 'Author'}
         assert author != null
     }
 

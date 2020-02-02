@@ -32,8 +32,8 @@ class PropertyNotationSpec extends Specification {
         // CompositeDataType must not implement a getProperty() method. It overrides groovy's
         // getProperty() and that breaks the groovy property notation.
 
-        def object = new ObjectDataType (type: 'Type')
-        DataType typed = new ObjectDataType (type: 'Typed')
+        def object = new ObjectDataType (name: 'Type')
+        DataType typed = new ObjectDataType (name: 'Typed')
 
         expect:
         object.name != null

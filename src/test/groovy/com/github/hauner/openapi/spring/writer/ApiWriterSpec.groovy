@@ -20,11 +20,14 @@ import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
+import com.squareup.javapoet.TypeSpec
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.slf4j.Logger
@@ -48,7 +51,7 @@ class ApiWriterSpec extends Specification {
         )
 
         when:
-        new ApiWriter (opts, Stub (InterfaceWriter), null, null).write (new Api())
+        new ApiWriter (opts, Stub (InterfaceGenerator), null, null).write (new Api())
 
         then:
         def api = new File([opts.targetDir, 'com', 'github', 'hauner', 'openapi', 'api'].join(File.separator))
@@ -68,20 +71,18 @@ class ApiWriterSpec extends Specification {
         when:
         target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'api')
         target.newFolder ('java', 'src', 'com', 'github', 'hauner', 'openapi', 'model')
-        new ApiWriter (opts, Stub (InterfaceWriter), null, null).write (new Api())
+        new ApiWriter (opts, Stub (InterfaceGenerator), null, null).write (new Api())
 
         then:
         0 * log.error (*_)
     }
 
     void "generates interface sources in api target folder"() {
-        def interfaceWriter = Stub (InterfaceWriter) {
-            write (_ as Writer, _ as Interface) >> {
-                Writer writer = it.get(0)
-                writer.write ('Foo interface!\n')
+        def interfaceWriter = Stub (InterfaceGenerator) {
+            generateTypeSpec (_ as Interface) >> {
+                TypeSpec.interfaceBuilder ('FooApi').build ()
             } >> {
-                Writer writer = it.get(0)
-                writer.write ('Bar interface!\n')
+                TypeSpec.interfaceBuilder ('BarApi').build ()
             }
         }
 
@@ -96,162 +97,36 @@ class ApiWriterSpec extends Specification {
         ])
 
         when:
-        new ApiWriter (opts, interfaceWriter, null, null, false)
-            .write (api)
-
-        then:
-        def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
-        fooSource.text == """\
-Foo interface!
-"""
-        def barSource = new File(getApiPath (opts.targetDir, 'BarApi.java'))
-        barSource.text == """\
-Bar interface!
-"""
-    }
-
-    @Ignore("rework with javapoet")
-    void "generates model sources in model target folder"() {
-        def dataTypeWriter = Stub (DataTypeGenerator) {
-            write (_ as Writer, _ as ObjectDataType) >> {
-                Writer writer = it.get(0)
-                writer.write ('Foo class!\n')
-            } >> {
-                Writer writer = it.get(0)
-                writer.write ('Bar class!\n')
-            }
-        }
-
-        def opts = new ApiOptions(
-            packageName: 'com.github.hauner.openapi',
-            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
-        )
-
-        def dt = new DataTypes()
-        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
-        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
-        def api = new Api(dt)
-
-        when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator), false)
-            .write (api)
-
-        then:
-        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
-        fooSource.text == """\
-Foo class!
-"""
-        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
-        barSource.text == """\
-Bar class!
-"""
-    }
-
-    @Ignore("rework with javapoet")
-    void "generates model enum sources in model target folder"() {
-        def enumWriter = Stub (StringEnumGenerator) {
-            generateTypeSpec (_ as Writer, _ as StringEnumDataType) >> {
-                Writer writer = it.get(0)
-                writer.write ('Foo enum!\n')
-            } >> {
-                Writer writer = it.get(0)
-                writer.write ('Bar enum!\n')
-            }
-        }
-
-        def opts = new ApiOptions(
-            packageName: 'com.github.hauner.openapi',
-            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
-        )
-
-        def dt = new DataTypes()
-        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
-        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
-        def api = new Api(dt)
-
-        when:
-        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeGenerator), enumWriter, false)
-            .write (api)
-
-        then:
-        def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
-        fooSource.text == """\
-Foo enum!
-"""
-        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
-        barSource.text == """\
-Bar enum!
-"""
-    }
-
-    @Ignore("rework with javapoet")
-    void "generates model for object data types only" () {
-        def dataTypeWriter = Mock (DataTypeGenerator) {
-            write (_ as Writer, _ as ObjectDataType) >> {
-                Writer writer = it.get(0)
-                writer.write ('Foo class!\n')
-            } >> {
-                Writer writer = it.get(0)
-                writer.write ('Bar class!\n')
-            }
-        }
-
-        def opts = new ApiOptions(
-            packageName: 'com.github.hauner.openapi',
-            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
-        )
-
-        def dt = new DataTypes()
-        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
-        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Bar'))
-        dt.add (new MappedDataType(pkg: "mapped", type: 'Type'))
-        dt.add ('simple', new StringDataType())
-        def api = new Api(dt)
-
-        when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator), false)
-            .write (api)
-
-        then:
-        0 * dataTypeWriter.write (_, dt.find ('simple'))
-        0 * dataTypeWriter.write (_, dt.find ('Type'))
-    }
-
-    void "re-formats interface sources"() {
-        def interfaceWriter = Stub (InterfaceWriter) {
-            write (_ as Writer, _ as Interface) >> {
-                Writer writer = it.get(0)
-                writer.write ('  interface   Foo   {    }\n')
-            }
-        }
-
-        def opts = new ApiOptions(
-            packageName: 'com.github.hauner.openapi',
-            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
-        )
-
-        def api = new Api(interfaces: [
-            new Interface(pkg: "${opts.packageName}.api", name: 'Foo')
-        ])
-
-        when:
         new ApiWriter (opts, interfaceWriter, null, null)
             .write (api)
 
         then:
         def fooSource = new File(getApiPath (opts.targetDir, 'FooApi.java'))
         fooSource.text == """\
-interface Foo {
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.api;
+
+interface FooApi {
+}
+"""
+        def barSource = new File(getApiPath (opts.targetDir, 'BarApi.java'))
+        barSource.text == """\
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.api;
+
+interface BarApi {
 }
 """
     }
 
-    @Ignore("rework with javapoet")
-    void "re-formats model sources"() {
+    void "generates model sources in model target folder"() {
         def dataTypeWriter = Stub (DataTypeGenerator) {
-            write (_ as Writer, _ as ObjectDataType) >> {
-                Writer writer = it.get(0)
-                writer.write ('      class Foo {  }')
+            generateTypeSpec (_ as ObjectDataType) >> {
+                TypeSpec.classBuilder ('Foo').build ()
+            } >> {
+                TypeSpec.classBuilder ('Bar').build ()
             }
         }
 
@@ -261,27 +136,45 @@ interface Foo {
         )
 
         def dt = new DataTypes()
-        dt.add (new ObjectDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Foo'))
+        dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Bar'))
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), dataTypeWriter, Stub(StringEnumGenerator))
+        new ApiWriter (opts, Stub(InterfaceGenerator), dataTypeWriter, Stub(StringEnumGenerator))
             .write (api)
 
         then:
         def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
         fooSource.text == """\
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.model;
+
 class Foo {
 }
 """
+        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
+        barSource.text == """\
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.model;
+
+class Bar {
+}
+"""
     }
 
-    @Ignore("rework with javapoet")
-    void "re-formats model enum sources"() {
+    void "generates model enum sources in model target folder"() {
         def enumWriter = Stub (StringEnumGenerator) {
-            generateTypeSpec (_ as Writer, _ as StringEnumDataType) >> {
-                Writer writer = it.get(0)
-                writer.write ('    enum   Foo   {   }')
+            generateTypeSpec (_ as StringEnumDataType) >> {
+                TypeSpec.enumBuilder ('Foo')
+                    .addEnumConstant ('foo')
+                    .build ()
+            } >> {
+                TypeSpec.enumBuilder ('Bar')
+                    .addEnumConstant ('bar')
+                    .build ()
             }
         }
 
@@ -291,19 +184,66 @@ class Foo {
         )
 
         def dt = new DataTypes()
-        dt.add (new StringEnumDataType(pkg: "${opts.packageName}.model", type: 'Foo'))
+        dt.add (new StringEnumDataType(packageName: "${opts.packageName}.model", name: 'Foo'))
+        dt.add (new StringEnumDataType(packageName: "${opts.packageName}.model", name: 'Bar'))
         def api = new Api(dt)
 
         when:
-        new ApiWriter (opts, Stub(InterfaceWriter), Stub(DataTypeGenerator), enumWriter)
+        new ApiWriter (opts, Stub(InterfaceGenerator), Stub(DataTypeGenerator), enumWriter)
             .write (api)
 
         then:
         def fooSource = new File(getModelPath (opts.targetDir, 'Foo.java'))
         fooSource.text == """\
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.model;
+
 enum Foo {
+    foo
 }
 """
+        def barSource = new File(getModelPath (opts.targetDir, 'Bar.java'))
+        barSource.text == """\
+// This class is auto generated by https://github.com/hauner/openapi-generatr-spring.
+// DO NOT EDIT.
+package com.github.hauner.openapi.model;
+
+enum Bar {
+    bar
+}
+"""
+    }
+
+    void "generates model for object data types only" () {
+        def dataTypeWriter = Mock (DataTypeGenerator)
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def dt = new DataTypes()
+        dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Foo'))
+        dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Bar'))
+        dt.add (new MappedDataType(packageName: "mapped", name: 'Type'))
+        dt.add ('simple', DataTypeHelper.createString (null))
+        def api = new Api(dt)
+
+        DataType foo = dt.getObjectDataTypes ().find { it.name == 'Foo' }
+        DataType bar = dt.getObjectDataTypes ().find { it.name == 'Bar' }
+        DataType simple = dt.getObjectDataTypes ().find { it.name == 'simple' }
+        DataType type = dt.getObjectDataTypes ().find { it.name == 'Type' }
+
+        when:
+        new ApiWriter (opts, Stub(InterfaceGenerator), dataTypeWriter, Stub(StringEnumGenerator))
+            .write (api)
+
+        then:
+        1 * dataTypeWriter.generateTypeSpec (foo) >> TypeSpec.classBuilder ("Foo").build ()
+        1 * dataTypeWriter.generateTypeSpec (bar) >> TypeSpec.classBuilder ("Bar").build ()
+        0 * dataTypeWriter.generateTypeSpec (simple)
+        0 * dataTypeWriter.generateTypeSpec (type)
     }
 
     String getApiPath(String targetFolder, String clazzName) {
@@ -313,5 +253,4 @@ enum Foo {
     String getModelPath(String targetFolder, String clazzName) {
         ([targetFolder] + apiModelPath + [clazzName]).join(File.separator)
     }
-
 }

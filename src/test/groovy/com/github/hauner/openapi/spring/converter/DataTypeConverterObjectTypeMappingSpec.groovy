@@ -114,7 +114,10 @@ components:
         parameter.dataType.packageName == 'org.springframework.data.domain'
         parameter.dataType.name == 'Pageable'
         response.responseType.packageName == 'org.springframework.data.domain'
-        response.responseType.name == 'Page<String>'
+        response.responseType.name == 'Page'
+        response.responseType.generics.size () == 1
+        response.responseType.generics[0].packageName == 'java.lang'
+        response.responseType.generics[0].name == 'String'
     }
 
     void "throws when there are multiple global mappings for a named schema" () {
@@ -331,8 +334,10 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'TargetClass<String>'
-        ep.response.responseType.imports == ['pkg.TargetClass', 'java.lang.String'] as Set
+        ep.response.responseType.name == 'TargetClass'
+        ep.response.responseType.generics.size () == 1
+        ep.response.responseType.generics[0].packageName == 'java.lang'
+        ep.response.responseType.generics[0].name == 'String'
 
         where:
         type << [
@@ -444,7 +449,13 @@ components:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def p = ep.parameters.first ()
-        p.dataType.name == 'Map<String, String>'
+        p.dataType.name == 'Map'
+        p.dataType.generics.size () == 2
+        p.dataType.generics[0].packageName == 'java.lang'
+        p.dataType.generics[0].name == 'String'
+        p.dataType.generics[1].packageName == 'java.lang'
+        p.dataType.generics[1].name == 'String'
+
     }
 
     void "converts query param object schema to MultiValueMap<> set via mapping" () {
@@ -499,7 +510,12 @@ components:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def p = ep.parameters.first ()
-        p.dataType.name == 'MultiValueMap<String, String>'
+        p.dataType.name == 'MultiValueMap'
+        p.dataType.generics.size () == 2
+        p.dataType.generics[0].packageName == 'java.lang'
+        p.dataType.generics[0].name == 'String'
+        p.dataType.generics[1].packageName == 'java.lang'
+        p.dataType.generics[1].name == 'String'
     }
 
 }

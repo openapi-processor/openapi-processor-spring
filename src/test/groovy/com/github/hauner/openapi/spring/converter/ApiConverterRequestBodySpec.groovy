@@ -59,7 +59,7 @@ paths:
         def ep = itf.endpoints.first ()
         def body = ep.requestBodies.first ()
         body.contentType == 'application/json'
-        body.requestBodyType.type == 'EndpointRequestBody'
+        body.requestBodyType.name == 'EndpointRequestBody'
         !body.required
         body.annotation == '@RequestBody'
         body.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestBody'
@@ -115,7 +115,6 @@ paths:
         file.name == 'file'
         file.required
         file.dataType.name == 'MultipartFile'
-        file.dataType.imports == ['org.springframework.web.multipart.MultipartFile'] as Set
         file.withAnnotation ()
         file.annotation == '@RequestParam'
         file.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'

@@ -112,9 +112,9 @@ components:
         def api = new ApiConverter ().convert (openApi)
 
         then:
-        api.models.dataTypes.size () == 2
-        api.models.dataTypes[0].name == 'Foo'
-        api.models.dataTypes[1].name == 'Bar'
+        api.models.getEnumDataTypes ().size () == 2
+        api.models.getEnumDataTypes ()[0].name == 'Foo'
+        api.models.getEnumDataTypes ()[1].name == 'Bar'
     }
 
 }

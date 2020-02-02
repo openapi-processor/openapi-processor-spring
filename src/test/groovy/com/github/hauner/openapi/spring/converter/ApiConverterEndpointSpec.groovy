@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.HttpMethod
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import spock.lang.Specification
 
@@ -135,7 +135,8 @@ paths:
         ep.path == '/ping'
         ep.method == HttpMethod.GET
         !ep.response.contentType
-        ep.response.responseType instanceof NoneDataType
+        ep.response.responseType.name == 'Void'
+        ep.response.responseType.packageName == 'java.lang'
     }
 
 

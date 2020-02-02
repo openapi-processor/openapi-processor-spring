@@ -59,13 +59,17 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
+        ep.response.responseType.packageName == 'java.util'
         ep.response.responseType.name == responseTypeName
+        ep.response.responseType.generics.size () == 1
+        ep.response.responseType.generics[0].packageName == 'java.lang'
+        ep.response.responseType.generics[0].name == 'String'
 
         where:
         targetTypeName         | responseTypeName
-        'java.util.Collection' | 'Collection<String>'
-        'java.util.List'       | 'List<String>'
-        'java.util.Set'        | 'Set<String>'
+        'java.util.Collection' | 'Collection'
+        'java.util.List'       | 'List'
+        'java.util.Set'        | 'Set'
     }
 
     void "throws when there are multiple global mappings for the array type" () {
@@ -230,12 +234,15 @@ paths:
         def ep = itf.endpoints.first ()
         ep.response.responseType.name == responseTypeName
         ep.response.responseType.packageName == 'java.util'
+        ep.response.responseType.generics.size () == 1
+        ep.response.responseType.generics[0].packageName == 'java.lang'
+        ep.response.responseType.generics[0].name == 'String'
 
         where:
         targetTypeName         | responseTypeName
-        'java.util.Collection' | 'Collection<String>'
-        'java.util.List'       | 'List<String>'
-        'java.util.Set'        | 'Set<String>'
+        'java.util.Collection' | 'Collection'
+        'java.util.List'       | 'List'
+        'java.util.Set'        | 'Set'
     }
 
     @Unroll
@@ -270,8 +277,11 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def p = ep.parameters.first ()
-        p.dataType.name == 'Collection<String>'
+        p.dataType.name == 'Collection'
         p.dataType.packageName == 'java.util'
+        p.dataType.generics.size () == 1
+        p.dataType.generics[0].packageName == 'java.lang'
+        p.dataType.generics[0].name == 'String'
 
         where:
         type << [
@@ -330,8 +340,11 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'Collection<String>'
-        ep.response.responseType.imports == ['java.util.Collection', 'java.lang.String'] as Set
+        ep.response.responseType.packageName == 'java.util'
+        ep.response.responseType.name == 'Collection'
+        ep.response.responseType.generics.size () == 1
+        ep.response.responseType.generics[0].packageName == 'java.lang'
+        ep.response.responseType.generics[0].name == 'String'
 
         where:
         type << [

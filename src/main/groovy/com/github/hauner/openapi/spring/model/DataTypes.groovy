@@ -77,4 +77,8 @@ class DataTypes {
     void add (String name, DataType dataType) {
         types.put (name, dataType)
     }
+
+    int size () {
+        types.size ()
+    }
 }

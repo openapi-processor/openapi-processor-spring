@@ -19,51 +19,20 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
-import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
-import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
-import com.github.hauner.openapi.spring.model.datatypes.LongDataType
+import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+import com.github.hauner.openapi.spring.model.datatypes.DefaultDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class BeanValidationGeneratorSpec extends Specification {
 
-    BeanValidationFactory beanValidationGenerator = new BeanValidationFactory ()
+    BeanValidationGenerator beanValidationGenerator = new BeanValidationGenerator ()
 
     @Unroll
     void "check @Valid for Object (type: #type)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-        def annotationSpecs = beanValidationGenerator.generateAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnnotation
-
-        where:
-        type              || resultImports              | resultAnnnotation
-        ObjectDataType    || ["javax.validation.Valid"] | "@Valid"
-        StringDataType    || []                         | ""
-        IntegerDataType   || []                         | ""
-        LongDataType      || []                         | ""
-        ListDataType      || []                         | ""
-        MappedDataType    || []                         | ""
-        FloatDataType     || []                         | ""
-        LocalDateDataType || []                         | ""
-    }
-
-    @Unroll
-    void "check @Valid for Object (type: #type) (javapoet)" () {
         setup:
         DataType dataType = type.getDeclaredConstructor ().newInstance ()
 
@@ -81,49 +50,15 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type              || annotationTypes
-        ObjectDataType    || ["javax.validation.Valid"]
-        StringDataType    || []
-        IntegerDataType   || []
-        LongDataType      || []
-        ListDataType      || []
-        MappedDataType    || []
-        FloatDataType     || []
-        LocalDateDataType || []
+        type            || annotationTypes
+        ObjectDataType  || ["javax.validation.Valid"]
+        DefaultDataType || []
+        MappedDataType  || []
     }
 
     @Unroll
-    void "check import @Size for String (minLength: #minLength, maxLength: #maxLength, type: #type)" () {
+    void "check import @Size for String (minLength: #minLength, maxLength: #maxLength, dataType: #dataType)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.minLength = minLength
-        dataType.constraints.maxLength = maxLength
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        type            | minLength | maxLength || resultImports                         | resultAnnotations
-        StringDataType  | null      | null      || []                                    | ""
-        StringDataType  | 1         | null      || ["javax.validation.constraints.Size"] | "@Size(min = 1)"
-        StringDataType  | null      | 2         || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
-        StringDataType  | 1         | 2         || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
-        IntegerDataType | 1         | null      || []                                    | ""
-        IntegerDataType | null      | 2         || []                                    | ""
-        IntegerDataType | 1         | 2         || []                                    | ""
-        ListDataType    | 1         | 2         || []                                    | ""
-    }
-
-    @Unroll
-    void "check import @Size for String (minLength: #minLength, maxLength: #maxLength, type: #type) (javapoet)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minLength = minLength
         dataType.constraints.maxLength = maxLength
@@ -144,50 +79,20 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type            | minLength | maxLength || annotationTypes
-        StringDataType  | null      | null      || []
-        StringDataType  | 1         | null      || ["javax.validation.constraints.Size"]
-        StringDataType  | null      | 2         || ["javax.validation.constraints.Size"]
-        StringDataType  | 1         | 2         || ["javax.validation.constraints.Size"]
-        IntegerDataType | 1         | null      || []
-        IntegerDataType | null      | 2         || []
-        IntegerDataType | 1         | 2         || []
-        ListDataType    | 1         | 2         || []
+        dataType                               | minLength | maxLength || annotationTypes
+        DataTypeHelper.createString (null)     | null      | null      || []
+        DataTypeHelper.createString (null)     | 1         | null      || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createString (null)     | null      | 2         || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createString (null)     | 1         | 2         || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createInteger (null)    | 1         | null      || []
+        DataTypeHelper.createInteger (null)    | null      | 2         || []
+        DataTypeHelper.createInteger (null)    | 1         | 2         || []
+        DataTypeHelper.createList (null, null) | 1         | 2         || []
     }
 
     @Unroll
-    void "check import @Size for Collections (minItems: #minItems, maxItems: #maxItems, type: #type)" () {
+    void "check import @Size for Collections (minItems: #minItems, maxItems: #maxItems, dataType: #dataType)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.minItems = minItems
-        dataType.constraints.maxItems = maxItems
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        type           | minItems | maxItems || resultImports                         | resultAnnotations
-        ArrayDataType  | null     | null     || []                                    | ""
-        ArrayDataType  | 1        | null     || ["javax.validation.constraints.Size"] | "@Size(min = 1)"
-        ArrayDataType  | null     | 2        || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
-        ArrayDataType  | 1        | 2        || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
-        ListDataType   | null     | 2        || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
-        SetDataType    | 1        | 2        || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
-        StringDataType | 1        | null     || []                                    | ""
-        StringDataType | null     | 2        || []                                    | ""
-        LongDataType   | 1        | 2        || []                                    | ""
-    }
-
-    @Unroll
-    void "check import @Size for Collections (minItems: #minItems, maxItems: #maxItems, type: #type) (javapoet)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minItems = minItems
         dataType.constraints.maxItems = maxItems
@@ -208,50 +113,21 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type           | minItems | maxItems || annotationTypes
-        ArrayDataType  | null     | null     || []
-        ArrayDataType  | 1        | null     || ["javax.validation.constraints.Size"]
-        ArrayDataType  | null     | 2        || ["javax.validation.constraints.Size"]
-        ArrayDataType  | 1        | 2        || ["javax.validation.constraints.Size"]
-        ListDataType   | null     | 2        || ["javax.validation.constraints.Size"]
-        SetDataType    | 1        | 2        || ["javax.validation.constraints.Size"]
-        StringDataType | 1        | null     || []
-        StringDataType | null     | 2        || []
-        LongDataType   | 1        | 2        || []
+        dataType                                     | minItems | maxItems || annotationTypes
+        DataTypeHelper.createArray (null, null)      | null     | null     || []
+        DataTypeHelper.createArray (null, null)      | 1        | null     || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createArray (null, null)      | null     | 2        || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createArray (null, null)      | 1        | 2        || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createCollection (null, null) | null     | 2        || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createSet (null, null)        | 1        | 2        || ["javax.validation.constraints.Size"]
+        DataTypeHelper.createString (null)           | 1        | null     || []
+        DataTypeHelper.createString (null)           | null     | 2        || []
+        DataTypeHelper.createLong (null)             | 1        | 2        || []
     }
 
     @Unroll
-    void "check import @NotNull (nullable: #nullable, type: #type)" () {
+    void "check import @NotNull (nullable: #nullable, dataType: #dataType)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.nullable = nullable
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        type            | nullable || resultImports                            | resultAnnotations
-        IntegerDataType | null     || []                                       | ""
-        IntegerDataType | true     || []                                       | ""
-        IntegerDataType | false    || ["javax.validation.constraints.NotNull"] | "@NotNull"
-        StringDataType  | null     || []                                       | ""
-        StringDataType  | true     || []                                       | ""
-        StringDataType  | false    || ["javax.validation.constraints.NotNull"] | "@NotNull"
-        ListDataType    | null     || []                                       | ""
-        ListDataType    | true     || []                                       | ""
-        ListDataType    | false    || ["javax.validation.constraints.NotNull"] | "@NotNull"
-    }
-
-    @Unroll
-    void "check import @NotNull (nullable: #nullable, type: #type) (javapoet)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.nullable = nullable
 
@@ -269,67 +145,21 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type            | nullable || annotationTypes
-        IntegerDataType | null     || []
-        IntegerDataType | true     || []
-        IntegerDataType | false    || ["javax.validation.constraints.NotNull"]
-        StringDataType  | null     || []
-        StringDataType  | true     || []
-        StringDataType  | false    || ["javax.validation.constraints.NotNull"]
-        ListDataType    | null     || []
-        ListDataType    | true     || []
-        ListDataType    | false    || ["javax.validation.constraints.NotNull"]
+        dataType                               | nullable || annotationTypes
+        DataTypeHelper.createInteger (null)    | null     || []
+        DataTypeHelper.createInteger (null)    | true     || []
+        DataTypeHelper.createInteger (null)    | false    || ["javax.validation.constraints.NotNull"]
+        DataTypeHelper.createString (null)     | null     || []
+        DataTypeHelper.createString (null)     | true     || []
+        DataTypeHelper.createString (null)     | false    || ["javax.validation.constraints.NotNull"]
+        DataTypeHelper.createList (null, null) | null     || []
+        DataTypeHelper.createList (null, null) | true     || []
+        DataTypeHelper.createList (null, null) | false    || ["javax.validation.constraints.NotNull"]
     }
 
     @Unroll
-    void "check import @DecimalMin (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum, type: #type)" () {
+    void "check import @DecimalMin (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum, dataType: #dataType)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.minimum = minimum
-        dataType.constraints.exclusiveMinimum = exclusiveMinimum
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        type            | minimum | exclusiveMinimum || resultImports                               | resultAnnotations
-        IntegerDataType | null    | null             || []                                          | ""
-        IntegerDataType | null    | true             || []                                          | ""
-        IntegerDataType | null    | false            || []                                          | ""
-        IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\", inclusive = false)"
-        IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        LongDataType    | null    | null             || []                                          | ""
-        LongDataType    | null    | true             || []                                          | ""
-        LongDataType    | null    | false            || []                                          | ""
-        LongDataType    | 1       | null             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        LongDataType    | 1       | true             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\", inclusive = false)"
-        LongDataType    | 1       | false            || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        FloatDataType   | null    | null             || []                                          | ""
-        FloatDataType   | null    | true             || []                                          | ""
-        FloatDataType   | null    | false            || []                                          | ""
-        FloatDataType   | 1       | null             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        FloatDataType   | 1       | true             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\", inclusive = false)"
-        FloatDataType   | 1       | false            || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        DoubleDataType  | null    | null             || []                                          | ""
-        DoubleDataType  | null    | true             || []                                          | ""
-        DoubleDataType  | null    | false            || []                                          | ""
-        DoubleDataType  | 1       | null             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        DoubleDataType  | 1       | true             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\", inclusive = false)"
-        DoubleDataType  | 1       | false            || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
-        StringDataType  | 1       | null             || []                                          | ""
-    }
-
-    @Unroll
-    void "check import @DecimalMin (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum, type: #type) (javapoet)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minimum = minimum
         dataType.constraints.exclusiveMinimum = exclusiveMinimum
@@ -354,83 +184,37 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type            | minimum | exclusiveMinimum || annotationTypes
-        IntegerDataType | null    | null             || []
-        IntegerDataType | null    | true             || []
-        IntegerDataType | null    | false            || []
-        IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        LongDataType    | null    | null             || []
-        LongDataType    | null    | true             || []
-        LongDataType    | null    | false            || []
-        LongDataType    | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        LongDataType    | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        LongDataType    | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        FloatDataType   | null    | null             || []
-        FloatDataType   | null    | true             || []
-        FloatDataType   | null    | false            || []
-        FloatDataType   | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        FloatDataType   | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        FloatDataType   | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        DoubleDataType  | null    | null             || []
-        DoubleDataType  | null    | true             || []
-        DoubleDataType  | null    | false            || []
-        DoubleDataType  | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        DoubleDataType  | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        DoubleDataType  | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        StringDataType  | 1       | null             || []
+        dataType                            | minimum | exclusiveMinimum || annotationTypes
+        DataTypeHelper.createInteger (null) | null    | null             || []
+        DataTypeHelper.createInteger (null) | null    | true             || []
+        DataTypeHelper.createInteger (null) | null    | false            || []
+        DataTypeHelper.createInteger (null) | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createInteger (null) | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createInteger (null) | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createLong (null)    | null    | null             || []
+        DataTypeHelper.createLong (null)    | null    | true             || []
+        DataTypeHelper.createLong (null)    | null    | false            || []
+        DataTypeHelper.createLong (null)    | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createLong (null)    | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createLong (null)    | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createFloat (null)   | null    | null             || []
+        DataTypeHelper.createFloat (null)   | null    | true             || []
+        DataTypeHelper.createFloat (null)   | null    | false            || []
+        DataTypeHelper.createFloat (null)   | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createFloat (null)   | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createFloat (null)   | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createDouble (null)  | null    | null             || []
+        DataTypeHelper.createDouble (null)  | null    | true             || []
+        DataTypeHelper.createDouble (null)  | null    | false            || []
+        DataTypeHelper.createDouble (null)  | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createDouble (null)  | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createDouble (null)  | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        DataTypeHelper.createString (null)  | 1       | null             || []
     }
 
     @Unroll
-    void "check import @DecimalMax (maximum: #maximum, exclusiveMaximum: #exclusiveMaximum, type: #type)" () {
+    void "check import @DecimalMax (maximum: #maximum, exclusiveMaximum: #exclusiveMaximum, dataType: #dataType)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.maximum = maximum
-        dataType.constraints.exclusiveMaximum = exclusiveMaximum
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        type            | maximum | exclusiveMaximum || resultImports                               | resultAnnotations
-        IntegerDataType | null    | null             || []                                          | ""
-        IntegerDataType | null    | true             || []                                          | ""
-        IntegerDataType | null    | false            || []                                          | ""
-        IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\", inclusive = false)"
-        IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        LongDataType    | null    | null             || []                                          | ""
-        LongDataType    | null    | true             || []                                          | ""
-        LongDataType    | null    | false            || []                                          | ""
-        LongDataType    | 1       | null             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        LongDataType    | 1       | true             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\", inclusive = false)"
-        LongDataType    | 1       | false            || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        FloatDataType   | null    | null             || []                                          | ""
-        FloatDataType   | null    | true             || []                                          | ""
-        FloatDataType   | null    | false            || []                                          | ""
-        FloatDataType   | 1       | null             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        FloatDataType   | 1       | true             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\", inclusive = false)"
-        FloatDataType   | 1       | false            || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        DoubleDataType  | null    | null             || []                                          | ""
-        DoubleDataType  | null    | true             || []                                          | ""
-        DoubleDataType  | null    | false            || []                                          | ""
-        DoubleDataType  | 1       | null             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        DoubleDataType  | 1       | true             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\", inclusive = false)"
-        DoubleDataType  | 1       | false            || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
-        StringDataType  | 1       | null             || []                                          | ""
-    }
-
-    @Unroll
-    void "check import @DecimalMax (maximum: #maximum, exclusiveMaximum: #exclusiveMaximum, type: #type) (jabapoet)" () {
-        setup:
-        DataType dataType = type.getDeclaredConstructor ().newInstance ()
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.maximum = maximum
         dataType.constraints.exclusiveMaximum = exclusiveMaximum
@@ -454,66 +238,38 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        type            | maximum | exclusiveMaximum || annotationTypes
-        IntegerDataType | null    | null             || []
-        IntegerDataType | null    | true             || []
-        IntegerDataType | null    | false            || []
-        IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        LongDataType    | null    | null             || []
-        LongDataType    | null    | true             || []
-        LongDataType    | null    | false            || []
-        LongDataType    | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        LongDataType    | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        LongDataType    | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        FloatDataType   | null    | null             || []
-        FloatDataType   | null    | true             || []
-        FloatDataType   | null    | false            || []
-        FloatDataType   | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        FloatDataType   | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        FloatDataType   | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        DoubleDataType  | null    | null             || []
-        DoubleDataType  | null    | true             || []
-        DoubleDataType  | null    | false            || []
-        DoubleDataType  | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        DoubleDataType  | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        DoubleDataType  | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        StringDataType  | 1       | null             || []
+        dataType                            | maximum | exclusiveMaximum || annotationTypes
+        DataTypeHelper.createInteger (null) | null    | null             || []
+        DataTypeHelper.createInteger (null) | null    | true             || []
+        DataTypeHelper.createInteger (null) | null    | false            || []
+        DataTypeHelper.createInteger (null) | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createInteger (null) | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createInteger (null) | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createLong (null)    | null    | null             || []
+        DataTypeHelper.createLong (null)    | null    | true             || []
+        DataTypeHelper.createLong (null)    | null    | false            || []
+        DataTypeHelper.createLong (null)    | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createLong (null)    | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createLong (null)    | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createFloat (null)   | null    | null             || []
+        DataTypeHelper.createFloat (null)   | null    | true             || []
+        DataTypeHelper.createFloat (null)   | null    | false            || []
+        DataTypeHelper.createFloat (null)   | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createFloat (null)   | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createFloat (null)   | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createDouble (null)  | null    | null             || []
+        DataTypeHelper.createDouble (null)  | null    | true             || []
+        DataTypeHelper.createDouble (null)  | null    | false            || []
+        DataTypeHelper.createDouble (null)  | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createDouble (null)  | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createDouble (null)  | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        DataTypeHelper.createString (null)  | 1       | null             || []
     }
 
     @Unroll
     void "check import @DecimalMin and @DecimalMax (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum maximum: #maximum, exclusiveMaximum: #exclusiveMaximum)" () {
         setup:
-        DataType dataType = new DoubleDataType ()
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.minimum = minimum
-        dataType.constraints.exclusiveMinimum = exclusiveMinimum
-        dataType.constraints.maximum = maximum
-        dataType.constraints.exclusiveMaximum = exclusiveMaximum
-
-        when:
-        def imports = beanValidationGenerator.collectImports (dataType)
-        def annotations = beanValidationGenerator.createAnnotations (dataType)
-
-        then:
-        imports == resultImports as Set<String>
-        annotations == resultAnnotations
-
-        where:
-        minimum | exclusiveMinimum | maximum | exclusiveMaximum || resultImports                                                                          | resultAnnotations
-        1       | false            | 2       | false            || ["javax.validation.constraints.DecimalMin", "javax.validation.constraints.DecimalMax"] | "@DecimalMin(value = \"1\") @DecimalMax(value = \"2\")"
-        1       | true             | 2       | false            || ["javax.validation.constraints.DecimalMin", "javax.validation.constraints.DecimalMax"] | "@DecimalMin(value = \"1\", inclusive = false) @DecimalMax(value = \"2\")"
-        1       | false            | 2       | true             || ["javax.validation.constraints.DecimalMin", "javax.validation.constraints.DecimalMax"] | "@DecimalMin(value = \"1\") @DecimalMax(value = \"2\", inclusive = false)"
-        1       | true             | 2       | true             || ["javax.validation.constraints.DecimalMin", "javax.validation.constraints.DecimalMax"] | "@DecimalMin(value = \"1\", inclusive = false) @DecimalMax(value = \"2\", inclusive = false)"
-        1       | true             | null    | true             || ["javax.validation.constraints.DecimalMin"]                                            | "@DecimalMin(value = \"1\", inclusive = false)"
-        null    | true             | 2       | true             || ["javax.validation.constraints.DecimalMax"]                                            | "@DecimalMax(value = \"2\", inclusive = false)"
-    }
-
-    @Unroll
-    void "check import @DecimalMin and @DecimalMax (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum maximum: #maximum, exclusiveMaximum: #exclusiveMaximum) (javapoet)" () {
-        setup:
-        DataType dataType = new DoubleDataType ()
+        DataType dataType = DataTypeHelper.createDouble (null)
         dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minimum = minimum
         dataType.constraints.exclusiveMinimum = exclusiveMinimum

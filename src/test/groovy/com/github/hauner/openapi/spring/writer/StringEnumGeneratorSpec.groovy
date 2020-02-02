@@ -28,7 +28,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum class" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['test'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -42,7 +42,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum value Filed" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['test'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -55,7 +55,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum constructor" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['test'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -79,7 +79,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum getValue" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['test'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -104,7 +104,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum fromValue" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['test'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['test'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
@@ -137,7 +137,7 @@ class StringEnumGeneratorSpec extends Specification {
 
     void "generate enum values" () {
         def pkg = 'com.github.hauner.openapi'
-        def dataType = new StringEnumDataType (type: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], pkg: pkg)
+        def dataType = new StringEnumDataType (name: 'Foo', values: ['foo', '_foo-2', 'foo-foo'], packageName: pkg)
 
         when:
         def typeSpec = writer.generateTypeSpec (dataType)
