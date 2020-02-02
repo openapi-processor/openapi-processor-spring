@@ -35,20 +35,21 @@ class Endpoint {
         responses.put (httpStatus, statusResponses)
     }
 
+    RequestBody getRequestBody () {
+        requestBodies.first ()
+    }
+
+    @Deprecated
+    Response getResponse () {
+        responses.values ().first ().first ()
+    }
+
     Set<String> getResponseImports () {
         responses
             .values ()
             .flatten ()
             .collect { it.imports }
             .flatten () as Set<String>
-    }
-
-    RequestBody getRequestBody () {
-        requestBodies.first ()
-    }
-
-    Response getResponse () {
-        responses.values ().first ().first ()
     }
 
     /**
