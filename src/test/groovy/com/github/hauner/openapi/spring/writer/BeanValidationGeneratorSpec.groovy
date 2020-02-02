@@ -17,13 +17,20 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
+import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
 import com.github.hauner.openapi.spring.model.datatypes.DefaultDataType
+import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
+import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
+import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
+import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.github.hauner.openapi.spring.model.datatypes.SetDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -79,15 +86,15 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        dataType                               | minLength | maxLength || annotationTypes
-        DataTypeHelper.createString (null)     | null      | null      || []
-        DataTypeHelper.createString (null)     | 1         | null      || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createString (null)     | null      | 2         || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createString (null)     | 1         | 2         || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createInteger (null)    | 1         | null      || []
-        DataTypeHelper.createInteger (null)    | null      | 2         || []
-        DataTypeHelper.createInteger (null)    | 1         | 2         || []
-        DataTypeHelper.createList (null, null) | 1         | 2         || []
+        dataType                      | minLength | maxLength || annotationTypes
+        new StringDataType ()         | null      | null      || []
+        new StringDataType ()         | 1         | null      || ["javax.validation.constraints.Size"]
+        new StringDataType ()         | null      | 2         || ["javax.validation.constraints.Size"]
+        new StringDataType ()         | 1         | 2         || ["javax.validation.constraints.Size"]
+        new IntegerDataType ()        | 1         | null      || []
+        new IntegerDataType ()        | null      | 2         || []
+        new IntegerDataType ()        | 1         | 2         || []
+        new ListDataType (null, null) | 1         | 2         || []
     }
 
     @Unroll
@@ -113,16 +120,16 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        dataType                                     | minItems | maxItems || annotationTypes
-        DataTypeHelper.createArray (null, null)      | null     | null     || []
-        DataTypeHelper.createArray (null, null)      | 1        | null     || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createArray (null, null)      | null     | 2        || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createArray (null, null)      | 1        | 2        || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createCollection (null, null) | null     | 2        || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createSet (null, null)        | 1        | 2        || ["javax.validation.constraints.Size"]
-        DataTypeHelper.createString (null)           | 1        | null     || []
-        DataTypeHelper.createString (null)           | null     | 2        || []
-        DataTypeHelper.createLong (null)             | 1        | 2        || []
+        dataType                            | minItems | maxItems || annotationTypes
+        new ArrayDataType (null, null)      | null     | null     || []
+        new ArrayDataType (null, null)      | 1        | null     || ["javax.validation.constraints.Size"]
+        new ArrayDataType (null, null)      | null     | 2        || ["javax.validation.constraints.Size"]
+        new ArrayDataType (null, null)      | 1        | 2        || ["javax.validation.constraints.Size"]
+        new CollectionDataType (null, null) | null     | 2        || ["javax.validation.constraints.Size"]
+        new SetDataType (null, null)        | 1        | 2        || ["javax.validation.constraints.Size"]
+        new StringDataType ()               | 1        | null     || []
+        new StringDataType ()               | null     | 2        || []
+        new LongDataType ()                 | 1        | 2        || []
     }
 
     @Unroll
@@ -145,16 +152,16 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        dataType                               | nullable || annotationTypes
-        DataTypeHelper.createInteger (null)    | null     || []
-        DataTypeHelper.createInteger (null)    | true     || []
-        DataTypeHelper.createInteger (null)    | false    || ["javax.validation.constraints.NotNull"]
-        DataTypeHelper.createString (null)     | null     || []
-        DataTypeHelper.createString (null)     | true     || []
-        DataTypeHelper.createString (null)     | false    || ["javax.validation.constraints.NotNull"]
-        DataTypeHelper.createList (null, null) | null     || []
-        DataTypeHelper.createList (null, null) | true     || []
-        DataTypeHelper.createList (null, null) | false    || ["javax.validation.constraints.NotNull"]
+        dataType                      | nullable || annotationTypes
+        new IntegerDataType ()        | null     || []
+        new IntegerDataType ()        | true     || []
+        new IntegerDataType ()        | false    || ["javax.validation.constraints.NotNull"]
+        new StringDataType ()         | null     || []
+        new StringDataType ()         | true     || []
+        new StringDataType ()         | false    || ["javax.validation.constraints.NotNull"]
+        new ListDataType (null, null) | null     || []
+        new ListDataType (null, null) | true     || []
+        new ListDataType (null, null) | false    || ["javax.validation.constraints.NotNull"]
     }
 
     @Unroll
@@ -184,32 +191,32 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        dataType                            | minimum | exclusiveMinimum || annotationTypes
-        DataTypeHelper.createInteger (null) | null    | null             || []
-        DataTypeHelper.createInteger (null) | null    | true             || []
-        DataTypeHelper.createInteger (null) | null    | false            || []
-        DataTypeHelper.createInteger (null) | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createInteger (null) | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createInteger (null) | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createLong (null)    | null    | null             || []
-        DataTypeHelper.createLong (null)    | null    | true             || []
-        DataTypeHelper.createLong (null)    | null    | false            || []
-        DataTypeHelper.createLong (null)    | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createLong (null)    | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createLong (null)    | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createFloat (null)   | null    | null             || []
-        DataTypeHelper.createFloat (null)   | null    | true             || []
-        DataTypeHelper.createFloat (null)   | null    | false            || []
-        DataTypeHelper.createFloat (null)   | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createFloat (null)   | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createFloat (null)   | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createDouble (null)  | null    | null             || []
-        DataTypeHelper.createDouble (null)  | null    | true             || []
-        DataTypeHelper.createDouble (null)  | null    | false            || []
-        DataTypeHelper.createDouble (null)  | 1       | null             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createDouble (null)  | 1       | true             || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createDouble (null)  | 1       | false            || ["javax.validation.constraints.DecimalMin"]
-        DataTypeHelper.createString (null)  | 1       | null             || []
+        dataType               | minimum | exclusiveMinimum || annotationTypes
+        new IntegerDataType () | null    | null             || []
+        new IntegerDataType () | null    | true             || []
+        new IntegerDataType () | null    | false            || []
+        new IntegerDataType () | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        new IntegerDataType () | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        new IntegerDataType () | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        new LongDataType ()    | null    | null             || []
+        new LongDataType ()    | null    | true             || []
+        new LongDataType ()    | null    | false            || []
+        new LongDataType ()    | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        new LongDataType ()    | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        new LongDataType ()    | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        new FloatDataType ()   | null    | null             || []
+        new FloatDataType ()   | null    | true             || []
+        new FloatDataType ()   | null    | false            || []
+        new FloatDataType ()   | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        new FloatDataType ()   | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        new FloatDataType ()   | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        new DoubleDataType ()  | null    | null             || []
+        new DoubleDataType ()  | null    | true             || []
+        new DoubleDataType ()  | null    | false            || []
+        new DoubleDataType ()  | 1       | null             || ["javax.validation.constraints.DecimalMin"]
+        new DoubleDataType ()  | 1       | true             || ["javax.validation.constraints.DecimalMin"]
+        new DoubleDataType ()  | 1       | false            || ["javax.validation.constraints.DecimalMin"]
+        new StringDataType ()  | 1       | null             || []
     }
 
     @Unroll
@@ -238,43 +245,43 @@ class BeanValidationGeneratorSpec extends Specification {
         }
 
         where:
-        dataType                            | maximum | exclusiveMaximum || annotationTypes
-        DataTypeHelper.createInteger (null) | null    | null             || []
-        DataTypeHelper.createInteger (null) | null    | true             || []
-        DataTypeHelper.createInteger (null) | null    | false            || []
-        DataTypeHelper.createInteger (null) | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createInteger (null) | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createInteger (null) | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createLong (null)    | null    | null             || []
-        DataTypeHelper.createLong (null)    | null    | true             || []
-        DataTypeHelper.createLong (null)    | null    | false            || []
-        DataTypeHelper.createLong (null)    | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createLong (null)    | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createLong (null)    | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createFloat (null)   | null    | null             || []
-        DataTypeHelper.createFloat (null)   | null    | true             || []
-        DataTypeHelper.createFloat (null)   | null    | false            || []
-        DataTypeHelper.createFloat (null)   | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createFloat (null)   | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createFloat (null)   | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createDouble (null)  | null    | null             || []
-        DataTypeHelper.createDouble (null)  | null    | true             || []
-        DataTypeHelper.createDouble (null)  | null    | false            || []
-        DataTypeHelper.createDouble (null)  | 1       | null             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createDouble (null)  | 1       | true             || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createDouble (null)  | 1       | false            || ["javax.validation.constraints.DecimalMax"]
-        DataTypeHelper.createString (null)  | 1       | null             || []
+        dataType               | maximum | exclusiveMaximum || annotationTypes
+        new IntegerDataType () | null    | null             || []
+        new IntegerDataType () | null    | true             || []
+        new IntegerDataType () | null    | false            || []
+        new IntegerDataType () | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        new IntegerDataType () | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        new IntegerDataType () | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        new LongDataType ()    | null    | null             || []
+        new LongDataType ()    | null    | true             || []
+        new LongDataType ()    | null    | false            || []
+        new LongDataType ()    | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        new LongDataType ()    | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        new LongDataType ()    | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        new FloatDataType ()   | null    | null             || []
+        new FloatDataType ()   | null    | true             || []
+        new FloatDataType ()   | null    | false            || []
+        new FloatDataType ()   | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        new FloatDataType ()   | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        new FloatDataType ()   | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        new DoubleDataType ()  | null    | null             || []
+        new DoubleDataType ()  | null    | true             || []
+        new DoubleDataType ()  | null    | false            || []
+        new DoubleDataType ()  | 1       | null             || ["javax.validation.constraints.DecimalMax"]
+        new DoubleDataType ()  | 1       | true             || ["javax.validation.constraints.DecimalMax"]
+        new DoubleDataType ()  | 1       | false            || ["javax.validation.constraints.DecimalMax"]
+        new StringDataType ()  | 1       | null             || []
     }
 
     @Unroll
     void "check import @DecimalMin and @DecimalMax (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum maximum: #maximum, exclusiveMaximum: #exclusiveMaximum)" () {
         setup:
-        DataType dataType = DataTypeHelper.createDouble (null)
-        dataType.constraints = new DataTypeConstraints ()
-        dataType.constraints.minimum = minimum
-        dataType.constraints.exclusiveMinimum = exclusiveMinimum
-        dataType.constraints.maximum = maximum
-        dataType.constraints.exclusiveMaximum = exclusiveMaximum
+        DataTypeConstraints constraints = new DataTypeConstraints ()
+        constraints.minimum = minimum
+        constraints.exclusiveMinimum = exclusiveMinimum
+        constraints.maximum = maximum
+        constraints.exclusiveMaximum = exclusiveMaximum
+        DataType dataType = new DoubleDataType (constraints: constraints)
 
         when:
         def annotationSpecs = beanValidationGenerator.generateAnnotations (dataType)

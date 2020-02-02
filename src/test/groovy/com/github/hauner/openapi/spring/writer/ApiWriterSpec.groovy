@@ -21,17 +21,16 @@ import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
 import com.squareup.javapoet.TypeSpec
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.slf4j.Logger
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class ApiWriterSpec extends Specification {
@@ -227,7 +226,7 @@ enum Bar {
         dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Foo'))
         dt.add (new ObjectDataType(packageName: "${opts.packageName}.model", name: 'Bar'))
         dt.add (new MappedDataType(packageName: "mapped", name: 'Type'))
-        dt.add ('simple', DataTypeHelper.createString (null))
+        dt.add ('simple', new StringDataType ())
         def api = new Api(dt)
 
         DataType foo = dt.getObjectDataTypes ().find { it.name == 'Foo' }

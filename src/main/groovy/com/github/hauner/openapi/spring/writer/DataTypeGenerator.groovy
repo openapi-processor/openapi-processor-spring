@@ -17,7 +17,8 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
+
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.support.Identifier
@@ -66,7 +67,7 @@ class DataTypeGenerator {
             return ClassName.get (dataType.packageName, dataType.name)
         }
 
-        if(DataTypeHelper.isArray (dataType)){
+        if(ArrayDataType.isArray (dataType)){
             return ArrayTypeName.of (createTypeName (dataType.generics[0]))
         }
 

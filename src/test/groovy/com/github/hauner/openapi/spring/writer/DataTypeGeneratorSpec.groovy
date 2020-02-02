@@ -17,9 +17,10 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
+import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import spock.lang.Specification
@@ -51,8 +52,8 @@ class DataTypeGeneratorSpec extends Specification {
         def pkg = 'com.github.hauner.openapi'
 
         def dataType = new ObjectDataType (name: 'Book', properties: [
-            'isbn': DataTypeHelper.createString (null),
-            'title': DataTypeHelper.createString (null)
+            'isbn': new StringDataType (),
+            'title': new StringDataType ()
         ], packageName: pkg)
 
         when:
@@ -81,8 +82,8 @@ class DataTypeGeneratorSpec extends Specification {
         def pkg = 'com.github.hauner.openapi'
 
         def dataType = new ObjectDataType (name: 'Book', properties: [
-            'a-isbn': DataTypeHelper.createString (null),
-            'a-title': DataTypeHelper.createString (null)
+            'a-isbn': new StringDataType (),
+            'a-title': new StringDataType ()
         ], packageName: pkg)
 
         when:
@@ -111,8 +112,8 @@ class DataTypeGeneratorSpec extends Specification {
         def pkg = 'com.github.hauner.openapi'
 
         def dataType = new ObjectDataType (name: 'Book', properties: [
-            'a-isbn': DataTypeHelper.createString (null),
-            'a-title': DataTypeHelper.createString (null)
+            'a-isbn': new StringDataType (),
+            'a-title': new StringDataType ()
         ], packageName: pkg)
 
         when:
@@ -180,7 +181,7 @@ class DataTypeGeneratorSpec extends Specification {
 
     void "generate import of generic list type" () {
         def dataType = new ObjectDataType (name: 'Book', properties: [
-            'authors': DataTypeHelper.createList (null, DataTypeHelper.createString (null))
+            'authors': new ListDataType (new StringDataType (), null)
         ])
 
         when:

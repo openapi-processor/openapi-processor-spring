@@ -26,12 +26,25 @@ import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
-
+import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
+import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
+import com.github.hauner.openapi.spring.model.datatypes.DefaultDataType
+import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
+import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
+import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
+import com.github.hauner.openapi.spring.model.datatypes.ListDataType
+import com.github.hauner.openapi.spring.model.datatypes.LongDataType
+import com.github.hauner.openapi.spring.model.datatypes.MapDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.SetDataType
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.github.hauner.openapi.spring.model.datatypes.VoidDataType
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -43,12 +56,12 @@ class DataTypeConverter {
 
     private ApiOptions options
 
-    DataTypeConverter(ApiOptions options) {
+    DataTypeConverter (ApiOptions options) {
         this.options = options
     }
 
-    DataType none() {
-        DataTypeHelper.createVoid ()
+    DataType none () {
+        new VoidDataType ()
     }
 
     /**
@@ -63,7 +76,7 @@ class DataTypeConverter {
     DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
 
         if (dataTypeInfo.isRefObject ()) {
-            createRefDataType(dataTypeInfo, dataTypes)
+            createRefDataType (dataTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isArray ()) {
             createArrayDataType (dataTypeInfo, dataTypes)
@@ -83,7 +96,7 @@ class DataTypeConverter {
         def arrayType
         TargetType targetType = getMappedDataType (new ArraySchemaType (schemaInfo))
 
-        def constraints = new DataTypeConstraints(
+        def constraints = new DataTypeConstraints (
             defaultValue: schemaInfo.defaultValue,
             nullable: schemaInfo.nullable,
             minItems: schemaInfo.minItems,
@@ -92,16 +105,16 @@ class DataTypeConverter {
 
         switch (targetType?.typeName) {
             case Collection.name:
-                arrayType = DataTypeHelper.createCollection (constraints, item)
+                arrayType = new CollectionDataType (item, constraints)
                 break
             case List.name:
-                arrayType = DataTypeHelper.createList (constraints, item)
+                arrayType = new ListDataType (item, constraints)
                 break
             case Set.name:
-                arrayType = DataTypeHelper.createSet (constraints, item)
+                arrayType = new SetDataType (item, constraints)
                 break
             default:
-                arrayType = DataTypeHelper.createArray(constraints, item)
+                arrayType = new ArrayDataType (item, constraints)
         }
 
         arrayType
@@ -116,27 +129,29 @@ class DataTypeConverter {
 
         TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
         if (targetType) {
-            objectType = DataTypeHelper.create (
-                targetType.pkg,
-                targetType.name,
-                null,
-                targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
-            )
-
-            // If it is no Map, it is a mapped data type
-            if(!DataTypeHelper.isMap (objectType)) {
-                objectType = DataTypeHelper.createMapped (
+            if (MapDataType.isMap (targetType.pkg, targetType.name)) {
+                def genericTypes = targetType.genericTypes.collect { new DefaultDataType (packageName: it.pkg, name: it.name) }
+                objectType = new MapDataType (
                     targetType.pkg,
                     targetType.name,
-                    null,
-                    targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
+                    genericTypes [0],
+                    genericTypes [1]
+                )
+            } else {
+                objectType = new MappedDataType (
+                    packageName: targetType.pkg,
+                    name: targetType.name,
+                    generics: targetType.genericTypes
+                        .collect { new DefaultDataType (packageName: it.pkg, name: it.name) }
+                        .toArray (new DataType[0]) as DataType[]
                 )
             }
+
 
             return objectType
         }
 
-        def constraints = new DataTypeConstraints(
+        def constraints = new DataTypeConstraints (
             nullable: schemaInfo.nullable,
         )
 
@@ -157,15 +172,15 @@ class DataTypeConverter {
 
     private DataType createSimpleDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
 
-        TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
+        TargetType targetType = getMappedDataType (new PrimitiveSchemaType (schemaInfo))
         if (targetType) {
-            def simpleType = DataTypeHelper.createMapped (
-                targetType.pkg,
-                targetType.name,
-                null,
-                targetType.genericTypes.collect ({ DataTypeHelper.create (it.pkg, it.name, null) }).toArray (new DataType[0]) as DataType[]
+            return new MappedDataType (
+                packageName: targetType.pkg,
+                name: targetType.name,
+                generics: targetType.genericTypes
+                    .collect { new DefaultDataType (packageName: it.pkg, name: it.name) }
+                    .toArray (new DataType[0]) as DataType[]
             )
-            return simpleType
         }
 
         def typeFormat = schemaInfo.type
@@ -173,7 +188,7 @@ class DataTypeConverter {
             typeFormat += '/' + schemaInfo.format
         }
 
-        def constraints = new DataTypeConstraints(
+        def constraints = new DataTypeConstraints (
             defaultValue: schemaInfo.defaultValue,
             nullable: schemaInfo.nullable,
             minLength: schemaInfo.minLength,
@@ -188,40 +203,40 @@ class DataTypeConverter {
         switch (typeFormat) {
             case 'integer':
             case 'integer/int32':
-                simpleType = DataTypeHelper.createInteger (constraints)
+                simpleType = new IntegerDataType (constraints: constraints)
                 break
             case 'integer/int64':
-                simpleType = DataTypeHelper.createLong (constraints)
+                simpleType = new LongDataType (constraints: constraints)
                 break
             case 'number':
             case 'number/float':
-                simpleType = DataTypeHelper.createFloat (constraints)
+                simpleType = new FloatDataType (constraints: constraints)
                 break
             case 'number/double':
-                simpleType = DataTypeHelper.createDouble (constraints)
+                simpleType = new DoubleDataType (constraints: constraints)
                 break
             case 'boolean':
-                simpleType = DataTypeHelper.createBoolean (constraints)
+                simpleType = new BooleanDataType (constraints: constraints)
                 break
             case 'string':
                 simpleType = createStringDataType (schemaInfo, constraints, dataTypes)
                 break
             case 'string/date':
-                simpleType = DataTypeHelper.create('java.time', 'LocalDate', constraints)
+                simpleType = new DefaultDataType (packageName: 'java.time', name: 'LocalDate', constraints: constraints)
                 break
             case 'string/date-time':
-                simpleType = DataTypeHelper.create('java.time', 'OffsetDateTime', constraints)
+                simpleType = new DefaultDataType (packageName: 'java.time', name: 'OffsetDateTime', constraints: constraints)
                 break
             default:
-                throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
+                throw new UnknownDataTypeException (schemaInfo.type, schemaInfo.format)
         }
 
         simpleType
     }
 
     private DataType createStringDataType (SchemaInfo info, DataTypeConstraints constraints, DataTypes dataTypes) {
-        if (!info.isEnum()) {
-            return DataTypeHelper.createString (constraints)
+        if (!info.isEnum ()) {
+            return new StringDataType (constraints: constraints)
         }
 
         // in case of an inline definition the name may be lowercase, make sure the enum
@@ -245,7 +260,7 @@ class DataTypeConverter {
                 throw new AmbiguousTypeMappingException (endpointMatches)
             }
 
-            TargetType target = (endpointMatches.first() as TypeMapping).targetType
+            TargetType target = (endpointMatches.first () as TypeMapping).targetType
             if (target) {
                 return target
             }
@@ -259,7 +274,7 @@ class DataTypeConverter {
                 throw new AmbiguousTypeMappingException (ioMatches)
             }
 
-            TargetType target = (ioMatches.first() as TypeMapping).targetType
+            TargetType target = (ioMatches.first () as TypeMapping).targetType
             if (target) {
                 return target
             }

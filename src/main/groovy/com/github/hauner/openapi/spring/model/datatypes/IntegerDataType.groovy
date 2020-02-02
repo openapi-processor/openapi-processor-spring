@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,40 +17,31 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * OpenAPI type 'array' maps to java [].
- *
  * @author Martin Hauner
- * @author Bastian Wilhelm
+ * @authro Bastian Wilhelm
  */
-class ArrayDataType implements DataType {
-    // ArrayType should have one generic parameter
-    private List<DataType> generics = []
-    private DataTypeConstraints constraints
+class IntegerDataType implements DataType {
+    DataTypeConstraints constraints
 
-    ArrayDataType (DataType type, DataTypeConstraints constraints) {
-        this.generics = [type]
-        this.constraints = constraints
-    }
+    private static final String NAME = 'Integer'
+    private static final String PACKAGE_NAME = 'java.lang'
 
-    static boolean isArray (DataType dataType) {
-        dataType != null && dataType instanceof ArrayDataType
+    static boolean isInteger (DataType dataType) {
+        dataType != null && dataType.packageName == PACKAGE_NAME && dataType.name == NAME
     }
 
     @Override
     String getName () {
-        return null
+        return NAME
     }
 
     @Override
     String getPackageName () {
-        return null
+        return PACKAGE_NAME
     }
 
+    @Override
     List<DataType> getGenerics () {
-        return generics
-    }
-
-    DataTypeConstraints getConstraints () {
-        return constraints
+        return []
     }
 }

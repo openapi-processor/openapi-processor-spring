@@ -30,7 +30,8 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+import com.github.hauner.openapi.spring.model.datatypes.DefaultDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
@@ -86,14 +87,14 @@ class ApiConverter {
         }
     }
 
-    ApiConverter(ApiOptions options) {
+    ApiConverter (ApiOptions options) {
         this.options = options
 
         if (!this.options) {
-            this.options = new DefaultApiOptions()
+            this.options = new DefaultApiOptions ()
         }
 
-        dataTypeConverter = new DataTypeConverter(this.options)
+        dataTypeConverter = new DataTypeConverter (this.options)
     }
 
     /**
@@ -110,7 +111,7 @@ class ApiConverter {
 
     private void createInterfaces (OpenAPI api, Api target) {
         def resolver = new RefResolver (api.components)
-        Map<String, Interface>interfaces = new HashMap<> ()
+        Map<String, Interface> interfaces = new HashMap<> ()
 
         api.paths.each { Map.Entry<String, PathItem> pathEntry ->
             String path = pathEntry.key
@@ -239,7 +240,7 @@ class ApiConverter {
                 return new CookieParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             default:
                 // should not reach this, the openapi parser ignores parameters with unknown type.
-                throw new UnknownParameterTypeException(parameter.name, parameter.in)
+                throw new UnknownParameterTypeException (parameter.name, parameter.in)
         }
     }
 
@@ -247,11 +248,13 @@ class ApiConverter {
         TypeMapping tm = mapping.childMappings.first ()
         TargetType tt = tm.targetType
 
-        def addType = DataTypeHelper.createMapped (
-            tt.pkg,
-            tt.name,
-            null,
-            tt.genericTypes.collect {DataTypeHelper.create (it.pkg, it.name, null)}.toArray (new DataType [0]) as DataType[])
+        def addType = new MappedDataType (
+            packageName: tt.pkg,
+            name: tt.name,
+            generics: tt.genericTypes
+                .collect { new DefaultDataType (packageName: it.pkg, name: it.name) }
+                .toArray (new DataType[0]) as DataType[]
+        )
 
         new AdditionalParameter (name: mapping.parameterName, required: true, dataType: addType)
     }
@@ -259,16 +262,16 @@ class ApiConverter {
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
-        new ModelRequestBody(
+        new ModelRequestBody (
             contentType: contentType,
             requestBodyType: dataType,
             required: required)
     }
 
     private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {
-        DataType dataType = dataTypeConverter.convert (info, new DataTypes())
-        if (! (dataType instanceof ObjectDataType)) {
-            throw new MultipartResponseBodyException(info.path)
+        DataType dataType = dataTypeConverter.convert (info, new DataTypes ())
+        if (!(dataType instanceof ObjectDataType)) {
+            throw new MultipartResponseBodyException (info.path)
         }
 
         dataType.properties.collect {
@@ -328,7 +331,7 @@ class ApiConverter {
 
     private boolean isExcluded (String path) {
         def endpointMatches = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint(path: path))
+            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (path: path))
         }
 
         if (!endpointMatches.empty) {

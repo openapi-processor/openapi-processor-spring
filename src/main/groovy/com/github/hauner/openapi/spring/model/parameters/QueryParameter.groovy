@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
+import com.github.hauner.openapi.spring.model.datatypes.MapDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 
@@ -38,7 +39,7 @@ class QueryParameter extends Parameter {
      */
     boolean withAnnotation () {
         // Map should be annotated
-        if (DataTypeHelper.isMap (dataType)) {
+        if (MapDataType.isMap (dataType)) {
             return true
         }
 
@@ -60,7 +61,7 @@ class QueryParameter extends Parameter {
      */
     boolean withParameters () {
         // Map should not have parameters
-        if (DataTypeHelper.isMap (dataType)) {
+        if (MapDataType.isMap (dataType)) {
             return false
         }
 

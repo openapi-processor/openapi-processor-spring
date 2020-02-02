@@ -17,12 +17,13 @@
 package com.github.hauner.openapi.spring.support
 
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
+import com.github.hauner.openapi.spring.model.datatypes.VoidDataType
 
 class EmptyResponse extends Response {
 
     EmptyResponse() {
         contentType = null
-        responseType = DataTypeHelper.createVoid ()
+        responseType = new VoidDataType ()
     }
 }

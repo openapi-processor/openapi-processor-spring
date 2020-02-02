@@ -22,19 +22,14 @@ import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-
+import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.spring.model.datatypes.VoidDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.support.EmptyResponse
-import com.squareup.javapoet.TypeSpec
 import spock.lang.Specification
-
-import java.util.stream.Collectors
-
-import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
-
 
 class InterfaceGeneratorSpec extends Specification {
     def apiOptions = new ApiOptions()
@@ -101,7 +96,7 @@ class InterfaceGeneratorSpec extends Specification {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
                 parameters: [
-                    new QueryParameter(name: 'any', dataType: DataTypeHelper.createString (null))
+                    new QueryParameter(name: 'any', dataType: new StringDataType ())
                 ])
         ])
 
@@ -116,12 +111,12 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "does not write @RequestParam annotation of parameter that does not want the annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: DataTypeHelper.createVoid ())
+            new Response (contentType: 'application/json', responseType: new VoidDataType ())
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 name: 'Foo', packageName: 'bar', properties: [
-                    foo1: DataTypeHelper.createString (null),
-                    foo2: DataTypeHelper.createString (null)
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
                 ]
             ))
         ])
@@ -139,12 +134,12 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes request parameter data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: DataTypeHelper.createVoid ())
+            new Response (contentType: 'application/json', responseType: new VoidDataType ())
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 packageName: 'model', name: 'Foo', properties: [
-                foo1: DataTypeHelper.createString (null),
-                foo2: DataTypeHelper.createString (null)
+                foo1: new StringDataType (),
+                foo2: new StringDataType ()
             ]
             ))
         ])
@@ -166,7 +161,7 @@ class InterfaceGeneratorSpec extends Specification {
                 requestBodies: [
                     new RequestBody(
                         contentType: 'plain/text',
-                        requestBodyType: DataTypeHelper.createString (null),
+                        requestBodyType: new StringDataType (),
                         required: true
                     )
                 ])

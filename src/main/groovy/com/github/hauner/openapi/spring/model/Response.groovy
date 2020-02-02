@@ -17,7 +17,8 @@
 package com.github.hauner.openapi.spring.model
 
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeHelper
+
+import com.github.hauner.openapi.spring.model.datatypes.VoidDataType
 
 /**
  * Endpoint response properties.
@@ -29,6 +30,6 @@ class Response {
     DataType responseType
 
     boolean isEmpty() {
-        DataTypeHelper.isVoid (responseType)
+        VoidDataType.isVoid (responseType)
     }
 }
