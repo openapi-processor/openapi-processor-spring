@@ -27,7 +27,7 @@ class GeneratrPendingTest extends GeneratrTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'endpoint-exclude')
+              new TestSet(name: 'response-content-multiple')
         ]
     }
 

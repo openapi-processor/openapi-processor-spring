@@ -36,8 +36,16 @@ class MethodWriter {
     void write (Writer target, Endpoint endpoint) {
         target.write ("""\
     ${createMappingAnnotation (endpoint)}
-    ResponseEntity<${endpoint.response.responseType.name}> ${createMethodName (endpoint)}(${createParameters(endpoint)});
+    ResponseEntity<${getResponseEntityType(endpoint)}> ${createMethodName (endpoint)}(${createParameters(endpoint)});
 """)
+    }
+
+    private String getResponseEntityType (Endpoint endpoint) {
+        if (endpoint.hasMultiStatusResponses ()) {
+            '?'
+        } else {
+            endpoint.singleResponse.responseType.name
+        }
     }
 
     private String createMappingAnnotation (Endpoint endpoint) {
@@ -50,9 +58,16 @@ class MethodWriter {
             mapping += 'consumes = {' + quote(endpoint.requestBody.contentType) + '}'
         }
 
-        if (!endpoint.response.empty) {
+        if (endpoint.hasResponseContentTypes ()) {
             mapping += ", "
-            mapping += 'produces = {' + quote(endpoint.response.contentType) + '}'
+            mapping += 'produces = {'
+
+            mapping += endpoint.getResponseContentTypes ()
+                .collect {
+                    quote (it)
+                }
+                .join (', ')
+            mapping += '}'
         }
 
         mapping += ")"

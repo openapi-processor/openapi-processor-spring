@@ -203,16 +203,16 @@ class ApiConverter {
             def httpResponse = responseEntry.value
 
             if (!httpResponse.content) {
-                ep.responses.add (createEmptyResponse ())
+                ep.addResponses (httpStatus, [Response.EMPTY])
             } else {
                 List<Response> results = createResponses (
                     ep.path,
+                    httpStatus,
                     httpResponse,
-                    getInlineResponseName (ep.path, httpStatus),
                     dataTypes,
                     resolver)
 
-                ep.responses.addAll (results)
+                ep.addResponses (httpStatus, results)
             }
         }
     }
@@ -274,7 +274,7 @@ class ApiConverter {
         }
     }
 
-    private List<Response> createResponses (String path, ApiResponse apiResponse, String inlineName, DataTypes dataTypes, RefResolver resolver) {
+    private List<Response> createResponses (String path, String httpStatus, ApiResponse apiResponse, DataTypes dataTypes, RefResolver resolver) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
@@ -285,7 +285,7 @@ class ApiConverter {
             def info = new SchemaInfo (
                 path: path,
                 contentType: contentType,
-                name: inlineName,
+                name: getInlineResponseName (path, httpStatus),
                 schema: schema,
                 resolver: resolver)
 
@@ -320,9 +320,6 @@ class ApiConverter {
         Identifier.toClass (path) + 'Response' + httpStatus
     }
 
-    private Response createEmptyResponse () {
-        new Response (responseType: dataTypeConverter.none ())
-    }
 
     private boolean isExcluded (String path) {
         def endpointMatches = options.typeMappings.findAll {

@@ -80,9 +80,8 @@ class InterfaceWriter {
                 }
             }
 
-            if (!ep.response.empty) {
-                imports.addAll (ep.response.imports)
-            }
+            // may add unnecessary imports with multiple status responses
+            imports.addAll (ep.responseImports)
         }
 
         new ImportFilter ()
