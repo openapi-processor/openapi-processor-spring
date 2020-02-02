@@ -39,11 +39,6 @@ class Endpoint {
         requestBodies.first ()
     }
 
-    @Deprecated
-    Response getResponse () {
-        singleResponse
-    }
-
     /**
      * all possible responses for an openapi status ('200', '2xx',... or 'default'). If the given
      * status has no responses the result is an empty list.
@@ -56,6 +51,25 @@ class Endpoint {
             []
         }
         responses[status]
+    }
+
+    /**
+     * tes support
+     *
+     * @param status the response status
+     * @return first response of status
+     */
+    Response getFirstResponse (String status) {
+        if (!responses.containsKey (status)) {
+            null
+        }
+
+        def resp = responses[status]
+        if (resp.empty) {
+            null
+        }
+
+        resp.first ()
     }
 
     /**

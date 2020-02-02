@@ -70,8 +70,9 @@ class MethodWriterSpec extends Specification {
         writer.write (target, endpoint)
 
         then:
+        def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
     ResponseEntity<${type.capitalize ()}> get${type.capitalize ()}();
 """
 
@@ -101,8 +102,9 @@ class MethodWriterSpec extends Specification {
         writer.write (target, endpoint)
 
         then:
+        def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
     ResponseEntity<GetInlineResponse> getInline();
 """
     }
@@ -119,8 +121,9 @@ class MethodWriterSpec extends Specification {
         writer.write (target, endpoint)
 
         then:
+        def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
     ResponseEntity<Collection<String>> getCollection();
 """
     }
@@ -137,8 +140,9 @@ class MethodWriterSpec extends Specification {
         writer.write (target, endpoint)
 
         then:
+        def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
     ResponseEntity<List<String>> getList();
 """
     }
@@ -155,8 +159,9 @@ class MethodWriterSpec extends Specification {
         writer.write (target, endpoint)
 
         then:
+        def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.response.contentType}"})
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
     ResponseEntity<Set<String>> getSet();
 """
     }
