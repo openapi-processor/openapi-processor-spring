@@ -25,6 +25,7 @@ class IdentifierSpec extends Specification {
     void "convert source string '#src' to valid java identifier '#identifier'" () {
         expect:
         Identifier.toCamelCase (src) == identifier
+        IdentifierKt.toCamelCase (src) == identifier
 
         where:
         src              | identifier
@@ -40,6 +41,7 @@ class IdentifierSpec extends Specification {
     void "convert source string '#src' to valid java enum identifier '#identifier'" () {
         expect:
         Identifier.toEnum (src) == identifier
+        IdentifierKt.toEnum (src) == identifier
 
         where:
         src             | identifier
@@ -55,6 +57,7 @@ class IdentifierSpec extends Specification {
     void "converts source string '#src' to valid java class identifier '#identifier'" () {
         expect:
         Identifier.toClass (src) == identifier
+        IdentifierKt.toClass (src) == identifier
 
         where:
         src              | identifier
