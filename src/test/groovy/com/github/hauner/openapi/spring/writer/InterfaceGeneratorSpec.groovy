@@ -49,7 +49,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes GetMapping" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -62,9 +62,9 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes mappings" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: [new EmptyResponse()]),
-            new Endpoint(path: 'path', method: HttpMethod.POST, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.PUT, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path', method: HttpMethod.POST, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -79,7 +79,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes ResponseEntity" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
         ])
 
         when:
@@ -94,7 +94,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes @RequestParam" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [new EmptyResponse()],
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]],
                 parameters: [
                     new QueryParameter(name: 'any', dataType: new StringDataType ())
                 ])
@@ -111,7 +111,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "does not write @RequestParam annotation of parameter that does not want the annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: new VoidDataType ())
+            ['200': [new Response (contentType: 'application/json', responseType: new VoidDataType ())]]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 name: 'Foo', packageName: 'bar', properties: [
@@ -134,7 +134,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes request parameter data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new Response (contentType: 'application/json', responseType: new VoidDataType ())
+            ['200': [new Response (contentType: 'application/json', responseType: new VoidDataType ())]]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
                 packageName: 'model', name: 'Foo', properties: [
@@ -157,7 +157,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes @RequestBody" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [new EmptyResponse()],
+            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]],
                 requestBodies: [
                     new RequestBody(
                         contentType: 'plain/text',
@@ -178,7 +178,7 @@ class InterfaceGeneratorSpec extends Specification {
 
     void "writes request body data type" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            new EmptyResponse ()
+            ['200': [new EmptyResponse ()]]
         ], requestBodies: [
             new RequestBody (
                 contentType: 'plain/text',
@@ -205,9 +205,10 @@ class InterfaceGeneratorSpec extends Specification {
 
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
-                new Response(
+                ['200': [new Response(
                     contentType: 'application/json',
                     responseType: new ObjectDataType (name: type, packageName: pkg))
+                ]]
             ]),
         ])
 

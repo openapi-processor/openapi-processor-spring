@@ -7,7 +7,7 @@ nav_order: 9
 # Using Gradle
 {: .no_toc }
 
-Note: this page is for the gradle plugin since version '1.0.0.M3'. The new plugin provides proper
+Note: this page is for the gradle plugin since version '1.0.0.M5'. The new plugin provides proper
 up-to-date checking (it does not re-run the generatr when the api yaml is unchanged) and uses a
 simpler configuration.
 {: .note .info .mb-6}
@@ -28,8 +28,8 @@ The following sections describe how to activate & configure **generatr-spring** 
 
 # adding the plugin
 
-The [openapi-generatr-gradle][generatr-gradle] plugin is activated (like any other gradle plugin) in the `plugins`
-configuration: 
+The [openapi-generatr-gradle][generatr-gradle] plugin is activated (like any other gradle plugin) in
+ the `plugins` configuration: 
 
         plugins {
             ....
@@ -37,20 +37,6 @@ configuration:
             id 'com.github.hauner.openapi-generatr' version '<version>'
         }
         
-        
-# adding generatr-spring
-
-The plugin provides a `openapiGeneratr` dependency configuration that is used to add the generatr dependency.
-
-        dependencies {
-            // 'openapiGeneratr' is a custom configuration that is used by the gradle plugin. It allows
-            // to add multiple generatrs.
-            openapiGeneratr 'com.github.hauner.openapi:openapi-generatr-spring:1.0.0.A4'
-            
-            // .... 
-            // normal project dependencies
-            // .... 
-        }
         
 # configuring generatr-spring
 
@@ -61,13 +47,18 @@ block name.
         openapiGeneratr {
 
             spring {
-                apiPath = "$projectDir/src/api/openapi.yaml"
-                targetDir = "$projectDir/build/openapi"
-                mapping = "$projectDir/openapi-mapping.yaml"
-                showWarnings = true
+                generatr 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
+                apiPath "$projectDir/src/api/openapi.yaml"
+                targetDir "$projectDir/build/openapi"
+                mapping "$projectDir/openapi-mapping.yaml"
+                showWarnings true
             }        
 
         }
+
+- `generatr`: (**required**) the generatr dependency. This works in the same way as adding a dependency
+ to a configuration in the gradle `dependencies` block. It is given here to avoid un-wanted side effects
+  on the build dependencies of the project.
         
 - `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the generatr. If
 set in the top level block it will be used for all configured generatrs.

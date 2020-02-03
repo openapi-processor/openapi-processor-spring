@@ -59,11 +59,12 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.packageName == 'java.util'
-        ep.response.responseType.name == responseTypeName
-        ep.response.responseType.generics.size () == 1
-        ep.response.responseType.generics[0].packageName == 'java.lang'
-        ep.response.responseType.generics[0].name == 'String'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType.packageName == 'java.util'
+        rsp.responseType.name == responseTypeName
+        rsp.responseType.generics.size () == 1
+        rsp.responseType.generics[0].packageName == 'java.lang'
+        rsp.responseType.generics[0].name == 'String'
 
         where:
         targetTypeName         | responseTypeName
@@ -232,11 +233,12 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == responseTypeName
-        ep.response.responseType.packageName == 'java.util'
-        ep.response.responseType.generics.size () == 1
-        ep.response.responseType.generics[0].packageName == 'java.lang'
-        ep.response.responseType.generics[0].name == 'String'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType.name == responseTypeName
+        rsp.responseType.packageName == 'java.util'
+        rsp.responseType.generics.size () == 1
+        rsp.responseType.generics[0].packageName == 'java.lang'
+        rsp.responseType.generics[0].name == 'String'
 
         where:
         targetTypeName         | responseTypeName
@@ -340,11 +342,12 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.packageName == 'java.util'
-        ep.response.responseType.name == 'Collection'
-        ep.response.responseType.generics.size () == 1
-        ep.response.responseType.generics[0].packageName == 'java.lang'
-        ep.response.responseType.generics[0].name == 'String'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType.packageName == 'java.util'
+        rsp.responseType.name == 'Collection'
+        rsp.responseType.generics.size () == 1
+        rsp.responseType.generics[0].packageName == 'java.lang'
+        rsp.responseType.generics[0].name == 'String'
 
         where:
         type << [

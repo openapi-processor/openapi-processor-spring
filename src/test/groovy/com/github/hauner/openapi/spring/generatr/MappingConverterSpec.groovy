@@ -316,4 +316,15 @@ map:
         exclude << [true, false]
     }
 
+    void "handles empty mapping" () {
+        String yaml = ""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 0
+    }
+
 }

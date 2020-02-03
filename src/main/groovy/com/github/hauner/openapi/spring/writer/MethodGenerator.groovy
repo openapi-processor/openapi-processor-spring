@@ -31,6 +31,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.WildcardTypeName
 
 import javax.lang.model.element.Modifier
 
@@ -50,16 +51,23 @@ class MethodGenerator {
             .addModifiers (Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation (createMappingAnnotation (endpoint))
             .addParameters (createParameters(endpoint))
-            .returns (generateReturnType (endpoint.response.responseType))
+            .returns (generateReturnType (endpoint))
 
         methodSpecBuilder.build ()
     }
 
-    private ParameterizedTypeName generateReturnType (DataType responseType) {
-        ParameterizedTypeName.get (
-            ClassName.get ('org.springframework.http', 'ResponseEntity'),
-            createTypeName(responseType)
-        )
+    private ParameterizedTypeName generateReturnType (Endpoint endpoint) {
+        if(!endpoint.hasMultiStatusResponses ()){
+            ParameterizedTypeName.get (
+                ClassName.get ('org.springframework.http', 'ResponseEntity'),
+                createTypeName(endpoint.singleResponse.responseType)
+            )
+        } else {
+            ParameterizedTypeName.get (
+                ClassName.get ('org.springframework.http', 'ResponseEntity'),
+                WildcardTypeName.subtypeOf (Object.class)
+            )
+        }
     }
 
     private TypeName createTypeName (DataType dataType) {
@@ -126,8 +134,18 @@ class MethodGenerator {
             mappingAnnotationSpecBuilder.addMember ('consumes', '{$S}', endpoint.requestBody.contentType)
         }
 
-        if (!endpoint.response.empty) {
-            mappingAnnotationSpecBuilder.addMember ('produces', '{$S}', endpoint.response.contentType)
+        if (endpoint.hasResponseContentTypes ()) {
+
+            String format = '{'
+            for (int i = 0; i < endpoint.responseContentTypes.size (); i++) {
+                if(i != 0){
+                    format += ', '
+                }
+                format += '$S'
+            }
+            format += '}'
+
+            mappingAnnotationSpecBuilder.addMember ('produces', format, endpoint.responseContentTypes.toArray ())
         }
 
         mappingAnnotationSpecBuilder.build ()

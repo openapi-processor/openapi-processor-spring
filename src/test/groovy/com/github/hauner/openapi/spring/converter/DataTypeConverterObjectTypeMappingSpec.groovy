@@ -22,7 +22,6 @@ import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -110,7 +109,7 @@ components:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def parameter = ep.parameters.first ()
-        def response = ep.response
+        def response = ep.getFirstResponse ('200')
         parameter.dataType.packageName == 'org.springframework.data.domain'
         parameter.dataType.name == 'Pageable'
         response.responseType.packageName == 'org.springframework.data.domain'
@@ -233,7 +232,7 @@ components:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def parameter = ep.parameters.first ()
-        def response = ep.response
+        def response = ep.getFirstResponse ('200')
         parameter.dataType.packageName == 'someA'
         parameter.dataType.name == 'ObjectA'
         response.responseType.packageName == 'someB'
@@ -334,10 +333,11 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'TargetClass'
-        ep.response.responseType.generics.size () == 1
-        ep.response.responseType.generics[0].packageName == 'java.lang'
-        ep.response.responseType.generics[0].name == 'String'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType.name == 'TargetClass'
+        rsp.responseType.generics.size () == 1
+        rsp.responseType.generics[0].packageName == 'java.lang'
+        rsp.responseType.generics[0].name == 'String'
 
         where:
         type << [

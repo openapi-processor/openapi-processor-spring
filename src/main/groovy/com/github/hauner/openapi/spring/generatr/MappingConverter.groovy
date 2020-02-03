@@ -45,19 +45,19 @@ class MappingConverter {
     List<Mapping> convert (YamlMapping source) {
         def result = new ArrayList<Mapping>()
 
-        source.map.types.each {
+        source?.map?.types?.each {
             result.add (convertType (it))
         }
 
-        source.map.parameters.each {
+        source?.map?.parameters?.each {
             result.add (convertParameter (it))
         }
 
-        source.map.responses.each {
+        source?.map?.responses?.each {
             result.add (convertResponse (it))
         }
 
-        source.map.paths.each {
+        source?.map?.paths?.each {
             result.add(convertPath (it.key, it.value))
         }
 

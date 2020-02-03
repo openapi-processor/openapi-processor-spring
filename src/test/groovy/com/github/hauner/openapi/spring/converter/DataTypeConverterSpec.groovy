@@ -163,10 +163,11 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType instanceof ArrayDataType
-        ep.response.responseType.generics.size () == 1
-        ep.response.responseType.generics[0].packageName == 'java.lang'
-        ep.response.responseType.generics[0].name == 'String'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType instanceof ArrayDataType
+        rsp.responseType.generics.size () == 1
+        rsp.responseType.generics[0].packageName == 'java.lang'
+        rsp.responseType.generics[0].name == 'String'
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {
@@ -199,17 +200,18 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType instanceof ObjectDataType
-        def props = (ep.response.responseType as ObjectDataType).properties
-        ep.response.responseType.name == 'InlineResponse200'
-        ep.response.responseType.packageName == "${options.packageName}.model"
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType instanceof ObjectDataType
+        def props = (rsp.responseType as ObjectDataType).properties
+        rsp.responseType.name == 'InlineResponse200'
+        rsp.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
         props.get ('isbn').name == 'String'
         props.get ('title').name == 'String'
 
         and:
         api.models.size () == 1
-        api.models.getObjectDataTypes().find {it.name == 'InlineResponse200'} is ep.response.responseType
+        api.models.getObjectDataTypes().find {it.name == 'InlineResponse200'} is rsp.responseType
     }
 
     void "creates model for component schema object" () {
@@ -394,7 +396,8 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        def rt = ep.response.responseType as ObjectDataType
+        def rsp = ep.getFirstResponse ('200')
+        def rt = rsp.responseType as ObjectDataType
         def keys = rt.properties.keySet ()
 
         keys[0] == 'b'
