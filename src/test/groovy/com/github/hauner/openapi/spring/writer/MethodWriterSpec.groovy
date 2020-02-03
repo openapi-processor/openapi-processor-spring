@@ -389,7 +389,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "writes simple (optional) parameter with default value" () {
+    void "writes simple (optional) parameter with string default value" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
@@ -405,6 +405,25 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+"""
+    }
+
+    void "writes simple (optional) parameter with number default value" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '204': [new Response (responseType: new NoneDataType())]
+        ], parameters: [
+            new QueryParameter(name: 'foo', required: false,
+                dataType: new LongDataType (
+                    constraints: new DataTypeConstraints (defaultValue: 5)))
+        ])
+
+        when:
+        writer.write (target, endpoint)
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "5") Long foo);
 """
     }
 

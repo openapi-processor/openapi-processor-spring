@@ -147,17 +147,12 @@ class MethodWriter {
         ps.join (', ')
     }
 
-    private String quote (String content) {
-        '"' + content + '"'
+    private String getDefault (Parameter parameter) {
+        quote(parameter.constraints.default as String)
     }
 
-    private def getDefault(Parameter parameter) {
-        def value = parameter.constraints.default
-        if (value instanceof String) {
-            quote(value)
-        } else {
-            value
-        }
+    private String quote (String content) {
+        '"' + content + '"'
     }
 
 }
