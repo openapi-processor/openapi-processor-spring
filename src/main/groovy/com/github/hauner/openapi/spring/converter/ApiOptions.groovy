@@ -44,7 +44,7 @@ class ApiOptions {
      * - interfaces => "${packageName}.api"
      * - models => "${packageName}.model"
      */
-    String packageName
+    String packageName = 'generatr'
 
     /**
      * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
@@ -62,6 +62,6 @@ class ApiOptions {
      * override parameter/response type mappings or to add additional parameters on a single
      * endpoint.
      */
-    List<Mapping> typeMappings
+    List<Mapping> typeMappings = []
 
 }

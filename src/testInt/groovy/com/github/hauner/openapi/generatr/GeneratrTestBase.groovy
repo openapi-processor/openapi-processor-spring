@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package com.github.hauner.openapi.generatr
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
+import com.github.hauner.openapi.spring.generatr.MappingReader
 import com.github.hauner.openapi.spring.generatr.SpringGeneratr
+import com.github.hauner.openapi.spring.generatr.mapping.Mapping
 import groovy.io.FileType
 import org.junit.Rule
 import org.junit.Test
@@ -32,6 +34,11 @@ abstract class GeneratrTestBase {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder()
 
+    String DEFAULT_OPTIONS = """\
+options:
+  package-name: generated
+    """;
+
     TestSet testSet
 
     GeneratrTestBase(TestSet testSet) {
@@ -41,22 +48,26 @@ abstract class GeneratrTestBase {
     @Test
     void "generatr creates expected files for api set "() {
         def source = testSet.name
-        def packageName = 'generated'
-        def expectedPath = ['.', 'src', 'testInt', 'resources', source, packageName].join(File.separator)
-        def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
 
         def generatr = new SpringGeneratr()
         def options = [
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
-            targetDir: folder.root,
-            packageName: packageName,
-            beanValidation: testSet.beanValidation
+            targetDir: folder.root
         ]
 
-        def mapping = new File("./src/testInt/resources/${source}/mapping.yaml")
-        if(mapping.exists ()) {
-            options.typeMappings = mapping
+        def mappingYaml = new File("./src/testInt/resources/${source}/mapping.yaml")
+        if(mappingYaml.exists ()) {
+            options.mapping = mappingYaml
+        } else {
+            options.mapping = DEFAULT_OPTIONS
         }
+
+        def reader = new MappingReader ()
+        Mapping mapping = reader.read (options.mapping as String)
+
+        def packageName = mapping.options.packageName
+        def expectedPath = ['.', 'src', 'testInt', 'resources', source, packageName].join(File.separator)
+        def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
 
         when:
         generatr.run (options)

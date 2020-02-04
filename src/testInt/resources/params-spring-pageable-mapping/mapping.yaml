@@ -1,5 +1,7 @@
-map:
+options:
+  package-name: generated
 
+map:
   types:
     - from: Pageable
       to: org.springframework.data.domain.Pageable

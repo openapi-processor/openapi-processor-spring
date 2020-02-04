@@ -1,0 +1,3 @@
+options:
+  package-name: generated
+  bean-validation: true

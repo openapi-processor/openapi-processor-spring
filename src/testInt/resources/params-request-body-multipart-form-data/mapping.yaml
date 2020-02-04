@@ -1,5 +1,7 @@
-map:
+options:
+  package-name: generated
 
+map:
   types:
     - from: string:binary
       to: org.springframework.web.multipart.MultipartFile

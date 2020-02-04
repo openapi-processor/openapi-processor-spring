@@ -18,7 +18,6 @@ package com.github.hauner.openapi.generatr
 
 class TestSet {
     String name
-    boolean beanValidation = false
 
     @Override
     String toString () {
