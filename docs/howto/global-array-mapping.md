@@ -43,8 +43,8 @@ to the [`mapping.yaml`][docs-mapping]. Adding the following *global* type mappin
       types:
     
         # map array to java.util.Collection
-        - from array
-          to java.util.Collection
+        - from: array
+          to: java.util.Collection
 ```
 
 will change the generated endpoint to:
