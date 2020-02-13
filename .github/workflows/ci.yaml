@@ -20,3 +20,13 @@ jobs:
         java-version: 11.0.2
     - name: build
       run: ./gradlew build
+    - name: archive artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: artifacts
+        path: build/libs
+    - name: archive test results
+      uses: actions/upload-artifact@v1
+      with:
+        name: test results
+        path: build/reports
