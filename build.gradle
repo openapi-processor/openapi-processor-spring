@@ -52,6 +52,7 @@ dependencies {
     }
     testImplementation 'org.spockframework:spock-junit4:2.0-M2-groovy-3.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     testIntImplementation "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
     testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.5'

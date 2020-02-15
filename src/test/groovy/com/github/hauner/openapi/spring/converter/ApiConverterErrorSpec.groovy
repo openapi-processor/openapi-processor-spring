@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,28 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.support.Sl4jMockRule
-import org.junit.Rule
-import org.slf4j.Logger
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import spock.lang.Specification
+import spock.lang.Subject
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class ApiConverterErrorSpec extends Specification {
 
-    def log = Mock Logger
-    @Rule Sl4jMockRule rule = new Sl4jMockRule(ApiConverter, log)
+    @Subject
+    def converter
+
+    def appender
+
+    void setup() {
+        converter = new ApiConverter ()
+
+        appender = new ListAppender<ILoggingEvent> ()
+        appender.start ()
+        converter.log.addAppender (appender)
+    }
 
     void "logs error when datatype conversion fails" () {
         def openApi = parse ("""\
@@ -48,12 +58,12 @@ paths:
                 type: unknown
 """)
         when:
-        log.isErrorEnabled () >> true
-        Api api = new ApiConverter ().convert (openApi)
+        converter.convert (openApi)
 
         then:
         notThrown (UnknownDataTypeException)
-        1 * log.error (*_)
+        appender.list.size () == 1
+        appender.list.first ().level == Level.ERROR
     }
 
 }
