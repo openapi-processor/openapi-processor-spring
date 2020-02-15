@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
  * Options of the generatr.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class ApiOptions {
 
@@ -43,7 +44,12 @@ class ApiOptions {
      * - interfaces => "${packageName}.api"
      * - models => "${packageName}.model"
      */
-    String packageName
+    String packageName = 'generatr'
+
+    /**
+     * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)
+     */
+    boolean beanValidation = false
 
     /**
      * provide additional type mapping information to map OpenAPI types to java types. The list can
@@ -56,6 +62,6 @@ class ApiOptions {
      * override parameter/response type mappings or to add additional parameters on a single
      * endpoint.
      */
-    List<Mapping> typeMappings
+    List<Mapping> typeMappings = []
 
 }

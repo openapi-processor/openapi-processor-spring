@@ -1,0 +1,7 @@
+options:
+  package-name: generated
+
+map:
+  paths:
+    /endpoint-exclude/{foo}:
+      exclude: true

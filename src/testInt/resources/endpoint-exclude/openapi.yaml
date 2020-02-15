@@ -1,0 +1,31 @@
+openapi: 3.0.2
+info:
+  title: test excluding endpoint
+  version: 1.0.0
+
+paths:
+  /endpoint/{foo}:
+    get:
+      parameters:
+        - name: foo
+          description: dummy paramter
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+
+  /endpoint-exclude/{foo}:
+    get:
+      parameters:
+        - name: foo
+          description: dummy parameter
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty

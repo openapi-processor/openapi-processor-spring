@@ -50,6 +50,7 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
  * Converter to map OpenAPI schemas to Java data types.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class DataTypeConverter {
 
@@ -94,18 +95,26 @@ class DataTypeConverter {
 
         def arrayType
         TargetType targetType = getMappedDataType (new ArraySchemaType (schemaInfo))
+
+        def constraints = new DataTypeConstraints(
+            defaultValue: schemaInfo.defaultValue,
+            nullable: schemaInfo.nullable,
+            minItems: schemaInfo.minItems,
+            maxItems: schemaInfo.maxItems,
+        )
+
         switch (targetType?.typeName) {
             case Collection.name:
-                arrayType = new CollectionDataType (item: item)
+                arrayType = new CollectionDataType (item: item, constraints: constraints)
                 break
             case List.name:
-                arrayType = new ListDataType (item: item)
+                arrayType = new ListDataType (item: item, constraints: constraints)
                 break
             case Set.name:
-                arrayType = new SetDataType (item: item)
+                arrayType = new SetDataType (item: item, constraints: constraints)
                 break
             default:
-                arrayType = new ArrayDataType (item: item)
+                arrayType = new ArrayDataType (item: item, constraints: constraints)
         }
 
         arrayType
@@ -142,9 +151,14 @@ class DataTypeConverter {
             }
         }
 
+        def constraints = new DataTypeConstraints(
+            nullable: schemaInfo.nullable,
+        )
+
         objectType = new ObjectDataType (
             type: schemaInfo.name,
-            pkg: [options.packageName, 'model'].join ('.')
+            pkg: [options.packageName, 'model'].join ('.'),
+            constraints: constraints
         )
 
         schemaInfo.eachProperty { String propName, SchemaInfo propDataTypeInfo ->
@@ -173,8 +187,16 @@ class DataTypeConverter {
             typeFormat += '/' + schemaInfo.format
         }
 
-        def defaultValue = schemaInfo.defaultValue
-        def constraints = defaultValue != null ? new DataTypeConstraints(defaultValue: defaultValue) : null
+        def constraints = new DataTypeConstraints(
+            defaultValue: schemaInfo.defaultValue,
+            nullable: schemaInfo.nullable,
+            minLength: schemaInfo.minLength,
+            maxLength: schemaInfo.maxLength,
+            maximum: schemaInfo.maximum,
+            exclusiveMaximum: schemaInfo.exclusiveMaximum,
+            minimum: schemaInfo.minimum,
+            exclusiveMinimum: schemaInfo.exclusiveMinimum,
+        )
 
         def simpleType
         switch (typeFormat) {

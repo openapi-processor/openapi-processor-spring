@@ -14,8 +14,8 @@ permalink: /
 
 a simple [OpenAPI][openapi] interface only (& model) code generator for [Spring Boot][springboot].
 
-It is useful in an API first approach where you API is explicitly defined by an OpenAPI yaml file
-before it gets implemented. 
+It is useful in an API first approach where you API is explicitly defined and documented with OpenAPI
+ before it gets implemented. 
 
 The generatr generates java interfaces based on the endpoint description of the API and simple POJO
 classes for parameter or response objects defined in th API. It is **your** task to create the controller
@@ -28,7 +28,7 @@ correctly.
 See the [generatr intro][docs-generatr]{:target="_blank"} for a short example.
 {: .mb-6 }
 
-January 2020: The generatr is ready to try but note that the generatr is still in an early state of
+February 2020: The generatr is ready to try but note that the generatr is still in an early state of
 development and may not generate the correct code yet in all cases. See [feedback](#feedback).
 {: .note .info .mb-6}
 
@@ -67,10 +67,17 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 
 - add additional parameters to an endpoint which are not defined in the OpenAPI description. For example to pass
  a `HttpServletRequest` to the endpoint implementation. <span class="label label-green">since 1.0.0.M6</span>
+
+- supports bean validations. The constraints of the openapi description are mapped to java bean validation
+ annotations. <span class="label label-green">since 1.0.0.M6</span>
  
-- <span class="label label-yellow">planned</span> handle multiple responses by generating one endpoint method for
-  each response content type.
- 
+- allows to exclude endpoints from generation. This is useful if the generatr does not create the correct code for
+ an endpoint. That way the generatr can still be used for all the other endpoints.
+   <span class="label label-green">since 1.0.0.M6</span>
+
+- handle multiple responses by generating one endpoint method for each response content type.
+   <span class="label label-green">since 1.0.0.M8</span>
+
 - <span class="label label-yellow">planned</span> WebFlux support, may need its own generatr. 
 
 - the generated code does not use swagger annotations. There is no need to generate the documentation from the code
@@ -101,7 +108,7 @@ The structure looks like this:
                AnotherModelClass.java
                .. more model files ..
 
-The `mapping.yaml` contains the type mapping information and is an optional file.
+The `mapping.yaml` contains the type mapping information.
 
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 

@@ -2,7 +2,7 @@
 layout: default
 title: Models
 parent: The generatr
-nav_order: 6
+nav_order: 7
 ---
 
 # Models

@@ -162,7 +162,8 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        ep.response.responseType.name == 'String[]'
+        def rsp = ep.getFirstResponse ('200')
+        rsp.responseType.name == 'String[]'
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {
@@ -195,16 +196,17 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        def props = ep.response.responseType.properties
-        ep.response.responseType.name == 'InlineResponse200'
-        ep.response.responseType.packageName == "${options.packageName}.model"
+        def rsp = ep.getFirstResponse ('200')
+        def props = rsp.responseType.properties
+        rsp.responseType.name == 'InlineResponse200'
+        rsp.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
         props.get ('isbn').name == 'String'
         props.get ('title').name == 'String'
 
         and:
         api.models.size () == 1
-        api.models.find ('InlineResponse200') is ep.response.responseType
+        api.models.find ('InlineResponse200') is rsp.responseType
     }
 
     void "creates model for component schema object" () {
@@ -389,7 +391,8 @@ paths:
         then:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
-        def rt = ep.response.responseType as ObjectDataType
+        def rsp = ep.getFirstResponse ('200')
+        def rt = rsp.responseType as ObjectDataType
         def keys = rt.properties.keySet ()
 
         keys[0] == 'b'

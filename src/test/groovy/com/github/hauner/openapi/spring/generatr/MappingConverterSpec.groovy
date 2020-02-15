@@ -21,47 +21,15 @@ import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.Subject
 
-class TypeMappingReaderSpec extends Specification {
+class MappingConverterSpec extends Specification {
 
-    @Rule
-    TemporaryFolder folder
+    def reader = new MappingReader()
 
-    void "ignores empty type mapping" () {
-        when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
-
-        then:
-        mappings == []
-
-        where:
-        yaml << [null, ""]
-    }
-
-    void "reads mapping from file" () {
-        def yaml = """\
-openapi-generatr-spring: v1.0
-    
-map:
-  types:
-    - from: array
-      to: java.util.Collection
-"""
-
-        def yamlFile = folder.newFile ("openapi-generatr-spring.yaml")
-        yamlFile.text = yaml
-
-        when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yamlFile.absolutePath)
-
-        then:
-        mappings.size () == 1
-    }
+    @Subject
+    def converter = new MappingConverter()
 
     void "reads global type mapping" () {
         String yaml = """\
@@ -74,8 +42,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -105,8 +73,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 2
@@ -135,8 +103,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -158,8 +126,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -185,8 +153,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -214,8 +182,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -241,8 +209,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size() == 1
@@ -271,8 +239,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -304,8 +272,8 @@ map:
 """
 
         when:
-        def reader = new TypeMappingReader()
-        def mappings = reader.read (yaml)
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
 
         then:
         mappings.size () == 1
@@ -320,6 +288,43 @@ map:
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'javax.servlet.http.HttpServletRequest'
         parameter.mapping.genericTypeNames == []
+    }
+
+    void "reads endpoint exclude flag" () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  paths:
+    /foo:
+      exclude: ${exclude.toString ()}
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.exclude == exclude
+        endpoint.typeMappings.empty
+
+        where:
+        exclude << [true, false]
+    }
+
+    void "handles empty mapping" () {
+        String yaml = ""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 0
     }
 
 }

@@ -29,7 +29,12 @@ class Mapping {
     String openapiGeneratrSpring
 
     /**
-     * the mappings
+     * general options
+     */
+    Options options
+
+    /**
+     * the type mappings
      */
     Map map
 

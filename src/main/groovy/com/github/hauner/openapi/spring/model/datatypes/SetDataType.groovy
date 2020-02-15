@@ -20,10 +20,13 @@ package com.github.hauner.openapi.spring.model.datatypes
  * OpenAPI type 'array' maps to Set<>.
  *
  * @author Martin Hauner
+ * @author Bastian Wilhelm
  */
 class SetDataType implements DataType {
 
     private DataType item
+    private DataTypeConstraints constraints
+
 
     @Override
     String getName () {
@@ -45,4 +48,8 @@ class SetDataType implements DataType {
         []
     }
 
+    @Override
+    DataTypeConstraints getConstraints () {
+        constraints
+    }
 }

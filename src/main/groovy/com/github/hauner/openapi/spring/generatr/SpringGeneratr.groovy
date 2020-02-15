@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
+import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -33,6 +34,7 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  *  Entry point of openapi-generatr-spring.
  *
  *  @author Martin Hauner
+ *  @author Bastian Wilhelm
  */
 class SpringGeneratr implements OpenApiGeneratr {
 
@@ -61,11 +63,23 @@ class SpringGeneratr implements OpenApiGeneratr {
         def api = cv.convert (result.openAPI)
 
         def headerWriter = new HeaderWriter()
+        def beanValidationFactory = new BeanValidationFactory()
+
         def writer = new ApiWriter (options,
             new InterfaceWriter(
                 headerWriter: headerWriter,
-                methodWriter: new MethodWriter()),
-            new DataTypeWriter(headerWriter: headerWriter),
+                methodWriter: new MethodWriter(
+                    beanValidationFactory: beanValidationFactory,
+                    apiOptions: options
+                ),
+                beanValidationFactory: beanValidationFactory,
+                apiOptions: options
+            ),
+            new DataTypeWriter(
+                headerWriter: headerWriter,
+                beanValidationFactory: beanValidationFactory,
+                apiOptions: options
+            ),
             new StringEnumWriter(headerWriter: headerWriter)
         )
 
@@ -73,12 +87,44 @@ class SpringGeneratr implements OpenApiGeneratr {
     }
 
     private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
-        def options = new ApiOptions()
-        def reader = new TypeMappingReader ()
+        def reader = new MappingReader ()
+        def converter = new MappingConverter ()
+        def mapping
+
+        if (generatrOptions.containsKey ('mapping')) {
+            mapping = reader.read (generatrOptions.mapping as String)
+
+        } else if (generatrOptions.containsKey ('typeMappings')) {
+            mapping = reader.read (generatrOptions.typeMappings as String)
+            println "warning: 'typeMappings' option is deprecated, use 'mapping'!"
+        }
+
+        def options = new ApiOptions ()
         options.apiPath = generatrOptions.apiPath
         options.targetDir = generatrOptions.targetDir
-        options.packageName = generatrOptions.packageName
-        options.typeMappings = reader.read (generatrOptions.typeMappings as String)
+
+        if (generatrOptions.packageName) {
+            options.packageName = generatrOptions.packageName
+            println "warning: 'options:package-name' should be set in the mapping yaml!"
+        }
+
+        if (generatrOptions.containsKey ('beanValidation')) {
+            options.beanValidation = generatrOptions.beanValidation
+            println "warning: 'options:bean-validation' should be set in the mapping yaml!"
+        }
+
+        if (mapping) {
+            if (mapping?.options?.packageName != null) {
+                options.packageName = mapping.options.packageName
+            }
+
+            if (mapping?.options?.beanValidation != null) {
+                options.beanValidation = mapping.options.beanValidation
+            }
+
+            options.typeMappings = converter.convert (mapping)
+        }
+
         options
     }
 

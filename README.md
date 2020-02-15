@@ -36,7 +36,7 @@ The structure looks like this:
                                      AnotherModelClass.java
                                      .. more model files ..
 
-The `mapping.yaml` contains the type mapping information and is an optional file.
+The `mapping.yaml` contains the type mapping information.
 
 See the [existing integration tests][generatr-int-resources] for a couple of examples. 
 

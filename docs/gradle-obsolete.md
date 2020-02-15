@@ -7,9 +7,9 @@ nav_order: 10
 # Using Gradle (obsolete)
 {: .no_toc }
 
-Note: this page is out-of-date describing the previous version of the gradle plugin. See the latest
+**Deprecated**: this page is out-of-date, describing the previous version of the gradle plugin. See the latest
 documentation [here][docs-gradle].
-{: .note .info .mb-6}
+{: .note .deprecated .mb-6}
 
 The [openapi-generatr-gradle][generatr-gradle] is currently the only way to run a **openapi-generatr.** 
 
