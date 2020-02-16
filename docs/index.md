@@ -9,7 +9,6 @@ permalink: /
 [![][badge-license]][oaps-license]
 [![][badge-ci]][workflow-ci]
 
-![openapi-processor-spring logo][oaps-logo]
 
 # openapi-processor-spring
 {: .no_toc }
