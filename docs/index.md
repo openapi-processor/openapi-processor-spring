@@ -116,7 +116,7 @@ See the [existing integration tests][oaps-int-resources] for a couple of example
 
 ## License
 
-openapi-generatr-spring  is distributed by [Apache License 2.0][license].
+openapi-processor-spring  is distributed by [Apache License 2.0][license].
 
 ## Contributors
 
@@ -133,17 +133,17 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
 
-[docs-gradle]: /openapi-generatr-spring/gradle.html
-[docs-processor]: /openapi-generatr-spring/generatr/
-[docs-mapping]: /openapi-generatr-spring/mapping/
+[docs-gradle]: /openapi-processor-spring/gradle.html
+[docs-processor]: /openapi-processor-spring/generatr/
+[docs-mapping]: /openapi-gprocessor-spring/mapping/
 
-[bintray]: https://bintray.com/hauner/openapi-generatr
+[bintray]: https://bintray.com/hauner/openapi-processor
 [oap-gradle]: https://github.com/hauner/openapi-processor-gradle
 [oaps-releases]: https://github.com/hauner/openapi-processor-spring/releases
 [oaps-license]: https://github.com/hauner/openapi-processor-spring/blob/master/LICENSE
 [oaps-int-resources]: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources
 [oaps-issues]: https://github.com/hauner/openapi-processor-spring/issues
-[oaps-logo]: {{ site.url }}/images/openapi-processor-spring%401280x200.png
+[oaps-logo]: https://github.com/hauner/openapi-processor-spring/blob/master/images/openapi-processor-spring%401280x200.png
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot

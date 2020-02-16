@@ -13,7 +13,7 @@ simpler configuration.
 {: .note .info .mb-6}
 
 
-The [openapi-processor-gradle][oap-gradle] is currently the only tool to run a **openapi-processor**. 
+The [openapi-processor-gradle][oap-gradle] is currently the only tool to run an **openapi-processor**. 
 
 To use it in a gradle project the gradle file of the project requires a few additional instructions.
 The following sections describe how to activate & configure **openapi-processor-spring** in a
@@ -57,7 +57,7 @@ block name.
 
         }
 
-- `processor`: (**required**) the generatr dependency. This works in the same way as adding a dependency
+- `processor`: (**required**) the processor dependency. This works in the same way as adding a dependency
  to a configuration in the gradle `dependencies` block. It is given here to avoid un-wanted side effects
   on the build dependencies of the project.
         
@@ -131,5 +131,5 @@ Adding automatic compilation in this way will also automatically include the gen
 
 [oap-gradle]: https://github.com/hauner/openapi-processor-gradle
 [docs-mapping]: /openapi-processor-spring/mapping/
-[docs-configuration]: /openapi-processor-spring/generatr/configuration.html
+[docs-configuration]: /openapi-processor-spring/processor/configuration.html
 [docs-running]: #running-processor-spring

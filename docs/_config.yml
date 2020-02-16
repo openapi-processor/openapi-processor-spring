@@ -27,7 +27,7 @@ search_enabled: true
 search_tokenizer_separator: /[\s/]+/
 
 # logo, replaces the title
-logo: "../images/openapi-processor-spring@1280x200.png"
+logo: "https://github.com/hauner/openapi-processor-spring/blob/master/images/openapi-processor-spring%401280x200.png"
 
 aux_links:
   openapi-processor-spring:
