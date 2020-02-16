@@ -52,7 +52,7 @@ See the [release notes][oaps-releases]{:target="_blank"}.
 
 - generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints and schemas to
  allow (nearly) full control of the endpoint implementation. It does not generate any other file. See
- [processor][docs-generatr].
+ [processor][docs-processor].
 
 - powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml to
   existing java types. For example to map the openapi `array` type to different java collections or to
