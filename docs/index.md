@@ -143,7 +143,7 @@ openapi-processor-spring  is distributed by [Apache License 2.0][license].
 [oaps-license]: https://github.com/hauner/openapi-processor-spring/blob/master/LICENSE
 [oaps-int-resources]: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources
 [oaps-issues]: https://github.com/hauner/openapi-processor-spring/issues
-[oaps-logo]: https://github.com/hauner/openapi-processor-spring/blob/master/images/openapi-processor-spring%401280x200.png
+[oaps-logo]: https://github.com/hauner/openapi-processor-spring/raw/master/images/openapi-processor-spring%401280x200.png
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot
