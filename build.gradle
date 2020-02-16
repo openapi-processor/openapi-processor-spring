@@ -16,7 +16,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
-    generatrApiVersion = '1.0.0.M3'
+    processorApiVersion = '1.0.0.M4'
 
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
     bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'
@@ -30,7 +30,7 @@ repositories {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
     maven {
-        url  "https://dl.bintray.com/hauner/openapi-generatr"
+        url  "https://dl.bintray.com/hauner/openapi-processor"
     }
 }
 
@@ -49,7 +49,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
-    compileOnly "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
+    compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
 
     testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-3.0') {
         exclude group: 'org.codehaus.groovy'
@@ -60,7 +60,7 @@ dependencies {
     testImplementation 'net.bytebuddy:byte-buddy:1.10.7'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
-    testIntImplementation "com.github.hauner.openapi:openapi-generatr-api:$generatrApiVersion"
+    testIntImplementation "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
     testIntImplementation 'io.github.java-diff-utils:java-diff-utils:4.5'
 //    testIntRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
 //    testIntRuntimeOnly 'org.slf4j:slf4j-nop:1.6.1'
@@ -93,14 +93,14 @@ dokka {
 bintray {
     user = bintrayUser
     key = bintrayKey
-    publications = ['GeneratrSpring']
+    publications = ['processor']
 
     pkg {
-        repo = 'openapi-generatr'
-        name = 'openapi-generatr-spring'
+        repo = 'openapi-processor'
+        name = 'openapi-processor-spring'
         //userOrg = 'openapi-generatr'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/hauner/openapi-generatr-spring'
+        vcsUrl = 'https://github.com/hauner/openapi-processor-spring'
 
         version {
             name = project.version
@@ -110,7 +110,7 @@ bintray {
 
 publishing {
     publications {
-        GeneratrSpring (MavenPublication) {
+        processor (MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact javadocJar

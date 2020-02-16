@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * a "responses:" entry in the mapping yaml
+ * *the* Schema of the mapping yaml
+ *
+ *  @author Martin Hauner
  */
-class Response {
-    
-    /**
-     * content type
-     */
-    String content
+class Mapping {
 
     /**
-     * target java type
+     * version (currently optional)
      */
-    String to
-    
+    String openapiGeneratrSpring
+
     /**
-     * (optional) generic parameters of {@link #to}
+     * general options
      */
-    List<String> generics
-    
+    Options options
+
+    /**
+     * the type mappings
+     */
+    Map map
+
 }

@@ -14,33 +14,26 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * a "paths:" entry in the mapping yaml
- *
- *  @author Martin Hauner
+ * a "responses:" entry in the mapping yaml
  */
-class Path {
+class Response {
+    
+    /**
+     * content type
+     */
+    String content
 
     /**
-     * path should be excluded
+     * target java type
      */
-    boolean exclude = false
-
+    String to
+    
     /**
-     * path limited type mappings
+     * (optional) generic parameters of {@link #to}
      */
-    List<Type> types
-
-    /**
-     * path limited parameter mappings
-     */
-    List<Parameter> parameters
-
-    /**
-     * path limited response mappings
-     */
-    List<Response> responses
+    List<String> generics
     
 }

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.processor
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.github.hauner.openapi.spring.generatr.mapping.Mapping
-import com.github.hauner.openapi.spring.generatr.mapping.Parameter
-import com.github.hauner.openapi.spring.generatr.mapping.ParameterDeserializer
+import com.github.hauner.openapi.spring.processor.mapping.Mapping
+import com.github.hauner.openapi.spring.processor.mapping.Parameter
+import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
 
 import java.util.regex.Pattern
 

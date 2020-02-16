@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * *the* Schema of the mapping yaml
+ * a "parameters:" request parameter entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-class Mapping {
+class RequestParameter extends Parameter {
 
     /**
-     * version (currently optional)
+     * name of the parameter
      */
-    String openapiGeneratrSpring
+    String name
 
     /**
-     * general options
+     * target java type
      */
-    Options options
-
+    String to
+    
     /**
-     * the type mappings
+     * (optional) generic parameters of {@link #to}
      */
-    Map map
-
+    List<String> generics
+    
 }

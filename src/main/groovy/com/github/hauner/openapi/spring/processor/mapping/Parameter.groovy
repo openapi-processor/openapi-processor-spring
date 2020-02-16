@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.spring.processor.mapping
 
-class TestSet {
-    String name
-
-    @Override
-    String toString () {
-        name
-    }
+/**
+ * a "parameters:" entry in the mapping yaml
+ *
+ *  @author Martin Hauner
+ */
+class Parameter {
 }

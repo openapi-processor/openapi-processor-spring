@@ -14,35 +14,33 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * the "map:" entry in the mapping yaml
+ * a "paths:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-class Map {
+class Path {
 
     /**
-     * global type mappings
+     * path should be excluded
+     */
+    boolean exclude = false
+
+    /**
+     * path limited type mappings
      */
     List<Type> types
-    
+
     /**
-     * global parameter mappings
+     * path limited parameter mappings
      */
     List<Parameter> parameters
 
     /**
-     * global response mappings
+     * path limited response mappings
      */
     List<Response> responses
-
-    /**
-     * endpoint mappings
-     * 
-     * the LinkedHashMap preserves order
-     */
-    LinkedHashMap<String, Path> paths
     
 }

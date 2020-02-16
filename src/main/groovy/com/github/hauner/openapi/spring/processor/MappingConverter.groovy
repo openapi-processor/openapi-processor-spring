@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
@@ -22,13 +22,13 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.generatr.mapping.AdditionalParameter
-import com.github.hauner.openapi.spring.generatr.mapping.Mapping as YamlMapping
-import com.github.hauner.openapi.spring.generatr.mapping.Parameter
-import com.github.hauner.openapi.spring.generatr.mapping.Path
-import com.github.hauner.openapi.spring.generatr.mapping.RequestParameter
-import com.github.hauner.openapi.spring.generatr.mapping.Response
-import com.github.hauner.openapi.spring.generatr.mapping.Type
+import com.github.hauner.openapi.spring.processor.mapping.AdditionalParameter
+import com.github.hauner.openapi.spring.processor.mapping.Mapping as YamlMapping
+import com.github.hauner.openapi.spring.processor.mapping.Parameter
+import com.github.hauner.openapi.spring.processor.mapping.Path
+import com.github.hauner.openapi.spring.processor.mapping.RequestParameter
+import com.github.hauner.openapi.spring.processor.mapping.Response
+import com.github.hauner.openapi.spring.processor.mapping.Type
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern

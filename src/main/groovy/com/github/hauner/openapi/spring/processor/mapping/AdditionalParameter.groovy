@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
-
-import com.fasterxml.jackson.annotation.JsonProperty
-
+package com.github.hauner.openapi.spring.processor.mapping
 /**
  * a "parameters:" add parameter entry in the mapping yaml
  *

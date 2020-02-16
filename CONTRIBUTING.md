@@ -1,4 +1,4 @@
-# contributing to openapi-generatr
+# contributing to openapi-processor
 
 ## feature & bug reports
 
@@ -22,7 +22,7 @@ should create. The structure looks like this:
 
 The `mapping.yaml` contains the type mapping information and is an optional file.
 
-See the [existing integration tests][generatr-int-resources] for a couple of examples.
+See the [existing integration tests][oap-int-resources] for a couple of examples.
 
 ## working on the code
 
@@ -32,7 +32,7 @@ the minimum jdk is currently JDK 8
 
 ### ide setup
 
-openapi-generatr can be imported into IntelliJ IDEA by opening the `build.gradle` file.
+openapi-processor can be imported into IntelliJ IDEA by opening the `build.gradle` file.
  
 ### running the tests
 
@@ -44,3 +44,4 @@ To run the tests use `./gradlew check`.
 
 The documentation is in `docs`. See the `README` in `docs` for setup and viewing it locally.
 
+[oap-int-resources]: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources

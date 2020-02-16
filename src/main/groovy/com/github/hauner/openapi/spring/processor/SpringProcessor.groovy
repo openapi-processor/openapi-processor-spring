@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr
+package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.api.OpenApiGeneratr
+import com.github.hauner.openapi.api.OpenApiProcessor
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.writer.ApiWriter
@@ -31,12 +31,12 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
- *  Entry point of openapi-generatr-spring.
+ *  Entry point of openapi-processor-spring.
  *
  *  @author Martin Hauner
  *  @author Bastian Wilhelm
  */
-class SpringGeneratr implements OpenApiGeneratr {
+class SpringProcessor implements OpenApiProcessor {
 
     @Override
     String getName () {
@@ -44,7 +44,7 @@ class SpringGeneratr implements OpenApiGeneratr {
     }
 
     @Override
-    void run (Map<String, ?> generatrOptions) {
+    void run (Map<String, ?> processorOptions) {
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
             // external files with $refs to #/components/schema.
@@ -52,13 +52,13 @@ class SpringGeneratr implements OpenApiGeneratr {
         )
 
         SwaggerParseResult result = new OpenAPIV3Parser ()
-            .readLocation (generatrOptions.apiPath as String, null, opts)
+            .readLocation (processorOptions.apiPath as String, null, opts)
 
-        if (generatrOptions.showWarnings) {
+        if (processorOptions.showWarnings) {
             printWarnings(result.messages)
         }
 
-        def options = convertOptions (generatrOptions)
+        def options = convertOptions (processorOptions)
         def cv = new ApiConverter(options)
         def api = cv.convert (result.openAPI)
 
@@ -86,30 +86,30 @@ class SpringGeneratr implements OpenApiGeneratr {
         writer.write (api)
     }
 
-    private ApiOptions convertOptions (Map<String, ?> generatrOptions) {
+    private ApiOptions convertOptions (Map<String, ?> processorOptions) {
         def reader = new MappingReader ()
         def converter = new MappingConverter ()
         def mapping
 
-        if (generatrOptions.containsKey ('mapping')) {
-            mapping = reader.read (generatrOptions.mapping as String)
+        if (processorOptions.containsKey ('mapping')) {
+            mapping = reader.read (processorOptions.mapping as String)
 
-        } else if (generatrOptions.containsKey ('typeMappings')) {
-            mapping = reader.read (generatrOptions.typeMappings as String)
+        } else if (processorOptions.containsKey ('typeMappings')) {
+            mapping = reader.read (processorOptions.typeMappings as String)
             println "warning: 'typeMappings' option is deprecated, use 'mapping'!"
         }
 
         def options = new ApiOptions ()
-        options.apiPath = generatrOptions.apiPath
-        options.targetDir = generatrOptions.targetDir
+        options.apiPath = processorOptions.apiPath
+        options.targetDir = processorOptions.targetDir
 
-        if (generatrOptions.packageName) {
-            options.packageName = generatrOptions.packageName
+        if (processorOptions.packageName) {
+            options.packageName = processorOptions.packageName
             println "warning: 'options:package-name' should be set in the mapping yaml!"
         }
 
-        if (generatrOptions.containsKey ('beanValidation')) {
-            options.beanValidation = generatrOptions.beanValidation
+        if (processorOptions.containsKey ('beanValidation')) {
+            options.beanValidation = processorOptions.beanValidation
             println "warning: 'options:bean-validation' should be set in the mapping yaml!"
         }
 

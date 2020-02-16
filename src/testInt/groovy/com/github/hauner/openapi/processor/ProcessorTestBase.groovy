@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.processor
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import com.github.hauner.openapi.spring.generatr.MappingReader
-import com.github.hauner.openapi.spring.generatr.SpringGeneratr
-import com.github.hauner.openapi.spring.generatr.mapping.Mapping
+import com.github.hauner.openapi.spring.processor.MappingReader
+import com.github.hauner.openapi.spring.processor.SpringProcessor
+import com.github.hauner.openapi.spring.processor.mapping.Mapping
 import groovy.io.FileType
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +29,7 @@ import org.junit.rules.TemporaryFolder
 
 import static org.junit.Assert.assertEquals
 
-abstract class GeneratrTestBase {
+abstract class ProcessorTestBase {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder()
@@ -37,11 +37,11 @@ abstract class GeneratrTestBase {
     String DEFAULT_OPTIONS = """\
 options:
   package-name: generated
-    """;
+    """
 
     TestSet testSet
 
-    GeneratrTestBase(TestSet testSet) {
+    ProcessorTestBase (TestSet testSet) {
         this.testSet = testSet
     }
 
@@ -49,7 +49,7 @@ options:
     void "generatr creates expected files for api set "() {
         def source = testSet.name
 
-        def generatr = new SpringGeneratr()
+        def generatr = new SpringProcessor()
         def options = [
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root

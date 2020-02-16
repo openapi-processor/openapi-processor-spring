@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.generatr
+package com.github.hauner.openapi.processor
 
 import org.junit.Ignore
 import org.junit.runner.RunWith
@@ -22,7 +22,7 @@ import org.junit.runners.Parameterized
 
 @Ignore
 @RunWith(Parameterized)
-class GeneratrPendingTest extends GeneratrTestBase {
+class ProcessorPendingTest extends ProcessorTestBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
@@ -31,7 +31,7 @@ class GeneratrPendingTest extends GeneratrTestBase {
         ]
     }
 
-    GeneratrPendingTest (TestSet testSet) {
+    ProcessorPendingTest (TestSet testSet) {
         super (testSet)
     }
 

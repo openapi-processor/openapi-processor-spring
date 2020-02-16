@@ -14,28 +14,35 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.generatr.mapping
+package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * a "parameters:" request parameter entry in the mapping yaml
+ * the "map:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-class RequestParameter extends Parameter {
+class Map {
 
     /**
-     * name of the parameter
+     * global type mappings
      */
-    String name
-
-    /**
-     * target java type
-     */
-    String to
+    List<Type> types
     
     /**
-     * (optional) generic parameters of {@link #to}
+     * global parameter mappings
      */
-    List<String> generics
+    List<Parameter> parameters
+
+    /**
+     * global response mappings
+     */
+    List<Response> responses
+
+    /**
+     * endpoint mappings
+     * 
+     * the LinkedHashMap preserves order
+     */
+    LinkedHashMap<String, Path> paths
     
 }
