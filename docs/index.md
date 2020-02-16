@@ -4,10 +4,18 @@ title: Home
 nav_order: 1
 description: "Home Description"
 permalink: /
+date: 2020-02-16
 ---
 
+<div style="display: flex; justify-content: flex-end; position: relative; top: 1.5em">
+<div>
+{{ page.date | date_to_long_string }}
+</div>
+</div>
+{: .fs-1.lh-default }
+
 [![][badge-license]][oaps-license]
-[![][badge-ci]][workflow-ci]
+[![][badge-ci]][workflow-ci] 
 
 
 # openapi-processor-spring
