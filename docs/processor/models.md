@@ -1,13 +1,13 @@
 ---
 layout: default
 title: Models
-parent: The generatr
+parent: The processor
 nav_order: 7
 ---
 
 # Models
 
-The generatr will create simple POJOs classes for the `object` schemas used in the OpenAPI description.
+The processor will create simple POJOs classes for the `object` schemas used in the OpenAPI description.
 A POJO will only have (annotated) properties and get/set methods for its properties. 
 
 The following api describes two endpoints:

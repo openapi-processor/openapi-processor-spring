@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Generatr API
+title: Processor API
 nav_order: 20
 ---
 
@@ -10,7 +10,7 @@ nav_order: 20
 todo
 {: .label .label-yellow }
 
-describe the generatr api
+describe the processor api
 
 ## table of contents
 {: .no_toc .text-delta }

@@ -5,7 +5,7 @@ parent: HowTo's
 nav_order: 5
 ---
 
-# generatr: using Spring Pageable & Page 
+# processor: using Spring Pageable & Page 
 
 The given (lengthy) openapi yaml example describes a pageable api in two variations. The `/page`
 endpoint uses named objects and the second endpoint `/page-inline` uses inline objects to describe
@@ -111,7 +111,7 @@ components:
         - $ref: '#/components/schemas/StringContent'
 ```
 
-The generatr does create a proper interface with both endpoints if we provide a type mappings for the
+The processor does create a proper interface with both endpoints if we provide a type mappings for the
 `Pageable` and `Page` types. 
 
 Here is the java code we expect:
@@ -168,5 +168,5 @@ Usually you would use the first variation using named objects so they can be re-
 In that case you will only need the global type mapping of `Pageable` and the `StringPage`. Note that
 the `StringPage` uses a generic parameter.
 
-Worth mentioning is that the generatr will not generate model classes for the openapi types `Pageable`,
+Worth mentioning is that the processor will not generate model classes for the openapi types `Pageable`,
 `Page`, `StringContent` or `StringPage`.

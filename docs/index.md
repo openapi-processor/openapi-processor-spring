@@ -6,10 +6,12 @@ description: "Home Description"
 permalink: /
 ---
 
-[![][badge-license]][generatr-license]
+[![][badge-license]][oaps-license]
 [![][badge-ci]][workflow-ci]
 
-# openapi-generatr-spring
+![openapi-processor-spring logo][oaps-logo]
+
+# openapi-processor-spring
 {: .no_toc }
 
 a simple [OpenAPI][openapi] interface only (& model) code generator for [Spring Boot][springboot].
@@ -17,7 +19,7 @@ a simple [OpenAPI][openapi] interface only (& model) code generator for [Spring 
 It is useful in an API first approach where you API is explicitly defined and documented with OpenAPI
  before it gets implemented. 
 
-The generatr generates java interfaces based on the endpoint description of the API and simple POJO
+The processor generates java interfaces based on the endpoint description of the API and simple POJO
 classes for parameter or response objects defined in th API. It is **your** task to create the controller
 classes that implement the interfaces. 
  
@@ -25,10 +27,10 @@ The interfaces will help to keep the implementation in sync with the API. If any
 in the API the interface changes and the compiler will warn that the interface is not implemented
 correctly.
 
-See the [generatr intro][docs-generatr]{:target="_blank"} for a short example.
+See the [processor intro][docs-processor]{:target="_blank"} for a short example.
 {: .mb-6 }
 
-February 2020: The generatr is ready to try but note that the generatr is still in an early state of
+February 2020: The processor is ready to try but note that the it is still in an early state of
 development and may not generate the correct code yet in all cases. See [feedback](#feedback).
 {: .note .info .mb-6}
 
@@ -45,13 +47,13 @@ See the [maven repository][bintray]{:target="_blank"}.
 
 ## Releases
 
-See the [release notes][generatr-releases]{:target="_blank"}.
+See the [release notes][oaps-releases]{:target="_blank"}.
 
 ## Features
 
 - generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints and schemas to
  allow (nearly) full control of the endpoint implementation. It does not generate any other file. See
- [generatr][docs-generatr].
+ [processor][docs-generatr].
 
 - powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml to
   existing java types. For example to map the openapi `array` type to different java collections or to
@@ -62,7 +64,7 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 
 - generates human readable code.
     
-- gradle support via [openapi-generatr-gradle][generatr-gradle] plugin (the plugin is currently the only option
+- gradle support via [openapi-processor-gradle][oap-gradle] plugin (the plugin is currently the only option
  to run the generatr).
 
 - add additional parameters to an endpoint which are not defined in the OpenAPI description. For example to pass
@@ -85,12 +87,12 @@ See the [release notes][generatr-releases]{:target="_blank"}.
 
 
 The generated source code has to be included in a project to compile it. This is easily done
-with the [openapi-generatr-gradle][generatr-gradle] plugin. See [Using Gradle][docs-gradle].
+with the [openapi-processor-gradle][oap-gradle] plugin. See [Using Gradle][docs-gradle].
 {: .note .info .mb-6}
 
 ## Feedback
 
-In case some feature is missing or the generated code is not 100% what you would expect create an [issue][generatr-issues]
+In case some feature is missing or the generated code is not 100% what you would expect create an [issue][oap-spring-issues]
 preferably with a test case. Providing a test case will help significantly :-) 
 
 A test case is a single folder with an openapi.yaml file and the expected Java files the generatr should create.
@@ -110,7 +112,7 @@ The structure looks like this:
 
 The `mapping.yaml` contains the type mapping information.
 
-See the [existing integration tests][generatr-int-resources] for a couple of examples. 
+See the [existing integration tests][oaps-int-resources] for a couple of examples. 
 
 ## License
 
@@ -132,15 +134,16 @@ openapi-generatr-spring  is distributed by [Apache License 2.0][license].
 [workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
 
 [docs-gradle]: /openapi-generatr-spring/gradle.html
-[docs-generatr]: /openapi-generatr-spring/generatr/
+[docs-processor]: /openapi-generatr-spring/generatr/
 [docs-mapping]: /openapi-generatr-spring/mapping/
 
 [bintray]: https://bintray.com/hauner/openapi-generatr
-[generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
-[generatr-releases]: https://github.com/hauner/openapi-generatr-spring/releases
-[generatr-license]: https://github.com/hauner/openapi-generatr-spring/blob/master/LICENSE
-[generatr-int-resources]: https://github.com/hauner/openapi-generatr-spring/tree/master/src/testInt/resources
-[generatr-issues]: https://github.com/hauner/openapi-generatr-spring/issues
+[oap-gradle]: https://github.com/hauner/openapi-processor-gradle
+[oaps-releases]: https://github.com/hauner/openapi-processor-spring/releases
+[oaps-license]: https://github.com/hauner/openapi-processor-spring/blob/master/LICENSE
+[oaps-int-resources]: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources
+[oaps-issues]: https://github.com/hauner/openapi-processor-spring/issues
+[oaps-logo]: {{ site.url }}/images/openapi-processor-spring%401280x200.png
 
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot

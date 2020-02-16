@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Additional Parameters
-parent: The generatr
+parent: The processor
 nav_order: 11
 ---
 

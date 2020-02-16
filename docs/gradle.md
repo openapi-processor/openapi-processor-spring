@@ -7,16 +7,17 @@ nav_order: 9
 # Using Gradle
 {: .no_toc }
 
-Note: this page is for the gradle plugin since version '1.0.0.M5'. The new plugin provides proper
-up-to-date checking (it does not re-run the generatr when the api yaml is unchanged) and uses a
+Note: this page is for the gradle plugin since version '1.0.0.M6'. The new plugin provides proper
+up-to-date checking (it does not re-run the processor when the api yaml is unchanged) and uses a
 simpler configuration.
 {: .note .info .mb-6}
 
 
-The [openapi-generatr-gradle][generatr-gradle] is currently the only way to run a **openapi-generatr.** 
+The [openapi-processor-gradle][oap-gradle] is currently the only tool to run a **openapi-processor**. 
 
 To use it in a gradle project the gradle file of the project requires a few additional instructions.
-The following sections describe how to activate & configure **generatr-spring** in a `build.gradle` file. 
+The following sections describe how to activate & configure **openapi-processor-spring** in a
+`build.gradle` file. 
 {: .mb-6 }
 
 ## table of contents
@@ -28,26 +29,26 @@ The following sections describe how to activate & configure **generatr-spring** 
 
 # adding the plugin
 
-The [openapi-generatr-gradle][generatr-gradle] plugin is activated (like any other gradle plugin) in
+The [openapi-processor-gradle][oap-gradle] plugin is activated (like any other gradle plugin) in
  the `plugins` configuration: 
 
         plugins {
             ....
-            // add generatr-gradle plugin
-            id 'com.github.hauner.openapi-generatr' version '<version>'
+            // add openapi-processor-gradle plugin
+            id 'com.github.hauner.openapi-processor' version '<version>'
         }
         
         
-# configuring generatr-spring
+# configuring openapi-processor-spring
 
-The plugin will add an `openapiGeneratr` configuration block that is used to configure the generatrs.
-Configuration for a specific generatr is placed inside it using the generatr name as configuration
+The plugin will add an `openapiProcessor` configuration block that is used to configure the processors.
+Configuration for a specific processor is placed inside it using the processor name as configuration
 block name.   
 
-        openapiGeneratr {
+        openapiProcessor {
 
             spring {
-                generatr 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
+                processor 'com.github.hauner.openapi:openapi-processor-spring:<version>'
                 apiPath "$projectDir/src/api/openapi.yaml"
                 targetDir "$projectDir/build/openapi"
                 mapping "$projectDir/openapi-mapping.yaml"
@@ -56,20 +57,20 @@ block name.
 
         }
 
-- `generatr`: (**required**) the generatr dependency. This works in the same way as adding a dependency
+- `processor`: (**required**) the generatr dependency. This works in the same way as adding a dependency
  to a configuration in the gradle `dependencies` block. It is given here to avoid un-wanted side effects
   on the build dependencies of the project.
         
-- `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the generatr. If
-set in the top level block it will be used for all configured generatrs.
+- `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the processor. If
+set in the top level block it will be used for all configured processors.
 
 - `targetDir`: (**required**) the output folder for generating interfaces & models. This is the parent
  of the `packageName` folder tree. It is recommended to set this to a subfolder of gradle's standard `build`
 directory so it is cleared by the `clean` task and does not pollute the sources directory.
  
-  See [running the generatr][docs-running] how to include the `targetDir` in compilation & packing.  
+  See [running the processor][docs-running] how to include the `targetDir` in compilation & packing.  
 
-- `mapping`: (**required**, since 1.0.0.M6) provides the generatr mapping options. This is a path
+- `mapping`: (**required**, since 1.0.0.M6) provides the processor mapping options. This is a path
  to yaml file. See [Configuration][docs-configuration] for a description of the mapping yaml. This replaces
  the `typeMappings` option. 
 
@@ -100,13 +101,13 @@ directory so it is cleared by the `clean` task and does not pollute the sources 
   [Configuration][docs-configuration].
   {: .mb-5 }
 
-# running generatr-spring
+# running processor-spring
 
-The plugin will add a gradle task `generateSpring` to run the generatr. 
+The plugin will add a gradle task `processSpring` to run the processor. 
 
-To automatically generate & compile the generatr output two additional configurations are required.
+To automatically generate & compile the processor output two additional configurations are required.
 
-- the `sourceSets` are extended to include the generatr output (assuming a java project):
+- the `sourceSets` are extended to include the processor output (assuming a java project):
 
         sourceSets {
             main {
@@ -118,17 +119,17 @@ To automatically generate & compile the generatr output two additional configura
         }
  
  
- - and the `compileJava` task gets a dependency on `generateSpring` so it runs before compilation (again,
+ - and the `compileJava` task gets a dependency on `processSpring` so it runs before compilation (again,
   assuming a java project):  
 
         // generate api before compiling
-        compileJava.dependsOn ('generateSpring')
+        compileJava.dependsOn ('processSpring')
 
 Adding automatic compilation in this way will also automatically include the generated files into the
 `jar` build artifact. 
 
 
-[generatr-gradle]: https://github.com/hauner/openapi-generatr-gradle
-[docs-mapping]: /openapi-generatr-spring/mapping/
-[docs-configuration]: /openapi-generatr-spring/generatr/configuration.html
-[docs-running]: #running-generatr-spring
+[oap-gradle]: https://github.com/hauner/openapi-processor-gradle
+[docs-mapping]: /openapi-processor-spring/mapping/
+[docs-configuration]: /openapi-processor-spring/generatr/configuration.html
+[docs-running]: #running-processor-spring

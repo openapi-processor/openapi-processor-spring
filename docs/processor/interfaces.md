@@ -1,19 +1,19 @@
 ---
 layout: default
 title: Interfaces
-parent: The generatr
+parent: The processor
 nav_order: 5
 ---
 
 # Interfaces
 
-The generatr groups endpoints based on their _first_ tag. Using the `/ping` example again its first
+The processor groups endpoints based on their _first_ tag. Using the `/ping` example again its first
 (and only) tag is **ping**: 
 
 ```yaml
     openapi: 3.0.2
     info:
-      title: sample api for openapi-generatr-spring
+      title: openapi-processor-spring sample api
       version: 1.0.0
     
     paths:

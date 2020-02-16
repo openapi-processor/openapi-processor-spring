@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Identifiers
-parent: The generatr
+parent: The processor
 nav_order: 15
 ---
 
@@ -9,7 +9,7 @@ nav_order: 15
 
 ## general
 
-The generatr will map identifiers used in the OpenAPI description (i.e. `yaml` file) to valid Java
+The processor will map identifiers used in the OpenAPI description (i.e. `yaml` file) to valid Java
 identifiers.
 
 The Java identifiers will use camel case, starting with a upper case letter if it is a type name and

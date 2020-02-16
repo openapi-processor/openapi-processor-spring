@@ -1,13 +1,13 @@
 ---
 layout: default
-title: The generatr
+title: The processor
 nav_order: 2
 has_children: true
 ---
 
-# The generatr
+# The processor
 
-The openapi-generatr-spring is an **interface only & model** open api generatr. That means it will
+The openapi-processor-spring is an **interface only & model** open api generator. That means it will
 only generate java interfaces for the endpoints and the required model POJO classes. It is the
 projects task to implement the endpoint interfaces.
 
@@ -17,7 +17,7 @@ endpoint. A call to the `/ping` endpoint will simply respond with a plain text s
 ```yaml
     openapi: 3.0.2
     info:
-      title: sample api for openapi-generatr-spring
+      title: openapi-processor-spring sample
       version: 1.0.0
     
     paths:
@@ -36,7 +36,7 @@ endpoint. A call to the `/ping` endpoint will simply respond with a plain text s
                     type: string
 ```
 
-Running the generatr on that open api yaml will create the following java interface:
+Running the processor on that open api yaml will create the following java interface:
 
 ```java
     package com.github.hauner.openapi.api;

@@ -1,10 +1,10 @@
-title: openapi-generatr-spring
+title: openapi-processor-spring
 
 description: >-
-  an openapi generatr for spring-boot
+  an openapi-processor for spring-boot
 
 url: "https://hauner.github.io"
-baseurl: "/openapi-generatr-spring/"
+baseurl: "/openapi-processor-spring"
 
 twitter_username: "@MartinHauner"
 github_username:  hauner
@@ -17,14 +17,20 @@ exclude:
   - api.md
   - gradle-obsolete.md
 
+include:
+  - ../images
+
 ##
 ## "just-the-docs" theme options
 ##
 search_enabled: true
 search_tokenizer_separator: /[\s/]+/
 
+# logo, replaces the title
+logo: "../images/openapi-processor-spring@1280x200.png"
+
 aux_links:
-  openapi-generatr-spring:
-    - //github.com/hauner/openapi-generatr-spring
+  openapi-processor-spring:
+    - //github.com/hauner/openapi-processor-spring
 
 #footer_content:

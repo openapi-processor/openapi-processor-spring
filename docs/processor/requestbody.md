@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Request Body
-parent: The generatr
+parent: The processor
 nav_order: 15
 ---
 
@@ -43,7 +43,7 @@ This OpenAPI describes an endpoint with `requestBody`:
               type: string
 ```
 
-that the generatr will convert to the interface:
+that the processor will convert to the interface:
 
 ```java
     package generated.api;
@@ -141,5 +141,5 @@ to get the following code:
 ```
 
 
-[howto-file-upload]: /openapi-generatr-spring/howto/file_upload.html
+[howto-file-upload]: /openapi-processor-spring/howto/file_upload.html
 

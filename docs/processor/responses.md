@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Responses
-parent: The generatr
+parent: The processor
 nav_order: 20
 ---
 

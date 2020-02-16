@@ -1,13 +1,13 @@
 ---
 layout: default
 title: Configuration
-parent: The generatr
+parent: The processor
 nav_order: 4
 ---
 
 # Configuration
 
-The configuration of the generatr is given in the `mapping.yaml`. It does contain some general options
+The configuration of the processor is given in the `mapping.yaml`. It does contain some general options
 and the type mapping information.
 
 
@@ -37,12 +37,12 @@ A mapping yaml looks like this
 
 ## map:
 
-Using type mapping we can tell the generatr to map types (schemas) from an openapi.yaml description to
+Using type mapping we can tell the processor to map types (schemas) from an openapi.yaml description to
 a specific existing java type instead of generating a model class from the source OpenAPI type. 
 
 The type mapping is described in [java type mapping][docs-mapping].
 
 
-[docs-mapping]: /openapi-generatr-spring/mapping/
-[docs-gradle]:  /openapi-generatr-spring/gradle.html
+[docs-mapping]: /openapi-processor-spring/mapping/
+[docs-gradle]:  /openapi-processor-spring/gradle.html
 [bean-validation]: https://beanvalidation.org/

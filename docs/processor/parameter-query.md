@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Query Parameters
-parent: The generatr
+parent: The processor
 nav_order: 10
 ---
 

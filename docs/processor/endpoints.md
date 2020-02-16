@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Endpoints
-parent: The generatr
+parent: The processor
 nav_order: 6
 ---
 
