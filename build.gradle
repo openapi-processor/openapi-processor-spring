@@ -45,16 +45,16 @@ testSets {
 check.dependsOn testInt
 
 dependencies {
-    implementation ('org.codehaus.groovy:groovy:3.0.0')
+    implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
 
-    testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-3.0') {
+    testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation ('org.spockframework:spock-junit4:2.0-M2-groovy-3.0') {
+    testImplementation ('org.spockframework:spock-junit4:2.0-M2-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.10.7'
