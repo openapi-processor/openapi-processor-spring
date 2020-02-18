@@ -34,16 +34,16 @@ import spock.lang.Unroll
 
 class BeanValidationFactorySpec extends Specification {
 
-    BeanValidationFactory beanValidationFactory = new BeanValidationFactory()
+    BeanValidationFactory beanValidationFactory = new BeanValidationFactory ()
 
     @Unroll
-    void "check @Valid for Object (type: #type)"() {
+    void "check @Valid for Object (type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -62,16 +62,16 @@ class BeanValidationFactorySpec extends Specification {
     }
 
     @Unroll
-    void "check import @Size for String (minLength: #minLength, maxLength: #maxLength, type: #type)"() {
+    void "check import @Size for String (minLength: #minLength, maxLength: #maxLength, type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minLength = minLength
         dataType.constraints.maxLength = maxLength
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -80,7 +80,9 @@ class BeanValidationFactorySpec extends Specification {
         where:
         type            | minLength | maxLength || resultImports                         | resultAnnotations
         StringDataType  | null      | null      || []                                    | ""
+        StringDataType  | 0         | null      || []                                    | ""
         StringDataType  | 1         | null      || ["javax.validation.constraints.Size"] | "@Size(min = 1)"
+        StringDataType  | null      | 0         || ["javax.validation.constraints.Size"] | "@Size(max = 0)"
         StringDataType  | null      | 2         || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
         StringDataType  | 1         | 2         || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
         IntegerDataType | 1         | null      || []                                    | ""
@@ -90,16 +92,16 @@ class BeanValidationFactorySpec extends Specification {
     }
 
     @Unroll
-    void "check import @Size for Collections (minItems: #minItems, maxItems: #maxItems, type: #type)"() {
+    void "check import @Size for Collections (minItems: #minItems, maxItems: #maxItems, type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minItems = minItems
         dataType.constraints.maxItems = maxItems
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -108,26 +110,29 @@ class BeanValidationFactorySpec extends Specification {
         where:
         type           | minItems | maxItems || resultImports                         | resultAnnotations
         ArrayDataType  | null     | null     || []                                    | ""
+        ArrayDataType  | 0        | null     || []                                    | ""
         ArrayDataType  | 1        | null     || ["javax.validation.constraints.Size"] | "@Size(min = 1)"
+        ArrayDataType  | null     | 0        || ["javax.validation.constraints.Size"] | "@Size(max = 0)"
         ArrayDataType  | null     | 2        || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
         ArrayDataType  | 1        | 2        || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
         ListDataType   | null     | 2        || ["javax.validation.constraints.Size"] | "@Size(max = 2)"
         SetDataType    | 1        | 2        || ["javax.validation.constraints.Size"] | "@Size(min = 1, max = 2)"
+        StringDataType | 0        | null     || []                                    | ""
         StringDataType | 1        | null     || []                                    | ""
         StringDataType | null     | 2        || []                                    | ""
         LongDataType   | 1        | 2        || []                                    | ""
     }
 
     @Unroll
-    void "check import @NotNull (nullable: #nullable, type: #type)"() {
+    void "check import @NotNull (nullable: #nullable, type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.nullable = nullable
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -147,16 +152,16 @@ class BeanValidationFactorySpec extends Specification {
     }
 
     @Unroll
-    void "check import @DecimalMin (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum, type: #type)"() {
+    void "check import @DecimalMin (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum, type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minimum = minimum
         dataType.constraints.exclusiveMinimum = exclusiveMinimum
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -170,6 +175,7 @@ class BeanValidationFactorySpec extends Specification {
         IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
         IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\", inclusive = false)"
         IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMin"] | "@DecimalMin(value = \"1\")"
+        IntegerDataType | 0       | false            || ["javax.validation.constraints.DecimalMin"] | '@DecimalMin(value = "0")'
         LongDataType    | null    | null             || []                                          | ""
         LongDataType    | null    | true             || []                                          | ""
         LongDataType    | null    | false            || []                                          | ""
@@ -192,16 +198,16 @@ class BeanValidationFactorySpec extends Specification {
     }
 
     @Unroll
-    void "check import @DecimalMax (maximum: #maximum, exclusiveMaximum: #exclusiveMaximum, type: #type)"() {
+    void "check import @DecimalMax (maximum: #maximum, exclusiveMaximum: #exclusiveMaximum, type: #type)" () {
         setup:
-        DataType dataType = type.getDeclaredConstructor().newInstance()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = type.getDeclaredConstructor ().newInstance ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.maximum = maximum
         dataType.constraints.exclusiveMaximum = exclusiveMaximum
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>
@@ -215,6 +221,7 @@ class BeanValidationFactorySpec extends Specification {
         IntegerDataType | 1       | null             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
         IntegerDataType | 1       | true             || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\", inclusive = false)"
         IntegerDataType | 1       | false            || ["javax.validation.constraints.DecimalMax"] | "@DecimalMax(value = \"1\")"
+        IntegerDataType | 0       | false            || ["javax.validation.constraints.DecimalMax"] | '@DecimalMax(value = "0")'
         LongDataType    | null    | null             || []                                          | ""
         LongDataType    | null    | true             || []                                          | ""
         LongDataType    | null    | false            || []                                          | ""
@@ -237,18 +244,18 @@ class BeanValidationFactorySpec extends Specification {
     }
 
     @Unroll
-    void "check import @DecimalMin and @DecimalMax (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum maximum: #maximum, exclusiveMaximum: #exclusiveMaximum)"() {
+    void "check import @DecimalMin and @DecimalMax (minimum: #minimum, exclusiveMinimum: #exclusiveMinimum maximum: #maximum, exclusiveMaximum: #exclusiveMaximum)" () {
         setup:
-        DataType dataType = new DoubleDataType()
-        dataType.constraints = new DataTypeConstraints()
+        DataType dataType = new DoubleDataType ()
+        dataType.constraints = new DataTypeConstraints ()
         dataType.constraints.minimum = minimum
         dataType.constraints.exclusiveMinimum = exclusiveMinimum
         dataType.constraints.maximum = maximum
         dataType.constraints.exclusiveMaximum = exclusiveMaximum
 
         when:
-        def imports = beanValidationFactory.collectImports(dataType)
-        def annotations = beanValidationFactory.createAnnotations(dataType)
+        def imports = beanValidationFactory.collectImports (dataType)
+        def annotations = beanValidationFactory.createAnnotations (dataType)
 
         then:
         imports == resultImports as Set<String>

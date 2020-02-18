@@ -76,14 +76,14 @@ class BeanValidationFactory {
                     || dataType instanceof ArrayDataType
                     || dataType instanceof MappedMapDataType
             ) && (
-                dataType.constraints?.maxItems
+                dataType.constraints?.maxItems != null
                     || dataType.constraints?.minItems
             )
         ) || ( // String
             (
                 dataType instanceof StringDataType
             ) && (
-                dataType.constraints?.maxLength
+                dataType.constraints?.maxLength != null
                     || dataType.constraints?.minLength
             )
         )
@@ -96,7 +96,7 @@ class BeanValidationFactory {
                 || dataType instanceof IntegerDataType
                 || dataType instanceof LongDataType
         ) && (
-            dataType.constraints?.maximum
+            dataType.constraints?.maximum != null
         )
     }
 
@@ -107,7 +107,7 @@ class BeanValidationFactory {
                 || dataType instanceof IntegerDataType
                 || dataType instanceof LongDataType
         ) && (
-            dataType.constraints?.minimum
+            dataType.constraints?.minimum != null
         )
     }
 
