@@ -41,6 +41,7 @@ import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.parser.OpenApi
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
@@ -100,6 +101,19 @@ class ApiConverter {
      * @param api the open api model
      * @return source generation model
      */
+    Api convert (OpenApi api) {
+        def target = new Api ()
+        createInterfaces (api.openAPI, target)
+        target
+    }
+
+    /**
+     * converts the openapi model to the source generation model
+     *
+     * @param api the open api model
+     * @return source generation model
+     */
+    @Deprecated
     Api convert (OpenAPI api) {
         def target = new Api ()
         createInterfaces (api, target)

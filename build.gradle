@@ -48,6 +48,7 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
+    implementation 'org.openapi4j:openapi-parser:0.6'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
 
