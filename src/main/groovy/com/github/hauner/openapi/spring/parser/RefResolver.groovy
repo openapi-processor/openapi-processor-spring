@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.schema
-
-import io.swagger.v3.oas.models.Components
-import io.swagger.v3.oas.models.media.Schema
+package com.github.hauner.openapi.spring.parser
 
 /**
  * Resolves $ref objects from an OpenAPI.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class RefResolver {
+interface RefResolver {
 
-    private Components components
-
-    RefResolver(Components components) {
-        this.components = components
-    }
-
-    Schema resolve (String ref) {
-        components.schemas.get (getRefName (ref))
-    }
-
-    private String getRefName (String ref) {
-        ref.substring (ref.lastIndexOf ('/') + 1)
-    }
+    Schema resolve (String ref)
 
 }

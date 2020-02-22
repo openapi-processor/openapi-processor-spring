@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.schema
+package com.github.hauner.openapi.spring.parser.swagger
 
-import io.swagger.v3.oas.models.Components
-import io.swagger.v3.oas.models.media.Schema
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import io.swagger.v3.oas.models.Components as SwaggerComponents
 
 /**
- * Resolves $ref objects from an OpenAPI.
+ * Swagger $ref resolver.
  *
  * @author Martin Hauner
  */
-@Deprecated
-class RefResolver {
+class RefResolver implements ParserRefResolver {
 
-    private Components components
+    private SwaggerComponents components
 
-    RefResolver(Components components) {
+    RefResolver (SwaggerComponents components) {
         this.components = components
     }
 
-    Schema resolve (String ref) {
-        components.schemas.get (getRefName (ref))
+    @Override
+    ParserSchema resolve (String ref) {
+        new Schema (components.schemas.get (getRefName (ref)))
     }
 
     private String getRefName (String ref) {

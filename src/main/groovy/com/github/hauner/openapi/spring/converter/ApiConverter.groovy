@@ -23,7 +23,6 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -42,6 +41,8 @@ import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.swagger.RefResolver
+import com.github.hauner.openapi.spring.parser.swagger.Schema
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
@@ -200,7 +201,7 @@ class ApiConverter {
             def info = new SchemaInfo (
                 path: ep.path,
                 name: getInlineRequestBodyName (ep.path),
-                schema: reqBody.schema,
+                schema: new Schema(reqBody.schema),
                 resolver: resolver)
 
             if (contentType == MULTIPART) {
@@ -235,7 +236,7 @@ class ApiConverter {
         def info = new SchemaInfo (
             path: path,
             name: parameter.name,
-            schema: parameter.schema,
+            schema: new Schema(parameter.schema),
             resolver: resolver)
 
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
@@ -300,7 +301,7 @@ class ApiConverter {
                 path: path,
                 contentType: contentType,
                 name: getInlineResponseName (path, httpStatus),
-                schema: schema,
+                schema: new Schema(schema),
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)

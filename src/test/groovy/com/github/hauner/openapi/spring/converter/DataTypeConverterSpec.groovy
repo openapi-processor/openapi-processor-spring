@@ -16,13 +16,17 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.schema.RefResolver
+//import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.parser.RefResolver
+import com.github.hauner.openapi.spring.parser.Schema
+//import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import com.github.hauner.openapi.spring.support.TestSchema
 import io.swagger.v3.oas.models.media.ObjectSchema
-import io.swagger.v3.oas.models.media.Schema
+//import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -42,7 +46,7 @@ class DataTypeConverterSpec extends Specification {
 
     @Unroll
     void "converts schema(#type, #format) to #javaType" () {
-        Schema schema = new Schema(type: type, format: format)
+        def schema = new TestSchema (type: type, format: format)
 
         when:
         def datatype = converter.convert (new SchemaInfo (name: javaType, schema: schema), new DataTypes())
@@ -66,7 +70,7 @@ class DataTypeConverterSpec extends Specification {
 
     @Unroll
     void "converts schema(#type, #format, #dflt) to javaType with default value" () {
-        Schema schema = new Schema(type: type, format: format, _default: dflt)
+        def schema = new TestSchema (type: type, format: format, defaultValue: dflt)
 
         when:
         def datatype = converter.convert (
@@ -90,7 +94,7 @@ class DataTypeConverterSpec extends Specification {
     }
 
     void "throws when hitting an unknown data type" () {
-        Schema schema = new Schema(type: type, format: format)
+        def schema = new TestSchema (type: type, format: format)
 
         when:
         converter.convert (new SchemaInfo (schema: schema), new DataTypes())
@@ -109,14 +113,14 @@ class DataTypeConverterSpec extends Specification {
     void "converts object schema with ref" () {
         def dt = new DataTypes()
 
-        Schema barSchema = new Schema(type: 'object', properties: [
-            val: new Schema (type: 'string')
+        Schema barSchema = new TestSchema (type: 'object', properties: [
+            val: new TestSchema (type: 'string')
         ])
-        Schema fooSchema = new Schema (type: 'object', properties: [
-            bar: new ObjectSchema ($ref: "#/components/schemas/Bar")
+        Schema fooSchema = new TestSchema (type: 'object', properties: [
+            bar: new TestSchema (type: 'object', ref: "#/components/schemas/Bar")
         ])
 
-        def resolver = new RefResolver (null) {
+        def resolver = new RefResolver () {
             @Override
             Schema resolve (String ref) {
                 barSchema
