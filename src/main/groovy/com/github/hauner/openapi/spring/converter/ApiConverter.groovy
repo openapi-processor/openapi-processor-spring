@@ -38,18 +38,16 @@ import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.model.Response
+import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
-import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
-import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
-import com.github.hauner.openapi.spring.parser.Path as ParserPath
-import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
-import com.github.hauner.openapi.spring.parser.Response as ParserResponse
-import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
-import com.github.hauner.openapi.spring.parser.swagger.Operation
-import com.github.hauner.openapi.spring.parser.swagger.Schema
+import com.github.hauner.openapi.spring.parser.MediaType
+import com.github.hauner.openapi.spring.parser.Operation
+import com.github.hauner.openapi.spring.parser.Parameter
+import com.github.hauner.openapi.spring.parser.Path
+import com.github.hauner.openapi.spring.parser.RefResolver
+import com.github.hauner.openapi.spring.parser.Response
+import com.github.hauner.openapi.spring.parser.RequestBody
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 
@@ -111,12 +109,12 @@ class ApiConverter {
     private void createInterfaces (OpenApi api, Api target) {
         Map<String, Interface>interfaces = new HashMap<> ()
 
-        api.paths.each { Map.Entry<String, ParserPath> pathEntry ->
+        api.paths.each { Map.Entry<String, Path> pathEntry ->
             String path = pathEntry.key
-            ParserPath pathValue = pathEntry.value
+            Path pathValue = pathEntry.value
 
             def operations = pathValue.operations
-            operations.each { ParserOperation op ->
+            operations.each { Operation op ->
                 Interface itf = createInterface (path, op, interfaces)
 
                 Endpoint ep = createEndpoint (path, op, target.models, api.refResolver)
@@ -129,7 +127,7 @@ class ApiConverter {
         target.interfaces = interfaces.values () as List<Interface>
     }
 
-    private Interface createInterface (String path, ParserOperation operation, Map<String, Interface> interfaces) {
+    private Interface createInterface (String path, Operation operation, Map<String, Interface> interfaces) {
         def targetInterfaceName = getInterfaceName (operation, isExcluded (path))
 
         def itf = interfaces.get (targetInterfaceName)
@@ -146,7 +144,7 @@ class ApiConverter {
         itf
     }
 
-    private Endpoint createEndpoint (String path, ParserOperation operation, DataTypes dataTypes, ParserRefResolver resolver) {
+    private Endpoint createEndpoint (String path, Operation operation, DataTypes dataTypes, RefResolver resolver) {
         Endpoint ep = new Endpoint (path: path, method: operation.method)
 
         try {
@@ -161,8 +159,8 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<ParserParameter> parameters, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
-        parameters.each { ParserParameter parameter ->
+    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        parameters.each { Parameter parameter ->
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
 
@@ -172,14 +170,14 @@ class ApiConverter {
         }
     }
 
-    private void collectRequestBody (ParserRequestBody requestBody, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
+    private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
         if (requestBody == null) {
             return
         }
 
         def required = requestBody.required != null ?: false
 
-        requestBody.content.each { Map.Entry<String, ParserMediaType> requestBodyEntry ->
+        requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
             def contentType = requestBodyEntry.key
             def mediaType = requestBodyEntry.value
 
@@ -197,15 +195,15 @@ class ApiConverter {
         }
     }
 
-    private collectResponses (Map<String, ParserResponse> responses, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
-        responses.each { Map.Entry<String, ParserResponse> responseEntry ->
+    private collectResponses (Map<String, Response> responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        responses.each { Map.Entry<String, Response> responseEntry ->
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
 
             if (!httpResponse.content) {
-                ep.addResponses (httpStatus, [Response.EMPTY])
+                ep.addResponses (httpStatus, [ModelResponse.EMPTY])
             } else {
-                List<Response> results = createResponses (
+                List<ModelResponse> results = createResponses (
                     ep.path,
                     httpStatus,
                     httpResponse,
@@ -218,7 +216,7 @@ class ApiConverter {
 
     }
 
-    private ModelParameter createParameter (String path, ParserParameter parameter, DataTypes dataTypes, resolver) {
+    private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, RefResolver resolver) {
         def info = new SchemaInfo (
             path: path,
             name: parameter.name,
@@ -242,7 +240,7 @@ class ApiConverter {
         }
     }
 
-    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, ParserRefResolver resolver) {
+    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, RefResolver resolver) {
         TypeMapping tm = mapping.childMappings.first ()
         TargetType tt = tm.targetType
 
@@ -275,10 +273,10 @@ class ApiConverter {
         }
     }
 
-    private List<Response> createResponses (String path, String httpStatus, ParserResponse response, DataTypes dataTypes, ParserRefResolver resolver) {
+    private List<ModelResponse> createResponses (String path, String httpStatus, Response response, DataTypes dataTypes, RefResolver resolver) {
         def responses = []
 
-        response.content.each { Map.Entry<String, ParserMediaType> contentEntry ->
+        response.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
             def schema = mediaType.schema
@@ -292,7 +290,7 @@ class ApiConverter {
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
-            def resp = new Response (
+            def resp = new ModelResponse (
                 contentType: contentType,
                 responseType: dataType)
 
