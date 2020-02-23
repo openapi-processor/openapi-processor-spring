@@ -20,26 +20,13 @@ import com.github.hauner.openapi.spring.parser.OpenApi
 import com.github.hauner.openapi.spring.parser.ParserType
 import com.github.hauner.openapi.spring.support.parser.OpenApi4jParser
 import com.github.hauner.openapi.spring.support.parser.SwaggerParser
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.parser.OpenAPIV3Parser
 
 /**
  * OpenAPI parser to read yaml from memory (swagger or openapi4j).
  */
 class OpenApiParser {
 
-    @Deprecated
-    static OpenAPI parse (String apiYaml, showWarnings = true) {
-        def contents = new OpenAPIV3Parser ().readContents (apiYaml)
-
-        if (showWarnings) {
-            printWarnings(contents.messages)
-        }
-
-        contents.openAPI
-    }
-
-    static OpenApi parseYaml (String apiYaml, ParserType parserType = ParserType.SWAGGER) {
+    static OpenApi parse (String apiYaml, ParserType parserType = ParserType.SWAGGER) {
         switch (parserType) {
             case ParserType.SWAGGER:
                 def parser = new SwaggerParser ()

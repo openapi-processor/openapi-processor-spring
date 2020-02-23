@@ -27,7 +27,7 @@ import com.github.hauner.openapi.spring.support.TestSchema
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parseYaml
+import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter(new DefaultApiOptions())
@@ -137,7 +137,7 @@ class DataTypeConverterSpec extends Specification {
     }
 
     void "converts simple array schema to Array[]" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: API
@@ -168,7 +168,7 @@ paths:
     }
 
     void "creates model for inline response object with name {path}Response{response code}"() {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: API
@@ -211,7 +211,7 @@ paths:
     }
 
     void "creates model for component schema object" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: component schema object
@@ -258,7 +258,7 @@ components:
     }
 
     void "skips named simple data types from #/components/schemas" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: component simple schemas 
@@ -305,7 +305,7 @@ components:
     }
 
     void "skips named array data types from #/components/schemas" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: component array schemas 
@@ -360,7 +360,7 @@ components:
 
 
     void "preserves order of object properties" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: API

@@ -19,12 +19,12 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.parser.ParserType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parseYaml
+import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 
 class RefResolverSpec extends Specification {
 
     void "resolves \$referenced schemas in API" () {
-        def openApi = parseYaml ("""\
+        def openApi = parse ("""\
 openapi: 3.0.2
 info:
   title: API
