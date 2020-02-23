@@ -27,6 +27,7 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
@@ -41,15 +42,17 @@ import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.swagger.Operation
 import com.github.hauner.openapi.spring.parser.swagger.RefResolver
 import com.github.hauner.openapi.spring.parser.swagger.Schema
-import com.github.hauner.openapi.spring.parser.swagger.Parameter
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
-import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
+//import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
+import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
@@ -133,9 +136,10 @@ class ApiConverter {
             def operations = new OperationCollector ()
                 .collect (pathItem)
 
-            operations.each { httpOperation ->
-                Interface itf = createInterface (path, httpOperation, interfaces)
-                Endpoint ep = createEndpoint (path, httpOperation, target.models, resolver)
+            operations.each { Map.Entry<HttpMethod, SwaggerOperation> opEntry ->
+                Interface itf = createInterface (path, opEntry.value, interfaces)
+
+                Endpoint ep = createEndpoint (path, opEntry.key, opEntry.value, target.models, resolver)
                 if (ep) {
                     itf.endpoints.add (ep)
                 }
@@ -145,7 +149,7 @@ class ApiConverter {
         target.interfaces = interfaces.values () as List<Interface>
     }
 
-    private Interface createInterface (String path, def operation, Map<String, Interface> interfaces) {
+    private Interface createInterface (String path, SwaggerOperation operation, Map<String, Interface> interfaces) {
         def targetInterfaceName = getInterfaceName (operation, isExcluded (path))
 
         def itf = interfaces.get (targetInterfaceName)
@@ -162,11 +166,12 @@ class ApiConverter {
         itf
     }
 
-    private Endpoint createEndpoint (String path, def operation, DataTypes dataTypes, RefResolver resolver) {
-        Endpoint ep = new Endpoint (path: path, method: (operation as HttpMethodTrait).httpMethod)
+    private Endpoint createEndpoint (String path, HttpMethod method, SwaggerOperation operation, DataTypes dataTypes, RefResolver resolver) {
+        Endpoint ep = new Endpoint (path: path, method: method)
 
         try {
-            collectParameters (operation.parameters, ep, dataTypes, resolver)
+            def op = new Operation (method, operation)
+            collectParameters (op.parameters, ep, dataTypes, resolver)
             collectRequestBody (operation.requestBody, ep, dataTypes, resolver)
             collectResponses (operation.responses, ep, dataTypes, resolver)
             ep
@@ -177,9 +182,9 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<SwaggerParameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
-        parameters.each { SwaggerParameter parameter ->
-            ep.parameters.add (createParameter (ep.path, new Parameter (parameter), dataTypes, resolver))
+    private void collectParameters (List<ParserParameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        parameters.each { ParserParameter parameter ->
+            ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
 
         List<Mapping> addMappings = findAdditionalParameter (ep)
@@ -233,7 +238,7 @@ class ApiConverter {
         }
     }
 
-    private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
+    private ModelParameter createParameter (String path, ParserParameter parameter, DataTypes dataTypes, resolver) {
         def info = new SchemaInfo (
             path: path,
             name: parameter.name,

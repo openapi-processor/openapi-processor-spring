@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import io.swagger.v3.oas.models.PathItem
  */
 class OperationCollector {
 
-    List<Operation> collect (PathItem item) {
-        def ops = []
+    Map<HttpMethod, Operation> collect (PathItem item) {
+        def ops = [:] as Map<HttpMethod, Operation>
 
         HttpMethod.values ().each {
-            def pathItem = item."${it.method}" as HttpMethodTrait
-            if (pathItem) {
-                pathItem.httpMethod = it
-                ops << pathItem
+            Operation op = item."${it.method}"
+            if (op) {
+                ops.put (it, op)
             }
         }
 
         ops
     }
+
 }
