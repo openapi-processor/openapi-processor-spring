@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.parser.swagger
 
-import com.github.hauner.openapi.spring.parser.OpenApi as ParsedApi
+import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
@@ -28,7 +28,7 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  */
 class Parser {
 
-    ParsedApi parse (String apiPath) {
+    ParserOpenApi parse (String apiPath) {
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
             // external files with $refs to #/components/schema.

@@ -20,7 +20,7 @@ import com.github.hauner.openapi.spring.parser.swagger.Parser as Swagger
 import com.github.hauner.openapi.spring.parser.openapi4j.Parser as OpenApi4J
 
 /**
- * OpenAPI parser. Supports swagger or openapi4 parser.
+ * OpenAPI parser abstraction. Supports swagger or openapi4 parser.
  *
  * @author Martin Hauner
  */
@@ -40,7 +40,10 @@ class Parser {
                 return parser.parse (apiPath)
 
             default:
-                println "warning: unknown parser type: ${processorOptions.parser}"
+                if (processorOptions.parser != null) {
+                    println "warning: unknown parser type: ${processorOptions.parser}"
+                    println "warning: available parser: SWAGGER, OPENAPI4J"
+                }
                 println "warning: using fallback parser SWAGGER"
 
                 def parser = new Swagger ()

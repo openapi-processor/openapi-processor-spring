@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.spring.parser.swagger
 
-import com.github.hauner.openapi.spring.parser.OpenApi as ParsedApi
+import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
@@ -25,12 +26,17 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult
  *
  * @author Martin Hauner
  */
-class OpenApi implements ParsedApi {
+class OpenApi implements ParserOpenApi {
 
     private SwaggerParseResult result
 
     OpenApi (SwaggerParseResult result) {
         this.result = result
+    }
+
+    @Override
+    ParserRefResolver getRefResolver () {
+        new RefResolver(result.openAPI.components)
     }
 
     @Deprecated

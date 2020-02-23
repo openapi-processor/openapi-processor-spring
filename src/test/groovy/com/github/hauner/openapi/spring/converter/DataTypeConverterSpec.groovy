@@ -16,17 +16,14 @@
 
 package com.github.hauner.openapi.spring.converter
 
-//import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.parser.RefResolver
 import com.github.hauner.openapi.spring.parser.Schema
-//import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import com.github.hauner.openapi.spring.support.TestSchema
-import io.swagger.v3.oas.models.media.ObjectSchema
-//import io.swagger.v3.oas.models.media.Schema
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,20 @@
 
 package com.github.hauner.openapi.spring.support
 
+import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.spring.support.parser.OpenApi4jParser
+import com.github.hauner.openapi.spring.support.parser.SwaggerParser
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.OpenAPIV3Parser
 
+/**
+ * OpenAPI parser to read yaml from memory (swagger or openapi4j).
+ */
 class OpenApiParser {
-    static OpenAPI parse(String apiYaml, showWarnings = true) {
+
+    @Deprecated
+    static OpenAPI parse (String apiYaml, showWarnings = true) {
         def contents = new OpenAPIV3Parser ().readContents (apiYaml)
 
         if (showWarnings) {
@@ -28,6 +37,18 @@ class OpenApiParser {
         }
 
         contents.openAPI
+    }
+
+    static OpenApi parseYaml (String apiYaml, ParserType parserType = ParserType.SWAGGER) {
+        switch (parserType) {
+            case ParserType.SWAGGER:
+                def parser = new SwaggerParser ()
+                return parser.parseYaml (apiYaml)
+
+            case ParserType.OPENAPI4J:
+                def parser = new OpenApi4jParser ()
+                return parser.parseYaml (apiYaml)
+        }
     }
 
     private static printWarnings(List<String> warnings) {
@@ -40,4 +61,5 @@ class OpenApiParser {
             println it
         }
     }
+
 }

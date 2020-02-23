@@ -16,15 +16,15 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.schema.RefResolver
+import com.github.hauner.openapi.spring.parser.ParserType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.spring.support.OpenApiParser.parseYaml
 
 class RefResolverSpec extends Specification {
 
     void "resolves \$referenced schemas in API" () {
-        def openApi = parse ("""\
+        def openApi = parseYaml ("""\
 openapi: 3.0.2
 info:
   title: API
@@ -68,10 +68,10 @@ components:
         value:
           type: string
         
-""")
+""", ParserType.OPENAPI4J)
 
         when:
-        def resolver = new RefResolver(openApi.components)
+        def resolver = openApi.refResolver
         def schema = resolver.resolve('#/components/schemas/Schema')
         def other = resolver.resolve('#/components/schemas/OtherSchema')
 

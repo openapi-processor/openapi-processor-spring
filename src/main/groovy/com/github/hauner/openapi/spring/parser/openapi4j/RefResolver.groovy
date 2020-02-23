@@ -16,29 +16,30 @@
 
 package com.github.hauner.openapi.spring.parser.openapi4j
 
-import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
-import org.openapi4j.core.validation.ValidationResults
-import org.openapi4j.parser.OpenApi3Parser
-import org.openapi4j.parser.model.v3.OpenApi3
-import org.openapi4j.parser.validation.v3.OpenApi3Validator
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import org.openapi4j.parser.model.v3.Components as O4jComponents
 
 /**
- * openapi4j parser.
+ * openapi4j $ref resolver.
  *
  * @author Martin Hauner
  */
-class Parser {
+class RefResolver implements ParserRefResolver {
 
-    ParserOpenApi parse (String apiPath) {
+    private O4jComponents components
 
-        OpenApi3 api = new OpenApi3Parser ()
-            .parse (new File (apiPath), true)
+    RefResolver (O4jComponents components) {
+        this.components = components
+    }
 
-        ValidationResults results = OpenApi3Validator
-            .instance ()
-            .validate (api)
+    @Override
+    ParserSchema resolve (String ref) {
+        new Schema (components.schemas.get (getRefName (ref)))
+    }
 
-        new OpenApi (api, results)
+    private String getRefName (String ref) {
+        ref.substring (ref.lastIndexOf ('/') + 1)
     }
 
 }

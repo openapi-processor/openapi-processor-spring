@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.spring.parser.openapi4j
 
-import com.github.hauner.openapi.spring.parser.OpenApi as ParsedApi
+import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import org.openapi4j.core.validation.ValidationResults
 import org.openapi4j.parser.model.v3.OpenApi3
 
@@ -25,7 +26,7 @@ import org.openapi4j.parser.model.v3.OpenApi3
  *
  * @author Martin Hauner
  */
-class OpenApi implements ParsedApi {
+class OpenApi implements ParserOpenApi {
 
     private OpenApi3 api
     private ValidationResults validations
@@ -33,6 +34,11 @@ class OpenApi implements ParsedApi {
     OpenApi (OpenApi3 api, ValidationResults validations) {
         this.api = api
         this.validations = validations
+    }
+
+    @Override
+    ParserRefResolver getRefResolver () {
+        new RefResolver(api.components)
     }
 
     @Override
