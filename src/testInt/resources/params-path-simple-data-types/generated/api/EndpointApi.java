@@ -14,8 +14,4 @@ public interface EndpointApi {
     @GetMapping(path = "/endpoint/{foo}")
     ResponseEntity<Void> getEndpointFoo(@PathVariable(name = "foo") String foo);
 
-    @GetMapping(path = "/endpoint-optional/{foo}")
-    ResponseEntity<Void> getEndpointOptionalFoo(
-            @PathVariable(name = "foo", required = false) String foo);
-
 }
