@@ -43,7 +43,7 @@ class RequestBody implements ParserRequestBody {
     Map<String, ParserMediaType> getContent () {
         def content = [:] as LinkedHashMap
 
-        requestBody.content.each { Map.Entry<String, O4jMediaType> entry ->
+        requestBody.contentMediaTypes.each { Map.Entry<String, O4jMediaType> entry ->
             content.put (entry.key, new MediaType (entry.value))
         }
 
