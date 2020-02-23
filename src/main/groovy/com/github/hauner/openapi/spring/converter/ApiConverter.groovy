@@ -42,8 +42,12 @@ import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.Path as ParserPath
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import com.github.hauner.openapi.spring.parser.swagger.Operation
+import com.github.hauner.openapi.spring.parser.swagger.Parser
 import com.github.hauner.openapi.spring.parser.swagger.RefResolver
 import com.github.hauner.openapi.spring.parser.swagger.Schema
 import com.github.hauner.openapi.support.Identifier
@@ -108,38 +112,23 @@ class ApiConverter {
      */
     Api convert (OpenApi api) {
         def target = new Api ()
-        createInterfaces (api.openAPI, target)
-        target
-    }
-
-    /**
-     * converts the openapi model to the source generation model
-     *
-     * @param api the open api model
-     * @return source generation model
-     */
-    @Deprecated
-    Api convert (OpenAPI api) {
-        def target = new Api ()
         createInterfaces (api, target)
         target
     }
 
-    private void createInterfaces (OpenAPI api, Api target) {
-        def resolver = new RefResolver (api.components)
+    private void createInterfaces (OpenApi api, Api target) {
         Map<String, Interface>interfaces = new HashMap<> ()
 
-        api.paths.each { Map.Entry<String, PathItem> pathEntry ->
+        api.paths.each { Map.Entry<String, ParserPath> pathEntry ->
             String path = pathEntry.key
-            PathItem pathItem = pathEntry.value
+            ParserPath pathValue = pathEntry.value
 
-            def operations = new OperationCollector ()
-                .collect (pathItem)
+            def operations = pathValue.operations
 
-            operations.each { Map.Entry<HttpMethod, SwaggerOperation> opEntry ->
-                Interface itf = createInterface (path, opEntry.value, interfaces)
+            operations.each { ParserOperation op ->
+                Interface itf = createInterface (path, op, interfaces)
 
-                Endpoint ep = createEndpoint (path, opEntry.key, opEntry.value, target.models, resolver)
+                Endpoint ep = createEndpoint (path, op, target.models, api.refResolver)
                 if (ep) {
                     itf.endpoints.add (ep)
                 }
@@ -149,7 +138,7 @@ class ApiConverter {
         target.interfaces = interfaces.values () as List<Interface>
     }
 
-    private Interface createInterface (String path, SwaggerOperation operation, Map<String, Interface> interfaces) {
+    private Interface createInterface (String path, ParserOperation operation, Map<String, Interface> interfaces) {
         def targetInterfaceName = getInterfaceName (operation, isExcluded (path))
 
         def itf = interfaces.get (targetInterfaceName)
@@ -166,14 +155,15 @@ class ApiConverter {
         itf
     }
 
-    private Endpoint createEndpoint (String path, HttpMethod method, SwaggerOperation operation, DataTypes dataTypes, RefResolver resolver) {
-        Endpoint ep = new Endpoint (path: path, method: method)
+    private Endpoint createEndpoint (String path, ParserOperation operation, DataTypes dataTypes, ParserRefResolver resolver) {
+        Endpoint ep = new Endpoint (path: path, method: operation.method)
 
         try {
-            def op = new Operation (method, operation)
-            collectParameters (op.parameters, ep, dataTypes, resolver)
-            collectRequestBody (operation.requestBody, ep, dataTypes, resolver)
-            collectResponses (operation.responses, ep, dataTypes, resolver)
+            SwaggerOperation op = (operation as Operation).operation
+
+            collectParameters (operation.parameters, ep, dataTypes, resolver)
+            collectRequestBody (op.requestBody, ep, dataTypes, resolver)
+            collectResponses (op.responses, ep, dataTypes, resolver)
             ep
 
         } catch (UnknownDataTypeException e) {
@@ -182,7 +172,7 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<ParserParameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+    private void collectParameters (List<ParserParameter> parameters, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
         parameters.each { ParserParameter parameter ->
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
@@ -193,7 +183,7 @@ class ApiConverter {
         }
     }
 
-    private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+    private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
         if (requestBody == null) {
             return
         }
@@ -218,7 +208,7 @@ class ApiConverter {
         }
     }
 
-    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
         responses.each { Map.Entry<String, ApiResponse> responseEntry ->
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
@@ -262,7 +252,7 @@ class ApiConverter {
         }
     }
 
-    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, RefResolver resolver) {
+    private ModelParameter createAdditionalParameter (String path, AddParameterTypeMapping mapping, DataTypes dataTypes, ParserRefResolver resolver) {
         TypeMapping tm = mapping.childMappings.first ()
         TargetType tt = tm.targetType
 
@@ -295,7 +285,7 @@ class ApiConverter {
         }
     }
 
-    private List<Response> createResponses (String path, String httpStatus, ApiResponse apiResponse, DataTypes dataTypes, RefResolver resolver) {
+    private List<Response> createResponses (String path, String httpStatus, ApiResponse apiResponse, DataTypes dataTypes, ParserRefResolver resolver) {
         def responses = []
 
         apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
@@ -362,8 +352,8 @@ class ApiConverter {
     private String getInterfaceName (def op, boolean excluded) {
         String targetInterfaceName = INTERFACE_DEFAULT_NAME
 
-        if (hasTags (op)) {
-            targetInterfaceName = op.tags.first ()
+        if ((op.hasTags())) {
+            targetInterfaceName = op.firstTag
         }
 
         if (excluded) {
@@ -371,10 +361,6 @@ class ApiConverter {
         }
 
         targetInterfaceName
-    }
-
-    private boolean hasTags (op) {
-        op.tags && !op.tags.empty
     }
 
 }

@@ -55,7 +55,7 @@ class Operation implements ParserOperation {
 
     @Override
     boolean hasTags () {
-        !operation.tags.empty
+        operation.tags ? !operation.tags.empty : false
     }
 
     @Override

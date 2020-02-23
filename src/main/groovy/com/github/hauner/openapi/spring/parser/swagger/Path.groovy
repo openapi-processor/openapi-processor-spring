@@ -42,7 +42,9 @@ class Path implements ParserPath {
 
         HttpMethod.values ().each {
             def op = info."${it.method}"
-            ops.add (new Operation(it, op))
+            if (op != null) {
+                ops.add (new Operation(it, op))
+            }
         }
 
         ops
