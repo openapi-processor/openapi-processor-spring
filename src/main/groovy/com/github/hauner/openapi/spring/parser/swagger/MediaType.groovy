@@ -21,7 +21,7 @@ import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 
 /**
- * Swagger MediaType result.
+ * Swagger MediaType abstraction.
  *
  * @author Martin Hauner
  */

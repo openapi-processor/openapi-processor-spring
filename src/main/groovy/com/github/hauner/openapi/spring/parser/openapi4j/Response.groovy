@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.parser.openapi4j
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
+import com.github.hauner.openapi.spring.parser.Response as ParserResponse
 
 /**
- * Used to remember the http method of an OpenAPI operation.
+ * openapi4j Response abstraction.
  *
  * @author Martin Hauner
  */
-trait HttpMethodTrait {
-    HttpMethod httpMethod
+class Response implements ParserResponse {
+
+    @Override
+    Map<String, ParserMediaType> getContent () {
+        return null
+    }
+
 }

@@ -14,18 +14,36 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser
+package com.github.hauner.openapi.spring.parser.openapi4j
+
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 
 /**
- * OpenAPI Parameter abstraction.
+ * openapi4j Parameter abstraction.
  *
  * @author Martin Hauner
  */
-interface Parameter {
+class Parameter implements ParserParameter {
 
-    String getIn ()
-    String getName ()
-    Schema getSchema ()
-    Boolean isRequired ()
+    @Override
+    String getIn () {
+        return null
+    }
+
+    @Override
+    String getName () {
+        return null
+    }
+
+    @Override
+    ParserSchema getSchema () {
+        return null
+    }
+
+    @Override
+    Boolean isRequired () {
+        return null
+    }
 
 }

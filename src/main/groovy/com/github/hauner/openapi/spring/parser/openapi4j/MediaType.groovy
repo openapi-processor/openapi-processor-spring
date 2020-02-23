@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser
+package com.github.hauner.openapi.spring.parser.openapi4j
+
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 
 /**
- * OpenAPI Parameter abstraction.
+ * openapi4j MediaType abstraction.
  *
  * @author Martin Hauner
  */
-interface Parameter {
+class MediaType implements ParserMediaType {
 
-    String getIn ()
-    String getName ()
-    Schema getSchema ()
-    Boolean isRequired ()
+    @Override
+    ParserSchema getSchema () {
+        return null
+    }
 
 }

@@ -20,6 +20,11 @@ import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 
+/**
+ * Swagger Parameter abstraction.
+ *
+ * @author Martin Hauner
+ */
 class Parameter implements ParserParameter {
 
     SwaggerParameter parameter

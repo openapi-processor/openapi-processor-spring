@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser
+package com.github.hauner.openapi.spring.parser.openapi4j
+
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
+import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
+
 
 /**
- * OpenAPI Parameter abstraction.
+ * openapi4j RequestBody abstraction.
  *
  * @author Martin Hauner
  */
-interface Parameter {
+class RequestBody implements ParserRequestBody {
 
-    String getIn ()
-    String getName ()
-    Schema getSchema ()
-    Boolean isRequired ()
+    @Override
+    Boolean getRequired () {
+        return null
+    }
+
+    @Override
+    Map<String, ParserMediaType> getContent () {
+        return null
+    }
 
 }
