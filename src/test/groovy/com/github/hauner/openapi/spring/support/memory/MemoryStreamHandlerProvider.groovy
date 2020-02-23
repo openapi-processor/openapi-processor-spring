@@ -54,7 +54,7 @@ class MemoryStreamHandlerProvider extends URLStreamHandlerProvider {
 
                     @Override
                     InputStream getInputStream () throws IOException {
-                        return new ByteArrayInputStream (getData ())
+                        return new ByteArrayInputStream (data)
                     }
 
                     private byte[] getData () {
