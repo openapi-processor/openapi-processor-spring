@@ -18,7 +18,11 @@ package com.github.hauner.openapi.spring.parser.swagger
 
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
+import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
+
 
 /**
  * Swagger Operation abstraction.
@@ -33,17 +37,35 @@ class Operation implements ParserOperation {
     Operation (HttpMethod method, SwaggerOperation operation) {
         this.method = method
         this.operation = operation
+    }
 
+    @Override
+    List<ParserParameter> getParameters () {
+        def params = []
+        operation.parameters.each { SwaggerParameter p ->
+            params.add (new Parameter(p))
+        }
+        params
+    }
+
+    @Override
+    ParserRequestBody getRequestBody () {
+        new RequestBody (operation.requestBody)
     }
 
     @Override
     boolean hasTags () {
-        return false
+        !operation.tags.empty
     }
 
     @Override
     String getFirstTag () {
-        return null
+        operation.tags.first ()
+    }
+
+    @Deprecated
+    SwaggerOperation getOperation () {
+        operation
     }
 
 }

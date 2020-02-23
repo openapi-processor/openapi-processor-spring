@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 
 /**
  * openapi4j Operation abstraction.
@@ -33,6 +35,16 @@ class Operation implements ParserOperation {
         this.method = method
         this.operation = operation
 
+    }
+
+    @Override
+    List<ParserParameter> getParameters () {
+        return null
+    }
+
+    @Override
+    ParserRequestBody getRequestBody () {
+        return null
     }
 
     @Override

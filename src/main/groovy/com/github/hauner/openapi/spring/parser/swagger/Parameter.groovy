@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser
+package com.github.hauner.openapi.spring.parser.swagger
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 
-/**
- * OpenAPI Operation abstraction.
- *
- * @author Martin Hauner
- */
-interface Operation {
+class Parameter implements ParserParameter {
 
-    HttpMethod getMethod()
-    List<Parameter> getParameters ()
-    RequestBody getRequestBody ()
+    SwaggerParameter parameter
 
-    boolean hasTags ()
+    Parameter (SwaggerParameter parameter) {
+        this.parameter = parameter
+    }
 
-    String getFirstTag ()
+    @Override
+    String getName () {
+        parameter.name
+    }
+
+    @Override
+    Boolean isRequired () {
+        parameter.required
+    }
 
 }

@@ -16,21 +16,11 @@
 
 package com.github.hauner.openapi.spring.parser
 
-import com.github.hauner.openapi.spring.model.HttpMethod
 
-/**
- * OpenAPI Operation abstraction.
- *
- * @author Martin Hauner
- */
-interface Operation {
+interface Parameter {
 
-    HttpMethod getMethod()
-    List<Parameter> getParameters ()
-    RequestBody getRequestBody ()
+    String getName ()
 
-    boolean hasTags ()
-
-    String getFirstTag ()
+    Boolean isRequired ()
 
 }
