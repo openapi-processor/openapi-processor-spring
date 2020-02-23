@@ -27,7 +27,6 @@ import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
@@ -42,21 +41,17 @@ import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 import com.github.hauner.openapi.spring.parser.swagger.Operation
-import com.github.hauner.openapi.spring.parser.swagger.Parser
-import com.github.hauner.openapi.spring.parser.swagger.RefResolver
 import com.github.hauner.openapi.spring.parser.swagger.Schema
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
-//import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
@@ -189,16 +184,15 @@ class ApiConverter {
         }
 
         def required = requestBody.required != null ?: false
-        def rb = requestBody.requestBody
 
-        rb.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
+        requestBody.content.each { Map.Entry<String, ParserMediaType> requestBodyEntry ->
             def contentType = requestBodyEntry.key
-            def reqBody = requestBodyEntry.value
+            def mediaType = requestBodyEntry.value
 
             def info = new SchemaInfo (
                 path: ep.path,
                 name: getInlineRequestBodyName (ep.path),
-                schema: new Schema(reqBody.schema),
+                schema: mediaType.schema,
                 resolver: resolver)
 
             if (contentType == MULTIPART) {

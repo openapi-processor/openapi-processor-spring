@@ -17,15 +17,12 @@
 package com.github.hauner.openapi.spring.parser
 
 /**
- * OpenAPI parser result abstraction.
+ * OpenAPI MediaType abstraction.
  *
  * @author Martin Hauner
  */
-interface OpenApi {
+interface MediaType {
 
-    Map<String, Path> getPaths ()
-
-    RefResolver getRefResolver ()
-    void printWarnings ()
+    Schema getSchema ()
 
 }

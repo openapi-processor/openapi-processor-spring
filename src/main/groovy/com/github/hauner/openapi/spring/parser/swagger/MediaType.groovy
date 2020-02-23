@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser
+package com.github.hauner.openapi.spring.parser.swagger
+
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 
 /**
- * OpenAPI parser result abstraction.
+ * Swagger MediaType result.
  *
  * @author Martin Hauner
  */
-interface OpenApi {
+class MediaType implements ParserMediaType {
 
-    Map<String, Path> getPaths ()
+    SwaggerMediaType mediaType
 
-    RefResolver getRefResolver ()
-    void printWarnings ()
+    MediaType (SwaggerMediaType mediaType) {
+        this.mediaType = mediaType
+    }
+
+    @Override
+    ParserSchema getSchema () {
+        return new Schema (mediaType.schema)
+    }
 
 }

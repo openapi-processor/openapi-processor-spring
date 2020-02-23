@@ -16,8 +16,14 @@
 
 package com.github.hauner.openapi.spring.parser
 
+/**
+ * OpenAPI RequestBody abstraction.
+ *
+ * @author Martin Hauner
+ */
 interface RequestBody {
 
     Boolean getRequired ()
+    Map<String, MediaType> getContent ()
 
 }

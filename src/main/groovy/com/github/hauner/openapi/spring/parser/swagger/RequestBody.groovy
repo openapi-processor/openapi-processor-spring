@@ -16,9 +16,16 @@
 
 package com.github.hauner.openapi.spring.parser.swagger
 
+import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
+import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 import io.swagger.v3.oas.models.parameters.RequestBody as SwaggerRequestBody
 
+/**
+ * OpenAPI Swagger RequestBody abstraction.
+ *
+ * @author Martin Hauner
+ */
 
 class RequestBody implements ParserRequestBody {
 
@@ -31,6 +38,17 @@ class RequestBody implements ParserRequestBody {
     @Override
     Boolean getRequired () {
         requestBody.required
+    }
+
+
+    Map<String, ParserMediaType> getContent () {
+        def content = [:] as LinkedHashMap
+
+        requestBody.content.each { Map.Entry<String, SwaggerMediaType> entry ->
+            content.put (entry.key, new MediaType (entry.value))
+        }
+
+        content
     }
 
 }
