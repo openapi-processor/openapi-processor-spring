@@ -13,18 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hauner.openapi.spring.parser
+
+package com.github.hauner.openapi.spring.parser.openapi4j
+
+import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 
 /**
- * OpenAPI parser result abstraction.
+ * openapi4j Operation abstraction.
  *
  * @author Martin Hauner
  */
-interface OpenApi {
+class Operation implements ParserOperation {
 
-    Map<String, Path> getPaths ()
+    HttpMethod method
+    io.swagger.v3.oas.models.Operation operation
 
-    RefResolver getRefResolver ()
-    void printWarnings ()
+    Operation (HttpMethod method, io.swagger.v3.oas.models.Operation operation) {
+        this.method = method
+        this.operation = operation
+
+    }
+
+    @Override
+    boolean hasTags () {
+        return false
+    }
+
+    @Override
+    String getFirstTag () {
+        return null
+    }
 
 }

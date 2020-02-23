@@ -17,12 +17,14 @@
 package com.github.hauner.openapi.spring.parser.swagger
 
 import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
+import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
-import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.OpenAPI as SwaggerApi
+import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
- * Swagger parser result
+ * Swagger parser result.
  *
  * @author Martin Hauner
  */
@@ -35,12 +37,23 @@ class OpenApi implements ParserOpenApi {
     }
 
     @Override
+    Map<String, ParserPath> getPaths () {
+        Map<String, com.github.hauner.openapi.spring.parser.Path> paths = new LinkedHashMap<>()
+
+        result.openAPI.paths.each { Map.Entry<String, SwaggerPath> pathEntry ->
+            paths.put (pathEntry.key, new Path (pathEntry.key, pathEntry.value))
+        }
+
+        paths
+    }
+
+    @Override
     ParserRefResolver getRefResolver () {
         new RefResolver(result.openAPI.components)
     }
 
     @Deprecated
-    OpenAPI getOpenAPI () {
+    SwaggerApi getOpenAPI () {
         result.openAPI
     }
 

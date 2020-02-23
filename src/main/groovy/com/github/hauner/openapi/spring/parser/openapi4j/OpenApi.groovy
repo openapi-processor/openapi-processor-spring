@@ -17,23 +17,36 @@
 package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
+import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import org.openapi4j.core.validation.ValidationResults
-import org.openapi4j.parser.model.v3.OpenApi3
+import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
+import org.openapi4j.parser.model.v3.Path as O4jPath
 
 /**
- * openapi4j parser result
+ * openapi4j parser result.
  *
  * @author Martin Hauner
  */
 class OpenApi implements ParserOpenApi {
 
-    private OpenApi3 api
+    private O4jOpenApi api
     private ValidationResults validations
 
-    OpenApi (OpenApi3 api, ValidationResults validations) {
+    OpenApi (O4jOpenApi api, ValidationResults validations) {
         this.api = api
         this.validations = validations
+    }
+
+    @Override
+    Map<String, com.github.hauner.openapi.spring.parser.Path> getPaths () {
+        Map<String, ParserPath> paths = new LinkedHashMap<>()
+
+        api.paths.each { Map.Entry<String, O4jPath> pathEntry ->
+            paths.put (pathEntry.key, new Path (pathEntry.key, pathEntry.value))
+        }
+
+        return paths
     }
 
     @Override

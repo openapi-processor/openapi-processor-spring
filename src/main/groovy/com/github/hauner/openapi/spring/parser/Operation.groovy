@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.hauner.openapi.spring.parser
 
 /**
- * OpenAPI parser result abstraction.
+ * OpenAPI Operation abstraction.
  *
  * @author Martin Hauner
  */
-interface OpenApi {
+interface Operation {
 
-    Map<String, Path> getPaths ()
+    boolean hasTags ()
 
-    RefResolver getRefResolver ()
-    void printWarnings ()
+    String getFirstTag ()
 
 }
