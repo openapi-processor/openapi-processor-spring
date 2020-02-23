@@ -43,12 +43,13 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
 import com.github.hauner.openapi.spring.parser.swagger.RefResolver
 import com.github.hauner.openapi.spring.parser.swagger.Schema
+import com.github.hauner.openapi.spring.parser.swagger.Parameter
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.media.MediaType
-import io.swagger.v3.oas.models.parameters.Parameter
+import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
@@ -176,9 +177,9 @@ class ApiConverter {
         }
     }
 
-    private void collectParameters (List<Parameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
-        parameters.each { Parameter parameter ->
-            ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
+    private void collectParameters (List<SwaggerParameter> parameters, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        parameters.each { SwaggerParameter parameter ->
+            ep.parameters.add (createParameter (ep.path, new Parameter (parameter), dataTypes, resolver))
         }
 
         List<Mapping> addMappings = findAdditionalParameter (ep)
@@ -236,7 +237,7 @@ class ApiConverter {
         def info = new SchemaInfo (
             path: path,
             name: parameter.name,
-            schema: new Schema(parameter.schema),
+            schema: parameter.schema,
             resolver: resolver)
 
         DataType dataType = dataTypeConverter.convert (info, dataTypes)

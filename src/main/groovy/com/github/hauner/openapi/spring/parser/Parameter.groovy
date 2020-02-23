@@ -19,8 +19,9 @@ package com.github.hauner.openapi.spring.parser
 
 interface Parameter {
 
+    String getIn ()
     String getName ()
-
+    Schema getSchema ()
     Boolean isRequired ()
 
 }

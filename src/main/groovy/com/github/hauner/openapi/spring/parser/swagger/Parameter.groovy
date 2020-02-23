@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.parser.swagger
 
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 
 class Parameter implements ParserParameter {
@@ -28,8 +29,18 @@ class Parameter implements ParserParameter {
     }
 
     @Override
+    String getIn () {
+        parameter.in
+    }
+
+    @Override
     String getName () {
         parameter.name
+    }
+
+    @Override
+    ParserSchema getSchema () {
+        new Schema (parameter.schema)
     }
 
     @Override
