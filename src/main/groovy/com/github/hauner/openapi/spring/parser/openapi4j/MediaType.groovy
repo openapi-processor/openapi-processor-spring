@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import org.openapi4j.parser.model.v3.MediaType as O4jMediaType
 
 /**
  * openapi4j MediaType abstraction.
@@ -26,9 +27,15 @@ import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
  */
 class MediaType implements ParserMediaType {
 
+    private O4jMediaType mediaType
+
+    MediaType (O4jMediaType mediaType) {
+        this.mediaType = mediaType
+    }
+
     @Override
     ParserSchema getSchema () {
-        return null
+        return new Schema (mediaType.schema)
     }
 
 }

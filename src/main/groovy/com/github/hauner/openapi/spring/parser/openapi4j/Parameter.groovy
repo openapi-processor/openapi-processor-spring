@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
+import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 
 /**
  * openapi4j Parameter abstraction.
@@ -26,24 +27,30 @@ import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
  */
 class Parameter implements ParserParameter {
 
+    private O4jParameter parameter
+
+    Parameter (O4jParameter parameter) {
+        this.parameter = parameter
+    }
+
     @Override
     String getIn () {
-        return null
+        parameter.in
     }
 
     @Override
     String getName () {
-        return null
+        parameter.name
     }
 
     @Override
     ParserSchema getSchema () {
-        return null
+        new Schema (parameter.schema)
     }
 
     @Override
     Boolean isRequired () {
-        return null
+        parameter.required != null ?: false
     }
 
 }

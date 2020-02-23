@@ -27,7 +27,7 @@ import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
  */
 class MediaType implements ParserMediaType {
 
-    SwaggerMediaType mediaType
+    private SwaggerMediaType mediaType
 
     MediaType (SwaggerMediaType mediaType) {
         this.mediaType = mediaType

@@ -29,7 +29,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
  */
 class Response implements ParserResponse {
 
-    SwaggerResponse response
+    private SwaggerResponse response
 
     Response (SwaggerResponse response) {
         this.response = response

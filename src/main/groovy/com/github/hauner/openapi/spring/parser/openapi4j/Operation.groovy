@@ -21,6 +21,9 @@ import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 import com.github.hauner.openapi.spring.parser.Response as ParserResponse
+import org.openapi4j.parser.model.v3.Operation as O4jOperation
+import org.openapi4j.parser.model.v3.Parameter as O4jParameter
+import org.openapi4j.parser.model.v3.Response as O4jResponse
 
 /**
  * openapi4j Operation abstraction.
@@ -30,9 +33,9 @@ import com.github.hauner.openapi.spring.parser.Response as ParserResponse
 class Operation implements ParserOperation {
 
     HttpMethod method
-    io.swagger.v3.oas.models.Operation operation
+    private O4jOperation operation
 
-    Operation (HttpMethod method, io.swagger.v3.oas.models.Operation operation) {
+    Operation (HttpMethod method, O4jOperation operation) {
         this.method = method
         this.operation = operation
 
@@ -40,27 +43,41 @@ class Operation implements ParserOperation {
 
     @Override
     List<ParserParameter> getParameters () {
-        return null
+        def params = []
+        operation.parameters.each { O4jParameter p ->
+            params.add (new Parameter(p))
+        }
+        params
     }
 
     @Override
     ParserRequestBody getRequestBody () {
-        return null
+        if (!operation.requestBody) {
+            return null
+        }
+
+        new RequestBody (operation.requestBody)
     }
 
     @Override
     Map<String, ParserResponse> getResponses () {
-        return null
+        def content = [:] as LinkedHashMap
+
+        operation.responses.each { Map.Entry<String, O4jResponse> entry ->
+            content.put (entry.key, new Response(entry.value))
+        }
+
+        content
     }
 
     @Override
     boolean hasTags () {
-        return false
+        operation.tags ? !operation.tags.empty : false
     }
 
     @Override
     String getFirstTag () {
-        return null
+        operation.tags.first ()
     }
 
 }

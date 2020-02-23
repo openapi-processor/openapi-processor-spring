@@ -29,7 +29,7 @@ import io.swagger.v3.oas.models.parameters.RequestBody as SwaggerRequestBody
 
 class RequestBody implements ParserRequestBody {
 
-    SwaggerRequestBody requestBody
+    private SwaggerRequestBody requestBody
 
     RequestBody (SwaggerRequestBody requestBody) {
         this.requestBody = requestBody
@@ -39,7 +39,6 @@ class RequestBody implements ParserRequestBody {
     Boolean getRequired () {
         requestBody.required
     }
-
 
     Map<String, ParserMediaType> getContent () {
         def content = [:] as LinkedHashMap

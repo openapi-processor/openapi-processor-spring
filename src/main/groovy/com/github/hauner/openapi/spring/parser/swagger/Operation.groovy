@@ -34,7 +34,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
 class Operation implements ParserOperation {
 
     HttpMethod method
-    SwaggerOperation operation
+    private SwaggerOperation operation
 
     Operation (HttpMethod method, SwaggerOperation operation) {
         this.method = method
@@ -78,11 +78,6 @@ class Operation implements ParserOperation {
     @Override
     String getFirstTag () {
         operation.tags.first ()
-    }
-
-    @Deprecated
-    SwaggerOperation getOperation () {
-        operation
     }
 
 }

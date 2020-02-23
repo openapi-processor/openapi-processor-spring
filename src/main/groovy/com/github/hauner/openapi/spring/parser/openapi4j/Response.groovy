@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
 import com.github.hauner.openapi.spring.parser.Response as ParserResponse
+import org.openapi4j.parser.model.v3.MediaType as O4jMediaType
+import org.openapi4j.parser.model.v3.Response as O4jResponse
 
 /**
  * openapi4j Response abstraction.
@@ -26,9 +28,21 @@ import com.github.hauner.openapi.spring.parser.Response as ParserResponse
  */
 class Response implements ParserResponse {
 
+    private O4jResponse response
+
+    Response (O4jResponse response) {
+        this.response = response
+    }
+
     @Override
     Map<String, ParserMediaType> getContent () {
-        return null
+        def content = [:] as LinkedHashMap
+
+        response.contentMediaTypes.each { Map.Entry<String, O4jMediaType> entry ->
+            content.put (entry.key, new MediaType (entry.value))
+        }
+
+        content
     }
 
 }

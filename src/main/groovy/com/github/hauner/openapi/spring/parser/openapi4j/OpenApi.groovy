@@ -39,8 +39,8 @@ class OpenApi implements ParserOpenApi {
     }
 
     @Override
-    Map<String, com.github.hauner.openapi.spring.parser.Path> getPaths () {
-        Map<String, ParserPath> paths = new LinkedHashMap<>()
+    Map<String, ParserPath> getPaths () {
+        Map<String, ParserPath> paths = new LinkedHashMap<> ()
 
         api.paths.each { Map.Entry<String, O4jPath> pathEntry ->
             paths.put (pathEntry.key, new Path (pathEntry.key, pathEntry.value))
@@ -51,7 +51,7 @@ class OpenApi implements ParserOpenApi {
 
     @Override
     ParserRefResolver getRefResolver () {
-        new RefResolver(api.components)
+        new RefResolver (api.components)
     }
 
     @Override

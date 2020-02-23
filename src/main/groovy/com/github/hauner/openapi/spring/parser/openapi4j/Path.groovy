@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.parser.openapi4j
 
+import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import org.openapi4j.parser.model.v3.Path as Oa4jPath
@@ -41,7 +42,9 @@ class Path implements ParserPath {
 
         HttpMethod.values ().each {
             def op = info."${it.method}"
-            ops.add (new Operation(it, op))
+            if (op != null) {
+                ops.add (new Operation(it, op))
+            }
         }
 
         ops

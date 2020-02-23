@@ -27,7 +27,7 @@ import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
  */
 class Parameter implements ParserParameter {
 
-    SwaggerParameter parameter
+    private SwaggerParameter parameter
 
     Parameter (SwaggerParameter parameter) {
         this.parameter = parameter
@@ -50,7 +50,7 @@ class Parameter implements ParserParameter {
 
     @Override
     Boolean isRequired () {
-        parameter.required
+        parameter.required != null ?: false
     }
 
 }

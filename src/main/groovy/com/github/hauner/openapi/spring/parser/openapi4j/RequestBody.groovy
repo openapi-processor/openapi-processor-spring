@@ -18,7 +18,8 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.MediaType as ParserMediaType
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
-
+import org.openapi4j.parser.model.v3.MediaType as O4jMediaType
+import org.openapi4j.parser.model.v3.RequestBody as O4jRequestBody
 
 /**
  * openapi4j RequestBody abstraction.
@@ -27,14 +28,26 @@ import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
  */
 class RequestBody implements ParserRequestBody {
 
+    private O4jRequestBody requestBody
+
+    RequestBody (O4jRequestBody requestBody) {
+        this.requestBody = requestBody
+    }
+
     @Override
     Boolean getRequired () {
-        return null
+        requestBody.required
     }
 
     @Override
     Map<String, ParserMediaType> getContent () {
-        return null
+        def content = [:] as LinkedHashMap
+
+        requestBody.content.each { Map.Entry<String, O4jMediaType> entry ->
+            content.put (entry.key, new MediaType (entry.value))
+        }
+
+        content
     }
 
 }

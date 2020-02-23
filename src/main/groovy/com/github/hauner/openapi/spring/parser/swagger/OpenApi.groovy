@@ -19,7 +19,6 @@ package com.github.hauner.openapi.spring.parser.swagger
 import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
 import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
-import io.swagger.v3.oas.models.OpenAPI as SwaggerApi
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
@@ -38,7 +37,7 @@ class OpenApi implements ParserOpenApi {
 
     @Override
     Map<String, ParserPath> getPaths () {
-        Map<String, com.github.hauner.openapi.spring.parser.Path> paths = new LinkedHashMap<>()
+        Map<String, ParserPath> paths = new LinkedHashMap<> ()
 
         result.openAPI.paths.each { Map.Entry<String, SwaggerPath> pathEntry ->
             paths.put (pathEntry.key, new Path (pathEntry.key, pathEntry.value))
@@ -49,12 +48,7 @@ class OpenApi implements ParserOpenApi {
 
     @Override
     ParserRefResolver getRefResolver () {
-        new RefResolver(result.openAPI.components)
-    }
-
-    @Deprecated
-    SwaggerApi getOpenAPI () {
-        result.openAPI
+        new RefResolver (result.openAPI.components)
     }
 
     @Override
@@ -62,7 +56,7 @@ class OpenApi implements ParserOpenApi {
         print (result.messages)
     }
 
-    private static print(List<String> warnings) {
+    private static print (List<String> warnings) {
         if (warnings.empty) {
             return
         }

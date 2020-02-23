@@ -44,12 +44,12 @@ class Schema implements ParserSchema {
 
     @Override
     String getRef () {
-        schema.$ref
+        schema.ref
     }
 
     @Override
     List<?> getEnum () {
-        schema.enum
+        schema.enums
     }
 
     @Override
