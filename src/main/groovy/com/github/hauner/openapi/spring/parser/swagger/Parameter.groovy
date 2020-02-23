@@ -50,7 +50,7 @@ class Parameter implements ParserParameter {
 
     @Override
     Boolean isRequired () {
-        parameter.required != null ?: false
+        parameter.required != null ? parameter.required : false
     }
 
 }
