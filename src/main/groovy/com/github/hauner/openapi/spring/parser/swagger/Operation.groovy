@@ -50,6 +50,10 @@ class Operation implements ParserOperation {
 
     @Override
     ParserRequestBody getRequestBody () {
+        if (!operation.requestBody) {
+            return null
+        }
+
         new RequestBody (operation.requestBody)
     }
 

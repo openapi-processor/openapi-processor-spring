@@ -18,4 +18,6 @@ package com.github.hauner.openapi.spring.parser
 
 interface RequestBody {
 
+    Boolean getRequired ()
+
 }

@@ -28,4 +28,9 @@ class RequestBody implements ParserRequestBody {
         this.requestBody = requestBody
     }
 
+    @Override
+    Boolean getRequired () {
+        requestBody.required
+    }
+
 }

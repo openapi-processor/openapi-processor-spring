@@ -46,6 +46,7 @@ import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 import com.github.hauner.openapi.spring.parser.swagger.Operation
 import com.github.hauner.openapi.spring.parser.swagger.Parser
 import com.github.hauner.openapi.spring.parser.swagger.RefResolver
@@ -124,7 +125,6 @@ class ApiConverter {
             ParserPath pathValue = pathEntry.value
 
             def operations = pathValue.operations
-
             operations.each { ParserOperation op ->
                 Interface itf = createInterface (path, op, interfaces)
 
@@ -162,7 +162,7 @@ class ApiConverter {
             SwaggerOperation op = (operation as Operation).operation
 
             collectParameters (operation.parameters, ep, dataTypes, resolver)
-            collectRequestBody (op.requestBody, ep, dataTypes, resolver)
+            collectRequestBody (operation.requestBody, ep, dataTypes, resolver)
             collectResponses (op.responses, ep, dataTypes, resolver)
             ep
 
@@ -183,14 +183,15 @@ class ApiConverter {
         }
     }
 
-    private void collectRequestBody (RequestBody requestBody, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
+    private void collectRequestBody (ParserRequestBody requestBody, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
         if (requestBody == null) {
             return
         }
 
         def required = requestBody.required != null ?: false
+        def rb = requestBody.requestBody
 
-        requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
+        rb.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
             def contentType = requestBodyEntry.key
             def reqBody = requestBodyEntry.value
 
