@@ -46,16 +46,12 @@ import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.Path as ParserPath
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.spring.parser.Response as ParserResponse
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
 import com.github.hauner.openapi.spring.parser.swagger.Operation
 import com.github.hauner.openapi.spring.parser.swagger.Schema
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
-import io.swagger.v3.oas.models.media.MediaType
-import io.swagger.v3.oas.models.Operation as SwaggerOperation
-import io.swagger.v3.oas.models.parameters.RequestBody
-import io.swagger.v3.oas.models.responses.ApiResponse
-import io.swagger.v3.oas.models.responses.ApiResponses
 
 /**
  * Converts the open api model to a new model that is better suited for generating source files
@@ -154,11 +150,9 @@ class ApiConverter {
         Endpoint ep = new Endpoint (path: path, method: operation.method)
 
         try {
-            SwaggerOperation op = (operation as Operation).operation
-
             collectParameters (operation.parameters, ep, dataTypes, resolver)
             collectRequestBody (operation.requestBody, ep, dataTypes, resolver)
-            collectResponses (op.responses, ep, dataTypes, resolver)
+            collectResponses (operation.responses, ep, dataTypes, resolver)
             ep
 
         } catch (UnknownDataTypeException e) {
@@ -203,8 +197,8 @@ class ApiConverter {
         }
     }
 
-    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
-        responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+    private collectResponses (Map<String, ParserResponse> responses, Endpoint ep, DataTypes dataTypes, ParserRefResolver resolver) {
+        responses.each { Map.Entry<String, ParserResponse> responseEntry ->
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
 
@@ -221,6 +215,7 @@ class ApiConverter {
                 ep.addResponses (httpStatus, results)
             }
         }
+
     }
 
     private ModelParameter createParameter (String path, ParserParameter parameter, DataTypes dataTypes, resolver) {
@@ -280,10 +275,10 @@ class ApiConverter {
         }
     }
 
-    private List<Response> createResponses (String path, String httpStatus, ApiResponse apiResponse, DataTypes dataTypes, ParserRefResolver resolver) {
+    private List<Response> createResponses (String path, String httpStatus, ParserResponse response, DataTypes dataTypes, ParserRefResolver resolver) {
         def responses = []
 
-        apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
+        response.content.each { Map.Entry<String, ParserMediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
             def schema = mediaType.schema
@@ -292,16 +287,16 @@ class ApiConverter {
                 path: path,
                 contentType: contentType,
                 name: getInlineResponseName (path, httpStatus),
-                schema: new Schema(schema),
+                schema: schema,
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
-            def response = new Response (
+            def resp = new Response (
                 contentType: contentType,
                 responseType: dataType)
 
-            responses.add (response)
+            responses.add (resp)
         }
 
         responses

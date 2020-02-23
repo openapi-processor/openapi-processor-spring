@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
+import com.github.hauner.openapi.spring.parser.Response as ParserResponse
 
 /**
  * openapi4j Operation abstraction.
@@ -44,6 +45,11 @@ class Operation implements ParserOperation {
 
     @Override
     ParserRequestBody getRequestBody () {
+        return null
+    }
+
+    @Override
+    Map<String, ParserResponse> getResponses () {
         return null
     }
 

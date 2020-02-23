@@ -20,8 +20,10 @@ import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.spring.parser.RequestBody as ParserRequestBody
+import com.github.hauner.openapi.spring.parser.Response as ParserResponse
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
+import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
 
 
 /**
@@ -55,6 +57,17 @@ class Operation implements ParserOperation {
         }
 
         new RequestBody (operation.requestBody)
+    }
+
+    @Override
+    Map<String, ParserResponse> getResponses () {
+        def content = [:] as LinkedHashMap
+
+        operation.responses.each { Map.Entry<String, SwaggerResponse> entry ->
+            content.put (entry.key, new Response(entry.value))
+        }
+
+        content
     }
 
     @Override
