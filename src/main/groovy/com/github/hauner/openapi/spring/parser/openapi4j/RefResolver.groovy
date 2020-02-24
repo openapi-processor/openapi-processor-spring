@@ -18,7 +18,8 @@ package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
-import org.openapi4j.parser.model.v3.Components as O4jComponents
+import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
+import org.openapi4j.parser.model.v3.Schema as O4jSchema
 
 /**
  * openapi4j $ref resolver.
@@ -27,15 +28,17 @@ import org.openapi4j.parser.model.v3.Components as O4jComponents
  */
 class RefResolver implements ParserRefResolver {
 
-    private O4jComponents components
+    private O4jOpenApi api
 
-    RefResolver (O4jComponents components) {
-        this.components = components
+    RefResolver (O4jOpenApi api) {
+        this.api = api
     }
 
     @Override
-    ParserSchema resolve (String ref) {
-        new Schema (components.schemas.get (getRefName (ref)))
+    ParserSchema resolve (ParserSchema ref) {
+        O4jSchema o4jSchema = (ref as Schema).schema
+        def resolved = o4jSchema.copy (api.context, true)
+        return new Schema (resolved)
     }
 
     private String getRefName (String ref) {

@@ -51,7 +51,7 @@ class OpenApi implements ParserOpenApi {
 
     @Override
     ParserRefResolver getRefResolver () {
-        new RefResolver (api.components)
+        new RefResolver (api)
     }
 
     @Override

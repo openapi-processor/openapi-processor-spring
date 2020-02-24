@@ -27,7 +27,7 @@ class ProcessorPendingTest extends ProcessorTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'response-content-multiple')
+              new TestSet(name: 'ref-into-another-file')
         ]
     }
 

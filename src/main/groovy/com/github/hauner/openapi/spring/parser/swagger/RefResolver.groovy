@@ -34,8 +34,8 @@ class RefResolver implements ParserRefResolver {
     }
 
     @Override
-    ParserSchema resolve (String ref) {
-        new Schema (components.schemas.get (getRefName (ref)))
+    ParserSchema resolve (ParserSchema ref) {
+        new Schema (components.schemas.get (getRefName (ref.ref)))
     }
 
     private String getRefName (String ref) {

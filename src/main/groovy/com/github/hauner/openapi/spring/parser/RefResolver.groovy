@@ -23,6 +23,6 @@ package com.github.hauner.openapi.spring.parser
  */
 interface RefResolver {
 
-    Schema resolve (String ref)
+    Schema resolve (Schema ref)
 
 }

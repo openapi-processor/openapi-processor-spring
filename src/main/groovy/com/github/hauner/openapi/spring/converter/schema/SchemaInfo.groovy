@@ -69,7 +69,7 @@ class SchemaInfo implements MappingSchema {
         new SchemaInfo (
             path: path,
             name: getRefName (schema),
-            schema: resolver.resolve (schema.ref),
+            schema: resolver.resolve (schema),
             resolver: resolver)
     }
 
@@ -99,8 +99,6 @@ class SchemaInfo implements MappingSchema {
             path: path,
             name: schema.item.type,
             schema: schema.item,
-//            name: (schema as ArraySchema).items.type,
-//            schema: (schema as ArraySchema).items,
            resolver: resolver)
     }
 
