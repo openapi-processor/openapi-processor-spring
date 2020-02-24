@@ -16,18 +16,20 @@
 
 package com.github.hauner.openapi.processor
 
+import com.github.hauner.openapi.spring.parser.ParserType
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-@Ignore
+//@Ignore
 @RunWith(Parameterized)
 class ProcessorPendingTest extends ProcessorTestBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'ref-into-another-file')
+              new TestSet(name: 'ref-into-another-file', parser: ParserType.SWAGGER),
+              new TestSet(name: 'ref-into-another-file', parser: ParserType.OPENAPI4J)
         ]
     }
 

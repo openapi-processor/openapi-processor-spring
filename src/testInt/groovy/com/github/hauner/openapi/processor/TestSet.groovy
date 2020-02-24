@@ -16,11 +16,15 @@
 
 package com.github.hauner.openapi.processor
 
+import com.github.hauner.openapi.spring.parser.ParserType
+
 class TestSet {
     String name
+    ParserType parser = ParserType.SWAGGER
 
     @Override
     String toString () {
         name
     }
+
 }

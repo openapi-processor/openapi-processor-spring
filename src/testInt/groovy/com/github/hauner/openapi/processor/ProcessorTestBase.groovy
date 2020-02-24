@@ -51,7 +51,7 @@ options:
 
         def processor = new SpringProcessor()
         def options = [
-            parser: "OPENAPI4J",
+            parser: testSet.parser.toString (),
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root
         ]
