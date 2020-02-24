@@ -119,7 +119,7 @@ class DataTypeConverterSpec extends Specification {
 
         def resolver = new RefResolver () {
             @Override
-            Schema resolve (String ref) {
+            Schema resolve (Schema ref) {
                 barSchema
             }
         }

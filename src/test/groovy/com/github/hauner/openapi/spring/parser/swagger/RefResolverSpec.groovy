@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.parser.swagger
 
 import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.spring.parser.Schema
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
@@ -68,12 +69,20 @@ components:
         value:
           type: string
         
-""", ParserType.OPENAPI4J)
+""", ParserType.SWAGGER)
+
+        def schemaA = Stub (Schema) {
+            getRef () >> '#/components/schemas/Schema'
+        }
+
+        def schemaB = Stub (Schema) {
+            getRef () >> '#/components/schemas/OtherSchema'
+        }
 
         when:
         def resolver = openApi.refResolver
-        def schema = resolver.resolve('#/components/schemas/Schema')
-        def other = resolver.resolve('#/components/schemas/OtherSchema')
+        def schema = resolver.resolve (schemaA)
+        def other = resolver.resolve (schemaB)
 
         then:
         schema
