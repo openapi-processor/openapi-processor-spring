@@ -42,6 +42,7 @@ import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
+import com.github.hauner.openapi.spring.model.datatypes.LazyDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
@@ -55,9 +56,12 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 class DataTypeConverter {
 
     private ApiOptions options
+    private List<SchemaInfo> current
+
 
     DataTypeConverter(ApiOptions options) {
         this.options = options
+        this.current = []
     }
 
     DataType none() {
@@ -74,19 +78,28 @@ class DataTypeConverter {
      * @return the resulting java data type
      */
     DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
+        if (isLoop (dataTypeInfo)) {
+            return new LazyDataType (info: dataTypeInfo, dataTypes: dataTypes)
+        }
 
+        push (dataTypeInfo)
+
+        DataType result
         if (dataTypeInfo.isRefObject ()) {
-            createRefDataType(dataTypeInfo, dataTypes)
+            result = createRefDataType(dataTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isArray ()) {
-            createArrayDataType (dataTypeInfo, dataTypes)
+            result = createArrayDataType (dataTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isObject ()) {
-            createObjectDataType (dataTypeInfo, dataTypes)
+            result = createObjectDataType (dataTypeInfo, dataTypes)
 
         } else {
-            createSimpleDataType (dataTypeInfo, dataTypes)
+            result = createSimpleDataType (dataTypeInfo, dataTypes)
         }
+
+        pop ()
+        result
     }
 
     private DataType createArrayDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
@@ -250,7 +263,7 @@ class DataTypeConverter {
         enumType
     }
 
-    TargetType getMappedDataType (SchemaType schemaType) {
+    private TargetType getMappedDataType (SchemaType schemaType) {
         // check endpoint mappings
         List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
         if (!endpointMatches.empty) {
@@ -291,6 +304,42 @@ class DataTypeConverter {
 
         TypeMapping match = typeMatches.first () as TypeMapping
         return match.targetType
+    }
+
+    /**
+     * push the current schema info.
+     *
+     * Pushes the given {@code info} onto the in-progress data type stack. It is used to detect
+     * $ref loops.
+     *
+     * @param info the schema info that is currently processed
+     */
+    private void push (SchemaInfo info) {
+        current.push (info)
+    }
+
+    /**
+     * pop the current schema info.
+     *
+     */
+    private void pop () {
+        current.pop ()
+    }
+
+    /**
+     * detect $ref loop.
+     *
+     * returns true if the given {@code info} is currently processed, false otherwise. True indicates
+     * a $ref loop.
+     *
+     * @param info the schema info that is currently processed
+     * @return
+     */
+    private boolean isLoop (SchemaInfo info) {
+        def found = current.find {
+            it.name == info.name
+        }
+        found != null
     }
 
 }
