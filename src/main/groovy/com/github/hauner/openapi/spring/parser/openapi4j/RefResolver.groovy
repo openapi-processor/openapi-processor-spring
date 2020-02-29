@@ -39,7 +39,7 @@ class RefResolver implements ParserRefResolver {
         def resolved
 
         def refName = getRefName (ref.ref)
-        O4jSchema o4jCompSchema = api.components.schemas.get (refName)
+        O4jSchema o4jCompSchema = api.components?.schemas?.get (refName)
         if (o4jCompSchema) {
             resolved = o4jCompSchema
         } else {
