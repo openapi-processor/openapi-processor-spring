@@ -37,16 +37,8 @@ class MethodWriter {
     void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
         target.write ("""\
     ${createMappingAnnotation (endpoint, endpointResponse)}
-    ResponseEntity<${getResponseEntityType(endpointResponse)}> ${createMethodName (endpoint, endpointResponse)}(${createParameters(endpoint)});
+    ResponseEntity<${endpointResponse.responseType}> ${createMethodName (endpoint, endpointResponse)}(${createParameters(endpoint)});
 """)
-    }
-
-    private String getResponseEntityType (EndpointResponse endpointResponse) {
-        if (endpointResponse.hasMultipleResponses ()) {
-            '?'
-        } else {
-            endpointResponse.responseType
-        }
     }
 
     private String createMappingAnnotation (Endpoint endpoint, EndpointResponse endpointResponse) {

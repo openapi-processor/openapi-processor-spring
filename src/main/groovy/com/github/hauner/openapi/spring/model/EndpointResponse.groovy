@@ -36,7 +36,11 @@ class EndpointResponse {
 
 
     String getResponseType () {
-        main.responseType.name
+        if (hasMultipleResponses ()) {
+            '?'
+        } else {
+            main.responseType.name
+        }
     }
 
     String getContentType () {
