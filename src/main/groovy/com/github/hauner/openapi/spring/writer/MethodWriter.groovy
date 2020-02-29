@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
@@ -33,22 +34,22 @@ class MethodWriter {
     ApiOptions apiOptions
     BeanValidationFactory beanValidationFactory
 
-    void write (Writer target, Endpoint endpoint) {
+    void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
         target.write ("""\
-    ${createMappingAnnotation (endpoint)}
-    ResponseEntity<${getResponseEntityType(endpoint)}> ${createMethodName (endpoint)}(${createParameters(endpoint)});
+    ${createMappingAnnotation (endpoint, endpointResponse)}
+    ResponseEntity<${getResponseEntityType(endpointResponse)}> ${createMethodName (endpoint, endpointResponse)}(${createParameters(endpoint)});
 """)
     }
 
-    private String getResponseEntityType (Endpoint endpoint) {
-        if (endpoint.hasMultiStatusResponses ()) {
+    private String getResponseEntityType (EndpointResponse endpointResponse) {
+        if (endpointResponse.hasMultipleResponses ()) {
             '?'
         } else {
-            endpoint.singleResponse.responseType.name
+            endpointResponse.responseType
         }
     }
 
-    private String createMappingAnnotation (Endpoint endpoint) {
+    private String createMappingAnnotation (Endpoint endpoint, EndpointResponse endpointResponse) {
         String mapping = "${endpoint.method.mappingAnnotation}"
         mapping += "("
         mapping += 'path = ' + quote(endpoint.path)
@@ -58,15 +59,15 @@ class MethodWriter {
             mapping += 'consumes = {' + quote(endpoint.requestBody.contentType) + '}'
         }
 
-        if (endpoint.hasResponseContentTypes ()) {
+        def contentTypes = endpointResponse.contentTypes
+        if (!contentTypes.empty) {
             mapping += ", "
             mapping += 'produces = {'
 
-            mapping += endpoint.getResponseContentTypes ()
-                .collect {
-                    quote (it)
-                }
-                .join (', ')
+            mapping += contentTypes.collect {
+                quote (it)
+            }.join (', ')
+
             mapping += '}'
         }
 
@@ -110,8 +111,13 @@ class MethodWriter {
         param
     }
 
-    private String createMethodName (Endpoint endpoint) {
+    private String createMethodName (Endpoint endpoint, EndpointResponse endpointResponse) {
         def tokens = endpoint.path.tokenize ('/')
+
+        if (endpoint.hasMultipleEndpointResponses ()) {
+            tokens += endpointResponse.contentType.tokenize ('/')
+        }
+
         tokens = tokens.collect { Identifier.toCamelCase (it).capitalize () }
         def name = tokens.join ('')
         "${endpoint.method.method}${name}"

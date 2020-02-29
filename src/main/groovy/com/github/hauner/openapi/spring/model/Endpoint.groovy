@@ -54,7 +54,7 @@ class Endpoint {
     }
 
     /**
-     * tes support
+     * test support
      *
      * @param status the response status
      * @return first response of status
@@ -73,52 +73,59 @@ class Endpoint {
     }
 
     /**
-     * return the first response assuming there is only a single successful response.
+     * checks if the endpoint has multiple success responses with different content types.
      *
-     * @return the first response
+     * @return true if condition is met, otherwise false.
      */
-    Response getSingleResponse () {
-        if (hasMultiStatusResponses ()) {
-            println "warning: Endpoint::getSingleResponse() called on a multi status response!"
-        }
-
-        responses
-            .values ()
-            .first ()
-            .first ()
-    }
-
-    Set<String> getResponseImports () {
-        responses
-            .values ()
-            .flatten ()
-            .collect { it.imports }
-            .flatten () as Set<String>
+    boolean hasMultipleEndpointResponses () {
+        endpointResponses.size () > 1
     }
 
     /**
-     * checks if the endpoint contains multiple http status with responses, e.g. for status 200 and
-     * default (or a specific error code).
+     * creates groups from the responses.
      *
-     * @return true if condition is met, else false
+     * if the endpoint does provide its result in multiple content types it will create one entry
+     * for each response kind (main response). if error responses are defined they are added as
+     * error responses.
+     *
+     * this is used to create one controller method for each (successful) response definition.
+     *
+     * @return list of method responses
      */
-    boolean hasMultiStatusResponses () {
-        responses.size () > 1
-    }
-
-    boolean hasResponseContentTypes () {
-        !responseContentTypes.empty
-    }
-
-    List<String> getResponseContentTypes () {
-        def results = []
-        responses.each {
-            def contentType = it.value.first ().contentType
-            if (contentType) {
-                results.add (contentType)
-            }
+    List<EndpointResponse> getEndpointResponses () {
+        List<Response> oks = successResponses
+        List<Response> errors = errorResponses
+        oks.collect {
+            new EndpointResponse(main: it, errors: errors)
         }
-        results
+    }
+
+    /**
+     * finds the success responses
+     */
+    private List<Response> getSuccessResponses () {
+        def success = responses.keySet ()
+            .findAll {
+                it.startsWith ('2')
+            }
+
+        if (success.size () == 1) {
+            return responses."${success.first ()}"
+        }
+
+        println "Endpoint: can't find successful responses (${path}/${success})"
+        []
+    }
+
+    /**
+     * finds the error responses
+     */
+    private List<Response> getErrorResponses () {
+        responses.findAll {
+            !it.key.startsWith ('2')
+        }.collect {
+            it.value.first ()
+        }
     }
 
 }
