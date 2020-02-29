@@ -42,4 +42,5 @@ class NoneDataType implements DataType {
     Set<String> getReferencedImports () {
         []
     }
+
 }
