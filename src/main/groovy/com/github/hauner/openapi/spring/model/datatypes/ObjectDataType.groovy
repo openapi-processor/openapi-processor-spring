@@ -72,4 +72,5 @@ class ObjectDataType implements DataType {
     DataTypeConstraints getConstraints () {
         constraints
     }
+
 }
