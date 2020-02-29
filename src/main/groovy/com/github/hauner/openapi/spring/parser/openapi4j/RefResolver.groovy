@@ -36,9 +36,18 @@ class RefResolver implements ParserRefResolver {
 
     @Override
     ParserSchema resolve (ParserSchema ref) {
-        O4jSchema o4jSchema = (ref as Schema).schema
-        def resolved = o4jSchema.copy (api.context, true)
-        return new Schema (resolved)
+        def resolved
+
+        def refName = getRefName (ref.ref)
+        O4jSchema o4jCompSchema = api.components.schemas.get (refName)
+        if (o4jCompSchema) {
+            resolved = o4jCompSchema
+        } else {
+            O4jSchema o4jSchema = (ref as Schema).schema
+            resolved = o4jSchema.copy (api.context, true)
+        }
+
+        new Schema (resolved)
     }
 
     private String getRefName (String ref) {
