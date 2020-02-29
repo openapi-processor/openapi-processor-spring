@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.processor
 
+import com.github.hauner.openapi.spring.parser.ParserType
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -26,25 +27,36 @@ import org.junit.runners.Parameterized
 @RunWith(Parameterized)
 class ProcessorEndToEndTest extends ProcessorTestBase {
 
+    static def testSets = [
+        'endpoint-exclude',
+        'no-response-content',
+        'params-additional',
+        'params-complex-data-types',
+        'params-enum',
+        'params-path-simple-data-types',
+        'params-request-body',
+        'params-request-body-multipart-form-data',
+        'params-simple-data-types',
+        'params-spring-pageable-mapping',
+        'ref-into-another-file',
+        'response-array-data-type-mapping',
+        'response-complex-data-types',
+        // 'response-content-multiple',
+        'response-simple-data-types',
+        'bean-validation'
+    ]
+
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
-        return [
-            new TestSet(name: 'endpoint-exclude'),
-            new TestSet(name: 'no-response-content'),
-            new TestSet(name: 'params-additional'),
-            new TestSet(name: 'params-complex-data-types'),
-            new TestSet(name: 'params-enum'),
-            new TestSet(name: 'params-path-simple-data-types'),
-            new TestSet(name: 'params-request-body'),
-            new TestSet(name: 'params-request-body-multipart-form-data'),
-            new TestSet(name: 'params-simple-data-types'),
-            new TestSet(name: 'params-spring-pageable-mapping'),
-            new TestSet(name: 'ref-into-another-file'),
-            new TestSet(name: 'response-array-data-type-mapping'),
-            new TestSet(name: 'response-complex-data-types'),
-            new TestSet(name: 'response-simple-data-types'),
-            new TestSet(name: 'bean-validation')
-        ]
+        def swagger = testSets.collect {
+           new TestSet (name: it, parser: ParserType.SWAGGER)
+        }
+
+        def openapi4j = testSets.collect {
+           new TestSet (name: it, parser: ParserType.OPENAPI4J)
+        }
+
+        swagger + openapi4j
     }
 
     ProcessorEndToEndTest (TestSet testSet) {

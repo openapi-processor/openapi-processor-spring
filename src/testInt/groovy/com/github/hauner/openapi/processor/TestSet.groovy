@@ -24,7 +24,7 @@ class TestSet {
 
     @Override
     String toString () {
-        name
+        "${parser.name ().toLowerCase ()} - $name"
     }
 
 }
