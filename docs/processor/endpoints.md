@@ -60,7 +60,7 @@ A client request uses the request `Accept` header to tell the api which result c
 handle. 
 
 Using a single endpoint method it has to decide which response to create. This leads to some boring
-`if/else` code. To avoid this the generatr creates one endpoint method for each possible response.
+`if/else` code. To avoid this the processor creates one endpoint method for each possible response.
 
 For the example above it creates the following interface:
 

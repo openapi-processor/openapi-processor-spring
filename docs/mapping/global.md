@@ -53,7 +53,7 @@ can be mapped to an existing `Book` java type/class by the following mapping:
 
 ```yaml
 - from: Book
-  to: com.github.hauner.openapi.generatr.Book
+  to: com.github.hauner.openapi.oap.Book
 ```
 
 It is also possible to use a predefined OpenAPI type as the `from` type of a type mapping: 
@@ -63,17 +63,17 @@ It is also possible to use a predefined OpenAPI type as the `from` type of a typ
   to: java.util.List
 ```
 
-This tells the generatr to us a `java.util.List` instead of the OpenAPI type `array`.
+This tells the processor to us a `java.util.List` instead of the OpenAPI type `array`.
  
-The **generics** parameter is not required in this special case. The generatr knows `java.util.List`
+The **generics** parameter is not required in this special case. The processor knows `java.util.List`
 and will automatically use the `items` property of the `array` as the generic type.  
 
 <div markdown="1">
 **Important:**
-- OpenAPIs `object` type has no special handling if given as the `from` type. The generatr assumes
+- OpenAPIs `object` type has no special handling if given as the `from` type. The processor assumes
 that it is just a schema name and it will only match if there is schema with the name "object".   
 - global type mappings do not work on OpenAPI inline schemas. Inline schemas do not have a name so
-there is no way for the generatr to recognize it.
+there is no way for the processor to recognize it.
 </div>{: .note .important .mb-6}
 
 ## mapping basic (primitive) types with format
@@ -109,16 +109,16 @@ For example if a `StringPage` schema is defined in the OpenAPI that corresponds 
     - java.lang.String
 ```
 
-The generatr will replace any use of `StringPage` with the **to** type and add the generic types
+The processor will replace any use of `StringPage` with the **to** type and add the generic types
  (in the given order) to the **to** type. 
  
-In case of the example above the generatr will create `Page<String>` instead of `StringPage` with an
+In case of the example above the processor will create `Page<String>` instead of `StringPage` with an
 additional `import` for the generic type (.. ignoring imports on `java.lang`).
 
 <div markdown="1">
 **Important:**
 
-The generatr does support only one level of generics. It is not possible to provide generic parameters
+The processor does support only one level of generics. It is not possible to provide generic parameters
 to generic parameters.
 </div>{: .note .important .mb-6}
 

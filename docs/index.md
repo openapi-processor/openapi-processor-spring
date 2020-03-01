@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 description: "Home Description"
 permalink: /
-date: 2020-02-16
+date: 2020-03-01
 ---
 
 <div style="display: flex; justify-content: flex-end; position: relative; top: 1.5em">
@@ -27,8 +27,9 @@ It is useful in an API first approach where you API is explicitly defined and do
  before it gets implemented. 
 
 The processor generates java interfaces based on the endpoint description of the API and simple POJO
-classes for parameter or response objects defined in th API. It is **your** task to create the controller
-classes that implement the interfaces. 
+classes for parameter or response objects defined in th API. The processor adds all the required
+spring & jackson annotations to the interface and all that is left to **you** is the implementation
+of the generated interfaces. 
  
 The interfaces will help to keep the implementation in sync with the API. If anything relevant changes
 in the API the interface changes and the compiler will warn that the interface is not implemented
@@ -36,10 +37,6 @@ correctly.
 
 See the [processor intro][docs-processor]{:target="_blank"} for a short example.
 {: .mb-6 }
-
-February 2020: The processor is ready to try but note that the it is still in an early state of
-development and may not generate the correct code yet in all cases. See [feedback](#feedback).
-{: .note .info .mb-6}
 
 
 ## table of contents
@@ -72,7 +69,7 @@ See the [release notes][oaps-releases]{:target="_blank"}.
 - generates human readable code.
     
 - gradle support via [openapi-processor-gradle][oap-gradle] plugin (the plugin is currently the only option
- to run the generatr).
+ to run the processor).
 
 - add additional parameters to an endpoint which are not defined in the OpenAPI description. For example to pass
  a `HttpServletRequest` to the endpoint implementation. <span class="label label-green">since 1.0.0.M6</span>
@@ -80,14 +77,14 @@ See the [release notes][oaps-releases]{:target="_blank"}.
 - supports bean validations. The constraints of the openapi description are mapped to java bean validation
  annotations. <span class="label label-green">since 1.0.0.M6</span>
  
-- allows to exclude endpoints from generation. This is useful if the generatr does not create the correct code for
- an endpoint. That way the generatr can still be used for all the other endpoints.
+- allows to exclude endpoints from generation. This is useful if the processor does not create the correct code for
+ an endpoint. That way the processor can still be used for all the other endpoints.
    <span class="label label-green">since 1.0.0.M6</span>
 
 - handle multiple responses by generating one endpoint method for each response content type.
-   <span class="label label-green">since 1.0.0.M8</span>
+   <span class="label label-green">since 1.0.0.M11</span>
 
-- <span class="label label-yellow">planned</span> WebFlux support, may need its own generatr. 
+- <span class="label label-yellow">planned</span> WebFlux support, may need its own processor. 
 
 - the generated code does not use swagger annotations. There is no need to generate the documentation from the code
   when the code is generated from the documentation (i.e. an openapi.yaml). 
@@ -99,10 +96,10 @@ with the [openapi-processor-gradle][oap-gradle] plugin. See [Using Gradle][docs-
 
 ## Feedback
 
-In case some feature is missing or the generated code is not 100% what you would expect create an [issue][oap-spring-issues]
+In case some feature is missing or the generated code is not 100% what you would expect create an [issue][oaps-issues]
 preferably with a test case. Providing a test case will help significantly :-) 
 
-A test case is a single folder with an openapi.yaml file and the expected Java files the generatr should create.
+A test case is a single folder with an openapi.yaml file and the expected Java files the processor should create.
 The structure looks like this:
 
     my-new-test-case/
@@ -136,12 +133,12 @@ openapi-processor-spring  is distributed by [Apache License 2.0][license].
 </ul>
 
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-[badge-ci]: https://github.com/hauner/openapi-generatr-spring/workflows/ci/badge.svg
+[badge-ci]: https://github.com/hauner/openapi-processor-spring/workflows/ci/badge.svg
 
-[workflow-ci]: https://github.com/hauner/openapi-generatr-spring/actions?query=workflow%3Aci
+[workflow-ci]: https://github.com/hauner/openapi-processor-spring/actions?query=workflow%3Aci
 
 [docs-gradle]: /openapi-processor-spring/gradle.html
-[docs-processor]: /openapi-processor-spring/generatr/
+[docs-processor]: /openapi-processor-spring/processor/
 [docs-mapping]: /openapi-gprocessor-spring/mapping/
 
 [bintray]: https://bintray.com/hauner/openapi-processor

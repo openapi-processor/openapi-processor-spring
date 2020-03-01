@@ -52,4 +52,4 @@ the `map` key. The `map` key contains multiple sections to define the different 
 
 ```
 
-[docs-configuration]: /openapi-generatr-spring/generatr/configuration.html
+[docs-configuration]: /openapi-processor-spring/processor/configuration.html

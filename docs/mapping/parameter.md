@@ -37,7 +37,7 @@ java type given by **to**.
 <div markdown="1">
 **Important:**
  
-Since the generatr will simply match the parameters by their name take care that all parameters of
+Since the processor will simply match the parameters by their name take care that all parameters of
 that name should really use the same type!
 </div>{: .note .important .mb-6}
 
@@ -100,7 +100,7 @@ and an openapi.yaml with multiple endpoints having a parameter named "date"
                         type: string
 ```
 
-the generatr will use `java.time.ZonedDateTime` as java type for **all** parameters named "date" in
+the processor will use `java.time.ZonedDateTime` as java type for **all** parameters named "date" in
 **all** endpoints that have a "date" parameter. 
 
 In the example both endpoints would use `java.time.ZonedDateTime` as java type for the "date" parameter.

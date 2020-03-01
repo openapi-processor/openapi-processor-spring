@@ -60,7 +60,7 @@ components:
           type: string
 ```
 
-The second endpoint uses a **schema** with name so the generatr can simply create a POJO using the
+The second endpoint uses a **schema** with name so the processor can simply create a POJO using the
 name as the Java class name. 
 
 ```java
@@ -95,7 +95,7 @@ public class Book {
 }
 ```
 
-The first endpoint has no name so the generatr invents a name based on the endpoint description.
+The first endpoint has no name so the processor invents a name based on the endpoint description.
 In this case the name will be `BookInlineResponse200`. To create a unique name and avoid name collisions
 with other inline objects it is created by concatenating 
 

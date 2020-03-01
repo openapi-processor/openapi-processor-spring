@@ -7,7 +7,7 @@ has_children: true
 
 # Type Mapping
 
-Using type mapping we can tell the generatr to map types (schemas) from an openapi.yaml description to
+Using type mapping we can tell the processor to map types (schemas) from an openapi.yaml description to
 a specific existing java type instead of generating a model class from the source OpenAPI type. 
 
 This can be a type created by us or a type from a framework. For example to map paging parameters and

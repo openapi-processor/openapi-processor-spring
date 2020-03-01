@@ -37,7 +37,7 @@ The interface name used for this api will be `PingApi`. `Ping` because `ping` is
 
 In case no tags are given, all endpoints will be added to an `Api` interface.
 
-The package name gets created from the configurable `packageName` parameter of the generatr and a
+The package name gets created from the configurable `packageName` parameter of the processor and a
 sub package named `api`. 
 
 If the `packageName` is configured as `com.github.hauner.openapi` the final package name for the 

@@ -37,7 +37,7 @@ java type given by **to**.
 <div markdown="1">
 **Important:**
  
-Since the generatr will simply match the content type string take care that all responses of this
+Since the processor will simply match the content type string take care that all responses of this
 content type should really use the same type!
 
 This is probably only useful for vendor content types. Globally mapping the content type for example
@@ -89,5 +89,5 @@ and an openapi.yaml with multiple endpoints returning their result as content ty
  ```
 
 
-the generatr will use `com.github.hauner.openapi.Something` as java type for **all** responses with
+the processor will use `com.github.hauner.openapi.Something` as java type for **all** responses with
 the content type `application/vnd.something`.

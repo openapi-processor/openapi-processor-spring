@@ -89,7 +89,7 @@ The file upload in OpenAPI is described like this:
 
 The `schema` must be of type `object` defining a property for each part in the multipart body.
 
-Instead of generating a `@RequestBody` parameter for the `object` schema the generatr creates
+Instead of generating a `@RequestBody` parameter for the `object` schema the processor creates
 a parameter for each property of the object annotated with `@RequestParam`:
 
 ```java
@@ -109,7 +109,7 @@ a parameter for each property of the object annotated with `@RequestParam`:
 ```
 
 Note that the `file` property (type `string` format `binary`) is mapped to Springs `MultipartFile`
-type. The generatr does not have a default mapping for the `binary` format so to get the code
+type. The processor does not have a default mapping for the `binary` format so to get the code
 above we have to configure it in the type mapping yaml:
 
 ```yaml
