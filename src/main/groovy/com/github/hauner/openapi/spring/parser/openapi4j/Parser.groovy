@@ -32,11 +32,11 @@ class Parser {
     ParserOpenApi parse (String apiPath) {
 
         OpenApi3 api = new OpenApi3Parser ()
-            .parse (new File (apiPath), true)
+            .parse (new File (apiPath), false)
 
-        ValidationResults results = OpenApi3Validator
-            .instance ()
-            .validate (api)
+        ValidationResults results = null //OpenApi3Validator
+//            .instance ()
+//            .validate (api)
 
         new OpenApi (api, results)
     }
