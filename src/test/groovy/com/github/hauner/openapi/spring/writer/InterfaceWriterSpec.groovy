@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody
@@ -259,6 +260,40 @@ import ${pkg}.${type};
 """)
     }
 
+    //@Ignore
+    void "writes multiple response model import"() {
+        def pkg = 'model.package'
+        def type = 'Model'
+
+        def pkg2 = 'model.package2'
+        def type2 = 'Model2'
+
+        def apiItf = new Interface (name: 'name', endpoints: [
+            new Endpoint (path: 'path', method: HttpMethod.GET, responses: [
+                '200': [
+                    new Response (
+                        contentType: 'application/json',
+                        responseType: new ObjectDataType (type: type, pkg: pkg)),
+                    new Response (
+                        contentType: 'text/plain',
+                        responseType: new ObjectDataType (type: type2, pkg: pkg2))
+                ]
+            ])
+        ])
+
+        when:
+        writer.write (target, apiItf)
+
+        then:
+        def result = extractImports (target.toString ())
+        result.contains("""\
+import ${pkg}.${type};
+""")
+        result.contains("""\
+import ${pkg2}.${type2};
+""")
+    }
+
     void "sorts imports as strings"() {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
@@ -316,7 +351,7 @@ public interface NameApi {
             new Endpoint(path: 'path2', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
         ]
 
-        writer.methodWriter.write (_ as Writer, _ as Endpoint) >> {
+        writer.methodWriter.write (_ as Writer, _ as Endpoint, _ as EndpointResponse) >> {
             Writer target = it.get (0)
             Endpoint e = it.get (1)
             target.write ("// ${e.path}\n")

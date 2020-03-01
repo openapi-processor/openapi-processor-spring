@@ -51,7 +51,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -67,7 +67,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         def rsp = endpoint.getFirstResponse ('200')
@@ -99,7 +99,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         def rsp = endpoint.getFirstResponse ('200')
@@ -118,7 +118,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         def rsp = endpoint.getFirstResponse ('200')
@@ -137,7 +137,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         def rsp = endpoint.getFirstResponse ('200')
@@ -156,7 +156,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         def rsp = endpoint.getFirstResponse ('200')
@@ -174,7 +174,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -191,7 +191,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -209,7 +209,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -226,7 +226,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -243,7 +243,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -260,7 +260,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -282,7 +282,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -303,7 +303,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -320,7 +320,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -337,7 +337,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -358,7 +358,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -380,7 +380,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -399,7 +399,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -418,7 +418,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\
@@ -429,7 +429,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes mapping annotation with multiple result content types" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200'    : [
+            '200' : [
                 new Response (contentType: 'application/json',
                     responseType: new CollectionDataType (item: new StringDataType ()))
             ],
@@ -440,7 +440,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString ().contains ("""\
@@ -450,7 +450,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes method with any response type when it has multiple result contents" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200'    : [
+            '200' : [
                 new Response (contentType: 'application/json',
                     responseType: new CollectionDataType (item: new StringDataType ()))
             ],
@@ -461,7 +461,7 @@ class MethodWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint)
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         then:
         target.toString () == """\

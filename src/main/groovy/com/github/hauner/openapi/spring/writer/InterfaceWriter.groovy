@@ -24,7 +24,7 @@ import com.github.hauner.openapi.spring.model.Interface
  * Writer for Java interfaces.
  *
  * @author Martin Hauner
- * @authro Bastian Wilhelm
+ * @author Bastian Wilhelm
  */
 class InterfaceWriter {
     ApiOptions apiOptions
@@ -44,15 +44,17 @@ class InterfaceWriter {
 
         target.write ("public interface ${itf.interfaceName} {\n\n")
 
-        itf.endpoints.each {
-            methodWriter.write(target, it)
-            target.write ("\n")
+        itf.endpoints.each { ep ->
+            ep.endpointResponses.each { er ->
+                methodWriter.write(target, ep, er)
+                target.write ("\n")
+            }
         }
 
         target.write ("}\n")
     }
 
-    List<String> collectImports(String packageName, List<Endpoint> endpoints) {
+    List<String> collectImports (String packageName, List<Endpoint> endpoints) {
         Set<String> imports = []
 
         imports.add ('org.springframework.http.ResponseEntity')
@@ -80,8 +82,12 @@ class InterfaceWriter {
                 }
             }
 
-            // may add unnecessary imports with multiple status responses
-            imports.addAll (ep.responseImports)
+            ep.endpointResponses.each { mr ->
+                def responseImports = mr.responseImports
+                if (!responseImports.empty) {
+                    imports.addAll (responseImports)
+                }
+            }
         }
 
         new ImportFilter ()
