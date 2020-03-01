@@ -32,19 +32,24 @@ class Parser {
         switch (processorOptions.parser as ParserType) {
 
             case ParserType.SWAGGER:
+                println "info: using SWAGGER parser"
+
                 def parser = new Swagger ()
                 return parser.parse (apiPath)
 
             case ParserType.OPENAPI4J:
+                println "info: using OPENAPI4J parser"
+
                 def parser = new OpenApi4J ()
                 return parser.parse (apiPath)
 
             default:
                 if (processorOptions.parser != null) {
                     println "warning: unknown parser type: ${processorOptions.parser}"
-                    println "warning: available parser: SWAGGER, OPENAPI4J"
+                    println "warning: available parsers: SWAGGER, OPENAPI4J"
                 }
-                println "warning: using fallback parser SWAGGER"
+
+                println "info: using SWAGGER parser"
 
                 def parser = new Swagger ()
                 return parser.parse (apiPath)

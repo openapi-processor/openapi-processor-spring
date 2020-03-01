@@ -56,7 +56,7 @@ class OpenApi implements ParserOpenApi {
 
     @Override
     void printWarnings () {
-        println "not implemented"
+        println "openapi4j: warnings are not yet implemented"
     }
 
 }
