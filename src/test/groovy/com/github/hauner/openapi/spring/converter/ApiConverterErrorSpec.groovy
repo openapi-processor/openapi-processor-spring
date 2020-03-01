@@ -31,7 +31,7 @@ class ApiConverterErrorSpec extends Specification {
 
     def appender
 
-    void setup() {
+    void setup () {
         converter = new ApiConverter ()
 
         appender = new ListAppender<ILoggingEvent> ()

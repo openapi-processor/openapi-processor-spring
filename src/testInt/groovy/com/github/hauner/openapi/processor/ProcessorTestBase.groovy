@@ -46,11 +46,12 @@ options:
     }
 
     @Test
-    void "generatr creates expected files for api set "() {
+    void "processor creates expected files for api set "() {
         def source = testSet.name
 
-        def generatr = new SpringProcessor()
+        def processor = new SpringProcessor()
         def options = [
+            parser: testSet.parser.toString (),
             apiPath: "./src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root
         ]
@@ -70,7 +71,7 @@ options:
         def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
 
         when:
-        generatr.run (options)
+        processor.run (options)
 
         then:
         def generatedFiles = collectGenerated(generatedPath)

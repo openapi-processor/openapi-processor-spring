@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.support.parser
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.parser.OpenApi as ParserOpenApi
+import com.github.hauner.openapi.spring.parser.swagger.OpenApi
+import com.github.hauner.openapi.spring.parser.swagger.Parser
+import io.swagger.v3.parser.OpenAPIV3Parser
 
 /**
- * Used to remember the http method of an OpenAPI operation.
+ * openapi4j parser.
  *
  * @author Martin Hauner
  */
-trait HttpMethodTrait {
-    HttpMethod httpMethod
+class SwaggerParser extends Parser {
+
+    ParserOpenApi parseYaml (String apiYaml) {
+        def result = new OpenAPIV3Parser ()
+            .readContents (apiYaml)
+
+        return new OpenApi (result)
+    }
+
 }

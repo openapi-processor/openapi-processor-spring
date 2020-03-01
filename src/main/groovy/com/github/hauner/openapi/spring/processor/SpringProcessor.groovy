@@ -19,6 +19,8 @@ package com.github.hauner.openapi.spring.processor
 import com.github.hauner.openapi.api.OpenApiProcessor
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.Parser
 import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter
@@ -26,9 +28,6 @@ import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MethodWriter
 import com.github.hauner.openapi.spring.writer.StringEnumWriter
-import io.swagger.v3.parser.OpenAPIV3Parser
-import io.swagger.v3.parser.core.models.ParseOptions
-import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
  *  Entry point of openapi-processor-spring.
@@ -45,22 +44,15 @@ class SpringProcessor implements OpenApiProcessor {
 
     @Override
     void run (Map<String, ?> processorOptions) {
-        ParseOptions opts = new ParseOptions(
-            // loads $refs to other files into #/components/schema and replaces the $refs to the
-            // external files with $refs to #/components/schema.
-            resolve: true
-        )
-
-        SwaggerParseResult result = new OpenAPIV3Parser ()
-            .readLocation (processorOptions.apiPath as String, null, opts)
-
+        def parser = new Parser ()
+        OpenApi openapi = parser.parse (processorOptions)
         if (processorOptions.showWarnings) {
-            printWarnings(result.messages)
+            openapi.printWarnings ()
         }
 
         def options = convertOptions (processorOptions)
         def cv = new ApiConverter(options)
-        def api = cv.convert (result.openAPI)
+        def api = cv.convert (openapi)
 
         def headerWriter = new HeaderWriter()
         def beanValidationFactory = new BeanValidationFactory()
@@ -126,16 +118,6 @@ class SpringProcessor implements OpenApiProcessor {
         }
 
         options
-    }
-
-    private static printWarnings(List<String> warnings) {
-        if (warnings.empty) {
-            return
-        }
-
-        warnings.each {
-            println it
-        }
     }
 
 }

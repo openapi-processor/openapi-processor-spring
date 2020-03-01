@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor
+package com.github.hauner.openapi.spring.support.memory
 
-import com.github.hauner.openapi.spring.parser.ParserType
+/**
+ * in-memory content by path.
+ */
+class Memory {
+    private static final Map<String, byte[]> contents = new HashMap<> ()
 
-class TestSet {
-    String name
-    ParserType parser = ParserType.SWAGGER
+    static byte[] get (String path) {
+        contents.get (path)
+    }
 
-    @Override
-    String toString () {
-        "${parser.name ().toLowerCase ()} - $name"
+    static void add (String path, String data) {
+        add (path, data.getBytes ("UTF-8"))
+    }
+
+    static void add (String path, byte[] data) {
+        contents.put (path, data)
     }
 
 }

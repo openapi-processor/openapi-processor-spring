@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.processor
 
+import com.github.hauner.openapi.spring.parser.ParserType
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -27,7 +28,8 @@ class ProcessorPendingTest extends ProcessorTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'response-content-multiple')
+              new TestSet(name: 'response-complex-data-types', parser: ParserType.SWAGGER),
+              new TestSet(name: 'response-complex-data-types', parser: ParserType.OPENAPI4J)
         ]
     }
 

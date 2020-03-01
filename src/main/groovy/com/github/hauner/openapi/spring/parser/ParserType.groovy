@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor
+package com.github.hauner.openapi.spring.parser
 
-import com.github.hauner.openapi.spring.parser.ParserType
-
-class TestSet {
-    String name
-    ParserType parser = ParserType.SWAGGER
-
-    @Override
-    String toString () {
-        "${parser.name ().toLowerCase ()} - $name"
-    }
-
+/**
+ * Parser types support by the {@code Parser} abstraction.
+ *
+ * @author Martin Hauner
+ */
+enum ParserType {
+    SWAGGER,
+    OPENAPI4J
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor
+package com.github.hauner.openapi.spring.parser
 
-import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.spring.model.HttpMethod
 
-class TestSet {
-    String name
-    ParserType parser = ParserType.SWAGGER
+/**
+ * OpenAPI Operation abstraction.
+ *
+ * @author Martin Hauner
+ */
+interface Operation {
 
-    @Override
-    String toString () {
-        "${parser.name ().toLowerCase ()} - $name"
-    }
+    HttpMethod getMethod()
+    List<Parameter> getParameters ()
+    RequestBody getRequestBody ()
+    Map<String, Response> getResponses ()
+
+    boolean hasTags ()
+
+    String getFirstTag ()
 
 }

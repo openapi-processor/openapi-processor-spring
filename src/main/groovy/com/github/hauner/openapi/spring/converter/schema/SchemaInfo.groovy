@@ -17,9 +17,8 @@
 package com.github.hauner.openapi.spring.converter.schema
 
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
-import groovy.transform.stc.ClosureParams
-import io.swagger.v3.oas.models.media.ArraySchema
-import io.swagger.v3.oas.models.media.Schema
+import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.spring.parser.Schema
 
 /**
  * Helper for {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}. Holds an OpenAPI
@@ -53,9 +52,9 @@ class SchemaInfo implements MappingSchema {
     /**
      * resolver of $ref'erences
      */
-    RefResolver resolver
+    ParserRefResolver resolver
 
-    void eachProperty (@ClosureParams({"String,DataTypeInfo"}) Closure closure) {
+    void eachProperty (/* Closure Params: String, SchemaInfo */ Closure closure) {
         schema.properties.each { Map.Entry<String, Schema> entry ->
             closure (entry.key, buildForNestedType (entry.key, entry.value))
         }
@@ -70,7 +69,7 @@ class SchemaInfo implements MappingSchema {
         new SchemaInfo (
             path: path,
             name: getRefName (schema),
-            schema: resolver.resolve (schema.$ref),
+            schema: resolver.resolve (schema),
             resolver: resolver)
     }
 
@@ -98,8 +97,8 @@ class SchemaInfo implements MappingSchema {
     SchemaInfo buildForItem () {
         new SchemaInfo (
             path: path,
-            name: (schema as ArraySchema).items.type,
-            schema: (schema as ArraySchema).items,
+            name: schema.item.type,
+            schema: schema.item,
            resolver: resolver)
     }
 
@@ -127,7 +126,7 @@ class SchemaInfo implements MappingSchema {
      * @return schema $ref
      */
     String getRef () {
-        schema.$ref
+        schema.ref
     }
 
     /**
@@ -135,7 +134,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return default value or null
      */
-    def getDefaultValue() {
+    def getDefaultValue () {
         schema.default
     }
 
@@ -144,7 +143,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return nullable value or null
      */
-    def getNullable() {
+    def getNullable () {
         schema.nullable
     }
 
@@ -153,7 +152,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return minLength value or null
      */
-    def getMinLength() {
+    def getMinLength () {
         schema.minLength
     }
 
@@ -162,7 +161,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return maxLength value or null
      */
-    def getMaxLength() {
+    def getMaxLength () {
         schema.maxLength
     }
 
@@ -171,7 +170,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return minItems value or null
      */
-    def getMinItems() {
+    def getMinItems () {
         schema.minItems
     }
 
@@ -180,7 +179,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return maxItems value or null
      */
-    def getMaxItems() {
+    def getMaxItems () {
         schema.maxItems
     }
 
@@ -189,7 +188,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return maximum value or null
      */
-    def getMaximum() {
+    def getMaximum () {
         schema.maximum
     }
 
@@ -198,7 +197,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return exclusiveMaximum value or null
      */
-    def getExclusiveMaximum() {
+    def getExclusiveMaximum () {
         schema.exclusiveMaximum
     }
 
@@ -207,7 +206,7 @@ class SchemaInfo implements MappingSchema {
      *
      * @return minimum value or null
      */
-    def getMinimum() {
+    def getMinimum () {
         schema.minimum
     }
 
@@ -216,23 +215,8 @@ class SchemaInfo implements MappingSchema {
      *
      * @return exclusiveMinimum value or null
      */
-    def getExclusiveMinimum() {
+    def getExclusiveMinimum () {
         schema.exclusiveMinimum
-    }
-
-    /**
-     * get the custom Java type (fully qualified) defined via the {@code x-java-type} OpenAPI
-     * extension. If no {@code x-java-type} is set the result is {@code null}.
-     *
-     * @return fully qualified name of the Java type or null if not set
-     */
-    @Deprecated
-    String getXJavaType () {
-        if (!hasExtensions ()) {
-            return null
-        }
-
-        schema.extensions.get ('x-java-type')
     }
 
     boolean isArray () {
@@ -244,7 +228,7 @@ class SchemaInfo implements MappingSchema {
     }
 
     boolean isRefObject () {
-        schema.$ref != null
+        schema.ref != null
     }
 
     boolean isEnum () {
@@ -255,12 +239,8 @@ class SchemaInfo implements MappingSchema {
         schema.enum
     }
 
-    private boolean hasExtensions () {
-        schema.extensions != null
-    }
-
     private String getRefName (Schema schema) {
-        schema.$ref.substring (schema.$ref.lastIndexOf ('/') + 1)
+        schema.ref.substring (schema.ref.lastIndexOf ('/') + 1)
     }
 
     private String getNestedTypeName (String propName) {

@@ -23,7 +23,6 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.schema.RefResolver
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
@@ -39,17 +38,18 @@ import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.model.Response
+import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.MediaType
+import com.github.hauner.openapi.spring.parser.Operation
+import com.github.hauner.openapi.spring.parser.Parameter
+import com.github.hauner.openapi.spring.parser.Path
+import com.github.hauner.openapi.spring.parser.RefResolver
+import com.github.hauner.openapi.spring.parser.Response
+import com.github.hauner.openapi.spring.parser.RequestBody
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.PathItem
-import io.swagger.v3.oas.models.media.MediaType
-import io.swagger.v3.oas.models.parameters.Parameter
-import io.swagger.v3.oas.models.parameters.RequestBody
-import io.swagger.v3.oas.models.responses.ApiResponse
-import io.swagger.v3.oas.models.responses.ApiResponses
 
 /**
  * Converts the open api model to a new model that is better suited for generating source files
@@ -100,26 +100,24 @@ class ApiConverter {
      * @param api the open api model
      * @return source generation model
      */
-    Api convert (OpenAPI api) {
+    Api convert (OpenApi api) {
         def target = new Api ()
         createInterfaces (api, target)
         target
     }
 
-    private void createInterfaces (OpenAPI api, Api target) {
-        def resolver = new RefResolver (api.components)
+    private void createInterfaces (OpenApi api, Api target) {
         Map<String, Interface>interfaces = new HashMap<> ()
 
-        api.paths.each { Map.Entry<String, PathItem> pathEntry ->
+        api.paths.each { Map.Entry<String, Path> pathEntry ->
             String path = pathEntry.key
-            PathItem pathItem = pathEntry.value
+            Path pathValue = pathEntry.value
 
-            def operations = new OperationCollector ()
-                .collect (pathItem)
+            def operations = pathValue.operations
+            operations.each { Operation op ->
+                Interface itf = createInterface (path, op, interfaces)
 
-            operations.each { httpOperation ->
-                Interface itf = createInterface (path, httpOperation, interfaces)
-                Endpoint ep = createEndpoint (path, httpOperation, target.models, resolver)
+                Endpoint ep = createEndpoint (path, op, target.models, api.refResolver)
                 if (ep) {
                     itf.endpoints.add (ep)
                 }
@@ -129,7 +127,7 @@ class ApiConverter {
         target.interfaces = interfaces.values () as List<Interface>
     }
 
-    private Interface createInterface (String path, def operation, Map<String, Interface> interfaces) {
+    private Interface createInterface (String path, Operation operation, Map<String, Interface> interfaces) {
         def targetInterfaceName = getInterfaceName (operation, isExcluded (path))
 
         def itf = interfaces.get (targetInterfaceName)
@@ -146,8 +144,8 @@ class ApiConverter {
         itf
     }
 
-    private Endpoint createEndpoint (String path, def operation, DataTypes dataTypes, RefResolver resolver) {
-        Endpoint ep = new Endpoint (path: path, method: (operation as HttpMethodTrait).httpMethod)
+    private Endpoint createEndpoint (String path, Operation operation, DataTypes dataTypes, RefResolver resolver) {
+        Endpoint ep = new Endpoint (path: path, method: operation.method)
 
         try {
             collectParameters (operation.parameters, ep, dataTypes, resolver)
@@ -181,12 +179,12 @@ class ApiConverter {
 
         requestBody.content.each { Map.Entry<String, MediaType> requestBodyEntry ->
             def contentType = requestBodyEntry.key
-            def reqBody = requestBodyEntry.value
+            def mediaType = requestBodyEntry.value
 
             def info = new SchemaInfo (
                 path: ep.path,
                 name: getInlineRequestBodyName (ep.path),
-                schema: reqBody.schema,
+                schema: mediaType.schema,
                 resolver: resolver)
 
             if (contentType == MULTIPART) {
@@ -197,15 +195,15 @@ class ApiConverter {
         }
     }
 
-    private collectResponses (ApiResponses responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
-        responses.each { Map.Entry<String, ApiResponse> responseEntry ->
+    private collectResponses (Map<String, Response> responses, Endpoint ep, DataTypes dataTypes, RefResolver resolver) {
+        responses.each { Map.Entry<String, Response> responseEntry ->
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
 
             if (!httpResponse.content) {
-                ep.addResponses (httpStatus, [Response.EMPTY])
+                ep.addResponses (httpStatus, [ModelResponse.EMPTY])
             } else {
-                List<Response> results = createResponses (
+                List<ModelResponse> results = createResponses (
                     ep.path,
                     httpStatus,
                     httpResponse,
@@ -215,9 +213,10 @@ class ApiConverter {
                 ep.addResponses (httpStatus, results)
             }
         }
+
     }
 
-    private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, resolver) {
+    private ModelParameter createParameter (String path, Parameter parameter, DataTypes dataTypes, RefResolver resolver) {
         def info = new SchemaInfo (
             path: path,
             name: parameter.name,
@@ -274,10 +273,10 @@ class ApiConverter {
         }
     }
 
-    private List<Response> createResponses (String path, String httpStatus, ApiResponse apiResponse, DataTypes dataTypes, RefResolver resolver) {
+    private List<ModelResponse> createResponses (String path, String httpStatus, Response response, DataTypes dataTypes, RefResolver resolver) {
         def responses = []
 
-        apiResponse.content.each { Map.Entry<String, MediaType> contentEntry ->
+        response.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
             def schema = mediaType.schema
@@ -291,11 +290,11 @@ class ApiConverter {
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
 
-            def response = new Response (
+            def resp = new ModelResponse (
                 contentType: contentType,
                 responseType: dataType)
 
-            responses.add (response)
+            responses.add (resp)
         }
 
         responses
@@ -341,8 +340,8 @@ class ApiConverter {
     private String getInterfaceName (def op, boolean excluded) {
         String targetInterfaceName = INTERFACE_DEFAULT_NAME
 
-        if (hasTags (op)) {
-            targetInterfaceName = op.tags.first ()
+        if ((op.hasTags())) {
+            targetInterfaceName = op.firstTag
         }
 
         if (excluded) {
@@ -350,10 +349,6 @@ class ApiConverter {
         }
 
         targetInterfaceName
-    }
-
-    private boolean hasTags (op) {
-        op.tags && !op.tags.empty
     }
 
 }

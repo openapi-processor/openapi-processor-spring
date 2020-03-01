@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,36 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.spring.parser.openapi4j
 
 import com.github.hauner.openapi.spring.model.HttpMethod
-import io.swagger.v3.oas.models.Operation
-import io.swagger.v3.oas.models.PathItem
+import com.github.hauner.openapi.spring.parser.Operation as ParserOperation
+import com.github.hauner.openapi.spring.parser.Path as ParserPath
+import org.openapi4j.parser.model.v3.Path as Oa4jPath
 
 /**
- * Collects a list of all used http methods of the given path (i.e. endpoint).
+ * openapi4j Path abstraction.
  *
  * @author Martin Hauner
  */
-class OperationCollector {
+class Path implements ParserPath {
 
-    Map<HttpMethod, Operation> collect (PathItem item) {
-        def ops = [:] as Map<HttpMethod, Operation>
+    String path
+    private Oa4jPath info
+
+    Path (String path, Oa4jPath info) {
+        this.path = path
+        this.info = info
+    }
+
+    @Override
+    List<ParserOperation> getOperations () {
+        def ops = []
 
         HttpMethod.values ().each {
-            Operation op = item."${it.method}"
-            if (op) {
-                ops.put (it, op)
+            def op = info."${it.method}"
+            if (op != null) {
+                ops.add (new Operation(it, op))
             }
         }
 

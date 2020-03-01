@@ -18,18 +18,3 @@ paths:
       responses:
         '204':
           description: empty
-
-  /endpoint-optional/{foo}:
-    get:
-      tags:
-        - endpoint
-      parameters:
-        - name: foo
-          description: path, not required, string
-          in: path
-          required: false
-          schema:
-            type: string
-      responses:
-        '204':
-          description: empty
