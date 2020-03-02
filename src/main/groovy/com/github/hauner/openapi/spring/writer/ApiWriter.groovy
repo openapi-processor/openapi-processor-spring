@@ -25,6 +25,8 @@ import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import groovy.util.logging.Slf4j
 
+import static com.github.hauner.openapi.support.Identifier.toClass
+
 /**
  * Root writer for the generated api files.
  *
@@ -66,7 +68,7 @@ class ApiWriter {
         createTargetFolders ()
 
         api.interfaces.each {
-            def target = new File (apiFolder, "${it.interfaceName}.java")
+            def target = new File (apiFolder, "${toClass (it.interfaceName)}.java")
             def writer = new FileWriter(target)
             writeInterface (writer, it)
             writer.close ()
