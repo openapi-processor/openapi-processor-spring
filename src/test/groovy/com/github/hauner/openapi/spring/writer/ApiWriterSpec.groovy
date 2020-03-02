@@ -109,6 +109,31 @@ Bar interface!
 """
     }
 
+    void "generates interface with valid java class name"() {
+        def interfaceWriter = Stub (InterfaceWriter) {
+            write (_ as Writer, _ as Interface) >> {
+                Writer writer = it.get(0)
+                writer.write ('interface!\n')
+            }
+        }
+
+        def opts = new ApiOptions(
+            packageName: 'com.github.hauner.openapi',
+            targetDir: [target.root.toString (), 'java', 'src'].join (File.separator)
+        )
+
+        def api = new Api(interfaces: [
+            new Interface(pkg: "${opts.packageName}.api", name: 'foo-bar'),
+        ])
+
+        when:
+        new ApiWriter (opts, interfaceWriter, null, null, false)
+            .write (api)
+
+        then:
+        new File(getApiPath (opts.targetDir, 'FooBarApi.java')).exists ()
+    }
+
     void "generates model sources in model target folder"() {
         def dataTypeWriter = Stub (DataTypeWriter) {
             write (_ as Writer, _ as ObjectDataType) >> {
