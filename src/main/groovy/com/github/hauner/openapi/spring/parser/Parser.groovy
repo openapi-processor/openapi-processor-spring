@@ -49,8 +49,6 @@ class Parser {
                     println "warning: available parsers: SWAGGER, OPENAPI4J"
                 }
 
-                println "info: using SWAGGER parser"
-
                 def parser = new Swagger ()
                 return parser.parse (apiPath)
         }
