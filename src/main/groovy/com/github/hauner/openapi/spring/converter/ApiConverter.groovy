@@ -154,7 +154,7 @@ class ApiConverter {
             ep
 
         } catch (UnknownDataTypeException e) {
-            log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message)
+            log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message, e)
             null
         }
     }

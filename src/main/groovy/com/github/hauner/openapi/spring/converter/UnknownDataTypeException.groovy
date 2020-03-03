@@ -23,18 +23,20 @@ package com.github.hauner.openapi.spring.converter
  */
 class UnknownDataTypeException extends RuntimeException {
 
+    String name
     String type
     String format
 
-    UnknownDataTypeException(String type, String format) {
+    UnknownDataTypeException(String name, String type, String format) {
         super()
+        this.name = name
         this.type = type
         this.format = format
     }
 
     @Override
     String getMessage () {
-        "unknown schema: $type${format ? "/" + format: ''}"
+        "unknown schema: ${name} of type $type${format ? "/" + format: ''}"
     }
 
 }

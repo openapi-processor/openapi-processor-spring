@@ -240,7 +240,7 @@ class DataTypeConverter {
                 simpleType = new OffsetDateTimeDataType ()
                 break
             default:
-                throw new UnknownDataTypeException(schemaInfo.type, schemaInfo.format)
+                throw new UnknownDataTypeException(schemaInfo.name, schemaInfo.type, schemaInfo.format)
         }
 
         simpleType
