@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.model
 
+import com.github.hauner.openapi.support.Identifier
+
 /**
  * Java interface properties.
  *
@@ -36,10 +38,11 @@ class Interface {
     }
 
     String getInterfaceName() {
-        name.capitalize () + "Api"
+        Identifier.toClass (name) + "Api"
     }
 
     String toString () {
         "$pkg.$name"
     }
+
 }

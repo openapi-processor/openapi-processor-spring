@@ -68,7 +68,7 @@ class ApiWriter {
         createTargetFolders ()
 
         api.interfaces.each {
-            def target = new File (apiFolder, "${toClass (it.interfaceName)}.java")
+            def target = new File (apiFolder, "${it.interfaceName}.java")
             def writer = new FileWriter(target)
             writeInterface (writer, it)
             writer.close ()
