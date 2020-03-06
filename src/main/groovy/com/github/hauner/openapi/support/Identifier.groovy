@@ -44,18 +44,19 @@ class Identifier {
 
         def wordSplit = false
         src.toCharArray ().eachWithIndex { char c, int idx ->
+            def lc = c.toLowerCase ()
 
             if (idx == 0) {
-                if (isValidStart (c)) {
-                    sb.append (c)
+                if (isValidStart (lc)) {
+                    sb.append (lc)
                 }
             } else {
-                if (isValidPart (c)) {
+                if (isValidPart (lc)) {
                     if (wordSplit) {
-                        sb.append (c.toUpperCase ())
+                        sb.append (lc.toUpperCase ())
                         wordSplit = false
                     } else {
-                        sb.append (c)
+                        sb.append (lc)
                     }
                 } else {
                     wordSplit = true

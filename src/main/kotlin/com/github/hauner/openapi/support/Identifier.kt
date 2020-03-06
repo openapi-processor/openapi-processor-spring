@@ -41,17 +41,19 @@ fun toCamelCase(src: String): String {
 
     var wordSplit = false
     for ((idx, char) in src.toCharArray().withIndex()) {
+        val lChar = char.toLowerCase()
+
         if (idx == 0) {
-            if (isValidStart(char)) {
-                sb.append(char)
+            if (isValidStart(lChar)) {
+                sb.append(lChar)
             }
         } else {
-            if (isValidPart(char)) {
+            if (isValidPart(lChar)) {
                 if (wordSplit) {
-                    sb.append(char.toUpperCase())
+                    sb.append(lChar.toUpperCase())
                     wordSplit = false
                 } else {
-                    sb.append(char)
+                    sb.append(lChar)
                 }
             } else {
                 wordSplit = true

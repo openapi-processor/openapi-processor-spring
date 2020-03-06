@@ -35,6 +35,7 @@ class IdentifierSpec extends Specification {
         'api/some/thing' | 'apiSomeThing'  // slash is invalid
         "_ab"            | "ab"  // underscore is valid but unwanted
         "a_b"            | "aB"  // underscore is valid but unwanted
+        "get-bAR"        | "getBar" // upper case only at word breaks
     }
 
     @Unroll
