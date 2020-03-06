@@ -22,6 +22,7 @@ import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
+import com.github.hauner.openapi.support.IdentifierKt
 
 /**
  * Writer for Java interface methods, i.e. endpoints.
@@ -104,6 +105,10 @@ class MethodWriter {
     }
 
     private String createMethodName (Endpoint endpoint, EndpointResponse endpointResponse) {
+        if (endpoint.operationId != null) {
+            return IdentifierKt.toCamelCase (endpoint.operationId)
+        }
+
         def tokens = endpoint.path.tokenize ('/')
 
         if (endpoint.hasMultipleEndpointResponses ()) {

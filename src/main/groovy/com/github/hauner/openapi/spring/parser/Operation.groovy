@@ -26,6 +26,7 @@ import com.github.hauner.openapi.spring.model.HttpMethod
 interface Operation {
 
     HttpMethod getMethod()
+    String getOperationId ()
     List<Parameter> getParameters ()
     RequestBody getRequestBody ()
     Map<String, Response> getResponses ()

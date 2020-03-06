@@ -42,6 +42,11 @@ class Operation implements ParserOperation {
     }
 
     @Override
+    String getOperationId () {
+        operation.operationId
+    }
+
+    @Override
     List<ParserParameter> getParameters () {
         def params = []
         operation.parameters.each { SwaggerParameter p ->

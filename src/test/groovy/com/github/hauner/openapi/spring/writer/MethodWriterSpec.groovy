@@ -329,6 +329,22 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    void "writes method name from operation id with valid java identifiers" () {
+        def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, operationId: 'get-bar',
+            responses: [
+                '204': [new Response (responseType: new NoneDataType())]
+            ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<Void> getBar();
+"""
+    }
+
     void "writes method parameter with valid java identifiers" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]

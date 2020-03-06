@@ -145,7 +145,7 @@ class ApiConverter {
     }
 
     private Endpoint createEndpoint (String path, Operation operation, DataTypes dataTypes, RefResolver resolver) {
-        Endpoint ep = new Endpoint (path: path, method: operation.method)
+        Endpoint ep = new Endpoint (path: path, method: operation.method, operationId: operation.operationId)
 
         try {
             collectParameters (operation.parameters, ep, dataTypes, resolver)

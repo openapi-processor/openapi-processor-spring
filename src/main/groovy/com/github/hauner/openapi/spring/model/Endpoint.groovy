@@ -26,6 +26,7 @@ import com.github.hauner.openapi.spring.model.parameters.Parameter
 class Endpoint {
     String path
     HttpMethod method
+    String operationId
 
     List<Parameter> parameters = []
     List<RequestBody> requestBodies = []

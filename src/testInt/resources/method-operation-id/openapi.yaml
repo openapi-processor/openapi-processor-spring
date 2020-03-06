@@ -1,0 +1,13 @@
+openapi: 3.0.2
+info:
+  title: operation id
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      operationId: get-bar
+      responses:
+        '204':
+          description: empty

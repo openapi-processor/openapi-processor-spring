@@ -30,6 +30,7 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
     static def testSets = [
         'bean-validation',
         'endpoint-exclude',
+        'method-operation-id',
         'no-response-content',
         'params-additional',
         'params-complex-data-types',
