@@ -44,6 +44,18 @@ testSets {
 
 check.dependsOn testInt
 
+
+compileGroovy {
+    dependsOn 'compileKotlin'
+    classpath += files(compileKotlin.destinationDir)
+}
+
+compileTestGroovy {
+    dependsOn 'compileKotlin'
+    classpath += files(compileKotlin.destinationDir)
+}
+
+
 dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.4'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
