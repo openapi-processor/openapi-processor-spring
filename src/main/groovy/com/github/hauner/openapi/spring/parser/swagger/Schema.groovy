@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.parser.swagger
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 import io.swagger.v3.oas.models.media.ArraySchema as SwaggerArraySchema
+import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
 
 /**
  * Swagger Schema abstraction.
@@ -35,6 +36,10 @@ class Schema implements ParserSchema {
 
     @Override
     String getType () {
+        if (schema instanceof SwaggerComposedSchema) {
+            return 'composed'
+        }
+
         schema.type
     }
 
@@ -60,6 +65,26 @@ class Schema implements ParserSchema {
             props.put (entry.key, new Schema(entry.value))
         }
         props
+    }
+
+    List<ParserSchema> getItems () {
+        List<ParserSchema> result = []
+
+        def composed = schema as SwaggerComposedSchema
+
+        composed.allOf.each {
+            result.add (new Schema(it))
+        }
+
+        composed.anyOf.each {
+            result.add (new Schema(it))
+        }
+
+        composed.oneOf.each {
+            result.add (new Schema(it))
+        }
+
+        result
     }
 
     @Override
@@ -116,5 +141,6 @@ class Schema implements ParserSchema {
     ParserSchema getItem () {
         new Schema((schema as SwaggerArraySchema).items)
     }
+
 
 }

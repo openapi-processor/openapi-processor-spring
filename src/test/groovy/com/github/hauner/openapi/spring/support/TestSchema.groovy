@@ -56,6 +56,10 @@ class TestSchema implements Schema {
         exclusiveMinimum
     }
 
+    @Override
+    List<Schema> getItems () {
+        return null
+    }
 
     @Override
     List<?> getEnum () {

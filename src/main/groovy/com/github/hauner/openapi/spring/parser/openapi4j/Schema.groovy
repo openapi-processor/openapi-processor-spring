@@ -62,6 +62,11 @@ class Schema implements ParserSchema {
     }
 
     @Override
+    List<ParserSchema> getItems () {
+        null
+    }
+
+    @Override
     def getDefault () {
         schema.default
     }

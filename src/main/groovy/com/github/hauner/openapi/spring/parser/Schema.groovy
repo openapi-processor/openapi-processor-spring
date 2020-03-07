@@ -45,6 +45,9 @@ interface Schema {
     // object
     Map<String, Schema> getProperties ()
 
+    // composed object
+    List<Schema> getItems ()
+
     // enum
     List<?> getEnum ()
 
