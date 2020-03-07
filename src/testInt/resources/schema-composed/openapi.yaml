@@ -1,0 +1,77 @@
+openapi: 3.0.2
+info:
+  title: composed schema
+  version: 1.0.0
+
+paths:
+
+  /foo-all-of:
+    get:
+      responses:
+        '200':
+          description: allOf
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/FooAllOf'
+
+  /foo-any-of:
+    get:
+      responses:
+        '200':
+          description: anyOf
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/FooAnyOf'
+
+  /foo-one-of:
+    get:
+      responses:
+        '200':
+          description: oneOf
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/FooOneOf'
+
+
+components:
+  schemas:
+
+    FooAllOf:
+      allOf:
+        - $ref: '#/components/schemas/One'
+        - $ref: '#/components/schemas/Two'
+        - $ref: '#/components/schemas/Three'
+
+    FooAnyOf:
+      anyOf:
+        - $ref: '#/components/schemas/One'
+        - $ref: '#/components/schemas/Two'
+        - $ref: '#/components/schemas/Three'
+
+    FooOneOf:
+      anyOf:
+        - $ref: '#/components/schemas/One'
+        - $ref: '#/components/schemas/Two'
+        - $ref: '#/components/schemas/Three'
+
+
+    One:
+      type: object
+      properties:
+        one:
+          type: string
+
+    Two:
+      type: object
+      properties:
+        two:
+          type: string
+
+    Three:
+      type: object
+      properties:
+        three:
+          type: string
