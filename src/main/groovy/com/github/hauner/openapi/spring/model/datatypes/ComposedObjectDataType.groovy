@@ -25,6 +25,7 @@ class ComposedObjectDataType implements DataType {
 
     String type
     String pkg = 'unknown'
+    String of
 
     List<DataType> items = []
     private DataTypeConstraints constraints
@@ -61,5 +62,10 @@ class ComposedObjectDataType implements DataType {
     DataTypeConstraints getConstraints () {
         constraints
     }
+
+    boolean isMultiOf () {
+        of != 'allOf'
+    }
+
 
 }

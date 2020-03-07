@@ -71,6 +71,10 @@ class SchemaInfo implements MappingSchema {
         }
     }
 
+    String itemOf () {
+        schema.itemsOf ()
+    }
+
     /**
      * Factory method to create a {@code DataTypeInfo} with the $ref name (without "path").
      *

@@ -59,6 +59,11 @@ class Schema implements ParserSchema {
     }
 
     @Override
+    ParserSchema getItem () {
+        new Schema((schema as SwaggerArraySchema).items)
+    }
+
+    @Override
     Map<String, ParserSchema> getProperties () {
         def props = new LinkedHashMap<String, ParserSchema>()
         schema.properties.each { Map.Entry<String, SwaggerSchema> entry ->
@@ -85,6 +90,25 @@ class Schema implements ParserSchema {
         }
 
         result
+    }
+
+    @Override
+    String itemsOf () {
+        def composed = schema as SwaggerComposedSchema
+
+        if (composed.allOf != null) {
+            return 'allOf'
+        }
+
+        if (composed.anyOf != null) {
+            return 'anyOf'
+        }
+
+        if (composed.oneOf != null) {
+            return 'oneOf'
+        }
+
+        null
     }
 
     @Override
@@ -135,11 +159,6 @@ class Schema implements ParserSchema {
     @Override
     Boolean isExclusiveMinimum () {
         schema.exclusiveMinimum
-    }
-
-    @Override
-    ParserSchema getItem () {
-        new Schema((schema as SwaggerArraySchema).items)
     }
 
 

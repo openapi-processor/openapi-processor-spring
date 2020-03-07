@@ -34,6 +34,10 @@ class Schema implements ParserSchema {
 
     @Override
     String getType () {
+        if (itemsOf () != null) {
+            return 'composed'
+        }
+
         schema.type
     }
 
@@ -53,6 +57,11 @@ class Schema implements ParserSchema {
     }
 
     @Override
+    ParserSchema getItem () {
+        new Schema(schema.itemsSchema)
+    }
+
+    @Override
     Map<String, ParserSchema> getProperties () {
         def props = new LinkedHashMap<String, ParserSchema> ()
         schema.properties.each { Map.Entry<String, O4jSchema> entry ->
@@ -63,6 +72,37 @@ class Schema implements ParserSchema {
 
     @Override
     List<ParserSchema> getItems () {
+        List<ParserSchema> result = []
+
+        schema.allOfSchemas.each {
+            result.add (new Schema(it))
+        }
+
+        schema.anyOfSchemas.each {
+            result.add (new Schema(it))
+        }
+
+        schema.oneOfSchemas.each {
+            result.add (new Schema(it))
+        }
+
+        result
+    }
+
+    @Override
+    String itemsOf () {
+        if (schema.allOfSchemas != null) {
+            return 'allOf'
+        }
+
+        if (schema.anyOfSchemas != null) {
+            return 'anyOf'
+        }
+
+        if (schema.oneOfSchemas != null) {
+            return 'oneOf'
+        }
+
         null
     }
 
@@ -114,11 +154,6 @@ class Schema implements ParserSchema {
     @Override
     Boolean isExclusiveMinimum () {
         schema.exclusiveMinimum
-    }
-
-    @Override
-    ParserSchema getItem () {
-        new Schema(schema.itemsSchema)
     }
 
 }

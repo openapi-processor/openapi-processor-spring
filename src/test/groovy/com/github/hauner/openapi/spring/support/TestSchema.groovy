@@ -27,6 +27,21 @@ class TestSchema implements Schema {
 
     String ref
 
+    @Override
+    List<Schema> getItems () {
+        return null
+    }
+
+    @Override
+    String itemsOf () {
+        return null
+    }
+
+    @Override
+    List<?> getEnum () {
+        return enumValues
+    }
+
     def defaultValue
     Boolean nullable
     Integer minLength
@@ -54,16 +69,6 @@ class TestSchema implements Schema {
     @Override
     Boolean isExclusiveMinimum () {
         exclusiveMinimum
-    }
-
-    @Override
-    List<Schema> getItems () {
-        return null
-    }
-
-    @Override
-    List<?> getEnum () {
-        return enumValues
     }
 
 }

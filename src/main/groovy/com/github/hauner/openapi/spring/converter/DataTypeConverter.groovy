@@ -121,7 +121,8 @@ class DataTypeConverter {
 
         objectType = new ComposedObjectDataType (
             type: schemaInfo.name,
-            pkg: [options.packageName, 'model'].join ('.')
+            pkg: [options.packageName, 'model'].join ('.'),
+            of: schemaInfo.itemOf ()
         )
 
         schemaInfo.eachItemOf { SchemaInfo itemSchemaInfo ->
