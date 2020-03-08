@@ -19,6 +19,7 @@ package com.github.hauner.openapi.spring.parser.swagger
 import com.github.hauner.openapi.spring.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 import io.swagger.v3.oas.models.media.ArraySchema as SwaggerArraySchema
+import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
 
 /**
  * Swagger Schema abstraction.
@@ -35,6 +36,10 @@ class Schema implements ParserSchema {
 
     @Override
     String getType () {
+        if (schema instanceof SwaggerComposedSchema) {
+            return 'composed'
+        }
+
         schema.type
     }
 
@@ -54,12 +59,56 @@ class Schema implements ParserSchema {
     }
 
     @Override
+    ParserSchema getItem () {
+        new Schema((schema as SwaggerArraySchema).items)
+    }
+
+    @Override
     Map<String, ParserSchema> getProperties () {
         def props = new LinkedHashMap<String, ParserSchema>()
         schema.properties.each { Map.Entry<String, SwaggerSchema> entry ->
             props.put (entry.key, new Schema(entry.value))
         }
         props
+    }
+
+    List<ParserSchema> getItems () {
+        List<ParserSchema> result = []
+
+        def composed = schema as SwaggerComposedSchema
+
+        composed.allOf.each {
+            result.add (new Schema(it))
+        }
+
+        composed.anyOf.each {
+            result.add (new Schema(it))
+        }
+
+        composed.oneOf.each {
+            result.add (new Schema(it))
+        }
+
+        result
+    }
+
+    @Override
+    String itemsOf () {
+        def composed = schema as SwaggerComposedSchema
+
+        if (composed.allOf != null) {
+            return 'allOf'
+        }
+
+        if (composed.anyOf != null) {
+            return 'anyOf'
+        }
+
+        if (composed.oneOf != null) {
+            return 'oneOf'
+        }
+
+        null
     }
 
     @Override
@@ -112,9 +161,5 @@ class Schema implements ParserSchema {
         schema.exclusiveMinimum
     }
 
-    @Override
-    ParserSchema getItem () {
-        new Schema((schema as SwaggerArraySchema).items)
-    }
 
 }

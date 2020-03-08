@@ -53,6 +53,13 @@ class EndpointResponse {
      * @return true if multi else false
      */
     boolean hasMultipleResponses () {
+        def responseType = main.responseType
+
+        if (responseType.isMultiOf ()) {
+            return true
+        }
+
+
         !errors.empty
     }
 

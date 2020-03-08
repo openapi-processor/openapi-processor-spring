@@ -21,15 +21,15 @@ import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-@Ignore
+//@Ignore
 @RunWith(Parameterized)
 class ProcessorPendingTest extends ProcessorTestBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'method-operation-id', parser: ParserType.SWAGGER),
-              new TestSet(name: 'method-operation-id', parser: ParserType.OPENAPI4J)
+              new TestSet(name: 'schema-composed', parser: ParserType.SWAGGER),
+              new TestSet(name: 'schema-composed', parser: ParserType.OPENAPI4J)
         ]
     }
 

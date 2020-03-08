@@ -29,6 +29,7 @@ import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
@@ -86,7 +87,10 @@ class DataTypeConverter {
 
         DataType result
         if (dataTypeInfo.isRefObject ()) {
-            result = createRefDataType(dataTypeInfo, dataTypes)
+            result = createRefDataType (dataTypeInfo, dataTypes)
+
+        } else if (dataTypeInfo.isComposedObject ()) {
+            result = createComposedDataType (dataTypeInfo, dataTypes)
 
         } else if (dataTypeInfo.isArray ()) {
             result = createArrayDataType (dataTypeInfo, dataTypes)
@@ -100,6 +104,34 @@ class DataTypeConverter {
 
         pop ()
         result
+    }
+
+    private DataType createComposedDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
+        def objectType
+
+        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
+        if (targetType) {
+            objectType = new MappedDataType (
+                type: targetType.name,
+                pkg: targetType.pkg,
+                genericTypes: targetType.genericNames
+            )
+            return objectType
+        }
+
+        objectType = new ComposedObjectDataType (
+            type: schemaInfo.name,
+            pkg: [options.packageName, 'model'].join ('.'),
+            of: schemaInfo.itemOf ()
+        )
+
+        schemaInfo.eachItemOf { SchemaInfo itemSchemaInfo ->
+            def itemType = convert (itemSchemaInfo, dataTypes)
+            objectType.addItems (itemType)
+        }
+
+        dataTypes.add (objectType)
+        objectType
     }
 
     private DataType createArrayDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
@@ -165,7 +197,7 @@ class DataTypeConverter {
         }
 
         def constraints = new DataTypeConstraints(
-            nullable: schemaInfo.nullable,
+            nullable: schemaInfo.nullable
         )
 
         objectType = new ObjectDataType (

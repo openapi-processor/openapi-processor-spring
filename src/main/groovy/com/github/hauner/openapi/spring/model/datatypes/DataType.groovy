@@ -59,4 +59,8 @@ trait /*interface*/ DataType {
         null
     }
 
+    boolean isMultiOf () {
+        false
+    }
+
 }

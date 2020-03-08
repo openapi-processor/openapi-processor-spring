@@ -60,6 +60,21 @@ class SchemaInfo implements MappingSchema {
         }
     }
 
+    void eachItemOf (/* Closure Params: SchemaInfo */ Closure closure) {
+        schema.items.eachWithIndex { it, idx ->
+            closure (new SchemaInfo (
+                path: path,
+                name: "$name-of-$idx",
+                schema: it,
+                resolver: resolver
+            ))
+        }
+    }
+
+    String itemOf () {
+        schema.itemsOf ()
+    }
+
     /**
      * Factory method to create a {@code DataTypeInfo} with the $ref name (without "path").
      *
@@ -225,6 +240,10 @@ class SchemaInfo implements MappingSchema {
 
     boolean isObject () {
         schema.type == 'object'
+    }
+
+    boolean isComposedObject () {
+        schema.type == 'composed'
     }
 
     boolean isRefObject () {

@@ -26,7 +26,21 @@ interface Schema {
     String getType ()
     String getFormat ()
 
+    // $ref
     String getRef ()
+
+    // array
+    Schema getItem ()
+
+    // object
+    Map<String, Schema> getProperties ()
+
+    // composed object
+    List<Schema> getItems ()
+    String itemsOf ()
+
+    // enum
+    List<?> getEnum ()
 
     def getDefault ()
     Boolean getNullable ()
@@ -38,14 +52,5 @@ interface Schema {
     Boolean isExclusiveMaximum ()
     BigDecimal getMinimum ()
     Boolean isExclusiveMinimum ()
-
-    // array
-    Schema getItem ()
-
-    // object
-    Map<String, Schema> getProperties ()
-
-    // enum
-    List<?> getEnum ()
 
 }
