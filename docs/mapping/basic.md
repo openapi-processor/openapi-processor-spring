@@ -10,6 +10,8 @@ nav_order: 1
 The OpenAPI specification defines a couple of basic [data types][openapi-spec-types]{:target="_blank"}.
 The basic data types are built-in into the processor. That means it will map the basic types automatically
  to a corresponding java type. There is no explicit type mapping required.
+ 
+The types with no default mapping can be mapped to a java type using the mapping configuration.  
 
 ## OpenAPI to Java type mapping
 
@@ -24,11 +26,12 @@ The following table shows the automatic mapping of OpenAPIs primitive types to J
 `number`  | `float`     | `java.lang.Float`
 `number`  | `double`    | `java.lang.Double`
 `string`  |             | `java.lang.String`
-`string`  | `byte`      | not (yet) implemented
-`string`  | `binary`    | not (yet) implemented
+`string`  | `byte`      | no default mapping
+`string`  | `binary`    | no default mapping
 `boolean` |             | `java.lang.Boolean`
 `string`  | `date`      | `java.time.LocalDate`  
 `string`  | `date-time` | `java.time.OffsetDataTime`
-`string`  | `password`  | ignored
+`string`  | `password`  | no default mapping
+
 
 [openapi-spec-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#dataTypes
