@@ -23,6 +23,7 @@ import groovy.transform.CompileStatic
  *
  * @author Martin Hauner
  */
+@Deprecated
 @CompileStatic
 class Identifier {
 
@@ -44,19 +45,18 @@ class Identifier {
 
         def wordSplit = false
         src.toCharArray ().eachWithIndex { char c, int idx ->
-            def lc = c.toLowerCase ()
 
             if (idx == 0) {
-                if (isValidStart (lc)) {
-                    sb.append (lc)
+                if (isValidStart (c)) {
+                    sb.append (c)
                 }
             } else {
-                if (isValidPart (lc)) {
+                if (isValidPart (c)) {
                     if (wordSplit) {
-                        sb.append (lc.toUpperCase ())
+                        sb.append (c.toUpperCase ())
                         wordSplit = false
                     } else {
-                        sb.append (lc)
+                        sb.append (c)
                     }
                 } else {
                     wordSplit = true
