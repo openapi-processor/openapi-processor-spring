@@ -24,9 +24,9 @@ class IdentifierSpec extends Specification {
     @Unroll
     void "convert source string '#src' to valid identifiers: #identifier/#clazz/#enumn" () {
         expect:
-        IdentifierKt.toCamelCase (src) == identifier
-        IdentifierKt.toClass (src) == clazz
-        IdentifierKt.toEnum (src) == enumn
+        Identifier.toCamelCase (src) == identifier
+        Identifier.toClass (src) == clazz
+        Identifier.toEnum (src) == enumn
 
         where:
         src              | identifier     | clazz          | enumn

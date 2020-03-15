@@ -38,7 +38,7 @@ class Interface {
     }
 
     String getInterfaceName() {
-        Identifier.toClass (name) + "Api"
+        !name.isEmpty () ? Identifier.toClass (name) + "Api" : "Api"
     }
 
     String toString () {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//@file:JvmName("Identifiers")
+@file:JvmName("Identifier")
 
 package com.github.hauner.openapi.support
 
