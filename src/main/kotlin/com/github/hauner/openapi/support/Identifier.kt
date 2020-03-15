@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//@file:JvmName("Identifiers")
+@file:JvmName("Identifier")
 
 package com.github.hauner.openapi.support
 
@@ -26,53 +26,33 @@ import java.lang.Character.isJavaIdentifierStart
  * reversible.
  *
  * conversion rules:
- * characters that are not valid java identifiers will be removed. The characters " ", "_",
- * "-" (valid or not) are interpreted as word separators and the next character will be
- * converted to upper case.
+ * create camel case from word breaks. A word break is any invalid character (i.e. it is not
+ * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
+ * are dropped.
+ *
+ * All words are converted to lowercase and are capitalized and joined except the first word
+ * that is no capitalized.
  *
  * @param src the source "string"
- *
  * @return a valid camel case java identifier
  *
  * @author Martin Hauner
  */
 fun toCamelCase(src: String): String {
-    val sb = StringBuilder()
-
-    var wordSplit = false
-    for ((idx, char) in src.toCharArray().withIndex()) {
-        val lChar = char.toLowerCase()
-
-        if (idx == 0) {
-            if (isValidStart(lChar)) {
-                sb.append(lChar)
-            }
-        } else {
-            if (isValidPart(lChar)) {
-                if (wordSplit) {
-                    sb.append(lChar.toUpperCase())
-                    wordSplit = false
-                } else {
-                    sb.append(lChar)
-                }
-            } else {
-                wordSplit = true
-            }
-        }
-    }
-
-    return sb.toString()
+    return joinCamelCase(joinSingleCharWords(splitAtWordBreaks(src)))
 }
 
 
 /**
- * converts a source string to a valid (camel case) java class identifier. One way, ie it is
+ * converts a source string to a valid (camel case) java *class* identifier. One way, ie it is
  * not reversible.
  *
  * conversion rules:
- * characters that are not valid java identifiers will be removed. The characters " ", "_",
- * "-" (valid or not) are removed and interpreted as word separators. Each words first character
- * will be converted to upper case.
+ * create camel case from word breaks. A word break is any invalid character (i.e. it is not
+ * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
+ * are dropped.
+ *
+ * All words are converted to lowercase and are capitalized and joined.
  *
  * @param src the source string
  *
@@ -89,9 +69,11 @@ fun toClass(src: String): String {
  * not reversible.
  *
  * conversion rules:
- * characters that are not valid java identifiers will be removed. The characters " ", "_",
- * "-" (valid or not) are interpreted as word separators and are replaced by "_" and the words
- * are converted to upper case.
+ * create camel case from word breaks. A word break is any invalid character (i.e. it is not
+ * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
+ * are dropped.
+ *
+ * All words are converted to uppercase and joined by an underscore.
  *
  * @param src the source "string"
  *
@@ -100,41 +82,162 @@ fun toClass(src: String): String {
  * @author Martin Hauner
  */
 fun toEnum(src: String): String {
+    return joinEnum(joinSingleCharWords(splitAtWordBreaks(src)))
+}
+
+
+/**
+ * joins the given words to a single camel case string.
+ *
+ * The first word is lower case.
+ *
+ * @param words a list of words
+ * @return a came case string
+ *
+ * @author Martin Hauner
+ */
+private fun joinCamelCase(words: ArrayList<String>): String {
     val sb = StringBuilder()
 
-    var wordSplit = false
-    for ((idx, char) in src.toCharArray().withIndex()) {
-        val cu = char.toUpperCase()
+    words.forEachIndexed { idx, p ->
         if (idx == 0) {
-            if (isValidStart(char)) {
-                sb.append(cu)
-            }
+            sb.append(p.toLowerCase())
         } else {
-            if (isValidPart(char)) {
-                if (wordSplit) {
-                    sb.append("_")
-                    sb.append(cu)
-                    wordSplit = false
-                } else {
-                    sb.append(cu)
-                }
-            } else {
-                wordSplit = true
-            }
+            sb.append(p.toLowerCase().capitalize())
         }
+    }
+
+    if (sb.isEmpty()) {
+        return "invalid"
     }
 
     return sb.toString()
 }
 
+/**
+ * joins the given words to a single uppercase string separated by underscore.
+ *
+ * @param words a list of words
+ * @return an uppercase string
+ *
+ * @author Martin Hauner
+ */
+private fun joinEnum(words: ArrayList<String>): String {
+    val result = words.joinToString("_") { it.toUpperCase() }
+
+    if (result.isEmpty()) {
+        return "INVALID"
+    }
+
+    return result
+}
+
+/**
+ * joins two words if at least one has only a single character.
+ *
+ * this tries to avoid identifiers with multiple uppercase characters in a row.
+ *
+ * @param words a list of words
+ * @return a list of words
+ *
+ * @author Martin Hauner
+ */
+private fun joinSingleCharWords(words: List<String>): ArrayList<String> {
+    val merged = ArrayList<String>()
+    val current = StringBuilder()
+
+    words.forEachIndexed { idx, p ->
+        if (idx == 0) {
+            current.append(p)
+        } else {
+            if (current.last().isUpperCase() && (current.length == 1 || p.length == 1)) {
+                current.append(p)
+            } else {
+                merged.add(current.toString())
+                current.clear()
+                current.append(p)
+            }
+        }
+    }
+
+
+    if (current.isNotEmpty()) {
+        merged.add(current.toString())
+    }
+
+    return merged
+}
+
+/**
+ * splits the given string at the word breaks.
+ *
+ * @param src the source "string"
+ * @return a list of split words
+ *
+ * @author Martin Hauner
+ */
+private fun splitAtWordBreaks(src: String): List<String> {
+    val words = ArrayList<String>()
+    val current = StringBuilder()
+
+    // clear illegal characters at at the beginning
+    val trimmed = src.trimStart {
+        !isValidStart(it)
+    }
+
+    trimmed.forEachIndexed { idx, c ->
+
+        if (idx != 0 && isWordBreak(c)) {
+            if (current.isEmpty()) {
+                if (isValid(c)) {
+                    current.append(c)
+                }
+            } else /* part.isNotEmpty() */ {
+                words.add(current.toString())
+                current.clear()
+
+                if (isValid(c)) {
+                    current.append(c)
+                }
+            }
+
+        } else {
+            current.append(c)
+        }
+    }
+
+    if(current.isNotEmpty()) {
+        words.add(current.toString())
+    }
+
+    return words
+}
+
+
+private val INVALID_WORD_BREAKS = listOf(' ', '-')
+private val VALID_WORD_BREAKS = listOf('_')
+
+
+private fun isValid(c: Char): Boolean {
+    return isJavaIdentifierPart(c) && !isValidWordBreak(c)
+}
+
 private fun isValidStart(c: Char): Boolean {
-    return isJavaIdentifierStart(c) && !isWordSplitPart(c)
+    return isJavaIdentifierStart(c) && !isValidWordBreak(c)
 }
 
-private fun isValidPart(c: Char): Boolean {
-    return isJavaIdentifierPart(c) && !isWordSplitPart(c)
+private fun isWordBreak(c: Char): Boolean {
+    return isWordBreakChar(c) || c.isUpperCase() || !isJavaIdentifierPart(c)
 }
 
-private fun isWordSplitPart(c: Char): Boolean {
-    return c == '_'  // split at underscore
+private fun isWordBreakChar(c: Char): Boolean {
+    return isInvalidWordBreak(c) || isValidWordBreak(c)
+}
+
+private fun isValidWordBreak(c: Char): Boolean {
+    return VALID_WORD_BREAKS.contains(c)
+}
+
+private fun isInvalidWordBreak(c: Char): Boolean {
+    return INVALID_WORD_BREAKS.contains(c)
 }

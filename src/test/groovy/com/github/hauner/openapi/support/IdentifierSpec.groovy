@@ -22,52 +22,54 @@ import spock.lang.Unroll
 class IdentifierSpec extends Specification {
 
     @Unroll
-    void "convert source string '#src' to valid java identifier '#identifier'" () {
+    void "convert source string '#src' to valid identifiers: #identifier/#clazz/#enumn" () {
         expect:
         Identifier.toCamelCase (src) == identifier
-        IdentifierKt.toCamelCase (src) == identifier
+        Identifier.toClass (src) == clazz
+        Identifier.toEnum (src) == enumn
 
         where:
-        src              | identifier
-        "a"              | "a"
-        "a b"            | "aB"  // space is invalid
-        "a-b"            | "aB"  // dash is invalid
-        'api/some/thing' | 'apiSomeThing'  // slash is invalid
-        "_ab"            | "ab"  // underscore is valid but unwanted
-        "a_b"            | "aB"  // underscore is valid but unwanted
-        "get-bAR"        | "getBar" // upper case only at word breaks
-    }
+        src              | identifier     | clazz          | enumn
 
-    @Unroll
-    void "convert source string '#src' to valid java enum identifier '#identifier'" () {
-        expect:
-        Identifier.toEnum (src) == identifier
-        IdentifierKt.toEnum (src) == identifier
+        // first char should be lowercase
+        "a"              | "a"            | "A"            | "A"
+        "A"              | "a"            | "A"            | "A"
 
-        where:
-        src             | identifier
-        "a"              | "A"
-        "a b"            | "A_B"  // space is invalid
-        "a-b"            | "A_B"  // dash is invalid
-        'api/some/thing' | 'API_SOME_THING'  // slash is invalid
-        "_ab"            | "AB"   // underscore is valid but unwanted
-        "a_b"            | "A_B"  // underscore is valid but unwanted
-    }
+        //
+        "AA"             | "aa"           | "Aa"           | "AA"
+        "AAFoo"          | "aaFoo"        | "AaFoo"        | "AA_FOO"
 
-    @Unroll
-    void "converts source string '#src' to valid java class identifier '#identifier'" () {
-        expect:
-        Identifier.toClass (src) == identifier
-        IdentifierKt.toClass (src) == identifier
+        // invalid chars are stripped
+        "1a"             | "a"            | "A"            | "A"
+        "2345a"          | "a"            | "A"            | "A"
 
-        where:
-        src              | identifier
-        "a"              | "A"
-        "a b"            | "AB"  // space is invalid
-        "a-b"            | "AB"  // dash is invalid
-        'api/some/thing' | 'ApiSomeThing'  // slash is invalid
-        "_ab"            | "Ab"  // underscore is valid but unwanted
-        "a_b"            | "AB"  // underscore is valid but unwanted
+        // word break at invalid characters
+        "a foo"          | "aFoo"         | "AFoo"         | "A_FOO"
+        "a-foo"          | "aFoo"         | "AFoo"         | "A_FOO"
+        "a foo bar"      | "aFooBar"      | "AFooBar"      | "A_FOO_BAR"
+        "a-foo-bar"      | "aFooBar"      | "AFooBar"      | "A_FOO_BAR"
+        "a foo-bar"      | "aFooBar"      | "AFooBar"      | "A_FOO_BAR"
+        'api/some/thing' | 'apiSomeThing' | "ApiSomeThing" | "API_SOME_THING"
+
+        // word break at underscore, it is valid but unwanted
+        "_ab"            | "ab"           | "Ab"           | "AB"
+        "a_b"            | "aB"           | "AB"           | "A_B"
+        "a_foo"          | "aFoo"         | "AFoo"         | "A_FOO"
+
+        // final result is empty
+        " "              | "invalid"      | "Invalid"      | "INVALID"
+        "_"              | "invalid"      | "Invalid"      | "INVALID"
+        "-"              | "invalid"      | "Invalid"      | "INVALID"
+
+        // word break at uppercase
+        "fooBar"         | "fooBar"       | "FooBar"       | "FOO_BAR"
+
+        // upper case only at word break
+        "fooBAr"         | "fooBar"       | "FooBar"       | "FOO_BAR"
+        "fooBAR"         | "fooBar"       | "FooBar"       | "FOO_BAR"
+        "FOO-bar"        | "fooBar"       | "FooBar"       | "FOO_BAR"
+        "FOOBar"         | "fooBar"       | "FooBar"       | "FOO_BAR"
+        "FOObar"         | "foObar"       | "FoObar"       | "FO_OBAR"
     }
 
 }

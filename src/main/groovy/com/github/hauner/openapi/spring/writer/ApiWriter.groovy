@@ -45,11 +45,12 @@ class ApiWriter {
 
     Formatter formatter
 
-    ApiWriter (ApiOptions options,
-               InterfaceWriter interfaceWriter,
-               DataTypeWriter dataTypeWriter,
-               StringEnumWriter enumWriter,
-                 boolean enableFormatter = true) {
+    ApiWriter (
+        ApiOptions options,
+        InterfaceWriter interfaceWriter,
+        DataTypeWriter dataTypeWriter,
+        StringEnumWriter enumWriter,
+        boolean enableFormatter = true) {
         this.options = options
         this.interfaceWriter = interfaceWriter
         this.dataTypeWriter = dataTypeWriter
