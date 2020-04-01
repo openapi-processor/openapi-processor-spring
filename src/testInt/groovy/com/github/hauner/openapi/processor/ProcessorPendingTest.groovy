@@ -28,8 +28,8 @@ class ProcessorPendingTest extends ProcessorTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-              new TestSet(name: 'schema-composed', parser: ParserType.SWAGGER),
-              new TestSet(name: 'schema-composed', parser: ParserType.OPENAPI4J)
+              new TestSet(name: 'response-content-single', parser: ParserType.SWAGGER),
+              new TestSet(name: 'response-content-single', parser: ParserType.OPENAPI4J)
         ]
     }
 

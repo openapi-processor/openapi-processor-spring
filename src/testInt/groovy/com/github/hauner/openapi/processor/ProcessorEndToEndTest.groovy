@@ -45,7 +45,9 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
         'response-array-data-type-mapping',
         'response-complex-data-types',
         'response-content-multiple',
-        'response-simple-data-types'
+        'response-content-single',
+        'response-simple-data-types',
+        'schema-composed'
     ]
 
     @Parameterized.Parameters(name = "{0}")

@@ -1,0 +1,50 @@
+openapi: 3.0.2
+info:
+  title: test multiple 2xx responses with same content
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      summary: same content (no content)
+      responses:
+        '202':
+          description: accepted
+        '201':
+          description: created
+
+  /bar:
+    get:
+      summary: same content
+      responses:
+        '202':
+          description: accepted
+          content:
+            text/plain:
+                schema:
+                  type: string
+
+        '201':
+          description: created
+          content:
+            text/plain:
+                schema:
+                  type: string
+
+  /bar-multi:
+    get:
+      summary: same content
+      responses:
+        '202':
+          description: accepted
+          content:
+            text/plain:
+                schema:
+                  type: string
+
+        '201':
+          description: created
+          content:
+            application/json:
+                schema:
+                  type: string

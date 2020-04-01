@@ -94,8 +94,8 @@ class Endpoint {
      * @return list of method responses
      */
     List<EndpointResponse> getEndpointResponses () {
-        List<Response> oks = successResponses
-        List<Response> errors = errorResponses
+        Set<Response> oks = successResponses
+        Set<Response> errors = errorResponses
         oks.collect {
             new EndpointResponse(main: it, errors: errors)
         }
@@ -104,29 +104,29 @@ class Endpoint {
     /**
      * finds the success responses
      */
-    private List<Response> getSuccessResponses () {
-        def success = responses.keySet ()
-            .findAll {
-                it.startsWith ('2')
-            }
+    private Set<Response> getSuccessResponses () {
+        Map<String, Response> result = [:]
 
-        if (success.size () == 1) {
-            return responses."${success.first ()}"
+        responses.findAll {
+            it.key.startsWith ('2')
+        }.each {
+            it.value.each {
+                result.put (it.contentType, it)
+            }
         }
 
-        println "Endpoint: can't find successful responses (${path}/${success})"
-        []
+        result.values () as Set<Response>
     }
 
     /**
      * finds the error responses
      */
-    private List<Response> getErrorResponses () {
+    private Set<Response> getErrorResponses () {
         responses.findAll {
             !it.key.startsWith ('2')
         }.collect {
             it.value.first ()
-        }
+        } as Set<Response>
     }
 
 }
