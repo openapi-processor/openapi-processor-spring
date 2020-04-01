@@ -25,15 +25,12 @@ import com.github.hauner.openapi.spring.processor.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
 
-import java.util.regex.Pattern
-
 /**
  *  Reader for mapping yaml.
  *
  *  @author Martin Hauner
  */
 class MappingReader {
-    private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
     Mapping read (String typeMappings) {
         if (typeMappings == null || typeMappings.empty) {
