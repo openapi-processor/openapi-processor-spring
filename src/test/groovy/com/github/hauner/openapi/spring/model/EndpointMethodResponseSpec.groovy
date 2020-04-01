@@ -28,7 +28,7 @@ class EndpointMethodResponseSpec extends Specification {
                 new Response (contentType: 'application/json',
                     responseType: new CollectionDataType (item: new StringDataType ()))
             ]
-        ])
+        ]).initEndpointResponses ()
 
         when:
         def result = endpoint.endpointResponses
@@ -51,7 +51,7 @@ class EndpointMethodResponseSpec extends Specification {
                 new Response (contentType: 'text/plain',
                     responseType: new CollectionDataType (item: new StringDataType ()))
             ]
-        ])
+        ]).initEndpointResponses ()
 
         when:
         def result = endpoint.endpointResponses

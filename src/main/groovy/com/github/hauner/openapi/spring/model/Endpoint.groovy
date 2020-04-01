@@ -31,11 +31,20 @@ class Endpoint {
     List<Parameter> parameters = []
     List<RequestBody> requestBodies = []
     LinkedHashMap<String, List<Response>> responses = [:]
+    
+    // grouped responses
+    List<EndpointResponse> endpointResponses = []
 
     void addResponses (String httpStatus, List<Response> statusResponses) {
         responses.put (httpStatus, statusResponses)
     }
 
+    Endpoint initEndpointResponses () {
+        endpointResponses = createEndpointResponses ()
+        this
+    }
+    
+    
     RequestBody getRequestBody () {
         requestBodies.first ()
     }
@@ -93,7 +102,7 @@ class Endpoint {
      *
      * @return list of method responses
      */
-    List<EndpointResponse> getEndpointResponses () {
+    private List<EndpointResponse> createEndpointResponses () {
         Set<Response> oks = successResponses
         Set<Response> errors = errorResponses
         oks.collect {

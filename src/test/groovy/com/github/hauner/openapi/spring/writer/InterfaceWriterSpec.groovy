@@ -247,7 +247,7 @@ import com.github.hauner.openapi.Bar;
                         contentType: 'application/json',
                         responseType: new ObjectDataType (type: type, pkg: pkg))
                 ]
-            ])
+            ]).initEndpointResponses ()
         ])
 
         when:
@@ -278,7 +278,7 @@ import ${pkg}.${type};
                         contentType: 'text/plain',
                         responseType: new ObjectDataType (type: type2, pkg: pkg2))
                 ]
-            ])
+            ]).initEndpointResponses ()
         ])
 
         when:
@@ -347,8 +347,10 @@ public interface NameApi {
 
     void "writes methods" () {
         def endpoints = [
-            new Endpoint(path: 'path1', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
+            new Endpoint(path: 'path1', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
+                .initEndpointResponses (),
             new Endpoint(path: 'path2', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
+                .initEndpointResponses ()
         ]
 
         writer.methodWriter.write (_ as Writer, _ as Endpoint, _ as EndpointResponse) >> {
