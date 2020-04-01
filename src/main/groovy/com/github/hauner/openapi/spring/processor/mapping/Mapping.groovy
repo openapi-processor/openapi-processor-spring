@@ -26,7 +26,7 @@ class Mapping {
     /**
      * version (currently optional)
      */
-    String openapiGeneratrSpring
+    String openapiProcessorSpring
 
     /**
      * general options
