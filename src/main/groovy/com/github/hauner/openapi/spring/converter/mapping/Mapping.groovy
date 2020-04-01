@@ -22,7 +22,7 @@ package com.github.hauner.openapi.spring.converter.mapping
 interface Mapping {
     // mapping levels
     enum Level {
-        ENDPOINT, IO, TYPE, ADD
+        ENDPOINT, IO, TYPE, ADD, RESULT
     }
 
     /**

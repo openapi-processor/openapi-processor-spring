@@ -15,6 +15,7 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
+
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
  * OpenAPI schema to a java type.

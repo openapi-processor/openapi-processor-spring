@@ -17,35 +17,20 @@
 package com.github.hauner.openapi.spring.processor.mapping
 
 /**
- * a "paths:" entry in the mapping yaml
+ * the "result:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-class Path {
+class Result {
 
     /**
-     * path should be excluded
+     * target java type
      */
-    boolean exclude = false
+    String to
 
     /**
-     * path limited type mappings
+     * (optional) generic parameters of {@link #to}
      */
-    List<Type> types
+    List<String> generics
 
-    /**
-     * path limited result mapping
-     */
-    Result result
-
-    /**
-     * path limited parameter mappings
-     */
-    List<Parameter> parameters
-
-    /**
-     * path limited response mappings
-     */
-    List<Response> responses
-    
 }

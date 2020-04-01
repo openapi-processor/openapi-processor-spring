@@ -21,6 +21,7 @@ import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.processor.mapping.AdditionalParameter
 import com.github.hauner.openapi.spring.processor.mapping.Mapping as YamlMapping
@@ -28,6 +29,7 @@ import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.Path
 import com.github.hauner.openapi.spring.processor.mapping.RequestParameter
 import com.github.hauner.openapi.spring.processor.mapping.Response
+import com.github.hauner.openapi.spring.processor.mapping.Result
 import com.github.hauner.openapi.spring.processor.mapping.Type
 
 import java.util.regex.Matcher
@@ -47,6 +49,10 @@ class MappingConverter {
 
         source?.map?.types?.each {
             result.add (convertType (it))
+        }
+        
+        if (source?.map?.result) {
+            result.add (convertResult (source.map.result))
         }
 
         source?.map?.parameters?.each {
@@ -87,6 +93,29 @@ class MappingConverter {
         new TypeMapping (
             sourceTypeName: from, sourceTypeFormat: format,
             targetTypeName: to, genericTypeNames: generics)
+    }
+    
+    private Mapping convertResult (Result result) {
+        Matcher matcher = result.to =~ GENERIC_INLINE
+        
+        String to = result.to
+        List<String> generics = []
+        
+        // has inline generics
+        if (matcher.find ()) {
+            to = matcher.group (1)
+            generics = matcher
+                .group (2)
+                .split (',')
+                .collect { it.trim () }
+
+            // has explicit generic list
+        } else if (result.generics) {
+            generics = result.generics
+        }
+
+        new ResultTypeMapping (
+            targetTypeName: to, genericTypeNames: generics)        
     }
 
     private Mapping convertParameter (Parameter source) {
@@ -130,6 +159,10 @@ class MappingConverter {
             result.add (convertType (it))
         }
 
+        if (source.result) {
+            result.add (convertResult (source.result))
+        }
+        
         source.parameters.each {
             result.add (convertParameter (it))
         }

@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMappin
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import spock.lang.Specification
 import spock.lang.Subject
@@ -325,6 +326,48 @@ map:
 
         then:
         mappings.size() == 0
+    }
+
+    void "reads global result mapping" () {
+        String yaml = """\
+openapi-processor-spring: v1.0
+    
+map:
+  result:
+    to: plain
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size () == 1
+        def type = mappings.first () as ResultTypeMapping
+        type.targetTypeName == 'plain'
+        type.genericTypeNames == []
+    }
+
+    void "reads global result mapping with generic types" () {
+        String yaml = """\
+openapi-generatr-spring: v1.0
+    
+map:
+  result:
+    to: org.springframework.http.ResponseEntity
+    generics:
+      - java.lang.String
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size () == 1
+        def type = mappings.first () as ResultTypeMapping
+        type.targetTypeName == 'org.springframework.http.ResponseEntity'
+        type.genericTypeNames == ['java.lang.String']
     }
 
 }

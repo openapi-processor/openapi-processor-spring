@@ -29,6 +29,11 @@ class Map {
     List<Type> types
     
     /**
+     * global result mapping
+     */
+    Result result
+    
+    /**
      * global parameter mappings
      */
     List<Parameter> parameters
