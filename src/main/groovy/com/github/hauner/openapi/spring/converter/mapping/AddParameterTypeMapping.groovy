@@ -40,11 +40,6 @@ class AddParameterTypeMapping implements Mapping {
     }
 
     @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.ADD == level
-    }
-
-    @Override
     List<TypeMapping> getChildMappings () {
         [mapping]
     }

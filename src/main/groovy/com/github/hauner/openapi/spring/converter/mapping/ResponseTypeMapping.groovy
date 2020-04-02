@@ -40,11 +40,6 @@ class ResponseTypeMapping implements Mapping {
     }
 
     @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.IO == level && contentType == schema.contentType
-    }
-
-    @Override
     List<Mapping> getChildMappings () {
         [mapping]
     }

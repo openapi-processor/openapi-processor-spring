@@ -52,11 +52,6 @@ class EndpointTypeMapping implements Mapping {
     }
 
     @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.ENDPOINT == level && path == schema.path
-    }
-
-    @Override
     List<Mapping> getChildMappings () {
         typeMappings
     }

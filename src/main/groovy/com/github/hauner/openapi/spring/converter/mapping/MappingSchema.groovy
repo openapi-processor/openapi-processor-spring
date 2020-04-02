@@ -27,5 +27,8 @@ interface MappingSchema {
     String getPath ()
     String getName ()
     String getContentType ()
+    
+    String getType ()
+    String getFormat ()
 
 }

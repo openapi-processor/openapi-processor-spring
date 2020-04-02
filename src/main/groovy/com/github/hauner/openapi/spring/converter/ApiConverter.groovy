@@ -17,10 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
@@ -63,26 +60,8 @@ class ApiConverter {
     public static final String INTERFACE_DEFAULT_NAME = ''
 
     private DataTypeConverter dataTypeConverter
+    private MappingFinder mappingFinder
     private ApiOptions options
-
-    class MappingSchemaEndpoint implements MappingSchema {
-        String path
-
-        @Override
-        String getPath () {
-            path
-        }
-
-        @Override
-        String getName () {
-            null
-        }
-
-        @Override
-        String getContentType () {
-            null
-        }
-    }
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -92,6 +71,7 @@ class ApiConverter {
         }
 
         dataTypeConverter = new DataTypeConverter(this.options)
+        mappingFinder = new MappingFinder (typeMappings: this.options.typeMappings)
     }
 
     /**
@@ -164,7 +144,7 @@ class ApiConverter {
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
 
-        List<Mapping> addMappings = findAdditionalParameter (ep)
+        List<Mapping> addMappings = mappingFinder.findAdditionalEndpointParameter (ep.path)
         addMappings.each {
             ep.parameters.add (createAdditionalParameter (ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
         }
@@ -300,17 +280,6 @@ class ApiConverter {
         responses
     }
 
-    private List<Mapping> findAdditionalParameter (Endpoint ep) {
-        def addMappings = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (path: ep.path))
-        }.collectMany {
-            it.childMappings
-        }.findAll {
-            it.matches (Mapping.Level.ADD, null as MappingSchema)
-        }
-        addMappings as List<Mapping>
-    }
-
     private String getInlineRequestBodyName (String path) {
         Identifier.toClass (path) + 'RequestBody'
     }
@@ -319,22 +288,8 @@ class ApiConverter {
         Identifier.toClass (path) + 'Response' + httpStatus
     }
 
-
     private boolean isExcluded (String path) {
-        def endpointMatches = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint(path: path))
-        }
-
-        if (!endpointMatches.empty) {
-            if (endpointMatches.size () != 1) {
-                throw new AmbiguousTypeMappingException (endpointMatches)
-            }
-
-            def match = endpointMatches.first () as EndpointTypeMapping
-            return match.exclude
-        }
-
-        false
+        mappingFinder.isExcludedEndpoint (path)
     }
 
     private String getInterfaceName (def op, boolean excluded) {

@@ -17,17 +17,16 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.MappingVisitor
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-
-import static com.github.hauner.openapi.spring.converter.mapping.Mapping.Level.IO
-
 
 /**
  * find mapping in type mapping list for a schema info.
@@ -40,7 +39,7 @@ class MappingFinder {
 
 
     class BaseVisitor implements MappingVisitor {
-        SchemaInfo schemaInfo
+        MappingSchema schema
 
         @Override
         boolean match (EndpointTypeMapping mapping) {
@@ -78,7 +77,7 @@ class MappingFinder {
 
         @Override
         boolean match (EndpointTypeMapping mapping) {
-            mapping.path == schemaInfo.path
+            mapping.path == schema.path
         }
 
     }
@@ -87,12 +86,12 @@ class MappingFinder {
 
         @Override
         boolean match (ParameterTypeMapping mapping) {
-            mapping.parameterName == schemaInfo.name
+            mapping.parameterName == schema.name
         }
 
         @Override
         boolean match (ResponseTypeMapping mapping) {
-            mapping.contentType == schemaInfo.contentType
+            mapping.contentType == schema.contentType
         }
 
     }
@@ -101,19 +100,58 @@ class MappingFinder {
 
         @Override
         boolean match (TypeMapping mapping) {
-            if (schemaInfo.isPrimitive ()) {
-                mapping.sourceTypeName == schemaInfo.type && mapping.sourceTypeFormat == schemaInfo.format
+            if (schema.isPrimitive ()) {
+                mapping.sourceTypeName == schema.type && mapping.sourceTypeFormat == schema.format
 
-            } else if (schemaInfo.isArray ()) {
+            } else if (schema.isArray ()) {
                 mapping.sourceTypeName == 'array'
 
             } else {
-                mapping.sourceTypeName == schemaInfo.name
+                mapping.sourceTypeName == schema.name
             }
         }
 
     }
-    
+
+    class AddParameterMatcher extends BaseVisitor {
+
+        @Override
+        boolean match (AddParameterTypeMapping mapping) {
+            true
+        }
+
+    }
+
+    class MappingSchemaEndpoint implements MappingSchema {
+        String path
+
+        @Override
+        String getPath () {
+            path
+        }
+
+        @Override
+        String getName () {
+            null
+        }
+
+        @Override
+        String getContentType () {
+            null
+        }
+
+        @Override
+        String getType () {
+            return null
+        }
+
+        @Override
+        String getFormat () {
+            return null
+        }
+
+    }
+
     /**
      * find any matching endpoint mapping for the given schema info.
      *
@@ -121,14 +159,14 @@ class MappingFinder {
      * @return list of matching mappings
      */
     List<Mapping> findEndpointMappings (SchemaInfo info) {
-        List<Mapping> ep = filterMappings (new EndpointMatcher (schemaInfo: info), typeMappings)
+        List<Mapping> ep = filterMappings (new EndpointMatcher (schema: info), typeMappings)
 
-        List<Mapping> io = filterMappings (new IoMatcher (schemaInfo: info), ep)
+        List<Mapping> io = filterMappings (new IoMatcher (schema: info), ep)
         if (!io.empty) {
             return io
         }
 
-        filterMappings (new TypeMatcher (schemaInfo: info), ep)
+        filterMappings (new TypeMatcher (schema: info), ep)
     }
     
     /**
@@ -138,7 +176,7 @@ class MappingFinder {
      * @return list of matching mappings
      */
     List<Mapping> findIoMappings (SchemaInfo info) {
-        filterMappings (new IoMatcher (schemaInfo: info), typeMappings)
+        filterMappings (new IoMatcher (schema: info), typeMappings)
     }
 
     /**
@@ -148,9 +186,58 @@ class MappingFinder {
      * @return list of matching mappings
      */
     List<Mapping> findTypeMappings (SchemaInfo info) {
-        filterMappings (new TypeMatcher (schemaInfo: info), typeMappings)
+        filterMappings (new TypeMatcher (schema: info), typeMappings)
     }
-    
+
+    /**
+     * find additional parameter mappings for the given endpoint.
+     *
+     * @param path the endpoint path
+     * @return list of matching mappings
+     */
+    List<Mapping> findAdditionalEndpointParameter (String path) {
+        def info = new MappingSchemaEndpoint(path: path)
+        List<Mapping> ep = filterMappings (new EndpointMatcher (schema: info), typeMappings)
+
+        def matcher = new AddParameterMatcher (schema: info)
+        def add = ep.findAll {
+            it.matches (matcher)
+        }
+
+        if (!add.empty) {
+            return add
+        }
+
+        []
+    }
+
+    /**
+     * check if the given endpoint should b excluded.
+     *
+     * @param path the endpoint path
+     * @return true/false
+     */
+    boolean isExcludedEndpoint (String path) {
+        def info = new MappingSchemaEndpoint(path: path)
+        def matcher = new EndpointMatcher (schema: info)
+
+        def ep = typeMappings.findAll {
+            it.matches (matcher)
+        }
+
+
+        if (!ep.empty) {
+            if (ep.size () != 1) {
+                throw new AmbiguousTypeMappingException (ep)
+            }
+
+            def match = ep.first () as EndpointTypeMapping
+            return match.exclude
+        }
+
+        false
+    }
+
     private List<Mapping> filterMappings (MappingVisitor visitor, List<Mapping> mappings) {
         mappings
             .findAll {
