@@ -328,7 +328,7 @@ map:
         mappings.size() == 0
     }
 
-    void "reads global result mapping" () {
+    void "reads global result mapping 'plain'" () {
         String yaml = """\
 openapi-processor-spring: v1.0
     
@@ -345,18 +345,15 @@ map:
         mappings.size () == 1
         def type = mappings.first () as ResultTypeMapping
         type.targetTypeName == 'plain'
-        type.genericTypeNames == []
     }
 
-    void "reads global result mapping with generic types" () {
+    void "reads global result mapping" () {
         String yaml = """\
 openapi-generatr-spring: v1.0
     
 map:
   result:
     to: org.springframework.http.ResponseEntity
-    generics:
-      - java.lang.String
 """
 
         when:
@@ -367,7 +364,6 @@ map:
         mappings.size () == 1
         def type = mappings.first () as ResultTypeMapping
         type.targetTypeName == 'org.springframework.http.ResponseEntity'
-        type.genericTypeNames == ['java.lang.String']
     }
 
 }

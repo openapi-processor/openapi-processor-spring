@@ -71,7 +71,7 @@ map:
           to: java.util.Collection
 
       result:
-        to: org.springframework.http.ResponseEntity<java.lang.String>
+        to: org.springframework.http.ResponseEntity
 
       parameters:
         - name: foo
