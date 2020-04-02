@@ -47,6 +47,7 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
         'response-content-multiple',
         'response-content-single',
         'response-simple-data-types',
+        'result-plain',
         'schema-composed'
     ]
 
