@@ -26,6 +26,7 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
@@ -181,18 +182,14 @@ class ApiConverter {
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
 
-            if (!httpResponse.content) {
-                ep.addResponses (httpStatus, [ModelResponse.EMPTY])
-            } else {
-                List<ModelResponse> results = createResponses (
-                    ep.path,
-                    httpStatus,
-                    httpResponse,
-                    dataTypes,
-                    resolver)
+            List<ModelResponse> results = createResponses (
+                ep.path,
+                httpStatus,
+                httpResponse,
+                dataTypes,
+                resolver)
 
-                ep.addResponses (httpStatus, results)
-            }
+            ep.addResponses (httpStatus, results)
         }
 
     }
@@ -255,8 +252,19 @@ class ApiConverter {
     }
 
     private List<ModelResponse> createResponses (String path, String httpStatus, Response response, DataTypes dataTypes, RefResolver resolver) {
-        def responses = []
+        if (!response.content) {
+            def info = new SchemaInfo (path: path)
 
+            DataType dataType = new NoneDataType()
+            DataType resultDataType = dataTypeWrapper.wrap (dataType, info)
+
+            def resp = new ModelResponse (
+                responseType: resultDataType)
+
+            return [resp]
+        }
+
+        def responses = []
         response.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
@@ -274,7 +282,7 @@ class ApiConverter {
 
             def resp = new ModelResponse (
                 contentType: contentType,
-                responseType: resultDataType /*dataType*/)
+                responseType: resultDataType)
 
             responses.add (resp)
         }

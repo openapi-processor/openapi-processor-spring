@@ -29,9 +29,19 @@ class ResultDataType implements DataType {
 
     @Override
     String getName () {
-        "$type<${dataType.name}>"
+        // void response must be Void when used as generic type. capitalize() should not
+        // break anything for other generic types.
+        "$type<${dataType.name.capitalize ()}>"
     }
 
+    String getName (boolean multipleResponses) {
+        if (multipleResponses) {
+            "$type<?>"
+        } else {
+            getName ()
+        }
+    }
+    
     @Override
     String getPackageName () {
         pkg
@@ -51,5 +61,9 @@ class ResultDataType implements DataType {
     DataTypeConstraints getConstraints () {
         null
     }
-    
+
+    boolean isMultiOf () {
+        dataType.isMultiOf ()
+    }
+
 }

@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.model
 
+import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
+
 /**
  * The responses that can be returned by an endpoint method for one (successful) response.
  *
@@ -36,10 +38,21 @@ class EndpointResponse {
 
 
     String getResponseType () {
+        def responseType = main.responseType
+
         if (hasMultipleResponses ()) {
-            '?'
+
+            // wrapped/unwrapped has different code if there are multiple responses:
+            // if wrapped we can use use the any type ? as generic parameter
+            // if NOT wrapped the any type ? doesn't work and we use Object 
+            if (responseType instanceof ResultDataType) {
+                responseType.getName (true)
+            } else {
+                'Object'
+            }
+
         } else {
-            main.responseType.name
+            responseType.name
         }
     }
 

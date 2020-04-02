@@ -25,7 +25,7 @@ class NoneDataType implements DataType {
 
     @Override
     String getName () {
-        'Void'
+        'void'
     }
 
     @Override
