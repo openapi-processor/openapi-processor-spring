@@ -51,4 +51,5 @@ class CollectionDataType implements DataType {
     DataTypeConstraints getConstraints () {
         constraints
     }
+    
 }
