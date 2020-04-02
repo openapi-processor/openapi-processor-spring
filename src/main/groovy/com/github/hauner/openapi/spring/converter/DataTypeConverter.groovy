@@ -73,32 +73,32 @@ class DataTypeConverter {
      * Stores named objects in {@code dataTypes} for re-use. {@code dataTypeInfo} provides the type
      * name used to add it to the list of data types.
      *
-     * @param dataTypeInfo the open api type with context information
+     * @param schemaInfo the open api type with context information
      * @param dataTypes known object types
      * @return the resulting java data type
      */
-    DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
-        if (isLoop (dataTypeInfo)) {
-            return new LazyDataType (info: dataTypeInfo, dataTypes: dataTypes)
+    DataType convert (SchemaInfo schemaInfo, DataTypes dataTypes) {
+        if (isLoop (schemaInfo)) {
+            return new LazyDataType (info: schemaInfo, dataTypes: dataTypes)
         }
 
-        push (dataTypeInfo)
+        push (schemaInfo)
 
         DataType result
-        if (dataTypeInfo.isRefObject ()) {
-            result = createRefDataType (dataTypeInfo, dataTypes)
+        if (schemaInfo.isRefObject ()) {
+            result = createRefDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isComposedObject ()) {
-            result = createComposedDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isComposedObject ()) {
+            result = createComposedDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isArray ()) {
-            result = createArrayDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isArray ()) {
+            result = createArrayDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isObject ()) {
-            result = createObjectDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isObject ()) {
+            result = createObjectDataType (schemaInfo, dataTypes)
 
         } else {
-            result = createSimpleDataType (dataTypeInfo, dataTypes)
+            result = createSimpleDataType (schemaInfo, dataTypes)
         }
 
         pop ()
@@ -334,37 +334,8 @@ class DataTypeConverter {
             throw new AmbiguousTypeMappingException (typeMatches)
         }
 
-        TargetTypeMapping match = typeMatches.first () as TargetTypeMapping
+        def match = typeMatches.first () as TargetTypeMapping
         return match.targetType
-    }
-
-    private TargetType getMappedResultDataType (SchemaType schemaType) {
-        // find endpoint mappings
-        List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
-        if (!endpointMatches.empty) {
-
-            if (endpointMatches.size () != 1) {
-                throw new AmbiguousTypeMappingException (endpointMatches)
-            }
-
-            TargetType target = (endpointMatches.first() as ResultTypeMapping).targetType
-            if (target) {
-                return target
-            }
-        }
-        
-        // find global result mapping
-        List<Mapping> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
-        if (typeMatches.isEmpty ()) {
-            return null
-        }
-
-        if (typeMatches.size () != 1) {
-            throw new AmbiguousTypeMappingException (typeMatches)
-        }
-
-        ResultTypeMapping match = typeMatches.first () as ResultTypeMapping
-        return match.targetType        
     }
     
     /**

@@ -28,9 +28,4 @@ class Result {
      */
     String to
 
-    /**
-     * (optional) generic parameters of {@link #to}
-     */
-    List<String> generics
-
 }

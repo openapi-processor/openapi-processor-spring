@@ -29,7 +29,7 @@ class ResultDataType implements DataType {
 
     @Override
     String getName () {
-        "$name<${dataType.name}>"
+        "$type<${dataType.name}>"
     }
 
     @Override

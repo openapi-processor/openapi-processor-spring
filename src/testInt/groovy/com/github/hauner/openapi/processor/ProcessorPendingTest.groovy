@@ -21,7 +21,7 @@ import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-@Ignore
+//@Ignore
 @RunWith(Parameterized)
 class ProcessorPendingTest extends ProcessorTestBase {
 

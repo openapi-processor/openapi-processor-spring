@@ -6,12 +6,14 @@ map:
     to: plain
 
   paths:
+    /foo-mono:
+      result:
+        to: reactor.core.publisher.Mono
+
+    /foo-flux:
+      result:
+        to: reactor.core.publisher.Flux
+
     /bar:
       result:
         to: org.springframework.http.ResponseEntity
-        generics:
-          - java.lang.String
-
-    /bar2:
-      result:
-        to: org.springframework.http.ResponseEntity<java.lang.String>

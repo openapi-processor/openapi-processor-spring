@@ -30,33 +30,17 @@ class ResultTypeMapping implements Mapping, TargetTypeMapping {
     String targetTypeName
 
     /**
-     * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
-     */
-    List<String> genericTypeNames = []
-    
-    
-    /**
      * Returns the target type of this type mapping.
      *
      * @return the target type
      */
     TargetType getTargetType () {
-        new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+        new TargetType (typeName: targetTypeName, genericNames: [])
     }
 
     @Override
     boolean matches (MappingVisitor visitor) {
         visitor.match (this)
-    }
-
-    @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.RESULT == level
-    }
-
-    @Override
-    boolean matches (Level level, MappingSchemaType schemaType) {
-        Level.RESULT == level
     }
 
     @Override

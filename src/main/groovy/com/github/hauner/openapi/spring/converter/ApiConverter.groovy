@@ -60,6 +60,7 @@ class ApiConverter {
     public static final String INTERFACE_DEFAULT_NAME = ''
 
     private DataTypeConverter dataTypeConverter
+    private ResultDataTypeWrapper dataTypeWrapper
     private MappingFinder mappingFinder
     private ApiOptions options
 
@@ -71,6 +72,7 @@ class ApiConverter {
         }
 
         dataTypeConverter = new DataTypeConverter(this.options)
+        dataTypeWrapper = new ResultDataTypeWrapper(this.options)
         mappingFinder = new MappingFinder (typeMappings: this.options.typeMappings)
     }
 
@@ -269,10 +271,11 @@ class ApiConverter {
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
+            DataType resultDataType = dataTypeWrapper.wrap (dataType, info)
 
             def resp = new ModelResponse (
                 contentType: contentType,
-                responseType: dataType)
+                responseType: resultDataType /*dataType*/)
 
             responses.add (resp)
         }

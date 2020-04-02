@@ -96,26 +96,7 @@ class MappingConverter {
     }
     
     private Mapping convertResult (Result result) {
-        Matcher matcher = result.to =~ GENERIC_INLINE
-        
-        String to = result.to
-        List<String> generics = []
-        
-        // has inline generics
-        if (matcher.find ()) {
-            to = matcher.group (1)
-            generics = matcher
-                .group (2)
-                .split (',')
-                .collect { it.trim () }
-
-            // has explicit generic list
-        } else if (result.generics) {
-            generics = result.generics
-        }
-
-        new ResultTypeMapping (
-            targetTypeName: to, genericTypeNames: generics)        
+        new ResultTypeMapping (targetTypeName: result.to)
     }
 
     private Mapping convertParameter (Parameter source) {

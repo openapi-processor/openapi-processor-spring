@@ -113,6 +113,15 @@ class MappingFinder {
 
     }
 
+    class ResultTypeMatcher extends BaseVisitor {
+
+        @Override
+        boolean match (ResultTypeMapping mapping) {
+            true
+        }
+
+    }
+
     class AddParameterMatcher extends BaseVisitor {
 
         @Override
@@ -211,6 +220,43 @@ class MappingFinder {
         []
     }
 
+    /**
+     * find endpoint result type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the result type mapping.
+     */
+    List<Mapping> findEndpointResultMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new EndpointMatcher (schema: info), typeMappings)
+
+        def matcher = new ResultTypeMatcher (schema: info)
+        def result = ep.findAll {
+            it.matches (matcher)
+        }
+
+        if (!result.empty) {
+            return result
+        }
+
+        []
+    }
+
+    /**
+     * find (global) result type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the result type mapping.
+     */
+    List<Mapping> findResultMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new ResultTypeMatcher (schema: info), typeMappings)
+
+        if (!ep.empty) {
+            return ep
+        }
+
+        []
+    }
+    
     /**
      * check if the given endpoint should b excluded.
      *

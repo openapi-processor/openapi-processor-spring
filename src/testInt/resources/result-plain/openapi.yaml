@@ -14,6 +14,26 @@ paths:
                 type: string
           description: plain result
 
+  /foo-mono:
+    get:
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: plain result
+
+  /foo-flux:
+    get:
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: plain result
+
   /bar:
     get:
       responses:
