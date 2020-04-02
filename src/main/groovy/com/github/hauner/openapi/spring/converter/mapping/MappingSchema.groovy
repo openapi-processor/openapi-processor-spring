@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.converter.mapping
 
 /**
  * Provides the properties required to check if a {@link Mapping} applies to a
- * {@link com.github.hauner.openapi.spring.converter.schema.SchemaType}.
+ * {@link com.github.hauner.openapi.spring.converter.schema.SchemaInfo}.
  *
  * @author Martin Hauner
  */
@@ -27,8 +27,5 @@ interface MappingSchema {
     String getPath ()
     String getName ()
     String getContentType ()
-
-    // getMatchType ()
-    // getMatchFormat ()
 
 }
