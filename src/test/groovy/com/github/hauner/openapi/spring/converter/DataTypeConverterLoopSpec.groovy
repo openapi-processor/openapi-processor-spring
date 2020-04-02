@@ -67,9 +67,9 @@ components:
         rt instanceof ObjectDataType
         sf instanceof LazyDataType
         sf.name == 'Self'
-        sf.packageName == 'generatr.model'
-        sf.imports == ['generatr.model.Self'] as Set
-        sf.referencedImports == ['generatr.model.Self'] as Set
+        sf.packageName == 'processor.model'
+        sf.imports == ['processor.model.Self'] as Set
+        sf.referencedImports == ['processor.model.Self'] as Set
     }
 
 }
