@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.converter.mapping
 
 /**
  * Provides the properties required to check if a {@link Mapping} applies to a
- * {@link com.github.hauner.openapi.spring.converter.schema.SchemaInfo}.
+ * {@link com.github.hauner.openapi.spring.converter.SchemaInfo}.
  *
  * @author Martin Hauner
  */
