@@ -18,6 +18,7 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
+import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
@@ -57,11 +58,14 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 class DataTypeConverter {
 
     private ApiOptions options
+    private MappingFinder finder
+
     private List<SchemaInfo> current
 
 
     DataTypeConverter(ApiOptions options) {
         this.options = options
+        this.finder = new MappingFinder(typeMappings: options.typeMappings)
         this.current = []
     }
 
@@ -297,8 +301,7 @@ class DataTypeConverter {
 
     private TargetType getMappedDataType (SchemaType schemaType) {
         // check endpoint mappings
-        List<Mapping> endpointMatches = new MappingFinder (typeMappings: options.typeMappings)
-            .findEndpointMappings (schemaType.info)
+        List<Mapping> endpointMatches = finder.findEndpointMappings (schemaType.info)
         
         if (!endpointMatches.empty) {
 
@@ -306,28 +309,28 @@ class DataTypeConverter {
                 throw new AmbiguousTypeMappingException (endpointMatches)
             }
 
-            TargetType target = (endpointMatches.first() as TypeMapping).targetType
+            TargetType target = (endpointMatches.first() as TargetTypeMapping).targetType
             if (target) {
                 return target
             }
         }
 
         // check global io (parameter & response) mappings
-        List<Mapping> ioMatches = schemaType.matchIoMapping (options.typeMappings)
+        List<Mapping> ioMatches = finder.findIoMappings (schemaType.info)
         if (!ioMatches.empty) {
 
             if (ioMatches.size () != 1) {
                 throw new AmbiguousTypeMappingException (ioMatches)
             }
 
-            TargetType target = (ioMatches.first() as TypeMapping).targetType
+            TargetType target = (ioMatches.first() as TargetTypeMapping).targetType
             if (target) {
                 return target
             }
         }
 
         // check global type mapping
-        List<Mapping> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
+        List<Mapping> typeMatches = finder.findTypeMappings (schemaType.info)
         if (typeMatches.isEmpty ()) {
             return null
         }
@@ -336,7 +339,7 @@ class DataTypeConverter {
             throw new AmbiguousTypeMappingException (typeMatches)
         }
 
-        TypeMapping match = typeMatches.first () as TypeMapping
+        TargetTypeMapping match = typeMatches.first () as TargetTypeMapping
         return match.targetType
     }
 

@@ -25,7 +25,7 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class TypeMapping implements Mapping {
+class TypeMapping implements Mapping, TargetTypeMapping {
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.

@@ -22,7 +22,7 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class ResultTypeMapping implements Mapping {
+class ResultTypeMapping implements Mapping, TargetTypeMapping {
 
     /**
      * The fully qualified java type name that will be used as the result type.
@@ -34,6 +34,21 @@ class ResultTypeMapping implements Mapping {
      */
     List<String> genericTypeNames = []
     
+    
+    /**
+     * Returns the target type of this type mapping.
+     *
+     * @return the target type
+     */
+    TargetType getTargetType () {
+        new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+    }
+
+    @Override
+    boolean matches (MappingVisitor visitor) {
+        visitor.match (this)
+    }
+
     @Override
     boolean matches (Level level, MappingSchema schema) {
         Level.RESULT == level

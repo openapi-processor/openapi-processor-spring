@@ -128,7 +128,27 @@ class MappingFinder {
 
         filterMappings (new TypeMatcher (schemaInfo: info), ep)
     }
+    
+    /**
+     * find any matching (global) io mapping for the given schema info.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return list of matching mappings
+     */
+    List<Mapping> findIoMappings (SchemaInfo info) {
+        filterMappings (new IoMatcher (schemaInfo: info), typeMappings)
+    }
 
+    /**
+     * find any matching (global) type mapping for the given schema info.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return list of matching mappings
+     */
+    List<Mapping> findTypeMappings (SchemaInfo info) {
+        filterMappings (new TypeMatcher (schemaInfo: info), typeMappings)
+    }
+    
     private List<Mapping> filterMappings (MappingVisitor visitor, List<Mapping> mappings) {
         mappings
             .findAll {
