@@ -29,9 +29,12 @@ class ResultDataType implements DataType {
 
     @Override
     String getName () {
-        // void response must be Void when used as generic type. capitalize() should not
-        // break anything for other generic types.
-        "$type<${dataType.name.capitalize ()}>"
+        // void response must be Void when used as generic type.
+        if (dataType.name == 'void') {
+            "$type<${dataType.name.capitalize ()}>"
+        } else {
+            "$type<${dataType.name}>"
+        }
     }
 
     String getName (boolean multipleResponses) {
