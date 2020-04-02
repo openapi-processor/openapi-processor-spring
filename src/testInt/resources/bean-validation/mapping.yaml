@@ -1,3 +1,8 @@
 options:
   package-name: generated
   bean-validation: true
+
+map:
+  result:
+    to: org.springframework.http.ResponseEntity
+

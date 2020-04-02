@@ -37,6 +37,10 @@ abstract class ProcessorTestBase {
     String DEFAULT_OPTIONS = """\
 options:
   package-name: generated
+
+map:  
+  result:
+    to: org.springframework.http.ResponseEntity  
     """
 
     TestSet testSet
