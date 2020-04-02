@@ -35,6 +35,11 @@ class ResponseTypeMapping implements Mapping {
     TypeMapping mapping
 
     @Override
+    boolean matches (MappingVisitor visitor) {
+        visitor.match (this)
+    }
+
+    @Override
     boolean matches (Level level, MappingSchema schema) {
         Level.IO == level && contentType == schema.contentType
     }

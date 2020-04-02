@@ -22,14 +22,24 @@ import com.github.hauner.openapi.spring.converter.mapping.MappingSchemaType
 import static com.github.hauner.openapi.spring.converter.mapping.Mapping.Level.*
 
 
+@Deprecated
 interface SchemaType {
 
+    /**
+     * find all mappings from the given mapping list that match the current endpoint.
+     * 
+     * @param typeMappings source list of type mappings
+     * @return list of matching type mappings
+     */
     List<Mapping> matchEndpointMapping (List<Mapping> typeMappings)
     List<Mapping> matchIoMapping (List<Mapping> typeMappings)
     List<Mapping> matchTypeMapping (List<Mapping> typeMappings)
+    Mapping matchResultMapping (List<Mapping> typeMappings)
 
+    // todo....
 }
 
+@Deprecated
 abstract class BaseSchemaType implements SchemaType {
 
     protected SchemaInfo info
@@ -47,12 +57,22 @@ abstract class BaseSchemaType implements SchemaType {
             return io
         }
 
+        Mapping result = findResultMapping (ep)
+        if (result) {
+            return [result]
+        }
+
         matchTypeMapping (ep)
     }
 
     List<Mapping> matchIoMapping (List<Mapping> typeMappings) {
         findIoMappings (typeMappings)
     }
+
+    Mapping matchResultMapping (List<Mapping> typeMappings) {
+        findResultMapping (typeMappings)
+    }
+
 
     private List<Mapping> findEndpointMappings (List<Mapping> typeMappings) {
         typeMappings
@@ -72,9 +92,18 @@ abstract class BaseSchemaType implements SchemaType {
             it.childMappings
         }
     }
+    
+    private Mapping findResultMapping (List<Mapping> typeMappings) {
+        typeMappings
+            .find {
+                it.matches (RESULT, info)
+            }
+    }
 
 }
 
+
+@Deprecated
 class ObjectSchemaType extends BaseSchemaType {
 
     ObjectSchemaType (SchemaInfo info) {
@@ -90,6 +119,7 @@ class ObjectSchemaType extends BaseSchemaType {
 
 }
 
+@Deprecated
 class ArraySchemaType extends BaseSchemaType {
 
     ArraySchemaType (SchemaInfo info) {
@@ -106,6 +136,7 @@ class ArraySchemaType extends BaseSchemaType {
 
 }
 
+@Deprecated
 class PrimitiveSchemaType extends BaseSchemaType {
 
     PrimitiveSchemaType (SchemaInfo info) {

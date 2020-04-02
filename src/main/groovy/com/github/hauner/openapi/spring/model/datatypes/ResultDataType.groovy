@@ -14,44 +14,42 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
- * defined in the api description.
+ * Result data type wrapper.
  *
  * @author Martin Hauner
  */
-class AddParameterTypeMapping implements Mapping {
+class ResultDataType implements DataType {
 
-    /**
-     * The parameter name of this mapping.
-     */
-    String parameterName
-
-    /**
-     * additional parameter type mapping.
-     */
-    TypeMapping mapping
+    protected String type
+    String pkg = 'unknown'
+    private DataType dataType
 
     @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+    String getName () {
+        "$name<${dataType.name}>"
     }
 
     @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.ADD == level
+    String getPackageName () {
+        pkg
     }
 
     @Override
-    boolean matches (Level level, MappingSchemaType schemaType) {
-        false
+    Set<String> getImports () {
+        [[packageName, type].join ('.')] + dataType.imports
     }
 
     @Override
-    List<TypeMapping> getChildMappings () {
-        [mapping]
+    Set<String> getReferencedImports () {
+        []
     }
 
+    @Override
+    DataTypeConstraints getConstraints () {
+        null
+    }
+    
 }

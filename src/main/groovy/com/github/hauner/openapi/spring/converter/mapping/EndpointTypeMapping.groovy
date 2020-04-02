@@ -47,6 +47,11 @@ class EndpointTypeMapping implements Mapping {
     List<Mapping> typeMappings
 
     @Override
+    boolean matches (MappingVisitor visitor) {
+        visitor.match (this)
+    }
+
+    @Override
     boolean matches (Level level, MappingSchema schema) {
         Level.ENDPOINT == level && path == schema.path
     }

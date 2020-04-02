@@ -21,10 +21,19 @@ package com.github.hauner.openapi.spring.converter.mapping
  */
 interface Mapping {
     // mapping levels
+    @Deprecated
     enum Level {
         ENDPOINT, IO, TYPE, ADD, RESULT
     }
 
+    /**
+     * check if this mapping applies to the given schema by delegating to the visitor.
+     * 
+     * @param visitor provides the matching logic
+     * @return true, id mapping applies, false otherwise
+     */
+    boolean matches (MappingVisitor visitor)
+    
     /**
      * Checks if this endpoint mapping applies to the given level and schema.
      *
@@ -32,6 +41,7 @@ interface Mapping {
      * @param schema the schema to match
      * @return true, if the mapping applies, false if not
      */
+    @Deprecated
     boolean matches (Level level, MappingSchema schema)
 
     /**
@@ -41,13 +51,14 @@ interface Mapping {
      * @param schemaType the schema type to match
      * @return true, if the mapping applies, false if not
      */
+    @Deprecated
     boolean matches (Level level, MappingSchemaType schemaType)
 
     /**
      * Returns the inner mappings.
      * In case of an ENDPOINT mapping the IO or TYPE mappings.
      * In case of an IO mappings its type mappings.
-     * In case of a TYPE mapping itself.
+     * In case of a TYPE or RESULT mapping itself.
      *
      * @return the inner type mappings.
      */

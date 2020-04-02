@@ -490,4 +490,34 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+//    void "write method with result type mapped to the default ResponseEntity" () {
+//
+//    }
+//
+//    void "write method with result type mapped to 'plain'" () {
+//
+//    }
+
 }
+
+
+/*
+    void "writes method with Collection response type" () {
+        def endpoint = createEndpoint (path: '/collection', method: HttpMethod.GET, responses: [
+            '200': [
+                new Response (contentType: 'application/json',
+                    responseType: new CollectionDataType (item: new StringDataType ()))
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        def rsp = endpoint.getFirstResponse ('200')
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
+    ResponseEntity<Collection<String>> getCollection();
+"""
+    }
+ */

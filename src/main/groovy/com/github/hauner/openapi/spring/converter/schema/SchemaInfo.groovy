@@ -234,6 +234,10 @@ class SchemaInfo implements MappingSchema {
         schema.exclusiveMinimum
     }
 
+    boolean isPrimitive () {
+        schema.type in ['boolean', 'int', 'number', 'string']
+    }
+
     boolean isArray () {
         schema.type == 'array'
     }

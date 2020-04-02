@@ -63,8 +63,14 @@ class TypeMapping implements Mapping {
      *
      * @return the target type
      */
+    @Override
     TargetType getTargetType () {
         new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+    }
+
+    @Override
+    boolean matches (MappingVisitor visitor) {
+        visitor.match (this)
     }
 
     @Override
@@ -74,8 +80,7 @@ class TypeMapping implements Mapping {
 
     @Override
     boolean matches (Level level, MappingSchemaType schemaType) {
-        Level.TYPE == level &&
-            sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
+        Level.TYPE == level && sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
     }
 
     @Override

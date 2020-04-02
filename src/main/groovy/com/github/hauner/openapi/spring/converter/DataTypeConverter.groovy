@@ -297,7 +297,9 @@ class DataTypeConverter {
 
     private TargetType getMappedDataType (SchemaType schemaType) {
         // check endpoint mappings
-        List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
+        List<Mapping> endpointMatches = new MappingFinder (typeMappings: options.typeMappings)
+            .findEndpointMappings (schemaType.info)
+        
         if (!endpointMatches.empty) {
 
             if (endpointMatches.size () != 1) {
@@ -338,6 +340,35 @@ class DataTypeConverter {
         return match.targetType
     }
 
+    private TargetType getMappedResultDataType (SchemaType schemaType) {
+        // find endpoint mappings
+        List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
+        if (!endpointMatches.empty) {
+
+            if (endpointMatches.size () != 1) {
+                throw new AmbiguousTypeMappingException (endpointMatches)
+            }
+
+            TargetType target = (endpointMatches.first() as ResultTypeMapping).targetType
+            if (target) {
+                return target
+            }
+        }
+        
+        // find global result mapping
+        List<Mapping> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
+        if (typeMatches.isEmpty ()) {
+            return null
+        }
+
+        if (typeMatches.size () != 1) {
+            throw new AmbiguousTypeMappingException (typeMatches)
+        }
+
+        ResultTypeMapping match = typeMatches.first () as ResultTypeMapping
+        return match.targetType        
+    }
+    
     /**
      * push the current schema info.
      *
