@@ -52,17 +52,20 @@ class ResultDataTypeWrapper {
         TargetType targetType = getMappedResultDataType (schemaInfo)
 
         if (!targetType) {
+            return dataType
+        }
+
+        if (targetType.typeName == 'plain') {
+            return dataType
+
+        } else if (targetType.typeName == 'mvc') {
             def resultType = new ResultDataType (
                 type: 'ResponseEntity',
                 pkg: 'org.springframework.http',
                 dataType: dataType
             )
             return resultType
-        }
-
-        if (targetType.typeName == 'plain') {
-            return dataType
-
+            
         } else {
             def resultType = new ResultDataType (
                 type: targetType.name,
