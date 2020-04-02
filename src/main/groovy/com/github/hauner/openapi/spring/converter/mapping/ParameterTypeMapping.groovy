@@ -45,11 +45,6 @@ class ParameterTypeMapping implements Mapping {
     }
 
     @Override
-    boolean matches (Level level, MappingSchemaType schemaType) {
-        false
-    }
-
-    @Override
     List<Mapping> getChildMappings () {
         [mapping]
     }

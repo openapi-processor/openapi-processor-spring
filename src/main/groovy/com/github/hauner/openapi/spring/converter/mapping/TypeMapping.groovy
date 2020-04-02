@@ -79,11 +79,6 @@ class TypeMapping implements Mapping, TargetTypeMapping {
     }
 
     @Override
-    boolean matches (Level level, MappingSchemaType schemaType) {
-        Level.TYPE == level && sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
-    }
-
-    @Override
     List<Mapping> getChildMappings () {
         [this]
     }

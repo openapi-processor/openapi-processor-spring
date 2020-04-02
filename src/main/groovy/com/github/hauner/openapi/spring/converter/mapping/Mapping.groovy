@@ -45,16 +45,6 @@ interface Mapping {
     boolean matches (Level level, MappingSchema schema)
 
     /**
-     * Checks if this endpoint mapping applied to the given schema type.
-     *
-     * @param level the level to match
-     * @param schemaType the schema type to match
-     * @return true, if the mapping applies, false if not
-     */
-    @Deprecated
-    boolean matches (Level level, MappingSchemaType schemaType)
-
-    /**
      * Returns the inner mappings.
      * In case of an ENDPOINT mapping the IO or TYPE mappings.
      * In case of an IO mappings its type mappings.
