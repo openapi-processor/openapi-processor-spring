@@ -26,6 +26,8 @@ import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 
+import static com.github.hauner.openapi.spring.converter.mapping.Mapping.Level.IO
+
 
 /**
  * find mapping in type mapping list for a schema info.

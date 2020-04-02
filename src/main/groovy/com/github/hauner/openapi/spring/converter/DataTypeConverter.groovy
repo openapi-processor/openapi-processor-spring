@@ -19,13 +19,8 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
-import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
-import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
 import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -113,7 +108,7 @@ class DataTypeConverter {
     private DataType createComposedDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,
@@ -143,7 +138,7 @@ class DataTypeConverter {
         DataType item = convert (itemSchemaInfo, dataTypes)
 
         def arrayType
-        TargetType targetType = getMappedDataType (new ArraySchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
 
         def constraints = new DataTypeConstraints(
             defaultValue: schemaInfo.defaultValue,
@@ -176,7 +171,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             switch (targetType?.typeName) {
                 case Map.name:
@@ -221,7 +216,7 @@ class DataTypeConverter {
 
     private DataType createSimpleDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
 
-        TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             def simpleType = new MappedDataType (
                 type: targetType.name,
@@ -299,9 +294,9 @@ class DataTypeConverter {
         enumType
     }
 
-    private TargetType getMappedDataType (SchemaType schemaType) {
+    private TargetType getMappedDataType (SchemaInfo info) {
         // check endpoint mappings
-        List<Mapping> endpointMatches = finder.findEndpointMappings (schemaType.info)
+        List<Mapping> endpointMatches = finder.findEndpointMappings (info)
         
         if (!endpointMatches.empty) {
 
@@ -316,7 +311,7 @@ class DataTypeConverter {
         }
 
         // check global io (parameter & response) mappings
-        List<Mapping> ioMatches = finder.findIoMappings (schemaType.info)
+        List<Mapping> ioMatches = finder.findIoMappings (info)
         if (!ioMatches.empty) {
 
             if (ioMatches.size () != 1) {
@@ -330,7 +325,7 @@ class DataTypeConverter {
         }
 
         // check global type mapping
-        List<Mapping> typeMatches = finder.findTypeMappings (schemaType.info)
+        List<Mapping> typeMatches = finder.findTypeMappings (info)
         if (typeMatches.isEmpty ()) {
             return null
         }
