@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,32 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * OpenAPI type 'array' maps to Collection<>.
+ * OpenAPI schema collection mapped to a java type. The java type is expected to have a single
+ * generic parameter. 
  *
  * @author Martin Hauner
- * @author Bastian Wilhelm
  */
-@Deprecated // replaced by MappedCollectionDataType
-class CollectionDataType implements DataType {
+class MappedCollectionDataType implements DataType {
+    
+    String type
+    String pkg = 'unknown'
 
     private DataType item
     private DataTypeConstraints constraints
 
     @Override
     String getName () {
-        "Collection<${item.name}>"
+        "${type}<${item.name}>"
     }
 
     @Override
     String getPackageName () {
-        'java.util'
+        pkg
     }
 
     @Override
     Set<String> getImports () {
-        [[packageName, 'Collection'].join('.')] + item.imports
+        [[packageName, type].join('.')] + item.imports
     }
 
     @Override

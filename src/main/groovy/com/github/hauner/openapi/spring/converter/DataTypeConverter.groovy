@@ -23,11 +23,10 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
-import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -39,7 +38,6 @@ import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.LazyDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
@@ -136,7 +134,6 @@ class DataTypeConverter {
         SchemaInfo itemSchemaInfo = schemaInfo.buildForItem ()
         DataType item = convert (itemSchemaInfo, dataTypes)
 
-        def arrayType
         TargetType targetType = getMappedDataType (schemaInfo)
 
         def constraints = new DataTypeConstraints(
@@ -146,21 +143,16 @@ class DataTypeConverter {
             maxItems: schemaInfo.maxItems,
         )
 
-        switch (targetType?.typeName) {
-            case Collection.name:
-                arrayType = new CollectionDataType (item: item, constraints: constraints)
-                break
-            case List.name:
-                arrayType = new ListDataType (item: item, constraints: constraints)
-                break
-            case Set.name:
-                arrayType = new SetDataType (item: item, constraints: constraints)
-                break
-            default:
-                arrayType = new ArrayDataType (item: item, constraints: constraints)
+        if (targetType) {
+            def mappedDataType = new MappedCollectionDataType (
+                type: targetType.name,
+                pkg: targetType.pkg,
+                item: item
+            )
+            return mappedDataType
         }
 
-        arrayType
+        new ArrayDataType (item: item, constraints: constraints)
     }
 
     private DataType createRefDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
