@@ -26,6 +26,7 @@ import com.github.hauner.openapi.spring.model.Response
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.support.EmptyResponse
@@ -108,9 +109,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 """)
     }
 
-    void "writes ResponseEntity import" () {
+    void "writes result data type import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]])
+            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
+                '200': [
+                    new Response (responseType:
+                        new ResultDataType (
+                            type: 'ResponseEntity',
+                            pkg: 'org.springframework.http',
+                            dataType: new NoneDataType ()
+                        ))
+                ]]).initEndpointResponses ()
         ])
 
         when:
@@ -307,7 +316,6 @@ import ${pkg2}.${type2};
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

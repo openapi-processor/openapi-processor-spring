@@ -22,10 +22,12 @@ package com.github.hauner.openapi.spring.model.datatypes
  * @author Martin Hauner
  */
 class NoneDataType implements DataType {
+    
+    private String type = 'void'
 
     @Override
     String getName () {
-        'void'
+        type
     }
 
     @Override
@@ -43,4 +45,13 @@ class NoneDataType implements DataType {
         []
     }
 
+    /**
+     * void response must be Void when it is wrapped in a generic type.
+     * 
+     * @return
+     */
+    DataType wrappedInResult () {
+        new NoneDataType(type: type.capitalize ())
+    }
+    
 }

@@ -17,32 +17,28 @@
 package com.github.hauner.openapi.spring.model.datatypes
 
 /**
- * Result data type wrapper.
+ * Result data type wrapper. Assumes a single generic parameter.
  *
  * @author Martin Hauner
  */
 class ResultDataType implements DataType {
 
-    protected String type
+    String type
     String pkg = 'unknown'
     private DataType dataType
 
     @Override
     String getName () {
-        // void response must be Void when used as generic type.
-        if (dataType.name == 'void') {
-            "$type<${dataType.name.capitalize ()}>"
-        } else {
-            "$type<${dataType.name}>"
-        }
+        "$type<${dataType.name}>"
     }
 
-    String getName (boolean multipleResponses) {
-        if (multipleResponses) {
-            "$type<?>"
-        } else {
-            getName ()
-        }
+    /**
+     * type if the result data type can have multiple values.
+     * 
+     * @return type 
+     */
+    String getNameMulti () {
+        "$type<?>"
     }
     
     @Override
@@ -55,6 +51,10 @@ class ResultDataType implements DataType {
         [[packageName, type].join ('.')] + dataType.imports
     }
 
+    Set<String> getImportsMulti () {
+        [[packageName, type].join ('.')]
+    }
+    
     @Override
     Set<String> getReferencedImports () {
         []

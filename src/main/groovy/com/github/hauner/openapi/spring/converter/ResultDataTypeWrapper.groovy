@@ -21,6 +21,7 @@ import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 
 /**
@@ -58,22 +59,22 @@ class ResultDataTypeWrapper {
         if (targetType.typeName == 'plain') {
             return dataType
 
-        } else if (targetType.typeName == 'mvc') {
-            def resultType = new ResultDataType (
-                type: 'ResponseEntity',
-                pkg: 'org.springframework.http',
-                dataType: dataType
-            )
-            return resultType
-            
         } else {
             def resultType = new ResultDataType (
                 type: targetType.name,
                 pkg: targetType.pkg,
-                dataType: dataType
+                dataType: checkNone (dataType)
             )
             return resultType
         }
+    }
+    
+    private DataType checkNone (DataType dataType) {
+        if (dataType instanceof NoneDataType) {
+            return dataType.wrappedInResult ()
+        }
+        
+        dataType
     }
 
     private TargetType getMappedResultDataType (SchemaInfo info) {

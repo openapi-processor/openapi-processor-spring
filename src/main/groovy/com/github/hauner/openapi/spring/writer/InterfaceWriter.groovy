@@ -57,8 +57,6 @@ class InterfaceWriter {
     List<String> collectImports (String packageName, List<Endpoint> endpoints) {
         Set<String> imports = []
 
-        imports.add ('org.springframework.http.ResponseEntity')
-
         endpoints.each { ep ->
             imports.add (ep.method.classNameWithPackage)
 

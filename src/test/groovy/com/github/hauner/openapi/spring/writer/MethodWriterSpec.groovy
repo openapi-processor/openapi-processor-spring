@@ -525,7 +525,7 @@ class MethodWriterSpec extends Specification {
                 new ResultDataType (
                     type: 'ResponseEntity',
                     pkg: 'org.springframework.http',
-                    dataType: new NoneDataType ()
+                    dataType: new NoneDataType ().wrappedInResult ()
                 ))]
         ])
 

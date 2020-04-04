@@ -36,65 +36,37 @@ class EndpointResponse {
     Set<Response> errors
 
 
-
-    String getResponseType () {
-        def responseType = main.responseType
-
-        if (hasMultipleResponses ()) {
-
-            // wrapped/unwrapped has different code if there are multiple responses:
-            // if wrapped we can use use the any type ? as generic parameter
-            // if NOT wrapped the any type ? doesn't work and we use Object 
-            if (responseType instanceof ResultDataType) {
-                responseType.getName (true)
-            } else {
-                'Object'
-            }
-
-        } else {
-            responseType.name
-        }
-    }
-
     String getContentType () {
         main.contentType
     }
 
     /**
-     * can this response return multiple types?
+     * provides the response type.
      *
-     * @return true if multi else false
+     * If the endpoint has multiple responses and there is no result data type the response
+     * type will be {@code Object}. If the response has a result data type the response type
+     * will be {@ode ResultDataType<?>}.
+     *
+     * @return the response type
      */
-    boolean hasMultipleResponses () {
-        def responseType = main.responseType
-
-        if (responseType.isMultiOf ()) {
-            return true
+    String getResponseType () {
+        if (hasMultipleResponses ()) {
+            multiResponseTypeName
+        } else {
+            singleResponseTypeName
         }
-
-
-        !errors.empty
     }
 
     /**
-     * provides the imports required for this response.
+     * provides the imports required for {@link #getResponseType()}.
      *
      * @return list of imports
      */
     Set<String> getResponseImports () {
-        if (errors.empty) {
-            def imports = [] as Set<String>
-
-            imports.addAll (main.imports)
-            errors.each {
-                imports.addAll (it.imports)
-            }
-
-            imports
+        if (hasMultipleResponses ()) {
+            multiImports
         } else {
-            // Because the response has multiple possible return types it will return "?" (any)
-            // and no imports are required.
-            [] as Set<String>
+            singleImports
         }
     }
 
@@ -112,6 +84,59 @@ class EndpointResponse {
             result.addAll (it.contentType)
         }
         result
+    }
+
+    /**
+     * can this response return multiple types?
+     *
+     * @return true if multi else false
+     */
+    private boolean hasMultipleResponses () {
+        def responseType = main.responseType
+
+        if (responseType.isMultiOf ()) {
+            return true
+        }
+
+        !errors.empty
+    }
+
+    private String getMultiResponseTypeName () {
+        def rt = asResultDataType ()
+        if (rt) {
+            rt.nameMulti
+        } else {
+            'Object'
+        }
+    }
+
+    private String getSingleResponseTypeName () {
+        main.responseType.name
+    }
+
+    private Set<String> getMultiImports () {
+        def rt = asResultDataType ()
+        if (rt) {
+            rt.importsMulti
+        } else {
+            [] as Set<String>
+        }
+    }
+
+    private Set<String> getSingleImports () {
+        def imports = [] as Set<String>
+
+        imports.addAll (main.imports)
+        errors.each {
+            imports.addAll (it.imports)
+        }
+
+        imports
+    }
+
+    private ResultDataType asResultDataType () {
+        def rt = main.responseType
+        rt instanceof ResultDataType ? rt : null
     }
 
 }
