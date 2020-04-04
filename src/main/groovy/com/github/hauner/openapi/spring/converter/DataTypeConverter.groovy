@@ -61,10 +61,6 @@ class DataTypeConverter {
         this.current = []
     }
 
-    DataType none() {
-        new NoneDataType()
-    }
-
     /**
      * converts an open api type (i.e. a {@code Schema}) to a java data type including nested types.
      * Stores named objects in {@code dataTypes} for re-use. {@code dataTypeInfo} provides the type

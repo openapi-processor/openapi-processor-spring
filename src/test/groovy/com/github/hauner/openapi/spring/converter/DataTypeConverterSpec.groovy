@@ -32,14 +32,6 @@ class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter(new DefaultApiOptions())
 
 
-    void "creates none data type" () {
-        when:
-        def type = converter.none ()
-
-        then:
-        type
-    }
-
     @Unroll
     void "converts schema(#type, #format) to #javaType" () {
         def schema = new TestSchema (type: type, format: format)
