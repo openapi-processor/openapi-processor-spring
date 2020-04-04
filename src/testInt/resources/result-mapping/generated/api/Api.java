@@ -7,8 +7,6 @@ package generated.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 public interface Api {
 
@@ -16,16 +14,6 @@ public interface Api {
             path = "/foo",
             produces = {"text/plain"})
     String getFoo();
-
-    @GetMapping(
-            path = "/foo-mono",
-            produces = {"text/plain"})
-    Mono<String> getFooMono();
-
-    @GetMapping(
-            path = "/foo-flux",
-            produces = {"text/plain"})
-    Flux<String> getFooFlux();
 
     @GetMapping(
             path = "/bar",
