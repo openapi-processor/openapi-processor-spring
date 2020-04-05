@@ -239,7 +239,7 @@ class SchemaInfo implements MappingSchema {
     }
 
     boolean isArray () {
-        schema.type == 'array'
+        schema?.type == 'array'
     }
 
     boolean isObject () {
@@ -254,6 +254,10 @@ class SchemaInfo implements MappingSchema {
         schema.ref != null
     }
 
+    boolean isEmpty () {
+        !schema
+    }
+    
     boolean isEnum () {
         schema.enum != null
     }

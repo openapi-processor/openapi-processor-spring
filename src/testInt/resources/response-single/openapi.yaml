@@ -1,0 +1,79 @@
+openapi: 3.0.2
+info:
+  title: test single mapping
+  version: 1.0.0
+
+paths:
+  /books:
+    get:
+      description: returns all known books
+      responses:
+        '200':
+          description: list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+    post:
+      description: add new books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: success
+
+  /books/{isbn}:
+    get:
+      description: get the book with the given {isbn}
+      parameters:
+        - name: isbn
+          in: path
+          description: isbn of the book
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: a single book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+    put:
+      description: update the book with the given {isbn}
+      parameters:
+        - name: isbn
+          in: path
+          description: isbn of the book
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: success
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string

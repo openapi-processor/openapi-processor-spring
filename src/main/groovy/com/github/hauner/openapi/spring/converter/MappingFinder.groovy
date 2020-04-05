@@ -121,6 +121,15 @@ class MappingFinder {
 
     }
 
+    class SingleTypeMatcher extends BaseVisitor {
+
+        @Override
+        boolean match (TypeMapping mapping) {
+            mapping.sourceTypeName == 'single'
+        }
+
+    }
+    
     class AddParameterMatcher extends BaseVisitor {
 
         @Override
@@ -249,6 +258,44 @@ class MappingFinder {
     List<Mapping> findResultMapping (SchemaInfo info) {
         List<Mapping> ep = filterMappings (new ResultTypeMatcher (schema: info), typeMappings)
 
+        if (!ep.empty) {
+            return ep
+        }
+
+        []
+    }
+
+    /**
+     * find endpoint single type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the single type mapping.
+     */
+    List<Mapping> findEndpointSingleMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new EndpointMatcher (schema: info), typeMappings)
+
+        def matcher = new SingleTypeMatcher (schema: info)
+        def result = ep.findAll {
+            it.matches (matcher)
+        }
+
+        if (!result.empty) {
+            return result
+        }
+
+        []
+    }
+    
+    /**
+     * find (global) single type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the single type mapping.
+     */
+    List<Mapping> findSingleMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new SingleTypeMatcher (schema: info), typeMappings)
+
+        
         if (!ep.empty) {
             return ep
         }

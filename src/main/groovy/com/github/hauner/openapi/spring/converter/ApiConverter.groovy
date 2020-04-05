@@ -61,6 +61,7 @@ class ApiConverter {
 
     private DataTypeConverter dataTypeConverter
     private ResultDataTypeWrapper dataTypeWrapper
+    private SingleDataTypeWrapper singleDataTypeWrapper
     private MappingFinder mappingFinder
     private ApiOptions options
 
@@ -73,6 +74,7 @@ class ApiConverter {
 
         dataTypeConverter = new DataTypeConverter(this.options)
         dataTypeWrapper = new ResultDataTypeWrapper(this.options)
+        singleDataTypeWrapper = new SingleDataTypeWrapper(this.options)
         mappingFinder = new MappingFinder (typeMappings: this.options.typeMappings)
     }
 
@@ -233,10 +235,11 @@ class ApiConverter {
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
+        DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
 
         new ModelRequestBody(
             contentType: contentType,
-            requestBodyType: dataType,
+            requestBodyType: singleDataType,
             required: required)
     }
 
@@ -256,7 +259,8 @@ class ApiConverter {
             def info = new SchemaInfo (path: path)
 
             DataType dataType = new NoneDataType()
-            DataType resultDataType = dataTypeWrapper.wrap (dataType, info)
+            DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
+            DataType resultDataType = dataTypeWrapper.wrap (singleDataType, info)
 
             def resp = new ModelResponse (
                 responseType: resultDataType)
@@ -278,7 +282,8 @@ class ApiConverter {
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
-            DataType resultDataType = dataTypeWrapper.wrap (dataType, info)
+            DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
+            DataType resultDataType = dataTypeWrapper.wrap (singleDataType, info)
 
             def resp = new ModelResponse (
                 contentType: contentType,
