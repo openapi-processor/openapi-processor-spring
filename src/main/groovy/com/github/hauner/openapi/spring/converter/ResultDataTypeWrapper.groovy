@@ -41,7 +41,7 @@ class ResultDataTypeWrapper {
 
     /**
      * wraps a (converted) result data type with the configured result java data type like
-     * {@code ResponseEntity}, {@code Flux} etc.
+     * {@code ResponseEntity}.
      *
      * If the configuration for the result type is 'plain' the source data type is not wrapped.
      *
