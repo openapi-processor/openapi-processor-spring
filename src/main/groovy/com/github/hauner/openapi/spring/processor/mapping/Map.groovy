@@ -24,14 +24,14 @@ package com.github.hauner.openapi.spring.processor.mapping
 class Map {
 
     /**
-     * global type mappings
-     */
-    List<Type> types
-    
-    /**
      * global result mapping
      */
     Result result
+    
+    /**
+     * global type mappings
+     */
+    List<Type> types
     
     /**
      * global parameter mappings
