@@ -1,0 +1,6 @@
+name: openapi-processor-spring
+title: openapi-processor-spring
+version: master
+#start_page: ROOT:index.adoc
+nav:
+- modules/ROOT/nav.adoc

@@ -1,0 +1,114 @@
+:author: Martin Hauner
+:revdate: 05.04.2020
+:page-title: openapi-processor-spring
+:page-layout: default
+include::partial$links.adoc[]
+
+//
+// content
+//
+image:openapi-processor-spring$$@$$1280x200.png[openapi-processor-spring]
+
+// badges
+link:{oaps-ci}[image:{badge-ci}[]]
+link:{oaps-license}[image:{badge-license}[]]
+
+
+*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model only code generator for
+link:{springboot}[Spring Boot].
+
+It supports an API first approach where you API is explicitly defined and documented with OpenAPI
+ before it gets implemented.
+
+The processor generates java interfaces based on the endpoint description of the API and simple POJO
+classes for parameter or response objects defined in the API. The processor adds all the required
+spring & jackson annotations to the interface and all that is left to *you* is the implementation
+of the generated interfaces in any way you like.
+
+The interfaces will help to keep the implementation in sync with the API. If anything relevant
+changes  in the API the interface changes and the compiler will warn that the interface is not
+implemented correctly.
+
+See the xref:processor.adoc[processor intro] for a short example.
+
+
+== Features
+
+- generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints
+and schemas to allow full control of the endpoint implementation. It does not generate any other
+file. See xref:processor.adoc[processor].
+
+- powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml
+to existing java types.
++
+For example to map the openapi `array` type to a different java collections or to map paging
+parameters and results to th Spring types like `Page<>` & `Pageable`.
++
+mappings can be defined globally or for a specific response or parameter or even only for a specific
+endpoint. See xref:mapping.adoc[type mapping].
+
+- Annotation based WebFlux support. Actually there is *no* explicit WebFlux support but the mapping
+allows to define *single* wrapper classes that wrap non-array result types (e.g. `Mono<>`).
+Together with the standard `array` mapping (e.g. `Flux<>`) there is WebFlux support. +
+[.badge .badge-since]+since 1.0.0.M13+
+
+- generates human readable code.
+
+- add additional parameters to an endpoint which are not defined in the OpenAPI description. For
+example to pass a `HttpServletRequest` to the endpoint implementation. +
+[.badge .badge-since]+since 1.0.0.M6+
+
+- supports bean validations. The constraints of the openapi description are mapped to java bean
+validation annotations. +
+[.badge .badge-since]+since 1.0.0.M6+
+
+- allows to exclude endpoints from generation. This is useful if the processor does not create the
+correct code for an endpoint. That way the processor can still be used for all the other endpoints. +
+[.badge .badge-since]+since 1.0.0.M6+
+
+- handle multiple responses by generating one endpoint method for each response content type. +
+[.badge .badge-since]+since 1.0.0.M11+
+
+- the generated code does not use swagger annotations. There is no need to generate the
+documentation from the code when the code is generated from the documentation (i.e. an openapi.yaml).
++
+NOTE: The generated source code has to be included in a project to compile it. This is easily done
+with the link:{oap-gradle}[openapi-processor-gradle] plugin. See xref:gradle.adoc[Using Gradle].
+
+- gradle support via link:{oap-gradle}[openapi-processor-gradle] plugin (the plugin is currently the
+only option to run the processor).
+
+== Releases
+
+See the link:{oaps-releases}[release notes, window="_blank"] to find the latest release. The full
+artifact name is
+
+.in gradle short notation
+----
+    com.github.hauner.openapi:openapi-processor-spring:<version>
+----
+
+== Feedback
+
+In case some feature is missing or the generated code is not 100% what you would expect create an
+link:{oaps-issues}[issue]. Preferably with a test case. Providing a test case will help
+significantly :-)
+
+A test case is a single folder with an `openapi.yaml` & `mapping.yaml` file and the expected Java
+files the processor should create. The structure looks like this:
+
+    my-new-test-case/
+        openapi.yaml
+        mapping.yaml
+        generated/
+           api/
+               AnEndpointInterface.java
+               .. more api interfaces ..
+           model/
+               AModelClass.java
+               AnotherModelClass.java
+               .. more model files ..
+
+The `mapping.yaml` contains the type mapping information.
+
+See the link:{oaps-inttests}[existing integration tests] for some examples.

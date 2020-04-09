@@ -1,0 +1,71 @@
+= Basic (primitive) mappings
+include::partial$links.adoc[]
+
+The OpenAPI specification defines a couple of basic link:{openapi-spec-types}[data types]. The
+basic data types are built-in into the processor. That means it will map the basic types
+automatically to a corresponding java type. There is no explicit type mapping required.
+
+The types with no default mapping can be mapped to a java type using the mapping configuration.
+
+== OpenAPI to Java type mapping
+
+The following table shows the automatic mapping of OpenAPIs primitive types to Java.
+
+
+|===
+| `type` | `format` | java type
+
+| `boolean`
+|
+| `java.lang.Boolean`
+
+| `integer`
+|
+| `java.lang.Integer`
+
+| `integer`
+| `int32`
+| `java.lang.Integer`
+
+| `integer`
+| `int64`
+| `java.lang.Long`
+
+| `number`
+|
+| `java.lang.Float`
+
+| `number`
+| `float`
+| `java.lang.Float`
+
+| `number`
+| `double`
+| `java.lang.Double`
+
+| `string`
+|
+| `java.lang.String`
+
+| `string`
+| `binary`
+| no default mapping
+
+| `string`
+| `byte`
+| no default mapping
+
+| `string`
+| `date`
+| `java.time.LocalDate`
+
+| `string`
+| `date-time`
+| `java.time.OffsetDataTime`
+
+| `string`
+| `password`
+| no default mapping
+
+|===
+

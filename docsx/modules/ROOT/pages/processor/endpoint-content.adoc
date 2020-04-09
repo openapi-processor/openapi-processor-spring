@@ -1,0 +1,159 @@
+= Endpoint content types
+
+A simple path of the OpenAPI description will usually produce a single endpoint method in the target
+interface as described in the introduction.
+
+OpenAPI allows us to define more complex apis that behave differently based on the request header.
+For example the following api definition can return its response in different format. As json or as
+plain text:
+
+[source,yaml]
+----
+openapi: 3.0.2
+info:
+  title: multiple response content types
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          description: json or plain text result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+            text/plain:
+                schema:
+                  type: string
+        default:
+          description: error
+          content:
+            application/xml:
+                schema:
+                  $ref: '#/components/schemas/Error'
+
+components:
+
+  schemas:
+    Foo:
+      type: object
+      properties:
+        bar:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+----
+
+A client request uses the request `Accept` header to tell the api which result content types it can
+handle.
+
+Using a single endpoint method it has to decide which response to create. This leads to some boring
+`if/else` code. To avoid this the processor creates one endpoint method for each possible response.
+
+== multiple content types
+
+For the example above (ignoring the `default` xml response) it creates the following interface:
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface Api {
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"application/json"})
+    Foo getFooApplicationJson();
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"text/plain"})
+    String getFooTextPlain();
+
+}
+----
+
+The apis normal response (status '200') can return the result as json or as plain text which leads
+to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
+
+One method which is called when json is requested and one when plain text is requested. Spring will
+take care of selecting the correct endpoint.
+
+
+== multiple content types & default content type
+
+In the (contrived) example our api does also define another content type for all other result status
+codes (usually the errors): xml. This results in the following code:
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface Api {
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"application/json", "application/xml"})
+    Object getFooApplicationJson();
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"text/plain", "application/xml"})
+    Object getFooTextPlain();
+
+}
+----
+
+Both endpoints need to handle the success case (json or text) and the error (xml) case. So both
+mappings contain the xml content type. To handle the multiple responses the return type is now
+`Object`.
+
+== multiple content types, default content type & result wrapper
+
+In case we (globally) enable a result wrapper, e.g. `ResponseEntity` in the `mapping.yaml`
+
+[source, yaml]
+----
+map:
+  result:
+    to: org.springframework.http.ResponseEntity
+----
+
+the created code will now look like this:
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface Api {
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"application/json", "application/xml"})
+    ResponseEntity<?> getFooApplicationJson();
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"text/plain", "application/xml"})
+    ResponseEntity<?> getFooTextPlain();
+
+}
+----
+
+The response type is now wrapped by a `ResponseEntity` and to handle the multiple response type the
+generic parameter is the *unknown* type.

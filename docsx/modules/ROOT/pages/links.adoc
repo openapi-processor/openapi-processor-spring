@@ -1,0 +1,12 @@
+= Links
+include::partial$links.adoc[]
+
+* link:{openapi}[OpenAPI, window="_blank"] Homepage of the OpenAPI Initiative.
+* link:{openapi-spec}[OpenAPI specification, window="_blank"] Github repository of the OpenAPI
+specification.
+* link:{openapi-tools}[OpenAPI tools, window="_blank"] List of OpenAPI tools.
+* link:{openapi-generator}[OpenAPI generator, window="_blank"] Generate clients, servers and
+documentation from OpenAPI 2.0/3.x documents.
+* link:{swagger-parser}:[Swagger OpenAPI parser, window="_blank"] Java parser for OpenAPI specs.
+* link:{openapi4j}[openapi4j OpenAPI parser, window="_blank"] Alternative Java parser for OpenAPI
+specs.

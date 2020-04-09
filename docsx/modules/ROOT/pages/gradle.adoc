@@ -1,0 +1,99 @@
+= Gradle Plugin
+include::partial$links.adoc[]
+
+The link:{oap-gradle}[openapi-processor-gradle] is currently the only tool to run any of the
+**openapi-processor**'s.
+
+To use it in a gradle project the gradle file of the project requires a few additional instructions.
+The following sections describe how to activate & configure **openapi-processor-spring** in a
+`build.gradle` file.
+
+
+== adding the plugin
+
+The [openapi-processor-gradle][oap-gradle] plugin is activated (like any other gradle plugin) in
+ the `plugins` configuration:
+
+[source,groovy]
+----
+plugins {
+    ....
+    // add openapi-processor-gradle plugin
+    id 'com.github.hauner.openapi-processor' version '<version>'
+}
+----
+
+== configuring processor-spring
+
+The plugin will add an `openapiProcessor` configuration block that is used to configure the processors.
+Configuration for a specific processor is placed inside it using the processor name as configuration
+block name.
+
+[source,groovy]
+----
+openapiProcessor {
+
+    spring {
+        processor 'com.github.hauner.openapi:openapi-processor-spring:<version>'
+        apiPath "$projectDir/src/api/openapi.yaml"
+        targetDir "$projectDir/build/openapi"
+        mapping "$projectDir/openapi-mapping.yaml"
+        showWarnings true
+    }
+
+}
+----
+
+* `processor`: (**required**) the processor dependency. This works in the same way as adding a
+dependency to a configuration in the gradle `dependencies` block. It is given here to avoid
+un-wanted side effects on the build dependencies of the project.
+
+* `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the
+processor. If set in the top level block it will be used for all configured processors.
+
+* `targetDir`: (**required**) the output folder for generating interfaces & models. This is the
+parent of the `packageName` folder tree. It is recommended to set this to a subfolder of gradle's
+standard `build` directory so it is cleared by the `clean` task and does not pollute the sources
+directory.
++
+See <<running processor-spring>> how to include the `targetDir` in compilation & packing.
+
+* `mapping`: (**required**, since 1.0.0.M6) provides the processor mapping options. This is a path
+to yaml file. See xref:processor/configuration.adoc[Configuration] for a description of the mapping
+yaml. This replaces the `typeMappings` option.
+
+* `showWarnings`: (**optional**) `true` to show warnings from the open api parser or `false`
+(default) to show no warnings.
+
+
+== running processor-spring
+
+The plugin will add a gradle task `processSpring` to run the processor.
+
+To automatically generate & compile the processor output two additional configurations are required.
+
+* the `sourceSets` are extended to include the processor output (assuming a java project):
++
+[source,groovy]
+----
+sourceSets {
+    main {
+        java {
+            // add generated files
+            srcDir 'build/openapi'
+        }
+    }
+}
+----
+
+* and the `compileJava` task gets a dependency on `processSpring` so it runs before compilation
+(again, assuming a java project):
++
+[source,groovy]
+----
+// generate api before compiling
+compileJava.dependsOn ('processSpring')
+----
+
+Adding automatic compilation in this way will also automatically include the generated files into the
+`jar` build artifact.

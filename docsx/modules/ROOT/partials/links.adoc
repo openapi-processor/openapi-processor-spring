@@ -1,0 +1,28 @@
+//
+// external openapi-processor links
+//
+:badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
+:badge-ci: https://github.com/hauner/openapi-processor-spring/workflows/ci/badge.svg
+:oaps-ci: https://github.com/hauner/openapi-processor-spring/actions?query=workflow%3Aci
+:oaps-issues: https://github.com/hauner/openapi-processor-spring/issues
+:oaps-inttests: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources
+:oaps-license: https://github.com/hauner/openapi-processor-spring/blob/master/LICENSE
+:oaps-releases: https://github.com/hauner/openapi-processor-spring/releases
+:oaps-bintray: https://bintray.com/hauner/openapi-processor
+:oap-gradle: https://github.com/hauner/openapi-processor-gradle
+
+//
+// other external links
+//
+:openapi: https://www.openapis.org/
+:openapi-spec: https://github.com/OAI/OpenAPI-Specification
+:openapi-spec-types: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#dataTypes
+:openapi-generator: https://openapi-generator.tech/
+:openapi-tools: https://openapi.tools/
+
+:swagger-parser: https://github.com/swagger-api/swagger-parser
+:openapi4j: https://github.com/openapi4j/openapi4j
+
+:springboot: https://spring.io/projects/spring-boot
+:license: http://www.apache.org/licenses/LICENSE-2.0.txt
+:bean-validation: https://beanvalidation.org/

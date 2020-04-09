@@ -1,0 +1,75 @@
+= Parameters
+
+== query parameters
+
+Query parameters are converted to method parameters with a `@RequestParam()` annotation.
+
+For example the following query parameter description:
+
+[source, yaml]
+----
+paths:
+  /endpoint:
+    get:
+      parameters:
+        - name: foo
+          description: simple query parameter with default value
+          in: query
+          required: false
+          schema:
+            type: string
+            default: 'not set'
+      responses:
+        '204':
+          description: empty
+----
+
+will generate the following interface method:
+
+[source,java]
+----
+@GetMapping(path = "/endpoint")
+ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo", required = false, defaultValue = "not set") String foo);
+----
+
+== path parameters
+
+todo...
+
+== header parameters
+
+todo...
+
+== cookie parameters
+
+todo...
+
+== additional parameters
+
+Sometimes it may be useful to add an additional parameter to an endpoint that is an implementation
+detail, i.e. it should not be part of the OpenAPI description. Think of the `HttpServletRequest` or
+a custom Spring `HandlerMethodArgumentResolver`.
+
+Such an additional parameter can be described in the mappings as an endpoint parameter. Assuming
+there is an endpoint `/foo` defined in the OpenAPI interfaces it is possible to add extra parameters
+by using an `add <parameter name>` `as <java type>` entry.
+
+[source, yaml]
+----
+map:
+  paths:
+    /foo:
+
+      parameters:
+        - add: request
+          as: javax.servlet.http.HttpServletRequest
+----
+
+will add the *additional* parameter to the generated interface method.
+
+[source, java]
+----
+@GetMapping(path = "/foo")
+ResponseEntity<?> getFoo(@RequestParam(name = "bar") String bar, HttpServletRequest request);
+----
+
