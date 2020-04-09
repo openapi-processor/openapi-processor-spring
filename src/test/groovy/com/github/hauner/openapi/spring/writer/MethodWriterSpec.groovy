@@ -32,6 +32,7 @@ import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
@@ -60,7 +61,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getPing();
+    void getPing();
 """
     }
 
@@ -77,7 +78,7 @@ class MethodWriterSpec extends Specification {
         def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ResponseEntity<${type.capitalize ()}> get${type.capitalize ()}();
+    ${type.capitalize ()} get${type.capitalize ()}();
 """
 
         where:
@@ -109,7 +110,7 @@ class MethodWriterSpec extends Specification {
         def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ResponseEntity<GetInlineResponse> getInline();
+    GetInlineResponse getInline();
 """
     }
 
@@ -128,7 +129,7 @@ class MethodWriterSpec extends Specification {
         def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ResponseEntity<Collection<String>> getCollection();
+    Collection<String> getCollection();
 """
     }
 
@@ -147,7 +148,7 @@ class MethodWriterSpec extends Specification {
         def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ResponseEntity<List<String>> getList();
+    List<String> getList();
 """
     }
 
@@ -166,7 +167,7 @@ class MethodWriterSpec extends Specification {
         def rsp = endpoint.getFirstResponse ('200')
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ResponseEntity<Set<String>> getSet();
+    Set<String> getSet();
 """
     }
 
@@ -183,7 +184,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "foo") String foo);
+    void getFoo(@RequestParam(name = "foo") String foo);
 """
     }
 
@@ -200,7 +201,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false) String foo);
+    void getFoo(@RequestParam(name = "foo", required = false) String foo);
 """
     }
 
@@ -218,7 +219,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestHeader(name = "x-foo") String xFoo);
+    void getFoo(@RequestHeader(name = "x-foo") String xFoo);
 """
     }
 
@@ -235,7 +236,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
+    void getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
 """
     }
 
@@ -252,7 +253,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@CookieValue(name = "foo") String foo);
+    void getFoo(@CookieValue(name = "foo") String foo);
 """
     }
 
@@ -269,7 +270,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@CookieValue(name = "foo", required = false) String foo);
+    void getFoo(@CookieValue(name = "foo", required = false) String foo);
 """
     }
 
@@ -291,7 +292,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(Foo foo);
+    void getFoo(Foo foo);
 """
     }
 
@@ -312,7 +313,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam Map<String, String> foo);
+    void getFoo(@RequestParam Map<String, String> foo);
 """
     }
 
@@ -329,7 +330,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFOOooBARrr(@RequestParam(name = "foo") String foo);
+    void getFOOooBARrr(@RequestParam(name = "foo") String foo);
 """
     }
 
@@ -345,7 +346,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getBar();
+    void getBar();
 """
     }
 
@@ -362,7 +363,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "_fo-o") String foO);
+    void getFoo(@RequestParam(name = "_fo-o") String foO);
 """
     }
 
@@ -383,7 +384,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    ResponseEntity<Void> postFoo(@RequestBody FooRequestBody body);
+    void postFoo(@RequestBody FooRequestBody body);
 """
     }
 
@@ -405,7 +406,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    ResponseEntity<Void> postFoo(@RequestBody(required = false) FooRequestBody body);
+    void postFoo(@RequestBody(required = false) FooRequestBody body);
 """
     }
 
@@ -424,7 +425,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+    void getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 """
     }
 
@@ -443,7 +444,7 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getFoo(@RequestParam(name = "foo", required = false, defaultValue = "5") Long foo);
+    void getFoo(@RequestParam(name = "foo", required = false, defaultValue = "5") Long foo);
 """
     }
 
@@ -468,7 +469,7 @@ class MethodWriterSpec extends Specification {
 """)
     }
 
-    void "writes method with any response type when it has multiple result contents" () {
+    void "writes method with any response type when it has multiple result contents with default result type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
                 new Response (contentType: 'application/json',
@@ -486,7 +487,55 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
+    Object getFoo();
+"""
+    }
+
+    void "writes method with any response type when it has multiple result contents with wrapped result type" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response (contentType: 'application/json',
+                    responseType: new ResultDataType (
+                        type: 'ResponseEntity',
+                        pkg: 'org.springframework.http',
+                        dataType: new CollectionDataType (item: new StringDataType ())))
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new ResultDataType (
+                        type: 'ResponseEntity',
+                        pkg: 'org.springframework.http',
+                        dataType: new CollectionDataType (item: new StringDataType ())))
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
     ResponseEntity<?> getFoo();
+"""
+    }
+
+    void "writes method with wrapped void response type" () {
+        def endpoint = createEndpoint (path: '/ping', method: HttpMethod.GET, responses: [
+            '204': [new Response(responseType:
+                new ResultDataType (
+                    type: 'ResponseEntity',
+                    pkg: 'org.springframework.http',
+                    dataType: new NoneDataType ().wrappedInResult ()
+                ))]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @GetMapping(path = "${endpoint.path}")
+    ResponseEntity<Void> getPing();
 """
     }
 

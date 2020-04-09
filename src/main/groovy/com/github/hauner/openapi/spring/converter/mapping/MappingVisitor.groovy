@@ -17,14 +17,18 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Provides properties required to check if a {@link Mapping} applies to a
- * {@link com.github.hauner.openapi.spring.converter.schema.SchemaType}.
- *
+ * interface for type mapping matching logic. 
+ * 
+ * 
  * @author Martin Hauner
  */
-interface MappingSchemaType {
+interface MappingVisitor {
 
-    String getType ()
-    String getFormat ()
+    boolean match (EndpointTypeMapping mapping)
+    boolean match (ParameterTypeMapping mapping)
+    boolean match (ResponseTypeMapping mapping)
+    boolean match (TypeMapping mapping)
+    boolean match (AddParameterTypeMapping mapping)
+    boolean match (ResultTypeMapping mapping)
 
 }

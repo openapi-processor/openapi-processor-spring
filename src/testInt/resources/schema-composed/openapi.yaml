@@ -52,7 +52,7 @@ components:
         - $ref: '#/components/schemas/Three'
 
     FooOneOf:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/One'
         - $ref: '#/components/schemas/Two'
         - $ref: '#/components/schemas/Three'

@@ -44,6 +44,9 @@ map:
         - java.lang.String
         - java.lang.Double
 
+  result: 
+    to: plain
+
   parameters:
     - name: foo
       to: java.util.List
@@ -66,6 +69,9 @@ map:
       types:
         - from: Schema
           to: java.util.Collection
+
+      result:
+        to: org.springframework.http.ResponseEntity
 
       parameters:
         - name: foo

@@ -1,4 +1,5 @@
 plugins {
+    id 'jacoco'
     id 'groovy'
     id 'java-library'
     id 'maven-publish'
@@ -79,6 +80,21 @@ dependencies {
 //    testIntRuntimeOnly 'org.slf4j:slf4j-nop:1.6.1'
 }
 
+
+tasks.withType(Test) {
+    finalizedBy jacocoTestReport
+}
+
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+project.jacocoTestReport {
+    getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
+}
+
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set ('sources')
     from sourceSets.main.allSource
@@ -103,6 +119,7 @@ dokka {
     outputDirectory = "$buildDir/docs/kotlin"
 }
 
+
 bintray {
     user = bintrayUser
     key = bintrayKey
@@ -120,6 +137,7 @@ bintray {
         }
     }
 }
+
 
 publishing {
     publications {

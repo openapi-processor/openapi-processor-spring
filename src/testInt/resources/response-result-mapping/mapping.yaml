@@ -1,0 +1,11 @@
+options:
+  package-name: generated
+
+map:
+  result:
+    to: plain
+
+  paths:
+    /bar:
+      result:
+        to: org.springframework.http.ResponseEntity

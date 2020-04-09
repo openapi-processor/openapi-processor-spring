@@ -2,6 +2,9 @@ options:
   package-name: generated
 
 map:
+  result:
+    to: org.springframework.http.ResponseEntity
+
   types:
     - from: Pageable
       to: org.springframework.data.domain.Pageable

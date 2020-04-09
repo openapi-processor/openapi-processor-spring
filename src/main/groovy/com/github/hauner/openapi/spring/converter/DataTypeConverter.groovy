@@ -18,21 +18,15 @@ package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.schema.ArraySchemaType
-import com.github.hauner.openapi.spring.converter.schema.ObjectSchemaType
-import com.github.hauner.openapi.spring.converter.schema.PrimitiveSchemaType
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
-import com.github.hauner.openapi.spring.converter.schema.SchemaType
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
-import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
+import com.github.hauner.openapi.spring.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -44,7 +38,6 @@ import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.LazyDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 
@@ -57,16 +50,15 @@ import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 class DataTypeConverter {
 
     private ApiOptions options
+    private MappingFinder finder
+
     private List<SchemaInfo> current
 
 
     DataTypeConverter(ApiOptions options) {
         this.options = options
+        this.finder = new MappingFinder(typeMappings: options.typeMappings)
         this.current = []
-    }
-
-    DataType none() {
-        new NoneDataType()
     }
 
     /**
@@ -74,32 +66,32 @@ class DataTypeConverter {
      * Stores named objects in {@code dataTypes} for re-use. {@code dataTypeInfo} provides the type
      * name used to add it to the list of data types.
      *
-     * @param dataTypeInfo the open api type with context information
+     * @param schemaInfo the open api type with context information
      * @param dataTypes known object types
      * @return the resulting java data type
      */
-    DataType convert (SchemaInfo dataTypeInfo, DataTypes dataTypes) {
-        if (isLoop (dataTypeInfo)) {
-            return new LazyDataType (info: dataTypeInfo, dataTypes: dataTypes)
+    DataType convert (SchemaInfo schemaInfo, DataTypes dataTypes) {
+        if (isLoop (schemaInfo)) {
+            return new LazyDataType (info: schemaInfo, dataTypes: dataTypes)
         }
 
-        push (dataTypeInfo)
+        push (schemaInfo)
 
         DataType result
-        if (dataTypeInfo.isRefObject ()) {
-            result = createRefDataType (dataTypeInfo, dataTypes)
+        if (schemaInfo.isRefObject ()) {
+            result = createRefDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isComposedObject ()) {
-            result = createComposedDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isComposedObject ()) {
+            result = createComposedDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isArray ()) {
-            result = createArrayDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isArray ()) {
+            result = createArrayDataType (schemaInfo, dataTypes)
 
-        } else if (dataTypeInfo.isObject ()) {
-            result = createObjectDataType (dataTypeInfo, dataTypes)
+        } else if (schemaInfo.isObject ()) {
+            result = createObjectDataType (schemaInfo, dataTypes)
 
         } else {
-            result = createSimpleDataType (dataTypeInfo, dataTypes)
+            result = createSimpleDataType (schemaInfo, dataTypes)
         }
 
         pop ()
@@ -109,7 +101,7 @@ class DataTypeConverter {
     private DataType createComposedDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             objectType = new MappedDataType (
                 type: targetType.name,
@@ -138,8 +130,7 @@ class DataTypeConverter {
         SchemaInfo itemSchemaInfo = schemaInfo.buildForItem ()
         DataType item = convert (itemSchemaInfo, dataTypes)
 
-        def arrayType
-        TargetType targetType = getMappedDataType (new ArraySchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
 
         def constraints = new DataTypeConstraints(
             defaultValue: schemaInfo.defaultValue,
@@ -148,21 +139,16 @@ class DataTypeConverter {
             maxItems: schemaInfo.maxItems,
         )
 
-        switch (targetType?.typeName) {
-            case Collection.name:
-                arrayType = new CollectionDataType (item: item, constraints: constraints)
-                break
-            case List.name:
-                arrayType = new ListDataType (item: item, constraints: constraints)
-                break
-            case Set.name:
-                arrayType = new SetDataType (item: item, constraints: constraints)
-                break
-            default:
-                arrayType = new ArrayDataType (item: item, constraints: constraints)
+        if (targetType) {
+            def mappedDataType = new MappedCollectionDataType (
+                type: targetType.name,
+                pkg: targetType.pkg,
+                item: item
+            )
+            return mappedDataType
         }
 
-        arrayType
+        new ArrayDataType (item: item, constraints: constraints)
     }
 
     private DataType createRefDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
@@ -172,7 +158,7 @@ class DataTypeConverter {
     private DataType createObjectDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
         def objectType
 
-        TargetType targetType = getMappedDataType (new ObjectSchemaType (schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             switch (targetType?.typeName) {
                 case Map.name:
@@ -217,7 +203,7 @@ class DataTypeConverter {
 
     private DataType createSimpleDataType (SchemaInfo schemaInfo, DataTypes dataTypes) {
 
-        TargetType targetType = getMappedDataType (new PrimitiveSchemaType(schemaInfo))
+        TargetType targetType = getMappedDataType (schemaInfo)
         if (targetType) {
             def simpleType = new MappedDataType (
                 type: targetType.name,
@@ -295,37 +281,38 @@ class DataTypeConverter {
         enumType
     }
 
-    private TargetType getMappedDataType (SchemaType schemaType) {
+    private TargetType getMappedDataType (SchemaInfo info) {
         // check endpoint mappings
-        List<Mapping> endpointMatches = schemaType.matchEndpointMapping (options.typeMappings)
+        List<Mapping> endpointMatches = finder.findEndpointMappings (info)
+        
         if (!endpointMatches.empty) {
 
             if (endpointMatches.size () != 1) {
                 throw new AmbiguousTypeMappingException (endpointMatches)
             }
 
-            TargetType target = (endpointMatches.first() as TypeMapping).targetType
+            TargetType target = (endpointMatches.first() as TargetTypeMapping).targetType
             if (target) {
                 return target
             }
         }
 
         // check global io (parameter & response) mappings
-        List<Mapping> ioMatches = schemaType.matchIoMapping (options.typeMappings)
+        List<Mapping> ioMatches = finder.findIoMappings (info)
         if (!ioMatches.empty) {
 
             if (ioMatches.size () != 1) {
                 throw new AmbiguousTypeMappingException (ioMatches)
             }
 
-            TargetType target = (ioMatches.first() as TypeMapping).targetType
+            TargetType target = (ioMatches.first() as TargetTypeMapping).targetType
             if (target) {
                 return target
             }
         }
 
         // check global type mapping
-        List<Mapping> typeMatches = schemaType.matchTypeMapping (options.typeMappings)
+        List<Mapping> typeMatches = finder.findTypeMappings (info)
         if (typeMatches.isEmpty ()) {
             return null
         }
@@ -334,10 +321,10 @@ class DataTypeConverter {
             throw new AmbiguousTypeMappingException (typeMatches)
         }
 
-        TypeMapping match = typeMatches.first () as TypeMapping
+        def match = typeMatches.first () as TargetTypeMapping
         return match.targetType
     }
-
+    
     /**
      * push the current schema info.
      *

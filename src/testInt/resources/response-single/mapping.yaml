@@ -1,0 +1,11 @@
+options:
+  package-name: generated
+
+map:
+
+  types:
+    - from: single
+      to: reactor.core.publisher.Mono
+
+    - from: array
+      to: reactor.core.publisher.Flux

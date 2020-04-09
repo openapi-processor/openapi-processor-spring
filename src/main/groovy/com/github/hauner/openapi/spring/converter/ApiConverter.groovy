@@ -17,19 +17,16 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
 import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
+import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
@@ -63,26 +60,10 @@ class ApiConverter {
     public static final String INTERFACE_DEFAULT_NAME = ''
 
     private DataTypeConverter dataTypeConverter
+    private ResultDataTypeWrapper dataTypeWrapper
+    private SingleDataTypeWrapper singleDataTypeWrapper
+    private MappingFinder mappingFinder
     private ApiOptions options
-
-    class MappingSchemaEndpoint implements MappingSchema {
-        String path
-
-        @Override
-        String getPath () {
-            path
-        }
-
-        @Override
-        String getName () {
-            null
-        }
-
-        @Override
-        String getContentType () {
-            null
-        }
-    }
 
     ApiConverter(ApiOptions options) {
         this.options = options
@@ -92,6 +73,9 @@ class ApiConverter {
         }
 
         dataTypeConverter = new DataTypeConverter(this.options)
+        dataTypeWrapper = new ResultDataTypeWrapper(this.options)
+        singleDataTypeWrapper = new SingleDataTypeWrapper(this.options)
+        mappingFinder = new MappingFinder (typeMappings: this.options.typeMappings)
     }
 
     /**
@@ -164,7 +148,7 @@ class ApiConverter {
             ep.parameters.add (createParameter (ep.path, parameter, dataTypes, resolver))
         }
 
-        List<Mapping> addMappings = findAdditionalParameter (ep)
+        List<Mapping> addMappings = mappingFinder.findAdditionalEndpointParameter (ep.path)
         addMappings.each {
             ep.parameters.add (createAdditionalParameter (ep.path, it as AddParameterTypeMapping, dataTypes, resolver))
         }
@@ -200,18 +184,14 @@ class ApiConverter {
             def httpStatus = responseEntry.key
             def httpResponse = responseEntry.value
 
-            if (!httpResponse.content) {
-                ep.addResponses (httpStatus, [ModelResponse.EMPTY])
-            } else {
-                List<ModelResponse> results = createResponses (
-                    ep.path,
-                    httpStatus,
-                    httpResponse,
-                    dataTypes,
-                    resolver)
+            List<ModelResponse> results = createResponses (
+                ep.path,
+                httpStatus,
+                httpResponse,
+                dataTypes,
+                resolver)
 
-                ep.addResponses (httpStatus, results)
-            }
+            ep.addResponses (httpStatus, results)
         }
 
     }
@@ -255,10 +235,11 @@ class ApiConverter {
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
+        DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
 
         new ModelRequestBody(
             contentType: contentType,
-            requestBodyType: dataType,
+            requestBodyType: singleDataType,
             required: required)
     }
 
@@ -274,8 +255,20 @@ class ApiConverter {
     }
 
     private List<ModelResponse> createResponses (String path, String httpStatus, Response response, DataTypes dataTypes, RefResolver resolver) {
-        def responses = []
+        if (!response.content) {
+            def info = new SchemaInfo (path: path)
 
+            DataType dataType = new NoneDataType()
+            DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
+            DataType resultDataType = dataTypeWrapper.wrap (singleDataType, info)
+
+            def resp = new ModelResponse (
+                responseType: resultDataType)
+
+            return [resp]
+        }
+
+        def responses = []
         response.content.each { Map.Entry<String, MediaType> contentEntry ->
             def contentType = contentEntry.key
             def mediaType = contentEntry.value
@@ -289,26 +282,17 @@ class ApiConverter {
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
+            DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
+            DataType resultDataType = dataTypeWrapper.wrap (singleDataType, info)
 
             def resp = new ModelResponse (
                 contentType: contentType,
-                responseType: dataType)
+                responseType: resultDataType)
 
             responses.add (resp)
         }
 
         responses
-    }
-
-    private List<Mapping> findAdditionalParameter (Endpoint ep) {
-        def addMappings = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint (path: ep.path))
-        }.collectMany {
-            it.childMappings
-        }.findAll {
-            it.matches (Mapping.Level.ADD, null as MappingSchema)
-        }
-        addMappings as List<Mapping>
     }
 
     private String getInlineRequestBodyName (String path) {
@@ -319,22 +303,8 @@ class ApiConverter {
         Identifier.toClass (path) + 'Response' + httpStatus
     }
 
-
     private boolean isExcluded (String path) {
-        def endpointMatches = options.typeMappings.findAll {
-            it.matches (Mapping.Level.ENDPOINT, new MappingSchemaEndpoint(path: path))
-        }
-
-        if (!endpointMatches.empty) {
-            if (endpointMatches.size () != 1) {
-                throw new AmbiguousTypeMappingException (endpointMatches)
-            }
-
-            def match = endpointMatches.first () as EndpointTypeMapping
-            return match.exclude
-        }
-
-        false
+        mappingFinder.isExcludedEndpoint (path)
     }
 
     private String getInterfaceName (def op, boolean excluded) {

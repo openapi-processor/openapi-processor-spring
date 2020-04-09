@@ -24,6 +24,11 @@ package com.github.hauner.openapi.spring.processor.mapping
 class Map {
 
     /**
+     * global result mapping
+     */
+    Result result
+    
+    /**
      * global type mappings
      */
     List<Type> types

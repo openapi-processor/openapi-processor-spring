@@ -28,6 +28,7 @@ import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MethodWriter
 import com.github.hauner.openapi.spring.writer.StringEnumWriter
+import org.slf4j.LoggerFactory
 
 /**
  *  Entry point of openapi-processor-spring.
@@ -36,6 +37,7 @@ import com.github.hauner.openapi.spring.writer.StringEnumWriter
  *  @author Bastian Wilhelm
  */
 class SpringProcessor implements OpenApiProcessor {
+    private static final LOG = LoggerFactory.getLogger (SpringProcessor)
 
     @Override
     String getName () {
@@ -44,38 +46,43 @@ class SpringProcessor implements OpenApiProcessor {
 
     @Override
     void run (Map<String, ?> processorOptions) {
-        def parser = new Parser ()
-        OpenApi openapi = parser.parse (processorOptions)
-        if (processorOptions.showWarnings) {
-            openapi.printWarnings ()
-        }
-
-        def options = convertOptions (processorOptions)
-        def cv = new ApiConverter(options)
-        def api = cv.convert (openapi)
-
-        def headerWriter = new HeaderWriter()
-        def beanValidationFactory = new BeanValidationFactory()
-
-        def writer = new ApiWriter (options,
-            new InterfaceWriter(
-                headerWriter: headerWriter,
-                methodWriter: new MethodWriter(
+        try {
+            def parser = new Parser ()
+            OpenApi openapi = parser.parse (processorOptions)
+            if (processorOptions.showWarnings) {
+                openapi.printWarnings ()
+            }
+    
+            def options = convertOptions (processorOptions)
+            def cv = new ApiConverter(options)
+            def api = cv.convert (openapi)
+    
+            def headerWriter = new HeaderWriter()
+            def beanValidationFactory = new BeanValidationFactory()
+    
+            def writer = new ApiWriter (options,
+                new InterfaceWriter(
+                    headerWriter: headerWriter,
+                    methodWriter: new MethodWriter(
+                        beanValidationFactory: beanValidationFactory,
+                        apiOptions: options
+                    ),
                     beanValidationFactory: beanValidationFactory,
                     apiOptions: options
                 ),
-                beanValidationFactory: beanValidationFactory,
-                apiOptions: options
-            ),
-            new DataTypeWriter(
-                headerWriter: headerWriter,
-                beanValidationFactory: beanValidationFactory,
-                apiOptions: options
-            ),
-            new StringEnumWriter(headerWriter: headerWriter)
-        )
-
-        writer.write (api)
+                new DataTypeWriter(
+                    headerWriter: headerWriter,
+                    beanValidationFactory: beanValidationFactory,
+                    apiOptions: options
+                ),
+                new StringEnumWriter(headerWriter: headerWriter)
+            )
+    
+            writer.write (api)
+        } catch (Exception e) {
+            LOG.error ("processing failed!", e)
+            throw e
+        }
     }
 
     private ApiOptions convertOptions (Map<String, ?> processorOptions) {

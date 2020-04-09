@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.schema
+package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
 import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
@@ -234,8 +234,12 @@ class SchemaInfo implements MappingSchema {
         schema.exclusiveMinimum
     }
 
+    boolean isPrimitive () {
+        schema.type in ['boolean', 'int', 'number', 'string']
+    }
+
     boolean isArray () {
-        schema.type == 'array'
+        schema?.type == 'array'
     }
 
     boolean isObject () {
@@ -250,6 +254,10 @@ class SchemaInfo implements MappingSchema {
         schema.ref != null
     }
 
+    boolean isEmpty () {
+        !schema
+    }
+    
     boolean isEnum () {
         schema.enum != null
     }

@@ -37,7 +37,7 @@ class MethodWriter {
     void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
         target.write ("""\
     ${createMappingAnnotation (endpoint, endpointResponse)}
-    ResponseEntity<${endpointResponse.responseType}> ${createMethodName (endpoint, endpointResponse)}(${createParameters(endpoint)});
+    ${endpointResponse.responseType} ${createMethodName (endpoint, endpointResponse)}(${createParameters(endpoint)});
 """)
     }
 

@@ -29,10 +29,15 @@ class Path {
     boolean exclude = false
 
     /**
+     * path limited result mapping
+     */
+    Result result
+    
+    /**
      * path limited type mappings
      */
     List<Type> types
-
+    
     /**
      * path limited parameter mappings
      */
