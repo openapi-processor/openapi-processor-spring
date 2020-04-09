@@ -29,14 +29,14 @@ The interfaces will help to keep the implementation in sync with the API. If any
 changes  in the API the interface changes and the compiler will warn that the interface is not
 implemented correctly.
 
-See the xref:processor.adoc[processor intro] for a short example.
+See the xref:processor/index.adoc[processor intro] for a short example.
 
 
 == Features
 
 - generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints
 and schemas to allow full control of the endpoint implementation. It does not generate any other
-file. See xref:processor.adoc[processor].
+file. See xref:processor/index.adoc[processor].
 
 - powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml
 to existing java types.
@@ -45,10 +45,10 @@ For example to map the openapi `array` type to a different java collections or t
 parameters and results to th Spring types like `Page<>` & `Pageable`.
 +
 mappings can be defined globally or for a specific response or parameter or even only for a specific
-endpoint. See xref:mapping.adoc[type mapping].
+endpoint. See xref:mapping/index.adoc[type mapping].
 
-- Annotation based WebFlux support. Actually there is *no* explicit WebFlux support but the mapping
-allows to define *single* wrapper classes that wrap non-array result types (e.g. `Mono<>`).
+- Annotation based WebFlux support. Actually there is *no* explicit WebFlux support, but the mapping
+allows defining a *single* wrapper classes that wrap non-array result types (e.g. `Mono<>`).
 Together with the standard `array` mapping (e.g. `Flux<>`) there is WebFlux support. +
 [.badge .badge-since]+since 1.0.0.M13+
 
@@ -58,11 +58,11 @@ Together with the standard `array` mapping (e.g. `Flux<>`) there is WebFlux supp
 example to pass a `HttpServletRequest` to the endpoint implementation. +
 [.badge .badge-since]+since 1.0.0.M6+
 
-- supports bean validations. The constraints of the openapi description are mapped to java bean
+- supports bean validations. The constraints of the openapi description map to java bean
 validation annotations. +
 [.badge .badge-since]+since 1.0.0.M6+
 
-- allows to exclude endpoints from generation. This is useful if the processor does not create the
+- allows excluding endpoints from generation. This is useful if the processor does not create the
 correct code for an endpoint. That way the processor can still be used for all the other endpoints. +
 [.badge .badge-since]+since 1.0.0.M6+
 
@@ -70,7 +70,7 @@ correct code for an endpoint. That way the processor can still be used for all t
 [.badge .badge-since]+since 1.0.0.M11+
 
 - the generated code does not use swagger annotations. There is no need to generate the
-documentation from the code when the code is generated from the documentation (i.e. an openapi.yaml).
+documentation from the code when the code originates from the documentation (i.e. an openapi.yaml).
 +
 NOTE: The generated source code has to be included in a project to compile it. This is easily done
 with the link:{oap-gradle}[openapi-processor-gradle] plugin. See xref:gradle.adoc[Using Gradle].
@@ -81,7 +81,7 @@ only option to run the processor).
 == Releases
 
 See the link:{oaps-releases}[release notes, window="_blank"] to find the latest release. The full
-artifact name is
+artifact name is:
 
 .in gradle short notation
 ----
@@ -90,11 +90,11 @@ artifact name is
 
 == Feedback
 
-In case some feature is missing or the generated code is not 100% what you would expect create an
+In case some feature is missing, or the generated code is not 100% what you would expect create an
 link:{oaps-issues}[issue]. Preferably with a test case. Providing a test case will help
 significantly :-)
 
-A test case is a single folder with an `openapi.yaml` & `mapping.yaml` file and the expected Java
+A test case is a single folder with an `openapi.yaml` & `mapping.yaml` file, and the expected Java
 files the processor should create. The structure looks like this:
 
     my-new-test-case/
