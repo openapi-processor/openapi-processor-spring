@@ -1,6 +1,7 @@
 name: openapi-processor-spring
 title: openapi-processor-spring
-version: master
+#version: master
+version: antora
 #start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/nav.adoc
