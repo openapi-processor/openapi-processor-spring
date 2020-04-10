@@ -87,8 +87,9 @@ To map non-array like responses to a `Mono<>` set the `single` mapping:
 [source,yaml]
 ----
 map:
-  single:
-    to: reactor.core.publisher.Mono
+  types:
+    - from: single
+      to: reactor.core.publisher.Mono
 ----
 
 The processor will now wrap all non-array like response types with the given `single` mapping.
