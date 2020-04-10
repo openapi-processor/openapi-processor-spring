@@ -3,7 +3,7 @@
 Global parameter mapping will replace any usage of an OpenAPI type in the api description based on
  the parameters **name** to the given java type.
 
-It is defined like below and it should be added to the `map/parameters` section in the mapping.yaml
+It is defined like below, and it should be added to the `map/parameters` section in the mapping.yaml
 which is a list of global parameter mappings.
 
 A single global parameter mapping can have the following properties:
@@ -19,11 +19,11 @@ A single global parameter mapping can have the following properties:
 
 * **name** and **to** are required.
 
-* **name** is the name of an endpoint parameter used in the OpenAPI description that should be replaced
-  by **to**.
+* **name** is the name of an endpoint parameter used in the OpenAPI description that should be
+replaced by **to**.
 
 * **to** is the fully qualified class name of the java type that should be used for all endpoint
- parameters of name **name**.
+ parameters of **name**.
 
 * **generics** defines the list of types that should be used as generic type parameters to the
 java type given by **to**.

@@ -1,10 +1,10 @@
 = Configuration
 include::partial$links.adoc[]
 
-The configuration of the processor is read from the (mandatory) `mapping.yaml` file. It does contain
+The processor reads the configuration from the (mandatory) `mapping.yaml` file. It does contain
 some  general options and the xref:mapping/index.adoc[mapping] type information.
 
-A mapping yaml looks like this
+A mapping yaml looks like this:
 
 [source,yaml]
 ----
@@ -24,11 +24,11 @@ package  folder tree will be created inside the `targetDir` (see xref:gradle.ado
 +
 Interfaces and models will be generated into the `api` and `model` subpackages of `package-name`.
 +
-** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`
+** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
 ** and the final package name of the generated models will be `"$\{package-name\}.model"`
 
 * `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
-annotations. Defaults to `false`. See link:{bean-validation}[Bean Validation, window="_blank"].
+annotations. Default is `false`. See link:{bean-validation}[Bean Validation, window="_blank"].
 
 == map:
 

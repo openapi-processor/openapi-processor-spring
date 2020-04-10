@@ -11,8 +11,8 @@ The following sections describe how to activate & configure **openapi-processor-
 
 == adding the plugin
 
-The [openapi-processor-gradle][oap-gradle] plugin is activated (like any other gradle plugin) in
- the `plugins` configuration:
+To [openapi-processor-gradle][oap-gradle] activate the plugin add it to (like any other gradle
+plugin) the `plugins` configuration:
 
 [source,groovy]
 ----
@@ -26,7 +26,7 @@ plugins {
 == configuring processor-spring
 
 The plugin will add an `openapiProcessor` configuration block that is used to configure the processors.
-Configuration for a specific processor is placed inside it using the processor name as configuration
+Configuration for a specific processor belongs inside it with the processor name as configuration
 block name.
 
 [source,groovy]
@@ -49,11 +49,11 @@ dependency to a configuration in the gradle `dependencies` block. It is given he
 un-wanted side effects on the build dependencies of the project.
 
 * `apiPath`: (**required**) the path to the `openapi.yaml` file and the main input for the
-processor. If set in the top level block it will be used for all configured processors.
+processor. If set in the top-level block it will be used for all configured processors.
 
 * `targetDir`: (**required**) the output folder for generating interfaces & models. This is the
 parent of the `packageName` folder tree. It is recommended to set this to a subfolder of gradle's
-standard `build` directory so it is cleared by the `clean` task and does not pollute the sources
+standard `build` directory, so it is cleared by the `clean` task and does not pollute the `sources`
 directory.
 +
 See <<running processor-spring>> how to include the `targetDir` in compilation & packing.
@@ -70,7 +70,7 @@ yaml. This replaces the `typeMappings` option.
 
 The plugin will add a gradle task `processSpring` to run the processor.
 
-To automatically generate & compile the processor output two additional configurations are required.
+To automatically generate & compile the processor output two additional configurations are necessary.
 
 * the `sourceSets` are extended to include the processor output (assuming a java project):
 +
@@ -86,7 +86,7 @@ sourceSets {
 }
 ----
 
-* and the `compileJava` task gets a dependency on `processSpring` so it runs before compilation
+* and the `compileJava` task gets a dependency on `processSpring`, so it runs before compilation
 (again, assuming a java project):
 +
 [source,groovy]

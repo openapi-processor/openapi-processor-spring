@@ -4,7 +4,7 @@ A simple path of the OpenAPI description will usually produce a single endpoint 
 interface as described in the introduction.
 
 OpenAPI allows us to define more complex apis that behave differently based on the request header.
-For example the following api definition can return its response in different format. As json or as
+For example the following api definition can return its response in different formats. As json or as
 plain text:
 
 [source,yaml]
@@ -85,8 +85,8 @@ public interface Api {
 The apis normal response (status '200') can return the result as json or as plain text which leads
 to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
 
-One method which is called when json is requested and one when plain text is requested. Spring will
-take care of selecting the correct endpoint.
+One method when json gets requested and one when plain text gets requested. Spring will take care of
+selecting the correct endpoint.
 
 
 == multiple content types & default content type
@@ -116,7 +116,7 @@ public interface Api {
 }
 ----
 
-Both endpoints need to handle the success case (json or text) and the error (xml) case. So both
+Both endpoints need to handle the success case (json or text), and the error (xml) case. So both
 mappings contain the xml content type. To handle the multiple responses the return type is now
 `Object`.
 
@@ -155,5 +155,5 @@ public interface Api {
 }
 ----
 
-The response type is now wrapped by a `ResponseEntity` and to handle the multiple response type the
+The response wraps the type by a `ResponseEntity` and to handle the multiple response types the
 generic parameter is the *unknown* type.

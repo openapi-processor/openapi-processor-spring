@@ -73,14 +73,14 @@ have any effect on other endpoints.
 
 [.badge .badge-since]+since 1.0.0.M6+
 
-It is possible to exclude endpoints from generation so it is possible to create a
-hand written interface for the excluded endpoint.
+It is possible to exclude endpoints from generation to make it easier to provide a hand written
+interface for the excluded endpoint.
 
 Excluding does not completely ignore the endpoint. Instead of generating it into the normal
 interface it is generated to a new interface with `Excluded` attached to its name. Type mappings
 still apply.
 
-That way the the generated code is still available for reference but it can be skipped by not
+That way the generated code is still available for reference, but it can be skipped by not
 implementing the `Excluded` interface.
 
 [source,yaml]

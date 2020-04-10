@@ -2,7 +2,7 @@
 
 == query parameters
 
-Query parameters are converted to method parameters with a `@RequestParam()` annotation.
+Query parameters get converted to method parameters with a `@RequestParam()` annotation.
 
 For example the following query parameter description:
 
@@ -46,9 +46,9 @@ todo...
 
 == additional parameters
 
-Sometimes it may be useful to add an additional parameter to an endpoint that is an implementation
-detail, i.e. it should not be part of the OpenAPI description. Think of the `HttpServletRequest` or
-a custom Spring `HandlerMethodArgumentResolver`.
+Sometimes it may be useful to have an additional endpoint parameter that is required for the
+implementation, but it should not be part of the OpenAPI description. Think of an `HttpServletRequest`
+or  a custom Spring `HandlerMethodArgumentResolver`.
 
 Such an additional parameter can be described in the mappings as an endpoint parameter. Assuming
 there is an endpoint `/foo` defined in the OpenAPI interfaces it is possible to add extra parameters

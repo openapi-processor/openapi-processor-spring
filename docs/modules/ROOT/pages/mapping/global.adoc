@@ -3,7 +3,7 @@
 Global type mapping will replace **any** usage of an OpenAPI type in the api description to the
 given java type.
 
-It is defined like below and it should be added to the `map/types` section in the `mapping.yaml`
+It is defined like below, and it should be added to the `map/types` section in the `mapping.yaml`
 which is a list of global type mappings.
 
 A single global mapping can have the following properties:
@@ -50,7 +50,7 @@ can be mapped to an existing `Book` java type/class by the following mapping:
   to: com.github.hauner.openapi.oap.Book
 ----
 
-It is also possible to use a predefined OpenAPI type as the `from` type of a type mapping:
+It is also possible to use a predefined OpenAPI type in the `from` type of the type mapping:
 
 [source,yaml]
 ----
@@ -60,7 +60,7 @@ It is also possible to use a predefined OpenAPI type as the `from` type of a typ
 
 This tells the processor to us a `java.util.List` instead of the OpenAPI type `array`.
 
-The **generics** parameter is not required in this special case. The processor knows `java.util.List`
+The **generics** parameter is unnecessary in this special case. The processor knows `java.util.List`
 and will automatically use the `items` property of the `array` as the generic type.
 
 [CAUTION]
@@ -69,7 +69,7 @@ and will automatically use the `items` property of the `array` as the generic ty
 assumes  that it is just a schema name and it will only match if there is a schema with the name
 "object".
 * global type mappings do work on OpenAPI inline schemas using the automatically generated name.
-This is not recommended as a small change to the api description could changes the inline name and
+This is not recommended as a small change to the api description could change the inline name and
 break the mapping.
 ====
 
@@ -89,16 +89,16 @@ to the **from** property value separated by a ':' like this:
   to: java.time.ZonedDateTime
 ----
 
-This maps the `string` type with `date-time` format from the default `java.time.OffsetDateTime` to
-`java.time.ZonedDateTime`. `string` without format or `string` with other formats are not affected
-by this mapping.
+This maps the `string` type with a `date-time` format from the default `java.time.OffsetDateTime` to
+`java.time.ZonedDateTime`. The mapping does not affect `string` without a format or `string` with
+other formats.
 
 == mapping with generic types
 
-Type mapping allows to use a target type that has generic parameters. The generic types are defined
+Type mapping allows to use a target type that has generic parameters. The generic types are given
 by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
 
-For example if a `StringPage` schema is defined in the OpenAPI that corresponds to
+For example if a `StringPage` schema in the OpenAPI corresponds to
 `org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
 
 [source,yaml]

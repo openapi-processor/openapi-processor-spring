@@ -1,10 +1,10 @@
 = map openapi array (globally) to a java collection type
 
-By default the OpenAPI `array` is mapped to a simple java array. That is probably the first thing
+By default, the OpenAPI `array` maps to a simple java array. That is probably the first thing
 you want to change.
 
 To change that default mapping for example to `java.util.Collection` a simple global type mapping
-is required in the xref:mapping/index.adoc[`mapping.yaml`].
+is necessary in the xref:mapping/index.adoc[`mapping.yaml`].
 
 Given the following openapi.yaml fragment:
 

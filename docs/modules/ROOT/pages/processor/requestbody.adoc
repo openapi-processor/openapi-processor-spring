@@ -83,7 +83,7 @@ The file upload in OpenAPI is described like this:
                 format: binary
 ----
 
-(See also xref:howto/file-upload[OpenAPI - describing a file upload endpoint])
+(See also xref:howto/file_upload.adoc[OpenAPI - describing a file upload endpoint])
 
 The `schema` must be of type `object` defining a property for each part in the multipart body.
 

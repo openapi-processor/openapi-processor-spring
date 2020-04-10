@@ -1,9 +1,9 @@
 = (global) Response mappings
 
-Global response mapping will replace the result type of an endpoint in the api description based on
+Global response mapping will replace the result type of the endpoint in the api description based on
  its **content type** to the given java type.
 
-It is defined like below and it should be added to the `map/responses` section in the mapping.yaml
+It is defined like below, and it should be added to the `map/responses` section in the mapping.yaml
 which is a list of global response mappings.
 
 A single global response mapping can have the following properties:
@@ -19,7 +19,7 @@ A single global response mapping can have the following properties:
 
 * **content** and **to** are required.
 
-* **content** is the name of the content type of an endpoint response that should be replaced
+* **content** is the name of the content type of the endpoint response that should be replaced
   by **to**.
 
 * **to** is the fully qualified class name of the java type that should be used for all endpoint
@@ -33,8 +33,8 @@ java type given by **to**.
 Since the processor will simply match the content type string take care that all responses of this
 content type should really use the same type!
 
-This is probably only useful for vendor content types. Globally mapping the content type for example
- of `application/json` does not look like a good idea.
+This is probably only useful for a vendor content types. Globally mapping the content type for
+example of `application/json` does not look like a good idea.
 ====
 
 == Example
@@ -51,7 +51,8 @@ map:
       to: com.github.hauner.openapi.Something
 ----
 
-and an openapi.yaml with multiple endpoints returning their result as content type `application/vnd.something`
+and an openapi.yaml with multiple endpoints returning their result as content type
+`application/vnd.something`
 
 [source,yaml]
 ----

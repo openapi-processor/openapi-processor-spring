@@ -1,7 +1,7 @@
 = using Spring Pageable & Page
 
 The given (lengthy) openapi yaml example describes a pageable api in two variations. The `/page`
-endpoint uses named objects and the second endpoint `/page-inline` uses inline objects to describe
+endpoint uses named objects, and the second endpoint `/page-inline` uses inline objects to describe
 the paging parameters and the page response. We fill focus on the first variation.
 
 [source,yaml]
@@ -91,14 +91,14 @@ components:
 ----
 
 <1> Describing the `Pageable` query parameters `page`, `size` etc in OpenAPI as an `object` lets us
-group the parameters. That tells someone reading the api that they belong together and we can avoid
+group the parameters. That tells a reader of the api that they belong together, and we can avoid
 confusion when there are more query parameters.
 
 <2> Describing the `Page` result is a bit more complicated. OpenAPI does not have generic types
 which we would like to have to define what type is in the content list of the page.
 +
 The best OpenAPI way is to define two objects. The first one describes the common properties of the
-`Page` response and the second one the content list of the page. In this example the `StringContent`
+`Page` response, and the second one the content list of the page. In this example the `StringContent`
 with an array of `string`.
 +
 Using OpenAPIs `allOf` construct we join both objects to describe a complete response that
@@ -185,7 +185,7 @@ generic type of the page `content`.
 
 <3> mapping for the inline version.
 
-Usually you would use the first variation using named objects so they can be re-used on other
+Usually you would use the first variation using named objects, so they can be re-used on other
 endpoints.
 
 Worth mentioning is that the processor will not generate model classes for the openapi types

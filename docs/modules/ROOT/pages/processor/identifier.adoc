@@ -19,7 +19,8 @@ first letter on the next word. The special characters are:
  by using link:{java-char-start}[`Character.isJavaIdentifierStart()`] and
     link:{java-char-part}[`Character.isJavaIdentifierPart()`]
 
-* `_` (underscore). The underscore is allowed in java identifiers but usually not used
+* `_` (underscore). The underscore is possible in java identifiers but usually not used apart from
+enums.
 
 == model
 
@@ -42,7 +43,7 @@ the mapping from the OpenAPI identifier to the Java identifier.
 The `@JsonProperty(...)` annotations are necessary in case a json property name is not a valid
 java identifier.
 
-Any json identifier is converted to a valid java identifier. If it differs from the json identifier
+Any json identifier gets converted to a valid java identifier. If it differs from the json identifier
 Spring (jackson) would be unable to correctly map the properties.
 
 To avoid this issue the processor adds the annotation.

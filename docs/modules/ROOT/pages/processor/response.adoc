@@ -11,12 +11,12 @@ There are two mappings available to customize the result type:
 . If for example the response needs some customization we would like to use a `ResponseEntity<>`
 to modify it. This is possible using the *result* mapping.
 
-. Another case is WebFlux, where we need the result to be either a `Flux<>` in case of an array type
-or a `Mono<>` in case it is not an array type. This is possible using the *single* mapping.
+. Another case is WebFlux, where we need the result to be either a `Flux<>` in case of an array
+type, or a `Mono<>` in case it is not an array type. This is possible using the *single* mapping.
 
 
 NOTE: *single* & *result* mappings are _independent_, i.e. both mappings can be used at the same
-time. For example it is possible to create a `Mono<>` result and modify the response using
+time. For example, it is possible to create a `Mono<>` result and modify the response using
 `ResponseEntity<>`. The response type would be `ResponseEntity<Mono<...>>`.
 
 
