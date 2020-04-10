@@ -2,7 +2,7 @@
 :revdate: 05.04.2020
 :page-title: openapi-processor-spring
 :page-layout: default
-:page-aliases: current@openapi-processor-spring:ROOT:index.adoc, latest@openapi-processor-spring:ROOT:index.adoc
+:page-aliases: current@spring:ROOT:index.adoc, latest@spring:ROOT:index.adoc
 include::partial$links.adoc[]
 
 //
