@@ -54,6 +54,7 @@ class TypeMapping implements Mapping, TargetTypeMapping {
      *
      * @return the full source type
      */
+    @Deprecated
     String getFullSourceType () {
         "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
     }
