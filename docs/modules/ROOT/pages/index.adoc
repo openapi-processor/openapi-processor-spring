@@ -1,5 +1,4 @@
 :author: Martin Hauner
-:revdate: 05.04.2020
 :page-title: openapi-processor-spring
 :page-layout: default
 :page-aliases: current@spring:ROOT:index.adoc, latest@spring:ROOT:index.adoc
@@ -74,10 +73,10 @@ correct code for an endpoint. That way the processor can still be used for all t
 documentation from the code when the code originates from the documentation (i.e. an openapi.yaml).
 +
 NOTE: The generated source code has to be included in a project to compile it. This is easily done
-with the link:{oap-gradle}[openapi-processor-gradle] plugin. See xref:gradle.adoc[Using Gradle].
+with the xref:gradle::index.adoc[openapi-processor-gradle] plugin. See xref:gradle.adoc[Using Gradle].
 
-- gradle support via link:{oap-gradle}[openapi-processor-gradle] plugin (the plugin is currently the
-only option to run the processor).
+- gradle support via xref:gradle::index.adoc[openapi-processor-gradle] plugin (the plugin is
+currently the only option to run the processor).
 
 == Releases
 

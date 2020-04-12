@@ -1,7 +1,7 @@
 = Gradle Plugin
 include::partial$links.adoc[]
 
-The link:{oap-gradle}[openapi-processor-gradle] is currently the only tool to run any of the
+The xref:gradle::index.adoc[openapi-processor-gradle] is currently the only tool to run any of the
 **openapi-processor**'s.
 
 To use it in a gradle project the gradle file of the project requires a few additional instructions.
