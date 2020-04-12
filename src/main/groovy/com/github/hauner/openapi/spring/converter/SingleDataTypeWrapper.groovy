@@ -42,10 +42,10 @@ class SingleDataTypeWrapper {
     }
     
     /**
-     * wraps a (converted) on-array data type with the configured single data type like
-     * {@code Mono<>} ec.
+     * wraps a (converted) non-array data type with the configured single data type like
+     * {@code Mono<>} etc.
      *
-     * If the configuration for the result type is 'plain' or not defined the source data type
+     * If the configuration for the single type is 'plain' or not defined the source data type
      * is not wrapped.
      *
      * @param dataType the data type to wrap
