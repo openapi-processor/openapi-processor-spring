@@ -29,7 +29,7 @@ import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 
 /**
  * find mapping in type mapping list for a schema info.
- * 
+ *
  * @author Martin Hauner
  */
 class MappingFinder {
@@ -129,7 +129,16 @@ class MappingFinder {
         }
 
     }
-    
+
+    class MultiTypeMatcher extends BaseVisitor {
+
+        @Override
+        boolean match (TypeMapping mapping) {
+            mapping.sourceTypeName == 'multi'
+        }
+
+    }
+
     class AddParameterMatcher extends BaseVisitor {
 
         @Override
@@ -185,7 +194,7 @@ class MappingFinder {
 
         filterMappings (new TypeMatcher (schema: info), ep)
     }
-    
+
     /**
      * find any matching (global) io mapping for the given schema info.
      *
@@ -285,7 +294,7 @@ class MappingFinder {
 
         []
     }
-    
+
     /**
      * find (global) single type mapping.
      *
@@ -295,14 +304,51 @@ class MappingFinder {
     List<Mapping> findSingleMapping (SchemaInfo info) {
         List<Mapping> ep = filterMappings (new SingleTypeMatcher (schema: info), typeMappings)
 
-        
         if (!ep.empty) {
             return ep
         }
 
         []
     }
-    
+
+    /**
+     * find endpoint multi type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the multi type mapping.
+     */
+    List<Mapping> findEndpointMultiMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new EndpointMatcher (schema: info), typeMappings)
+
+        def matcher = new MultiTypeMatcher (schema: info)
+        def result = ep.findAll {
+            it.matches (matcher)
+        }
+
+        if (!result.empty) {
+            return result
+        }
+
+        []
+    }
+
+    /**
+     * find (global) multi type mapping.
+     *
+     * @param info schema info of the OpenAPI schema.
+     * @return the multi type mapping.
+     */
+    List<Mapping> findMultiMapping (SchemaInfo info) {
+        List<Mapping> ep = filterMappings (new MultiTypeMatcher (schema: info), typeMappings)
+
+
+        if (!ep.empty) {
+            return ep
+        }
+
+        []
+    }
+
     /**
      * check if the given endpoint should b excluded.
      *
@@ -339,5 +385,5 @@ class MappingFinder {
                 it.childMappings
             }
     }
-    
+
 }

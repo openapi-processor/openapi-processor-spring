@@ -62,6 +62,7 @@ class ApiConverter {
     private DataTypeConverter dataTypeConverter
     private ResultDataTypeWrapper dataTypeWrapper
     private SingleDataTypeWrapper singleDataTypeWrapper
+    private MultiDataTypeWrapper multiDataTypeWrapper
     private MappingFinder mappingFinder
     private ApiOptions options
 
@@ -75,6 +76,7 @@ class ApiConverter {
         dataTypeConverter = new DataTypeConverter(this.options)
         dataTypeWrapper = new ResultDataTypeWrapper(this.options)
         singleDataTypeWrapper = new SingleDataTypeWrapper(this.options)
+        multiDataTypeWrapper = new MultiDataTypeWrapper(this.options)
         mappingFinder = new MappingFinder (typeMappings: this.options.typeMappings)
     }
 
@@ -235,11 +237,16 @@ class ApiConverter {
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
         DataType dataType = dataTypeConverter.convert (info, dataTypes)
-        DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
+        DataType changedType
+        if (!info.isArray ()) {
+            changedType = singleDataTypeWrapper.wrap (dataType, info)
+        } else {
+            changedType = multiDataTypeWrapper.wrap (dataType, info)
+        }
 
         new ModelRequestBody(
             contentType: contentType,
-            requestBodyType: singleDataType,
+            requestBodyType: changedType,
             required: required)
     }
 
@@ -282,8 +289,13 @@ class ApiConverter {
                 resolver: resolver)
 
             DataType dataType = dataTypeConverter.convert (info, dataTypes)
-            DataType singleDataType = singleDataTypeWrapper.wrap (dataType, info)
-            DataType resultDataType = dataTypeWrapper.wrap (singleDataType, info)
+            DataType changedType
+            if (!info.isArray ()) {
+                changedType = singleDataTypeWrapper.wrap (dataType, info)
+            } else {
+                changedType = multiDataTypeWrapper.wrap (dataType, info)
+            }
+            DataType resultDataType = dataTypeWrapper.wrap (changedType, info)
 
             def resp = new ModelResponse (
                 contentType: contentType,
