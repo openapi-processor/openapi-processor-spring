@@ -64,23 +64,32 @@ will be either the java type or the *unknown type*.
 
 NOTE: prior to 1.0.0.M13 all results were auto-wrapped with `ResponseEntity<>`.
 
-== single wrapper
+== single & multi wrapper
 
 [.badge .badge-since]+since 1.0.0.M13+
 
-When using WebFlux we want to wrap the result types in a reactive type. For array like types we can
-simply use the standard `array` mapping:
+When using WebFlux we want to wrap certain parameters & results types in reactive types like
+`Mono<>` or `Flux<>`.
+
+To achieve this the processor knows two special mappings:
+
+* single: to wrap non-array like types (i.e. not a collection)
+* multi: to wrap array like types (i.e. a collection)
+
+=== multi
 
 [source,yaml]
 ----
 map:
   types:
-    - from: array
+    - from: multi
       to: reactor.core.publisher.Flux
 ----
 
-Which will use `Flux<>` as collection wrapper instead of an java array for all list parameters
-or responses.
+Which will use `Flux<>` as collection wrapper instead of the original java collection type for all
+list *responses* (or *parameters*). The `multi` does not affect collections in model types.
+
+=== single
 
 To map non-array like responses to a `Mono<>` set the `single` mapping:
 
