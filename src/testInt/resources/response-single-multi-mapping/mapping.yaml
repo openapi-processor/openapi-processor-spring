@@ -7,5 +7,5 @@ map:
     - from: single
       to: reactor.core.publisher.Mono
 
-    - from: array
+    - from: multi
       to: reactor.core.publisher.Flux

@@ -48,6 +48,7 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
         'response-content-single',
         'response-result-mapping',
         'response-simple-data-types',
+        'response-single-multi-mapping',
         'schema-composed'
     ]
 

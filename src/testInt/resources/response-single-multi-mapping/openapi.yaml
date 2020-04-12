@@ -77,3 +77,14 @@ components:
           type: string
         title:
           type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+

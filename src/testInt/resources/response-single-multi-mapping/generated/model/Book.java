@@ -15,6 +15,9 @@ public class Book {
     @JsonProperty("title")
     private String title;
 
+    @JsonProperty("authors")
+    private Author[] authors;
+
     public String getIsbn() {
         return isbn;
     }
@@ -29,6 +32,14 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Author[] getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Author[] authors) {
+        this.authors = authors;
     }
 
 }
