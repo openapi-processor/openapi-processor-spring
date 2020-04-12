@@ -41,6 +41,9 @@ map:
     - from: single
       to: reactor.core.publisher.Mono
 
+    - from: multi
+      to: reactor.core.publisher.Flux
+
     - from: array
       to: java.util.Collection
 
