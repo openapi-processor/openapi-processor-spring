@@ -14,8 +14,8 @@ link:{oaps-ci}[image:{badge-ci}[]]
 link:{oaps-license}[image:{badge-license}[]]
 
 
-*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model only code generator for
-link:{springboot}[Spring Boot].
+*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model only java code generator
+for link:{springboot}[Spring Boot].
 
 It supports an API first approach where you API is explicitly defined and documented with OpenAPI
  before it gets implemented.
@@ -28,6 +28,8 @@ of the generated interfaces in any way you like.
 The interfaces will help to keep the implementation in sync with the API. If anything relevant
 changes  in the API the interface changes and the compiler will warn that the interface is not
 implemented correctly.
+
+The target programming language is Java so the generated code is usable from most JVM languages.
 
 See the xref:processor/index.adoc[processor intro] for a short example.
 
