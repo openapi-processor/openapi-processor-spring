@@ -1,7 +1,6 @@
 name: spring
 title: oap-spring
-#version: master
-version: antora
+version: master
 #start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/nav.adoc
