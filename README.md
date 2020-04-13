@@ -20,3 +20,4 @@ See [here][oap-docs].
 [workflow-ci]: https://github.com/hauner/openapi-processor-json/actions?query=workflow%3Aci
 [oap-docs]: https://hauner.github.com/openapi-processor/spring/current/index.html
 [openapi]: https://www.openapis.org/
+[springboot]: https://spring.io/projects/spring-boot
