@@ -1,0 +1,10 @@
+= Writer Notes
+
+== build with theme locally
+
+    antora antora-playbook.yml --ui-bundle-url ../openapi-processor-site-ui/build/ui-bundle.zip
+
+== pitfalls
+
+* partials but `include::partial$ ...` !!
+

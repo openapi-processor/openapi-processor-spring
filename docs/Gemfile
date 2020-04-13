@@ -1,4 +1,0 @@
-source "https://rubygems.org"
-
-# use same version as github
-gem "github-pages", group: :jekyll_plugins

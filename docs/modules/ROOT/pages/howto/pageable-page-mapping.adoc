@@ -1,0 +1,192 @@
+= using Spring Pageable & Page
+
+The given (lengthy) openapi yaml example describes a pageable api in two variations. The `/page`
+endpoint uses named objects, and the second endpoint `/page-inline` uses inline objects to describe
+the paging parameters and the page response. We fill focus on the first variation.
+
+[source,yaml]
+----
+openapi: 3.0.2
+info:
+  title: Spring Page/Pageable API
+  version: 1.0.0
+
+paths:
+  /page:
+    get:
+      parameters:
+        - in: query # <1>
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: none
+          content: #<2>
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringPage'
+
+  /page-inline:
+    get:
+      parameters:
+        - in: query #<3>
+          name: pageable
+          required: false
+          schema:
+            type: object
+            properties:
+              page:
+                type: integer
+              size:
+                type: integer
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema: #<4>
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Page'
+                  - $ref: '#/components/schemas/StringContent'
+
+components:
+  schemas:
+
+    Pageable: #<5>
+      description: minimal Pageable query parameters
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+
+    Page: #<6>
+      description: minimal Page response without content property
+      type: object
+      properties:
+        number:
+          type: integer
+        size:
+          type: integer
+
+    StringContent: #<7>
+      description: specific content List of the Page response
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: string
+
+    StringPage: #<8>
+      description: typed Page
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - $ref: '#/components/schemas/StringContent'
+----
+
+<1> Describing the `Pageable` query parameters `page`, `size` etc in OpenAPI as an `object` lets us
+group the parameters. That tells a reader of the api that they belong together, and we can avoid
+confusion when there are more query parameters.
+
+<2> Describing the `Page` result is a bit more complicated. OpenAPI does not have generic types
+which we would like to have to define what type is in the content list of the page.
++
+The best OpenAPI way is to define two objects. The first one describes the common properties of the
+`Page` response, and the second one the content list of the page. In this example the `StringContent`
+with an array of `string`.
++
+Using OpenAPIs `allOf` construct we join both objects to describe a complete response that
+corresponds to a Spring `Page` object.
++
+Splitting the `Page` object is useful too if we have multiple endpoints with paging because we do
+not have to repeat the common properties for every endpoint.
+
+<3> Inline `Pageable` definition.
+
+<4> Partial inline definition of the `Page` object. This can be a useful pattern because it avoids
+the extra `StringPage` object.
+
+<5> `Pageable` object definition.
+
+<6> `Page` object definition.
+
+<7> `StringContent` object definition. See 2.
+
+<8> `StringPage` object definition. See 2.
+
+The processor does create a proper interface with both endpoints if we provide a type mappings for
+the `Pageable` and `Page` types.
+
+Here is the java code we expect:
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface Api {
+
+    @GetMapping(
+            path = "/page",
+            produces = {"application/json"})
+    ResponseEntity<Page<String>> getPage(Pageable pageable);
+
+    @GetMapping(
+            path = "/page-inline",
+            produces = {"application/json"})
+    ResponseEntity<Page<String>> getPageInline(Pageable pageable);
+
+}
+----
+
+and here is the required mapping:
+
+Using named objects in OpenAPI all we need is two global type mappings. The mappings below the
+`page-inline` endpoint do the same for the inline variation.
+
+[source,yaml]
+----
+map:
+
+  types:
+    - from: Pageable #<1>
+      to: org.springframework.data.domain.Pageable
+
+    - from: StringPage #<2>
+      to: org.springframework.data.domain.Page<java.lang.String>
+
+  paths:
+
+    /page-inline: #<3>
+
+      parameters:
+        - name: pageable
+          to: org.springframework.data.domain.Pageable
+
+      responses:
+        - content: application/json
+          to: org.springframework.data.domain.Page<java.lang.String>
+----
+
+<1> this maps the `Pageable` object defined in the OpenAPI to Springs `Pageable` type.
+
+<2> this maps the `StringPage` object defined in the OpenAPI to Springs `Page` type including the
+generic type of the page `content`.
+
+<3> mapping for the inline version.
+
+Usually you would use the first variation using named objects, so they can be re-used on other
+endpoints.
+
+Worth mentioning is that the processor will not generate model classes for the openapi types
+`Pageable`, `Page`, `StringContent` or `StringPage`.

@@ -1,0 +1,145 @@
+= Request Body
+
+This OpenAPI describes an endpoint with `requestBody`:
+
+[source,yaml]
+----
+openapi: 3.0.2
+info:
+  title: request body
+  version: 1.0.0
+
+paths:
+  /book:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '201':
+          description: created book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        title:
+          type: string
+----
+
+that the processor will convert into the interface:
+
+[source,java]
+----
+package generated.api;
+
+import generated.model.Book;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+public interface Api {
+
+    @PostMapping(path = "/book", consumes = {"application/json"}, produces = {"application/json"})
+    ResponseEntity<Book> postBook(@RequestBody Book body);
+
+}
+----
+
+and a `Book` pojo.
+
+== multipart/form-data
+
+[.badge .badge-since]+since 1.0.0.M5+
+
+For file uploads, where the `content` of the `requestBody` is `multipart/form-data`, the resulting
+code looks a bit different and requires a specific type mapping.
+
+The file upload in OpenAPI is described like this:
+
+[source,yaml]
+----
+/file-upload:
+  summary: upload a file
+  post:
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+----
+
+(See also xref:howto/file_upload.adoc[OpenAPI - describing a file upload endpoint])
+
+The `schema` must be of type `object` defining a property for each part in the multipart body.
+
+Instead of generating a `@RequestBody` parameter for the `object` schema the processor creates
+a parameter for each property of the object annotated with `@RequestParam`:
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface Api {
+
+    @PostMapping(path = "/file-upload")
+    ResponseEntity<Void> postFileUpload(@RequestParam(name = "file") MultipartFile file);
+
+}
+----
+
+Note that the `file` property (type `string` format `binary`) is mapped to Springs `MultipartFile`
+type.
+
+The processor does not have a default mapping for the `binary` format so to get the code above we
+have to configure it in the type mapping yaml:
+
+[source,yaml]
+----
+map:
+  paths:
+    /file-upload:
+      types:
+        - from: string:binary
+          to: org.springframework.web.multipart.MultipartFile
+----
+
+To upload multiple files we can define the body `object` with an `array` property:
+
+[source,yaml]
+----
+type: object
+properties:
+  files:
+    type: array
+    items:
+      type: string
+      format: binary
+----
+
+to get the following code:
+
+[source,java]
+----
+@PostMapping(path = "/file-upload")
+ResponseEntity<Void> postFileUpload(@RequestParam(name = "files") MultipartFile[] files);
+----

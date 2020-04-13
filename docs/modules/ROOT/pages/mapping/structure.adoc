@@ -1,0 +1,73 @@
+= type mapping structure
+
+The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration])
+and configured under the `map` key. The `map` key contains multiple sections to define the different
+kinds of type mappings.
+
+All sections are optional.
+
+[source,yaml]
+----
+map:
+
+  # single wrapper
+  single:
+    to: ..
+
+  # result wrapper
+  result:
+    to: ..
+
+  # list of global mappings
+  types:
+    - from: ..
+      to: ..
+
+  # list of global parameter mappings, mapped by parameter name
+  parameters:
+    - name: ..
+      to: ..
+
+    # the list of parameter mappings can include additional parameters
+    - add: ..
+      as: ..
+
+  # list of global content mappings, mapped by content type
+  responses:
+    - content: ..
+      to: ..
+
+  # path mappings, only valid for the given path
+  paths:
+
+    # the path
+    /foo...:
+
+      # path specific single wrapper
+      single:
+        to: ..
+
+      # path specific result wrapper
+      result:
+        to: ..
+
+      # list of path specific mappings
+      types:
+        - from: ..
+          to: ..
+
+      # list of path specific parameter mappings, mapped by parameter name
+      parameters:
+        - name: ..
+          to: ..
+
+        # the list of parameter mappings can include additional parameters
+        - add: ..
+          as: ..
+
+      # list of path specific content mappings, mapped by content type
+      responses:
+        - content: ..
+          to: ..
+
+----

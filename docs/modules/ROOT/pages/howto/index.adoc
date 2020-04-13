@@ -1,0 +1,4 @@
+= HowTo's
+
+This section collects some useful examples how to configure the processor or how to describe
+something in OpenAPI.
