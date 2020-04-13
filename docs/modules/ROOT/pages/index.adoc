@@ -50,8 +50,10 @@ mappings can be defined globally or for a specific response or parameter or even
 endpoint. See xref:mapping/index.adoc[type mapping].
 
 - Annotation based WebFlux support. Actually there is *no* explicit WebFlux support, but the mapping
-allows defining a *single* wrapper classes that wrap non-array result types (e.g. `Mono<>`).
-Together with the standard `array` mapping (e.g. `Flux<>`) there is WebFlux support. +
+allows defining a *single*, and a *multi* wrapper class. *single* wraps non-array like result types
+(e.g. `Mono<>`). *multi* replaces array like result types or parameters with the given multi mapping.
+For example, it will replace `List<String>` with `Flux<String>` if the multi mapping contains the
+fully qualified `Flux` type. +
 [.badge .badge-since]+since 1.0.0.M13+
 
 - generates human readable code.
