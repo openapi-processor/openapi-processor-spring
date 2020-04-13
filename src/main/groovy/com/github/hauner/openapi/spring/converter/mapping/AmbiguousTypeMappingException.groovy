@@ -23,9 +23,9 @@ package com.github.hauner.openapi.spring.converter.mapping
  */
 class AmbiguousTypeMappingException extends RuntimeException {
 
-    List<TypeMapping> typeMappings
+    List<Mapping> typeMappings
 
-    AmbiguousTypeMappingException(List<TypeMapping> typeMappings) {
+    AmbiguousTypeMappingException(List<Mapping> typeMappings) {
         super()
         this.typeMappings = typeMappings
     }

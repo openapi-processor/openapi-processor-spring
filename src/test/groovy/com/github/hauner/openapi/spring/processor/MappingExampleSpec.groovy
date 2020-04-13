@@ -34,15 +34,27 @@ options:
     bean-validation: true 
 
 map:
+  result: 
+    to: plain
+
   types:
+    - from: single
+      to: reactor.core.publisher.Mono
+
+    - from: multi
+      to: reactor.core.publisher.Flux
+
     - from: array
-      to: java.util.Collection<java.lang.String>
+      to: java.util.Collection
 
     - from: Schema
       to: java.util.Map
       generics:
         - java.lang.String
         - java.lang.Double
+
+  result: 
+    to: plain
 
   parameters:
     - name: foo
@@ -63,9 +75,18 @@ map:
       exclude: true
 
     /second:
+      result:
+        to: org.springframework.http.ResponseEntity
+
       types:
+        - from: single
+          to: reactor.core.publisher.Mono
+      
         - from: Schema
           to: java.util.Collection
+
+      result:
+        to: org.springframework.http.ResponseEntity
 
       parameters:
         - name: foo

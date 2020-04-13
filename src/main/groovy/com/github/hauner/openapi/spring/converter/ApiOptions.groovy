@@ -44,7 +44,7 @@ class ApiOptions {
      * - interfaces => "${packageName}.api"
      * - models => "${packageName}.model"
      */
-    String packageName = 'generatr'
+    String packageName = 'processor'
 
     /**
      * provide enabling Bean Validation (JSR303) annotations. Default is false (disabled)

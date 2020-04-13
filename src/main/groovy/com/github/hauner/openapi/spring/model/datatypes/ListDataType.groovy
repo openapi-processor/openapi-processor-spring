@@ -22,6 +22,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  * @author Martin Hauner
  * @author Bastian Wilhelm
  */
+@Deprecated // replaced by MappedCollectionDataType
 class ListDataType implements DataType {
 
     private DataType item

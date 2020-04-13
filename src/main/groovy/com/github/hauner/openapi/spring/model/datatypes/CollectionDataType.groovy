@@ -22,6 +22,7 @@ package com.github.hauner.openapi.spring.model.datatypes
  * @author Martin Hauner
  * @author Bastian Wilhelm
  */
+@Deprecated // replaced by MappedCollectionDataType
 class CollectionDataType implements DataType {
 
     private DataType item
@@ -51,4 +52,5 @@ class CollectionDataType implements DataType {
     DataTypeConstraints getConstraints () {
         constraints
     }
+    
 }

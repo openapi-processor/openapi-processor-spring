@@ -25,7 +25,6 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
  * @author Martin Hauner
  */
 class Response {
-    static Response EMPTY = new Response(responseType: new NoneDataType())
 
     String contentType
     DataType responseType

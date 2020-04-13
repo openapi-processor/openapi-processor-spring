@@ -2,6 +2,11 @@ options:
   package-name: generated
 
 map:
+  result:
+    to: org.springframework.http.ResponseEntity
+
   paths:
     /endpoint-exclude/{foo}:
       exclude: true
+
+

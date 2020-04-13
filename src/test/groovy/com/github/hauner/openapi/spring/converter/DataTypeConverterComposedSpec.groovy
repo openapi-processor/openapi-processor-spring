@@ -17,7 +17,6 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
-import io.swagger.v3.oas.models.media.ComposedSchema
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse

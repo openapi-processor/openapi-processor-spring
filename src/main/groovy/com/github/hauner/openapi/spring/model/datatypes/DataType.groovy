@@ -59,6 +59,9 @@ trait /*interface*/ DataType {
         null
     }
 
+    /**
+     * is this a composed type, i.e. allOff, anyOf, oneOf ?
+     */
     boolean isMultiOf () {
         false
     }

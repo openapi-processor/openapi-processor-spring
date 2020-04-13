@@ -51,4 +51,5 @@ class ArrayDataType implements DataType {
     DataTypeConstraints getConstraints () {
         constraints
     }
+    
 }

@@ -15,6 +15,7 @@
  */
 
 package com.github.hauner.openapi.spring.converter.mapping
+
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
  * OpenAPI schema to a java type.
@@ -24,7 +25,7 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class TypeMapping implements Mapping {
+class TypeMapping implements Mapping, TargetTypeMapping {
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
@@ -53,6 +54,7 @@ class TypeMapping implements Mapping {
      *
      * @return the full source type
      */
+    @Deprecated
     String getFullSourceType () {
         "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
     }
@@ -62,19 +64,14 @@ class TypeMapping implements Mapping {
      *
      * @return the target type
      */
+    @Override
     TargetType getTargetType () {
         new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
     }
 
     @Override
-    boolean matches (Level level, MappingSchema schema) {
-        Level.TYPE == level && sourceTypeName == schema.name
-    }
-
-    @Override
-    boolean matches (Level level, MappingSchemaType schemaType) {
-        Level.TYPE == level &&
-            sourceTypeName == schemaType.type && sourceTypeFormat == schemaType.format
+    boolean matches (MappingVisitor visitor) {
+        visitor.match (this)
     }
 
     @Override

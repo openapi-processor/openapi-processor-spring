@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.schema.SchemaInfo
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -32,14 +31,6 @@ import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
 class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter(new DefaultApiOptions())
 
-
-    void "creates none data type" () {
-        when:
-        def type = converter.none ()
-
-        then:
-        type
-    }
 
     @Unroll
     void "converts schema(#type, #format) to #javaType" () {
