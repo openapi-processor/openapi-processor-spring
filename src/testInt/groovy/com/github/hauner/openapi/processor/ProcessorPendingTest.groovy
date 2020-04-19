@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package com.github.hauner.openapi.processor
 
 import com.github.hauner.openapi.spring.parser.ParserType
 import org.junit.Ignore
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-//@Ignore
+@Ignore
 @RunWith(Parameterized)
 class ProcessorPendingTest extends ProcessorTestBase {
 
@@ -35,6 +36,11 @@ class ProcessorPendingTest extends ProcessorTestBase {
 
     ProcessorPendingTest (TestSet testSet) {
         super (testSet)
+    }
+
+    @Test
+    void "native - processor creates expected files for api set "() {
+        runOnNativeFileSystem ()
     }
 
 }

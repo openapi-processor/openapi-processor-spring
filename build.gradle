@@ -65,6 +65,7 @@ dependencies {
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
 
+    testImplementation 'com.google.jimfs:jimfs:1.1'
     testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
