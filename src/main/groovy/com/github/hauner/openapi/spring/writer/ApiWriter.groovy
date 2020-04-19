@@ -25,6 +25,9 @@ import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import groovy.util.logging.Slf4j
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 import static com.github.hauner.openapi.support.Identifier.toClass
 
 /**
@@ -40,8 +43,8 @@ class ApiWriter {
     DataTypeWriter dataTypeWriter
     StringEnumWriter enumWriter
 
-    File apiFolder
-    File modelFolder
+    Path apiFolder
+    Path modelFolder
 
     Formatter formatter
 
@@ -69,22 +72,22 @@ class ApiWriter {
         createTargetFolders ()
 
         api.interfaces.each {
-            def target = new File (apiFolder, "${it.interfaceName}.java")
-            def writer = new FileWriter(target)
+            def target = apiFolder.resolve ("${it.interfaceName}.java")
+            def writer = new BufferedWriter (new PathWriter(target))
             writeInterface (writer, it)
             writer.close ()
         }
 
         api.models.objectDataTypes.each {
-            def target = new File (modelFolder, "${it.name}.java")
-            def writer = new FileWriter(target)
+            def target = modelFolder.resolve ("${it.name}.java")
+            def writer = new BufferedWriter (new PathWriter(target))
             writeDataType (writer, it)
             writer.close ()
         }
 
         api.models.enumDataTypes.each {
-            def target = new File (modelFolder, "${it.name}.java")
-            def writer = new FileWriter(target)
+            def target = modelFolder.resolve ("${it.name}.java")
+            def writer = new BufferedWriter (new PathWriter(target))
             writeEnumDataType (writer, it)
             writer.close ()
         }
@@ -132,23 +135,25 @@ class ApiWriter {
         log.debug ('creating target folders: {}', rootPkg)
 
         apiFolder = createTargetPackage (apiPkg)
-        log.debug ('created target folder: {}', apiFolder.absolutePath)
+        log.debug ('created target folder: {}', apiFolder.toAbsolutePath ().toString ())
 
         modelFolder = createTargetPackage (modelPkg)
-        log.debug ('created target folder: {}', modelFolder.absolutePath)
+        log.debug ('created target folder: {}', modelFolder.toAbsolutePath ().toString ())
     }
 
-    private File createTargetPackage (String apiPkg) {
-        def folder = new File ([options.targetDir, apiPkg].join (File.separator))
-        if (folder.exists () && folder.isDirectory ()) {
-            return folder
+    private Path createTargetPackage (String apiPkg) {
+        String root = options.targetDir
+        if (!hasScheme (root)) {
+            root = "file://${root}"
         }
 
-        def success = folder.mkdirs ()
-        if (!success) {
-            log.error ('failed to create package {}', folder)
-        }
-        folder
+        def target = Path.of (new URL ([root, apiPkg].join ('/')).toURI ())
+        Files.createDirectories (target)
+        target
+    }
+
+    private boolean hasScheme (String source) {
+        source.indexOf ("://") > -1
     }
 
 }

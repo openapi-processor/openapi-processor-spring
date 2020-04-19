@@ -22,13 +22,17 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
 
 /**
- * openapi4j parser.
+ * swagger parser.
  *
  * @author Martin Hauner
  */
 class Parser {
 
     ParserOpenApi parse (String apiPath) {
+        if (!hasScheme (apiPath)) {
+            apiPath = "file://${apiPath}"
+        }
+
         ParseOptions opts = new ParseOptions(
             // loads $refs to other files into #/components/schema and replaces the $refs to the
             // external files with $refs to #/components/schema.
@@ -38,6 +42,10 @@ class Parser {
                   .readLocation (apiPath, null, opts)
 
         new OpenApi(result)
+    }
+
+    boolean hasScheme (String path) {
+        path.indexOf ("://") > -1
     }
 
 }

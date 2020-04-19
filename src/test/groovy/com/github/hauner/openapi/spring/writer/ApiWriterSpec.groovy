@@ -47,7 +47,8 @@ class ApiWriterSpec extends Specification {
         )
 
         when:
-        new ApiWriter (opts, Stub (InterfaceWriter), null, null).write (new Api())
+        new ApiWriter (opts, Stub (InterfaceWriter), null, null)
+            .write (new Api())
 
         then:
         def api = new File([opts.targetDir, 'com', 'github', 'hauner', 'openapi', 'api'].join(File.separator))
