@@ -16,11 +16,19 @@
 
 package com.github.hauner.openapi.spring.processor
 
+import com.google.common.jimfs.Configuration
+import com.google.common.jimfs.Jimfs
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import spock.lang.Shared
 import spock.lang.Specification
 
+import java.nio.file.FileSystem
+
 class MappingReaderSpec extends Specification {
+
+    @Shared
+    FileSystem fs = Jimfs.newFileSystem (Configuration.unix ())
 
     @Rule
     TemporaryFolder folder
@@ -37,9 +45,9 @@ class MappingReaderSpec extends Specification {
         yaml << [null, ""]
     }
 
-    void "reads mapping from file" () {
+    void "reads mapping from url" () {
         def yaml = """\
-openapi-generatr-spring: v1.0
+openapi-processor-spring: v1.0
     
 map:
   types:
@@ -47,12 +55,33 @@ map:
       to: java.util.Collection
 """
 
-        def yamlFile = folder.newFile ("openapi-generatr-spring.yaml")
+        def yamlFile = fs.getPath ('mapping.yaml')
         yamlFile.text = yaml
 
         when:
         def reader = new MappingReader()
-        def mapping = reader.read (yamlFile.absolutePath)
+        def mapping = reader.read (yamlFile.toUri ().toURL ().toString ())
+
+        then:
+        mapping
+    }
+
+    void "reads mapping from local file if the scheme is missing" () {
+        def yaml = """\
+openapi-processor-spring: v1.0
+    
+map:
+  types:
+    - from: array
+      to: java.util.Collection
+"""
+
+        def yamlFile = folder.newFile ('mapping.yaml')
+        yamlFile.text = yaml
+
+        when:
+        def reader = new MappingReader()
+        def mapping = reader.read (yamlFile.toString ())
 
         then:
         mapping
@@ -60,7 +89,7 @@ map:
 
     void "reads mapping from string" () {
         def yaml = """\
-openapi-generatr-spring: v1.0
+openapi-processor-spring: v1.0
     
 map:
   types:

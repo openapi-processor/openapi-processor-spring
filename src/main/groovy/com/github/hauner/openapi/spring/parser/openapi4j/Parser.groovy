@@ -30,15 +30,22 @@ import org.openapi4j.parser.validation.v3.OpenApi3Validator
 class Parser {
 
     ParserOpenApi parse (String apiPath) {
+        if (!hasScheme (apiPath)) {
+            apiPath = "file://${apiPath}"
+        }
 
         OpenApi3 api = new OpenApi3Parser ()
-            .parse (new File (apiPath), true)
+            .parse (new URL (apiPath), true)
 
         ValidationResults results = OpenApi3Validator
             .instance ()
             .validate (api)
 
         new OpenApi (api, results)
+    }
+
+    boolean hasScheme (String path) {
+        path.indexOf ("://") > -1
     }
 
 }

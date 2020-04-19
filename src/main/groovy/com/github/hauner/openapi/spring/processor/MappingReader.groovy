@@ -37,13 +37,16 @@ class MappingReader {
             return null
         }
 
-        String mapping = typeMappings
-        if (isFileName (typeMappings)) {
+        def mapping
+        if (isUrl (typeMappings)) {
+            mapping = new URL (typeMappings).text
+        } else if (isFileName (typeMappings)) {
             mapping = new File (typeMappings).text
+        } else {
+            mapping = typeMappings
         }
 
         def mapper = createYamlParser ()
-
         mapper.readValue (mapping, Mapping)
     }
 
@@ -59,6 +62,14 @@ class MappingReader {
 
     private boolean isFileName (String name) {
         name.endsWith ('.yaml') || name.endsWith ('.yml')
+    }
+
+    private boolean isUrl (String source) {
+        try {
+            new URL (source)
+        } catch (MalformedURLException ignore) {
+            false
+        }
     }
 
 }
