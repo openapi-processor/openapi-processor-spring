@@ -18,6 +18,8 @@ package com.github.hauner.openapi.spring.parser
 
 import com.github.hauner.openapi.spring.parser.swagger.Parser as Swagger
 import com.github.hauner.openapi.spring.parser.openapi4j.Parser as OpenApi4J
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * OpenAPI parser abstraction. Supports swagger or openapi4 parser.
@@ -25,6 +27,7 @@ import com.github.hauner.openapi.spring.parser.openapi4j.Parser as OpenApi4J
  * @author Martin Hauner
  */
 class Parser {
+    private static final Logger LOG = LoggerFactory.getLogger (Parser.class)
 
     OpenApi parse (Map<String, ?> processorOptions) {
         def apiPath = processorOptions.apiPath as String
@@ -32,21 +35,21 @@ class Parser {
         switch (processorOptions.parser as ParserType) {
 
             case ParserType.SWAGGER:
-                println "info: using SWAGGER parser"
+                LOG.info ("using SWAGGER parser")
 
                 def parser = new Swagger ()
                 return parser.parse (apiPath)
 
             case ParserType.OPENAPI4J:
-                println "info: using OPENAPI4J parser"
+                LOG.info ("using OPENAPI4J parser")
 
                 def parser = new OpenApi4J ()
                 return parser.parse (apiPath)
 
             default:
                 if (processorOptions.parser != null) {
-                    println "warning: unknown parser type: ${processorOptions.parser}"
-                    println "warning: available parsers: SWAGGER, OPENAPI4J"
+                    LOG.warn ("unknown parser type: {}", processorOptions.parser)
+                    LOG.warn ("available parsers: SWAGGER, OPENAPI4J")
                 }
 
                 def parser = new Swagger ()
