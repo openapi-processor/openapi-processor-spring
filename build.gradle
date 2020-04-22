@@ -56,12 +56,14 @@ compileTestGroovy {
     classpath += files(compileKotlin.destinationDir)
 }
 
-
 dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.10'
     implementation 'org.codehaus.groovy:groovy-nio:2.5.10'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    implementation 'io.swagger.parser.v3:swagger-parser:2.0.19'
+    implementation ('io.swagger.parser.v3:swagger-parser:2.0.19') {
+        exclude group: 'io.swagger.parser.v3', module: 'swagger-parser-v2-converter'
+        exclude group: 'io.swagger.core.v3', module: 'swagger-annotations'
+    }
     implementation 'org.openapi4j:openapi-parser:0.9'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
@@ -81,7 +83,6 @@ dependencies {
 //    testIntRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
 //    testIntRuntimeOnly 'org.slf4j:slf4j-nop:1.6.1'
 }
-
 
 tasks.withType(Test) {
     finalizedBy jacocoTestReport
