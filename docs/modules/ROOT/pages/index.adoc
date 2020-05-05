@@ -17,8 +17,16 @@ link:{oaps-license}[image:{badge-license}[]]
 *openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model only java code generator
 for link:{springboot}[Spring Boot].
 
-It supports an API first approach where you API is explicitly defined and documented with OpenAPI
- before it gets implemented.
+It supports an approach where you explicitly define and document your Service API (using OpenAPI)
+with the Interface to the outside and its usage in mind before you implement it. You do not derive
+the API later from the implementation and its implicit design. (of course, adapt as you go...)
+
+The advantages are:
+
+* you have a single place to maintain the api which makes it easier to create a consistent api
+and keep the overview.
+* it is easy to document in plain text. You can use markdown in the OpenAPI `description`
+properties.
 
 The processor generates java interfaces based on the endpoint description of the API and simple POJO
 classes for parameter or response objects defined in the API. The processor adds all the required

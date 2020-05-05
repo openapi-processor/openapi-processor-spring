@@ -21,11 +21,13 @@ import com.github.difflib.UnifiedDiffUtils
 import com.github.hauner.openapi.spring.processor.MappingReader
 import com.github.hauner.openapi.spring.processor.SpringProcessor
 import com.github.hauner.openapi.spring.processor.mapping.Mapping
-import groovy.io.FileType
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+import java.nio.file.FileSystem
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Stream
 
 import static org.junit.Assert.assertEquals
 
@@ -43,26 +45,26 @@ map:
     to: org.springframework.http.ResponseEntity  
     """
 
+    Path project = Path.of ("").toAbsolutePath ()
     TestSet testSet
 
     ProcessorTestBase (TestSet testSet) {
         this.testSet = testSet
     }
 
-    @Test
-    void "processor creates expected files for api set "() {
+    protected runOnNativeFileSystem () {
         def source = testSet.name
 
         def processor = new SpringProcessor()
         def options = [
             parser: testSet.parser.toString (),
-            apiPath: "./src/testInt/resources/${source}/openapi.yaml",
+            apiPath: "${project.toString ()}/src/testInt/resources/${source}/openapi.yaml",
             targetDir: folder.root
         ]
 
-        def mappingYaml = new File("./src/testInt/resources/${source}/mapping.yaml")
-        if(mappingYaml.exists ()) {
-            options.mapping = mappingYaml
+        def mappingYaml = project.resolve ("src/testInt/resources/${source}/mapping.yaml")
+        if(Files.exists (mappingYaml)) {
+            options.mapping = mappingYaml.toString ()
         } else {
             options.mapping = DEFAULT_OPTIONS
         }
@@ -71,20 +73,20 @@ map:
         Mapping mapping = reader.read (options.mapping as String)
 
         def packageName = mapping.options.packageName
-        def expectedPath = ['.', 'src', 'testInt', 'resources', source, packageName].join(File.separator)
-        def generatedPath = [folder.root.absolutePath, packageName].join(File.separator)
+        def expectedPath = project.resolve ("src/testInt/resources/${source}/${packageName}")
+        def generatedPath = Path.of (folder.root.toString()).resolve (packageName)
 
         when:
         processor.run (options)
 
         then:
-        def generatedFiles = collectGenerated(generatedPath)
-        def expectedFiles = collectExpected(expectedPath)
-        assert generatedFiles == expectedFiles
+        def expectedFiles = collectPaths (expectedPath)
+        def generatedFiles = collectPaths (generatedPath)
+        assert expectedFiles == generatedFiles
 
         expectedFiles.each {
-            def expected = new File([expectedPath, it].join ('/'))
-            def generated = new File([generatedPath, it].join ('/'))
+            def expected = expectedPath.resolve (it)
+            def generated = generatedPath.resolve (it)
 
             printUnifiedDiff (expected, generated)
             assertEquals(
@@ -95,14 +97,99 @@ map:
         }
     }
 
-    void printUnifiedDiff (File expected, File generated) {
+    protected void runOnCustomFileSystem (FileSystem fs) {
+        def source = testSet.name
+
+        Path root = Files.createDirectory (fs.getPath ("source"))
+        Path files = Path.of ("./src/testInt/resources/${source}")
+        copy (files, root)
+
+        Path api = root.resolve ('openapi.yaml')
+        Path target = fs.getPath ('target')
+
+        def processor = new SpringProcessor()
+        def options = [
+            parser: 'OPENAPI4J', // swagger-parser does not work with fs
+            apiPath: api.toUri ().toURL ().toString (),
+            targetDir: target.toUri ().toURL ().toString ()
+        ]
+
+        def mappingYaml = root.resolve ('mapping.yaml')
+        if(Files.exists (mappingYaml)) {
+            options.mapping = mappingYaml.toUri ().toURL ().toString ()
+        } else {
+            options.mapping = DEFAULT_OPTIONS
+        }
+
+        def reader = new MappingReader ()
+        Mapping mapping = reader.read (options.mapping as String)
+
+        def packageName = mapping.options.packageName
+        def expectedPath = root.resolve (packageName)
+        def generatedPath = target.resolve (packageName)
+
+        when:
+        processor.run (options)
+
+        then:
+        def expectedFiles = collectPaths (expectedPath)
+        def generatedFiles = collectPaths (generatedPath)
+        assert expectedFiles == generatedFiles
+
+        expectedFiles.each {
+            def expected = expectedPath.resolve (it)
+            def generated = generatedPath.resolve (it)
+
+            printUnifiedDiff (expected, generated)
+            assertEquals(
+                // ignore cr (ie. crlf vs lf)
+                expected.text.replace('\r',''),
+                generated.text.replace('\r','')
+            )
+        }
+    }
+
+    private void copy (Path source, Path target) {
+        Stream<Path> paths = Files.walk (source)
+            .filter ({f -> !Files.isDirectory (f)})
+
+        paths.forEach { p ->
+            Path relativePath = source.relativize (p)
+            Path targetPath = target.resolve (relativePath.toString ())
+            Files.createDirectories (targetPath.getParent ())
+
+            InputStream src = Files.newInputStream (p)
+            OutputStream dst = Files.newOutputStream (targetPath)
+            src.transferTo (dst)
+        }
+
+        paths.close ()
+    }
+
+    private List<String> collectPaths(Path source) {
+        def files = []
+
+        def found = Files.walk (source)
+            .filter ({ f ->
+                !Files.isDirectory (f)
+            })
+
+        found.forEach ({f ->
+                files << source.relativize (f).toString ()
+            })
+        found.close ()
+
+        return files
+    }
+
+    void printUnifiedDiff (Path expected, Path generated) {
         def patch = DiffUtils.diff (
             expected.readLines (),
             generated.readLines ())
 
         def diff = UnifiedDiffUtils.generateUnifiedDiff (
-            expected.path,
-            generated.path,
+            expected.toString (),
+            generated.toString (),
             expected.readLines (),
             patch,
             2
@@ -111,22 +198,6 @@ map:
         diff.each {
             println it
         }
-    }
-
-    List<String> collectGenerated(String generatedPath) {
-        def generated = []
-        new File(generatedPath).eachFileRecurse FileType.FILES,  {
-            generated << it.absolutePath.replace (generatedPath, '')
-        }
-        generated
-    }
-
-    List<String> collectExpected(String expectedPath) {
-        def expected = []
-        new File(expectedPath).eachFileRecurse FileType.FILES,  {
-            expected << it.path.replace (expectedPath, '')
-        }
-        expected
     }
 
 }

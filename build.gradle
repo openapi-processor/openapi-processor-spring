@@ -3,18 +3,21 @@ plugins {
     id 'groovy'
     id 'java-library'
     id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.8.4'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
     id 'org.jetbrains.dokka' version '0.10.1'
-    id 'org.unbroken-dome.test-sets' version '2.2.1'
-    id "com.github.ben-manes.versions" version "0.27.0"
+    id 'org.unbroken-dome.test-sets' version '3.0.1'
+    id "com.github.ben-manes.versions" version "0.28.0"
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.M13'
+version '1.0.0.M14'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 
 ext {
     processorApiVersion = '1.0.0.M4'
@@ -56,22 +59,31 @@ compileTestGroovy {
     classpath += files(compileKotlin.destinationDir)
 }
 
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy:2.5.4'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    implementation 'io.swagger.parser.v3:swagger-parser:2.0.17'
-    implementation 'org.openapi4j:openapi-parser:0.8'
+    implementation 'org.codehaus.groovy:groovy:2.5.10'
+    implementation 'org.codehaus.groovy:groovy-nio:2.5.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+    implementation ('io.swagger.parser.v3:swagger-parser:2.0.19') {
+        exclude group: 'io.swagger.parser.v3', module: 'swagger-parser-v2-converter'
+        exclude group: 'io.swagger.core.v3', module: 'swagger-annotations'
+    }
+    implementation 'org.openapi4j:openapi-parser:0.9'
     implementation 'com.google.googlejavaformat:google-java-format:1.7'
     compileOnly "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
 
+    testImplementation 'com.google.jimfs:jimfs:1.1'
     testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
     testImplementation ('org.spockframework:spock-junit4:2.0-M2-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.7'
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.9'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     testIntImplementation "com.github.hauner.openapi:openapi-processor-api:$processorApiVersion"
@@ -79,7 +91,6 @@ dependencies {
 //    testIntRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
 //    testIntRuntimeOnly 'org.slf4j:slf4j-nop:1.6.1'
 }
-
 
 tasks.withType(Test) {
     finalizedBy jacocoTestReport
