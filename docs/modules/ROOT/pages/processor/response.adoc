@@ -64,6 +64,8 @@ will be either the java type or the *unknown type*.
 
 NOTE: prior to 1.0.0.M13 all results were auto-wrapped with `ResponseEntity<>`.
 
+See also xref:mapping/result.adoc[result mapping].
+
 == single & multi wrapper
 
 [.badge .badge-since]+since 1.0.0.M13+
