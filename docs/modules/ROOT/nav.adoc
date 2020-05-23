@@ -15,7 +15,7 @@
 ** xref:mapping/parameter.adoc[Global Parameter Mapping]
 ** xref:mapping/response.adoc[Global Response Mapping]
 ** xref:mapping/result.adoc[Global Result Mapping]
-** xref:mapping/single.adoc[Global Single Result Mapping]
+** xref:mapping/single-multi.adoc[Global Single & Multi Mapping]
 ** xref:mapping/endpoint.adoc[Endpoint Mapping]
 * xref:gradle.adoc[Gradle Integration]
 * xref:howto/index.adoc[HowTo]
