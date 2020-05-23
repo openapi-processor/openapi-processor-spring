@@ -26,3 +26,5 @@
 :springboot: https://spring.io/projects/spring-boot
 :license: http://www.apache.org/licenses/LICENSE-2.0.txt
 :bean-validation: https://beanvalidation.org/
+
+:spring-responseentity: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html

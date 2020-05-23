@@ -1,0 +1,61 @@
+# openapi yaml
+openapi: 3.0.2
+info:
+  title: name me
+  version: 1.0.0
+
+paths:
+# edit me....
+
+  /foo:
+    get:
+      responses:
+        '400':
+          $ref: "#/x-errors/400"
+
+x-errors:
+  '400':
+    description: invalid request
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/ErrResp"
+
+components:
+   schemas:
+      ErrResp:
+        type: object
+        properties:
+          error_code:
+            $ref: "#/components/schemas/ErrCode"
+          error_msg:
+            type: string
+
+      ErrCode:
+         type: integer
+         description: |
+           2 - invalid request
+
+      ServiceError:
+        type: object
+        description: dsfsdfsdf
+        properties:
+          Message:
+            type: string
+            description: "The exception message."
+          ExceptionMessage:
+            type: string
+          Type:
+            type: string
+            description: "The exception type."
+          InnerError:
+            $ref: "#/components/schemas/ServiceError"
+          Fooo:
+            $ref: "#/components/schemas/Property"
+
+      Property:
+        type: object
+        properties:
+          Name:
+            type: string
+            description: Name of the property.

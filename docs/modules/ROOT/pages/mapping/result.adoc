@@ -1,4 +1,5 @@
 = Result mapping
+include::partial$links.adoc[]
 
 
 [.badge .badge-since]+since 1.0.0.M13+

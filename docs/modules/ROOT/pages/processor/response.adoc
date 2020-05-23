@@ -1,7 +1,5 @@
 = Responses
-
-:spring-responseentity: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
-
+include::partial$links.adoc[]
 
 All generated endpoints return their java result type by default. This may be to simple for some
 endpoint implementations.
