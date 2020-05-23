@@ -1,6 +1,6 @@
 name: spring
 title: oap-spring
-version: 1.0.0.M14
+version: 1.0.x
 #start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/nav.adoc
