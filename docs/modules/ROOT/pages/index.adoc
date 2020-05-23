@@ -14,7 +14,7 @@ link:{oaps-ci}[image:{badge-ci}[]]
 link:{oaps-license}[image:{badge-license}[]]
 
 
-*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model only java code generator
+*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model java code generator
 for link:{springboot}[Spring Boot].
 
 It supports an approach where you explicitly define and document your Service API (using OpenAPI)
@@ -41,6 +41,10 @@ The target programming language is Java so the generated code is usable from mos
 
 See the xref:processor/index.adoc[processor intro] for a short example.
 
+== Playground
+
+openapi-processor has a link:{oap-playground}[playground, window="_blank"] application. You can try
+out some samples, or your own yaml and view the code that the processor generates.
 
 == Features
 

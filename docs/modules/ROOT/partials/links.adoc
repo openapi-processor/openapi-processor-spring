@@ -10,6 +10,7 @@
 :oaps-releases: https://github.com/hauner/openapi-processor-spring/releases
 :oaps-bintray: https://bintray.com/hauner/openapi-processor
 :oap-gradle: https://github.com/hauner/openapi-processor-gradle
+:oap-playground: https://openapi-processor-playground.appspot.com
 
 //
 // other external links
