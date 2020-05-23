@@ -1,5 +1,65 @@
-= (global) Result mapping
-
-todo...
+= Result mapping
 
 
+[.badge .badge-since]+since 1.0.0.M13+
+
+
+A link:{spring-responseentity}[`ResponseEntity<>`] allows an endpoint implementation full control of
+the response.
+
+Here is a super simple examples:
+
+[source,java]
+----
+public ResponseEntity<String> getFoo() {
+    return ResponseEntity.ok("foo");
+}
+----
+
+To enable a result wrapper set the `result` mapping in the mapping yaml to a fully qualified java
+type.
+
+[source,yaml]
+----
+map:
+  result:
+    to: org.springframework.http.ResponseEntity
+----
+
+NOTE: The processor expects that it takes a single generic parameter.
+
+Depending on the number of defined response content types the parameter of the `ResponseEntity<>`
+will be either the java type or the *unknown type*.
+
+|===
+|responses | ResponseEntity<>
+
+|one
+|`ResponseEntity<java type>`
+
+|multiple
+|`ResponseEntity<?>`
+|===
+
+NOTE: prior to 1.0.0.M13 all results were auto-wrapped with `ResponseEntity<>`.
+
+
+== Limit to Endpoint
+
+The `result` mapping works as endpoint specific mapping too. That way it is possible to use the
+`ResponseEntity<>` only on single endpoints.
+
+
+So a mapping like this:
+
+
+[source,yaml]
+----
+map:
+
+  /foo:
+    result:
+      to: org.springframework.http.ResponseEntity
+----
+
+will only wrap the result of the endpoint `/foo`.
