@@ -85,4 +85,4 @@ paths:
 
 the processor will use `com.github.hauner.openapi.Something` as java type for **all** responses with
 the content type `application/vnd.something`.
-##
+
