@@ -34,7 +34,42 @@ ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo", required = false, d
 
 == path parameters
 
-todo...
+Path parameters get converted to method parameters with a `@PathVariable()` annotation.
+
+For example the following endpoint description:
+
+
+[source, yaml]
+----
+paths:
+  /path/{foo}:
+    get:
+      parameters:
+        - name: foo
+          description: path parameters must be required
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: plain text response
+          content:
+            plain/text:
+              schema:
+                type: string
+----
+
+
+will generate the following interface method:
+
+[source,java]
+----
+    @GetMapping(
+            path = "/path/{foo}",
+            produces = {"plain/text"})
+    String getPathFoo(@PathVariable(name = "foo") String foo);
+----
 
 == header parameters
 
