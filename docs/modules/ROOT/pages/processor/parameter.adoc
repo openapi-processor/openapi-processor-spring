@@ -42,11 +42,11 @@ For example the following endpoint description:
 [source, yaml]
 ----
 paths:
-  /path/{foo}:
+  /endpoint/{foo}:
     get:
       parameters:
         - name: foo
-          description: path parameters must be required
+          description: a path parameter
           in: path
           required: true
           schema:
@@ -65,19 +65,77 @@ will generate the following interface method:
 
 [source,java]
 ----
-    @GetMapping(
-            path = "/path/{foo}",
-            produces = {"plain/text"})
-    String getPathFoo(@PathVariable(name = "foo") String foo);
+@GetMapping(
+        path = "/path/{foo}",
+        produces = {"plain/text"})
+String getEndpointFoo(@PathVariable(name = "foo") String foo);
 ----
 
 == header parameters
 
-todo...
+Header parameters use the `@RequestHeader` annotation.
+
+Given the following endpoint description:
+
+[source, yaml]
+----
+paths:
+  /endpoint:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: x-foo
+          description: a header parameter
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor generates the following interface method:
+
+[source,java]
+----
+@GetMapping(path = "/endpoint")
+void getEndpoint(@RequestHeader(name = "x-foo") String xFoo);
+----
 
 == cookie parameters
 
-todo...
+Cookie parameters use the `@CookieValue` annotation.
+
+Given the following endpoint description:
+
+
+[source, yaml]
+----
+paths:
+  /endpoint:
+
+    get:
+      parameters:
+        - name: foo
+          description: a cookie
+          in: cookie
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor generates the following interface method:
+
+[source,java]
+----
+@GetMapping(path = "/endpoint")
+void getEndpoint(@CookieValue(name = "foo") String foo);
+----
 
 == additional parameters
 
