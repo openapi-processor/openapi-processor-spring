@@ -55,9 +55,9 @@ paths:
             packageName: 'pkg',
             typeMappings: [
                 new TypeMapping (
-                    sourceTypeName: 'string',
-                    sourceTypeFormat: 'date-time',
-                    targetTypeName: 'java.time.ZonedDateTime')
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime')
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -96,13 +96,13 @@ paths:
             packageName: 'pkg',
             typeMappings: [
                 new TypeMapping (
-                    sourceTypeName: 'string',
-                    sourceTypeFormat: 'date-time',
-                    targetTypeName: 'java.time.ZonedDateTime'),
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime'),
                 new TypeMapping (
-                    sourceTypeName: 'string',
-                    sourceTypeFormat: 'date-time',
-                    targetTypeName: 'java.time.ZonedDateTime')
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime')
             ])
         new ApiConverter (options).convert (openApi)
 
@@ -154,29 +154,25 @@ paths:
 
         mappings << [
             [
-                new EndpointTypeMapping (path: '/foo',
-                    typeMappings: [
+                new EndpointTypeMapping ('/foo', [
                         new ParameterTypeMapping (
-                            parameterName: 'bar',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'string',
-                                sourceTypeFormat: 'date-time',
-                                targetTypeName: 'java.time.ZonedDateTime')
-                        )
+                            'bar', new TypeMapping (
+                                'string',
+                                'date-time',
+                                'java.time.ZonedDateTime'))
                     ])
             ], [
                 new ParameterTypeMapping (
-                    parameterName: 'bar',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'string',
-                        sourceTypeFormat: 'date-time',
-                        targetTypeName: 'java.time.ZonedDateTime')
+                    'bar', new TypeMapping (
+                        'string',
+                        'date-time',
+                        'java.time.ZonedDateTime')
                 )
             ], [
                 new TypeMapping (
-                    sourceTypeName: 'string',
-                    sourceTypeFormat: 'date-time',
-                    targetTypeName: 'java.time.ZonedDateTime')
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime')
             ]
         ]
     }

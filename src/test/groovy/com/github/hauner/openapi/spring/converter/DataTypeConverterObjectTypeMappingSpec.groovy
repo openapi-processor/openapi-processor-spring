@@ -96,12 +96,12 @@ components:
             packageName: 'pkg',
             typeMappings: [
                 new TypeMapping (
-                    sourceTypeName: 'Pageable',
-                    targetTypeName: 'org.springframework.data.domain.Pageable'),
+                    'Pageable',
+                    'org.springframework.data.domain.Pageable'),
                 new TypeMapping (
-                    sourceTypeName: 'StringPage',
-                    targetTypeName: 'org.springframework.data.domain.Page',
-                    genericTypeNames: ['java.lang.String'])
+                    'StringPage',
+                    'org.springframework.data.domain.Page',
+                    ['java.lang.String'])
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -154,11 +154,11 @@ components:
             packageName: 'pkg',
             typeMappings: [
                 new TypeMapping (
-                    sourceTypeName: 'Pageable',
-                    targetTypeName: 'org.springframework.data.domain.Pageable'),
+                    'Pageable',
+                    'org.springframework.data.domain.Pageable'),
                 new TypeMapping (
-                    sourceTypeName: 'Pageable',
-                    targetTypeName: 'org.springframework.data.domain.Pageable')
+                    'Pageable',
+                    'org.springframework.data.domain.Pageable')
             ])
         new ApiConverter (options).convert (openApi)
 
@@ -214,14 +214,13 @@ components:
         def options = new ApiOptions(
             packageName: 'pkg',
             typeMappings: [
-                new EndpointTypeMapping (path: '/foobar',
-                    typeMappings: [
+                new EndpointTypeMapping ('/foobar', [
                         new TypeMapping (
-                            sourceTypeName: 'Foo',
-                            targetTypeName: 'someA.ObjectA'),
+                            'Foo',
+                            'someA.ObjectA'),
                         new TypeMapping (
-                            sourceTypeName: 'Bar',
-                            targetTypeName: 'someB.ObjectB')])
+                            'Bar',
+                            'someB.ObjectB')])
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -280,19 +279,18 @@ paths:
 
         mappings << [
             [
-                new EndpointTypeMapping (path: '/foobar',
-                    typeMappings: [
+                new EndpointTypeMapping ('/foobar', [
                         new ParameterTypeMapping (
-                            parameterName: 'foobar',
-                            mapping: new TypeMapping (
-                                targetTypeName: 'pkg.TargetClass')
+                            'foobar', new TypeMapping (
+                                null,
+                                'pkg.TargetClass')
                         )
                     ])
             ], [
                 new ParameterTypeMapping (
-                    parameterName: 'foobar',
-                    mapping: new TypeMapping (
-                        targetTypeName: 'pkg.TargetClass')
+                    'foobar', new TypeMapping (
+                        null,
+                        'pkg.TargetClass')
                 )
             ]
         ]
@@ -344,48 +342,40 @@ paths:
 
         mappings << [
             [
-                new EndpointTypeMapping (path: '/object',
-                    typeMappings: [
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'object',
-                                targetTypeName: 'pkg.TargetClass',
-                                genericTypeNames: ['java.lang.String'])
-                        )
-                    ]
+                new EndpointTypeMapping ('/object', [
+                    new ResponseTypeMapping (
+                        'application/vnd.any', new TypeMapping (
+                        'object',
+                        'pkg.TargetClass',
+                        ['java.lang.String'])
+                    )]
                 )
             ], [
                 new ResponseTypeMapping (
-                    contentType: 'application/vnd.any',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'object',
-                        targetTypeName: 'pkg.TargetClass',
-                        genericTypeNames: ['java.lang.String'])
+                    'application/vnd.any', new TypeMapping (
+                        'object',
+                        'pkg.TargetClass',
+                        ['java.lang.String'])
                 )
             ], [
-                new EndpointTypeMapping (path: '/object',
-                    typeMappings: [
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'object',
-                                targetTypeName: 'pkg.TargetClass',
-                                genericTypeNames: ['java.lang.String'])
-                        ),
-                        new TypeMapping (
-                            sourceTypeName: 'ObjectResponse200',
-                            targetTypeName: 'pkg.TargetClassType',
-                            genericTypeNames: ['java.lang.StringType'])
-                    ]
-                )
-            ], [
-                new EndpointTypeMapping (path: '/object',
-                    typeMappings: [
+                new EndpointTypeMapping ('/object', [
+                    new ResponseTypeMapping (
+                        'application/vnd.any', new TypeMapping (
+                        'object',
+                        'pkg.TargetClass',
+                        ['java.lang.String'])
+                    ),
                     new TypeMapping (
-                        sourceTypeName: 'ObjectResponse200',
-                        targetTypeName: 'pkg.TargetClass',
-                        genericTypeNames: ['java.lang.String'])
+                        'ObjectResponse200',
+                        'pkg.TargetClassType',
+                        ['java.lang.StringType'])
+                ])
+            ], [
+                new EndpointTypeMapping ('/object', [
+                    new TypeMapping (
+                        'ObjectResponse200',
+                        'pkg.TargetClass',
+                        ['java.lang.String'])
                     ]
                 )
             ]
@@ -430,13 +420,12 @@ components:
         def options = new ApiOptions(
             packageName: 'pkg',
             typeMappings: [
-                new EndpointTypeMapping (path: '/endpoint-map',
-                    typeMappings: [
-                        new TypeMapping (
-                            sourceTypeName: 'Props',
-                            targetTypeName: 'java.util.Map',
-                            genericTypeNames: ['java.lang.String', 'java.lang.String'])
-                        ])
+                new EndpointTypeMapping ('/endpoint-map', [
+                    new TypeMapping (
+                        'Props',
+                        'java.util.Map',
+                        ['java.lang.String', 'java.lang.String'])
+                ])
             ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -485,13 +474,12 @@ components:
         def options = new ApiOptions(
             packageName: 'pkg',
             typeMappings: [
-                new EndpointTypeMapping (path: '/endpoint-map',
-                    typeMappings: [
-                        new TypeMapping (
-                            sourceTypeName: 'Props',
-                            targetTypeName: 'org.springframework.util.MultiValueMap',
-                            genericTypeNames: ['java.lang.String', 'java.lang.String'])
-                        ])
+                new EndpointTypeMapping ('/endpoint-map', [
+                    new TypeMapping (
+                        'Props',
+                        'org.springframework.util.MultiValueMap',
+                        ['java.lang.String', 'java.lang.String'])
+                ])
             ])
         Api api = new ApiConverter (options).convert (openApi)
 

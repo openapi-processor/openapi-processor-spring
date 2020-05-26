@@ -17,18 +17,17 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * interface for type mapping matching logic. 
- * 
- * 
+ * interface for type mapping matching logic.
+ *
  * @author Martin Hauner
  */
 interface MappingVisitor {
 
-    boolean match (EndpointTypeMapping mapping)
-    boolean match (ParameterTypeMapping mapping)
-    boolean match (ResponseTypeMapping mapping)
-    boolean match (TypeMapping mapping)
-    boolean match (AddParameterTypeMapping mapping)
-    boolean match (ResultTypeMapping mapping)
+    fun match (mapping: EndpointTypeMapping): Boolean
+    fun match (mapping: ParameterTypeMapping): Boolean
+    fun match (mapping: ResponseTypeMapping): Boolean
+    fun match (mapping: TypeMapping): Boolean
+    fun match (mapping: AddParameterTypeMapping): Boolean
+    fun match (mapping: ResultTypeMapping): Boolean
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,31 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Mapping target result created from {@link TypeMapping}.
+ * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
+ * defined in the api description.
+ *
+ * @author Martin Hauner
  */
-class TargetType {
-
-    String typeName
-    List<String> genericNames
+class AddParameterTypeMapping(
 
     /**
-     * Returns the class name without the package name.
-     *
-     * @return the class name
+     * The parameter name of this mapping.
      */
-    String getName () {
-        typeName.substring (typeName.lastIndexOf ('.') + 1)
+    val parameterName: String,
+
+    /**
+     * additional parameter type mapping.
+     */
+    val mapping: TypeMapping
+
+): Mapping {
+
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match(this)
     }
 
-    /**
-     * Returns the package name.
-     *
-     * @return the package name
-     */
-    String getPkg () {
-        typeName.substring (0, typeName.lastIndexOf ('.'))
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(mapping)
     }
 
 }

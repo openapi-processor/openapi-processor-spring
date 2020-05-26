@@ -95,11 +95,11 @@ paths:
         )
 
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping(path: '/multipart/single-file', typeMappings: [
+            new EndpointTypeMapping('/multipart/single-file', [
                 new TypeMapping (
-                    sourceTypeName: 'string',
-                    sourceTypeFormat: 'binary',
-                    targetTypeName: 'org.springframework.web.multipart.MultipartFile')
+                    'string',
+                    'binary',
+                    'org.springframework.web.multipart.MultipartFile')
             ])
         ])
 

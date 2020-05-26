@@ -22,26 +22,26 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class ResponseTypeMapping implements Mapping {
+class ResponseTypeMapping(
 
     /**
      * The content type of this mapping. Must match 1:1 with what is written in the api.
      */
-    String contentType
+    val contentType: String,
 
     /**
      * Type mapping valid only for responses with {@link #contentType}.
      */
-    TypeMapping mapping
+    val mapping: TypeMapping
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+): Mapping {
+
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match (this)
     }
 
-    @Override
-    List<Mapping> getChildMappings () {
-        [mapping]
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(mapping)
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,31 +17,26 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
- * defined in the api description.
- *
- * @author Martin Hauner
+ * Common interface for type mappings.
  */
-class AddParameterTypeMapping implements Mapping {
+interface Mapping {
 
     /**
-     * The parameter name of this mapping.
+     * check if this mapping applies to the given schema by delegating to the visitor.
+     *
+     * @param visitor provides the matching logic
+     * @return true, id mapping applies, false otherwise
      */
-    String parameterName
+    fun matches (visitor: MappingVisitor): Boolean
 
     /**
-     * additional parameter type mapping.
+     * Returns the inner mappings.
+     * In case of an ENDPOINT mapping the IO or TYPE mappings.
+     * In case of an IO mappings its type mappings.
+     * In case of a TYPE or RESULT mapping itself.
+     *
+     * @return the inner type mappings.
      */
-    TypeMapping mapping
-
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
-    }
-
-    @Override
-    List<TypeMapping> getChildMappings () {
-        [mapping]
-    }
+    fun getChildMappings (): List<Mapping>
 
 }

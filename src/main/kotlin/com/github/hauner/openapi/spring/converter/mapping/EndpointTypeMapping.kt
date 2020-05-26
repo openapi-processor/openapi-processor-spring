@@ -27,33 +27,31 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class EndpointTypeMapping implements Mapping {
+class EndpointTypeMapping @JvmOverloads constructor(
 
     /**
      * Full path of the endpoint that is configured by this object.
      */
-    String path
+    var path: String,
+
+    /**
+     * Provides type mappings for the endpoint.
+     */
+    var typeMappings: List<Mapping> = emptyList(),
 
     /**
      * Exclude endpoint.
      */
-    boolean exclude
+    var exclude: Boolean = false
 
-    /**
-     * Provides type mappings for the endpoint. The list can contain the following mappings:
-     *
-     * {@link ResponseTypeMapping}: used to map a response schema type to a java type.
-     */
-    List<Mapping> typeMappings
+): Mapping {
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match(this)
     }
 
-    @Override
-    List<Mapping> getChildMappings () {
-        typeMappings
+    override fun getChildMappings(): List<Mapping> {
+        return typeMappings
     }
 
 }

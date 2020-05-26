@@ -52,7 +52,7 @@ paths:
 """)
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new TypeMapping (sourceTypeName: 'array', targetTypeName: targetTypeName)
+            new TypeMapping ('array', targetTypeName)
         ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -97,11 +97,11 @@ paths:
             packageName: 'pkg',
             typeMappings: [
                 new TypeMapping (
-                    sourceTypeName: 'array',
-                    targetTypeName: 'java.util.Collection'),
+                    'array',
+                    'java.util.Collection'),
                 new TypeMapping (
-                    sourceTypeName: 'array',
-                    targetTypeName: 'java.util.Collection')
+                    'array',
+                    'java.util.Collection')
             ])
         new ApiConverter (options).convert (openApi)
 
@@ -142,7 +142,7 @@ paths:
         new ApiConverter (options).convert (openApi)
 
         then:
-        def e = thrown (AmbiguousTypeMappingException)
+        thrown (AmbiguousTypeMappingException)
 
         where:
         type << [
@@ -154,40 +154,35 @@ paths:
         mappings << [
             [
                 new TypeMapping (
-                    sourceTypeName: 'array',
-                    targetTypeName: 'java.util.Collection'),
+                    'array',
+                    'java.util.Collection'),
                 new TypeMapping (
-                    sourceTypeName: 'array',
-                    targetTypeName: 'java.util.Collection')
+                    'array',
+                    'java.util.Collection')
             ],
             [
                 new ParameterTypeMapping (
-                    parameterName: 'param',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'array',
-                        targetTypeName: 'java.util.Collection')
+                    'param', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
                 ),
                 new ParameterTypeMapping (
-                    parameterName: 'param',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'array',
-                        targetTypeName: 'java.util.Collection')
+                    'param', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
                 )
             ],
             [
-                new EndpointTypeMapping (path: '/foo',
-                    typeMappings: [
+                new EndpointTypeMapping ('/foo', [
                         new ParameterTypeMapping (
-                            parameterName: 'param',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
-                                targetTypeName: 'java.util.Collection')
+                            'param', new TypeMapping (
+                                'array',
+                                'java.util.Collection')
                         ),
                         new ParameterTypeMapping (
-                            parameterName: 'param',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
-                                targetTypeName: 'java.util.Collection')
+                            'param', new TypeMapping (
+                                'array',
+                                'java.util.Collection')
                         )
                     ])
             ]
@@ -217,12 +212,11 @@ paths:
 
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping (path: '/foo',
-                typeMappings: [
-                    new TypeMapping (
-                        sourceTypeName: 'array',
-                        targetTypeName: targetTypeName)
-                    ])
+            new EndpointTypeMapping ('/foo', [
+                new TypeMapping (
+                    'array',
+                    targetTypeName)
+            ])
         ])
         Api api = new ApiConverter (options).convert (openApi)
 
@@ -283,21 +277,18 @@ paths:
 
         mappings << [
             [
-                new EndpointTypeMapping (path: '/foobar',
-                    typeMappings: [
-                        new ParameterTypeMapping (
-                            parameterName: 'foobar',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
-                                targetTypeName: 'java.util.Collection')
-                        )
-                    ])
+                new EndpointTypeMapping ('/foobar', [
+                    new ParameterTypeMapping (
+                        'foobar', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
+                    )
+                ])
             ], [
                 new ParameterTypeMapping (
-                    parameterName: 'foobar',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'array',
-                        targetTypeName: 'java.util.Collection')
+                    'foobar', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
                 )
             ]
         ]
@@ -346,45 +337,36 @@ paths:
 
         mappings << [
             [
-                new EndpointTypeMapping (path: '/array-string',
-                    typeMappings: [
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
-                                targetTypeName: 'java.util.Collection')
-                        )
-                    ]
-                )
+                new EndpointTypeMapping ('/array-string', [
+                    new ResponseTypeMapping (
+                        'application/vnd.any', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
+                    )
+                ])
             ], [
                 new ResponseTypeMapping (
-                    contentType: 'application/vnd.any',
-                    mapping: new TypeMapping (
-                        sourceTypeName: 'array',
-                        targetTypeName: 'java.util.Collection')
+                    'application/vnd.any', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
                 )
             ], [
-                new EndpointTypeMapping (path: '/array-string',
-                    typeMappings: [
-                        new ResponseTypeMapping (
-                            contentType: 'application/vnd.any',
-                            mapping: new TypeMapping (
-                                sourceTypeName: 'array',
-                                targetTypeName: 'java.util.Collection')
-                        ),
-                        new TypeMapping (
-                            sourceTypeName: 'array',
-                            targetTypeName: 'java.util.Collection')
-                    ]
-                )
+                new EndpointTypeMapping ('/array-string', [
+                    new ResponseTypeMapping (
+                        'application/vnd.any', new TypeMapping (
+                        'array',
+                        'java.util.Collection')
+                    ),
+                    new TypeMapping (
+                        'array',
+                        'java.util.Collection')
+                ])
             ], [
-                new EndpointTypeMapping (path: '/array-string',
-                    typeMappings: [
-                        new TypeMapping (
-                            sourceTypeName: 'array',
-                            targetTypeName: 'java.util.Collection')
-                    ]
-                )
+                new EndpointTypeMapping ('/array-string', [
+                    new TypeMapping (
+                        'array',
+                        'java.util.Collection')
+                ])
             ]
         ]
     }

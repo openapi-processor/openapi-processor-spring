@@ -18,11 +18,11 @@ package com.github.hauner.openapi.spring.converter.mapping
 
 /**
  * provider of target type information.
- * 
+ *
  * @author Martin Hauner
  */
 interface TargetTypeMapping {
-    
-    TargetType getTargetType ()
-    
+
+    fun getTargetType (): TargetType
+
 }

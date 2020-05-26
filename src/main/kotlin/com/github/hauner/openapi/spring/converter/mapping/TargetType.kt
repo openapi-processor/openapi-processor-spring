@@ -17,31 +17,38 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
- * of the given endpoint parameter.
- *
- * @author Martin Hauner
+ * Mapping target result created from {@link TypeMapping}.
  */
-class ParameterTypeMapping implements Mapping {
+class TargetType(
 
     /**
-     * The parameter name of this mapping. Must match 1:1 with what is written in the api.
+     * type name
      */
-    String parameterName
+    val typeName: String,
 
     /**
-     * Type mapping valid only for requests with parameter {@link #parameterName}.
+     * generic parameters of typeName
      */
-    TypeMapping mapping
+    val genericNames: List<String>
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+) {
+
+    /**
+     * Returns the class name without the package name.
+     *
+     * @return the class name
+     */
+    fun getName(): String {
+        return typeName.substring(typeName.lastIndexOf('.') + 1)
     }
 
-    @Override
-    List<Mapping> getChildMappings () {
-        [mapping]
+    /**
+     * Returns the package name.
+     *
+     * @return the package name
+     */
+    fun getPkg(): String {
+        return typeName.substring(0, typeName.lastIndexOf('.'))
     }
 
 }

@@ -104,7 +104,7 @@ paths:
         method << ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
     }
 
-    void "sets interface package from generatr options with 'api' sub package" () {
+    void "sets interface package from processor options with 'api' sub package" () {
         def openApi = parse (
 """\
 openapi: 3.0.2
@@ -179,7 +179,7 @@ paths:
 """)
 
         def options = new ApiOptions(typeMappings: [
-            new EndpointTypeMapping (path: '/foo', exclude: true, typeMappings: [])
+            new EndpointTypeMapping ('/foo', [], true)
         ])
 
         when:

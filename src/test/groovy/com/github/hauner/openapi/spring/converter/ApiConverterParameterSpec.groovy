@@ -211,11 +211,11 @@ paths:
         )
 
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping(path: '/foo', typeMappings: [
+            new EndpointTypeMapping('/foo', [
                 new AddParameterTypeMapping (
-                    parameterName: 'request',
-                    mapping: new TypeMapping (
-                        targetTypeName: 'javax.servlet.http.HttpServletRequest')
+                    'request', new TypeMapping (
+                        null,
+                        'javax.servlet.http.HttpServletRequest')
                 )
             ])
         ])
