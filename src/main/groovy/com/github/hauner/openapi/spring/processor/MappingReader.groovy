@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.github.hauner.openapi.spring.processor.mapping.Mapping
+import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
 import com.github.hauner.openapi.spring.processor.mapping.version.Mapping as VersionMapping
@@ -35,7 +36,7 @@ import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV
  */
 class MappingReader {
 
-    def /*Mapping*/ read (String typeMappings) {
+    VersionedMapping read (String typeMappings) {
         if (typeMappings == null || typeMappings.empty) {
             return null
         }

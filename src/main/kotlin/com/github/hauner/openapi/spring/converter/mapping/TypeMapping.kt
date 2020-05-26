@@ -50,13 +50,13 @@ class TypeMapping (
 
 ): Mapping, TargetTypeMapping {
 
-    constructor(sourceTypeName: String, targetTypeName: String):
+    constructor(sourceTypeName: String?, targetTypeName: String):
             this (sourceTypeName, null, targetTypeName, emptyList())
 
-    constructor(sourceTypeName: String, sourceTypeFormat: String?, targetTypeName: String):
+    constructor(sourceTypeName: String?, sourceTypeFormat: String?, targetTypeName: String):
             this (sourceTypeName, sourceTypeFormat, targetTypeName, emptyList())
 
-    constructor(sourceTypeName: String, targetTypeName: String, genericTypeNames: List<String>):
+    constructor(sourceTypeName: String?, targetTypeName: String, genericTypeNames: List<String>):
             this (sourceTypeName, null, targetTypeName, genericTypeNames)
 
     /**

@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 
 /**
  * *the* v2 Schema of the mapping yaml
@@ -40,9 +41,9 @@ data class Mapping(
      */
     val map: Map
 
-) {
+): VersionedMapping {
 
-    fun isV2(): Boolean {
+    override fun isV2(): Boolean {
         return version.startsWith("v2")
     }
 

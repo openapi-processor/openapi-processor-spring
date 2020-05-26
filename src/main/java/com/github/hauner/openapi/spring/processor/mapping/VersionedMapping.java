@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.spring.processor.mapping;
+
 /**
- * *the* Schema of the mapping yaml
+ * check for mapping format
  *
- *  @author Martin Hauner
+ * @author Martin Hauner
  */
-class Mapping implements VersionedMapping {
+public interface VersionedMapping {
 
-    /**
-     * version (currently optional)
-     */
-    String openapiProcessorSpring
-
-    /**
-     * general options
-     */
-    Options options
-
-    /**
-     * the type mappings
-     */
-    Map map
-
-    @Override
-    boolean isV2() {
-        false
-    }
+    boolean isV2();
 
 }
