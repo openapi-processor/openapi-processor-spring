@@ -67,6 +67,7 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy:2.5.10'
     implementation 'org.codehaus.groovy:groovy-nio:2.5.10'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2'
 
     implementation ('io.swagger.parser.v3:swagger-parser:2.0.19') {
         exclude group: 'io.swagger.parser.v3', module: 'swagger-parser-v2-converter'
