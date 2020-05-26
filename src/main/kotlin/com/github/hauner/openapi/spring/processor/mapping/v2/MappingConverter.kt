@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.spring.processor.mapping.v2
+
+import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
 
 /**
- * *the* Schema of the mapping yaml
+ *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
+ *  into the format used by {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}.
  *
  *  @author Martin Hauner
  */
-class Mapping {
+class MappingConverter {
 
-    /**
-     * version (currently optional)
-     */
-    String openapiProcessorSpring
-
-    /**
-     * general options
-     */
-    Options options
-
-    /**
-     * the type mappings
-     */
-    Map map
-
-    Boolean isV2() {
-        false
+    fun convert(mapping: MappingV2): List<Mapping> {
+        TODO("Not yet implemented")
     }
 
 }

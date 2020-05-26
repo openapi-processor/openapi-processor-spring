@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.spring.processor.mapping.v2
 
 /**
- * *the* Schema of the mapping yaml
+ * the "map:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-class Mapping {
+data class Map(
 
     /**
-     * version (currently optional)
+     * global type mappings
      */
-    String openapiProcessorSpring
+    val types: List<Type> = emptyList()
 
-    /**
-     * general options
-     */
-    Options options
-
-    /**
-     * the type mappings
-     */
-    Map map
-
-    Boolean isV2() {
-        false
-    }
-
-}
+) {}

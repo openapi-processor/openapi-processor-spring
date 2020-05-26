@@ -21,9 +21,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.github.hauner.openapi.spring.processor.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
+import com.github.hauner.openapi.spring.processor.mapping.version.Mapping as VersionMapping
+import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
 
 /**
  *  Reader for mapping yaml.
@@ -32,7 +35,7 @@ import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
  */
 class MappingReader {
 
-    Mapping read (String typeMappings) {
+    def /*Mapping*/ read (String typeMappings) {
         if (typeMappings == null || typeMappings.empty) {
             return null
         }
@@ -46,8 +49,23 @@ class MappingReader {
             mapping = typeMappings
         }
 
-        def mapper = createYamlParser ()
-        mapper.readValue (mapping, Mapping)
+        def versionMapper = createVersionParser ()
+        VersionMapping version = versionMapper.readValue (mapping, VersionMapping)
+        if (version.v2) {
+            def mapper = createV2Parser ()
+            mapper.readValue (mapping, MappingV2)
+        } else {
+            // assume v1
+            def mapper = createYamlParser ()
+            mapper.readValue (mapping, Mapping)
+        }
+    }
+
+    private ObjectMapper createV2Parser () {
+        new ObjectMapper (new YAMLFactory ())
+            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
+            .registerModule (new KotlinModule ())
     }
 
     private ObjectMapper createYamlParser () {
@@ -58,6 +76,13 @@ class MappingReader {
             .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
             .registerModule (module)
+    }
+
+    private ObjectMapper createVersionParser () {
+        new ObjectMapper (new YAMLFactory ())
+            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
+            .registerModule (new KotlinModule ())
     }
 
     private boolean isFileName (String name) {
