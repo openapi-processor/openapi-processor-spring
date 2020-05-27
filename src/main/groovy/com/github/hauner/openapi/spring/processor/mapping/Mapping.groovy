@@ -20,6 +20,7 @@ package com.github.hauner.openapi.spring.processor.mapping
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class Mapping implements VersionedMapping {
 
     /**

@@ -21,6 +21,7 @@ package com.github.hauner.openapi.spring.processor.mapping
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class Path {
 
     /**
@@ -32,12 +33,12 @@ class Path {
      * path limited result mapping
      */
     Result result
-    
+
     /**
      * path limited type mappings
      */
     List<Type> types
-    
+
     /**
      * path limited parameter mappings
      */
@@ -47,5 +48,5 @@ class Path {
      * path limited response mappings
      */
     List<Response> responses
-    
+
 }

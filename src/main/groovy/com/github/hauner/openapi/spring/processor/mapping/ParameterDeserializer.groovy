@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class ParameterDeserializer extends StdDeserializer<Parameter> {
 
     ParameterDeserializer () {
@@ -61,5 +62,5 @@ class ParameterDeserializer extends StdDeserializer<Parameter> {
     private boolean isAdditionalParameterMapping (java.util.Map<String, ?> source) {
         source.containsKey ('add') && source.containsKey ('as')
     }
-    
+
 }
