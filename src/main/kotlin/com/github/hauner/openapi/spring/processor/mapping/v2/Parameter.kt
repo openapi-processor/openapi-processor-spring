@@ -17,32 +17,9 @@
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
 /**
- * the "map:" entry in the mapping yaml
+ * a "parameters:" entry (name or add) in the mapping yaml
  *
  *  @author Martin Hauner
  */
-data class Map(
-
-    /**
-     * global type mappings
-     */
-    val types: List<Type> = emptyList(),
-
-    /**
-     * global parameter mappings
-     */
-    val parameters: List<Parameter> = emptyList(),
-
-    /**
-     * global response mappings
-     */
-    val responses: List<Response> = emptyList()
-
-    /**
-     * endpoint mappings
-     *
-     * the LinkedHashMap preserves order
-     */
-//    val paths: LinkedHashMap<String, Path> = emptyMap<>()
-
-) {}
+interface Parameter {
+}

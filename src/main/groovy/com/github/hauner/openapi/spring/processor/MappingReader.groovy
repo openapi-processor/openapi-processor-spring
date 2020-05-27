@@ -28,6 +28,8 @@ import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
 import com.github.hauner.openapi.spring.processor.mapping.version.Mapping as VersionMapping
 import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
+import com.github.hauner.openapi.spring.processor.mapping.v2.Parameter as ParameterV2
+import com.github.hauner.openapi.spring.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
 
 /**
  *  Reader for mapping yaml.
@@ -63,10 +65,13 @@ class MappingReader {
     }
 
     private ObjectMapper createV2Parser () {
+        SimpleModule module = new SimpleModule ()
+        module.addDeserializer (ParameterV2, new ParameterDeserializerV2 ())
+
         new ObjectMapper (new YAMLFactory ())
             .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
-            .registerModule (new KotlinModule ())
+            .registerModules (new KotlinModule (), module)
     }
 
     private ObjectMapper createYamlParser () {

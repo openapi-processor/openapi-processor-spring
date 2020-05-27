@@ -16,33 +16,24 @@
 
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
+
 /**
- * the "map:" entry in the mapping yaml
+ * a "parameters:" request parameter entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-data class Map(
+data class RequestParameter(
 
     /**
-     * global type mappings
-     */
-    val types: List<Type> = emptyList(),
-
-    /**
-     * global parameter mappings
-     */
-    val parameters: List<Parameter> = emptyList(),
-
-    /**
-     * global response mappings
-     */
-    val responses: List<Response> = emptyList()
-
-    /**
-     * endpoint mappings
+     * the mapping from parameter name to target, ie a mapping string like:
      *
-     * the LinkedHashMap preserves order
+     * foo => mapping.Bar
      */
-//    val paths: LinkedHashMap<String, Path> = emptyMap<>()
+    val name: String,
 
-) {}
+    /**
+     * (optional) generic parameters of {@link #name} target
+     */
+    val generics: List<String>?
+
+): Parameter {}

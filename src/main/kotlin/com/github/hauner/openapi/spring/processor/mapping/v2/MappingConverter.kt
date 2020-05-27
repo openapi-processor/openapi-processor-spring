@@ -16,9 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.*
 import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
 
 
@@ -46,9 +44,9 @@ class MappingConverter {
             result.add(convertType(it))
         }
 
-//        source?.map?.parameters?.each {
-//            result.add (convertParameter (it))
-//        }
+        mapping.map.parameters.forEach {
+            result.add (convertParameter (it))
+        }
 
         mapping.map.responses.forEach {
             result.add (convertResponse (it))
@@ -67,6 +65,24 @@ class MappingConverter {
         val (toName, generics) = parseToType(toType, source.generics)
 
         return TypeMapping(fromName, fromFormat, toName, generics)
+    }
+
+    private fun convertParameter(source: Parameter): Mapping {
+        if (source is RequestParameter) {
+            val (name, toType) = parseTypes(source.name)
+            val (toName, generics) = parseToType(toType, source.generics)
+
+            return ParameterTypeMapping(name, TypeMapping(null, toName, generics))
+
+        } else if (source is AdditionalParameter) {
+            val (name, toType) = parseTypes(source.add)
+            val (toName, generics) = parseToType(toType, source.generics)
+
+            return AddParameterTypeMapping(name, TypeMapping(null, toName, generics))
+
+        } else {
+            throw Exception("unknown parameter mapping $source")
+        }
     }
 
     private fun convertResponse(source: Response): Mapping {

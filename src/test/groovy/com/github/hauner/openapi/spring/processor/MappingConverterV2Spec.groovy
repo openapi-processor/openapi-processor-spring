@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.processor
 
+import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import spock.lang.Specification
@@ -157,6 +159,38 @@ map:
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
         response.mapping.genericTypeNames == []
+    }
+
+    void "reads global parameter type mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  parameters:
+    - name: foo => mapping.Foo
+    - add: bar => mapping.Bar
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 2
+
+        def parameter = mappings.first () as ParameterTypeMapping
+        parameter.parameterName == 'foo'
+        parameter.mapping.sourceTypeName == null
+        parameter.mapping.sourceTypeFormat == null
+        parameter.mapping.targetTypeName == 'mapping.Foo'
+        parameter.mapping.genericTypeNames == []
+
+        def additional = mappings[1] as AddParameterTypeMapping
+        additional.parameterName == 'bar'
+        additional.mapping.sourceTypeName == null
+        additional.mapping.sourceTypeFormat == null
+        additional.mapping.targetTypeName == 'mapping.Bar'
+        additional.mapping.genericTypeNames == []
     }
 
 }
