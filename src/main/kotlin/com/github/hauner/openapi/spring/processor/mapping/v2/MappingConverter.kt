@@ -68,36 +68,60 @@ class MappingConverter {
 
 
     private fun convertType(source: Type): Mapping {
-        var (fromType, toType) = source.type
-                .split(SEPARATOR_TYPE)
-                .map { it.trim() }
-
-        var fromName: String = fromType
-        var fromFormat: String? = null
-        if (fromType.contains(SEPARATOR_FORMAT)) {
-            val split = fromType
-                    .split(SEPARATOR_FORMAT)
-                    .map { it.trim() }
-            fromName = split.component1()
-            fromFormat = split.component2()
-        }
-
-        var generics = emptyList<String>()
-
-        val matcher = PATTERN_GENERICS.matcher(toType)
-        if (matcher.find ()) {
-            toType = matcher.group (1)
-            generics = matcher
-                .group (2)
-                .split (',')
-                    .map { it.trim() }
-                    .toList()
-
-        } else if (source.generics != null) {
-            generics = source.generics
-        }
-
-        return TypeMapping(fromName, fromFormat, toType, generics)
+        val (fromType, toType) = parseTypes(source.type)
+        val (fromName, fromFormat) = parseFromType(fromType)
+        val (toName, generics) = parseToType(toType, source.generics)
+        return TypeMapping(fromName, fromFormat, toName, generics)
     }
 
+}
+
+private data class MappingTypes(val result: String, val format: String)
+private data class FromType(val name: String, val format: String?)
+private data class ToType(val name: String, val generics: List<String>)
+
+private fun parseTypes(type: String): MappingTypes {
+    val split = type
+            .split(SEPARATOR_TYPE)
+            .map { it.trim() }
+
+    return MappingTypes(
+            split.component1(),
+            split.component2())
+}
+
+private fun parseFromType(type: String): FromType {
+    var name = type
+    var format: String? = null
+
+    if (type.contains(SEPARATOR_FORMAT)) {
+        val split = type
+                .split(SEPARATOR_FORMAT)
+                .map { it.trim() }
+
+        name = split.component1()
+        format = split.component2()
+    }
+
+    return FromType(name, format)
+}
+
+private fun parseToType(type: String, typeGenerics: List<String>?): ToType {
+    var name: String = type
+    var generics = emptyList<String>()
+
+    val matcher = PATTERN_GENERICS.matcher(type)
+    if (matcher.find ()) {
+        name = matcher.group (1)
+        generics = matcher
+            .group (2)
+            .split (',')
+                .map { it.trim() }
+                .toList()
+
+    } else if (typeGenerics != null) {
+        generics = typeGenerics
+    }
+
+    return ToType(name, generics)
 }
