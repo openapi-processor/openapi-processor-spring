@@ -32,14 +32,14 @@ import org.slf4j.LoggerFactory
  *  @author Martin Hauner
  */
 class MappingConverter {
-    static final Logger LOG = LoggerFactory.getLogger (MappingConverter)
+    private static final Logger LOG = LoggerFactory.getLogger (MappingConverter)
 
     List<Mapping> convert (VersionedMapping source) {
         if (source?.isV2()) {
             def converter = new MappingConverterV2 ()
             converter.convert (source as MappingV2)
         } else {
-            LOG.warn ("the mapping.yaml format is deprecated, upgrade to v2")
+            LOG.warn ("current mapping.yaml format is deprecated, upgrade to v2")
             def converter = new MappingConverterV1 ()
             converter.convert (source as MappingV1)
         }
