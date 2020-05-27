@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor
 
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import spock.lang.Specification
 import spock.lang.Subject
@@ -132,6 +133,30 @@ map:
                     ['java.lang.String', 'java.lang.Boolean'])
             ]
         ]
+    }
+
+    void "reads global response type mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+
+map:
+  responses:
+    - content: application/vnd.array => java.util.List
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def response = mappings.first () as ResponseTypeMapping
+        response.contentType == 'application/vnd.array'
+        response.mapping.sourceTypeName == null
+        response.mapping.sourceTypeFormat == null
+        response.mapping.targetTypeName == 'java.util.List'
+        response.mapping.genericTypeNames == []
     }
 
 }

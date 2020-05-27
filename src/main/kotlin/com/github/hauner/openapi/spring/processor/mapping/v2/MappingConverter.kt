@@ -17,12 +17,10 @@
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
 
-private const val SEPARATOR_TYPE = " => "
-private const val SEPARATOR_FORMAT = ":"
-private val PATTERN_GENERICS = "(\\S+?)\\s*<(.+?)>".toPattern()
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
@@ -31,47 +29,51 @@ private val PATTERN_GENERICS = "(\\S+?)\\s*<(.+?)>".toPattern()
  *  @author Martin Hauner
  */
 class MappingConverter {
+    companion object {
+        private const val SEPARATOR_TYPE = " => "
+        private const val SEPARATOR_FORMAT = ":"
+        private val PATTERN_GENERICS = "(\\S+?)\\s*<(.+?)>".toPattern()
+    }
 
     fun convert(mapping: MappingV2): List<Mapping> {
         val result = ArrayList<Mapping>()
+
+//        if (source?.map?.result) {
+//            result.add (convertResult (source.map.result))
+//        }
 
         mapping.map.types.forEach {
             result.add(convertType(it))
         }
 
+//        source?.map?.parameters?.each {
+//            result.add (convertParameter (it))
+//        }
 
-        return result
-
-        /*
-        source?.map?.types?.each {
-            result.add (convertType (it))
-        }
-
-        if (source?.map?.result) {
-            result.add (convertResult (source.map.result))
-        }
-
-        source?.map?.parameters?.each {
-            result.add (convertParameter (it))
-        }
-
-        source?.map?.responses?.each {
+        mapping.map.responses.forEach {
             result.add (convertResponse (it))
         }
 
-        source?.map?.paths?.each {
-            result.add(convertPath (it.key, it.value))
-        }
+//        source?.map?.paths?.each {
+//            result.add(convertPath (it.key, it.value))
+//        }
 
-         */
+        return result
     }
-
 
     private fun convertType(source: Type): Mapping {
         val (fromType, toType) = parseTypes(source.type)
         val (fromName, fromFormat) = parseFromType(fromType)
         val (toName, generics) = parseToType(toType, source.generics)
+
         return TypeMapping(fromName, fromFormat, toName, generics)
+    }
+
+    private fun convertResponse(source: Response): Mapping {
+        val (content, toType) = parseTypes(source.content)
+        val (toName, generics) = parseToType(toType, source.generics)
+
+        return ResponseTypeMapping(content, TypeMapping(null, toName, generics))
     }
 
     private data class MappingTypes(val result: String, val format: String)
