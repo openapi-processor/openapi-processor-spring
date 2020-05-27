@@ -3,7 +3,7 @@
 Type mapping is an important feature of the processor and helps it to create the expected code.
 
 Using type mapping we can tell the processor to map types (schemas) from an openapi.yaml description
-to  a specific existing java type instead of generating a model class from the source OpenAPI type.
+to a specific existing java type instead of generating a model class from the source OpenAPI type.
 
 This can be a type created by us or a type from a framework. For example to map paging parameters
 and result to the Spring types `Page<>` & `Pageable`.

@@ -10,23 +10,22 @@ A single global response mapping can have the following properties:
 
 [source,yaml]
 ----
- - content: ..
-   to: ..
+ - content: {content type}  =>  {target type}
    generics:
-     - ..
-     - ..
+     - {a generic type}
+     - {another generic type}
 ----
 
-* **content** and **to** are required.
+* **content** is required.
 
-* **content** is the name of the content type of the endpoint response that should be replaced
-  by **to**.
+** **{content type}** is the name of the content type of the endpoint response that should be replaced
+  by **{target type}**.
 
-* **to** is the fully qualified class name of the java type that should be used for all endpoint
- content types with name **content**.
+** **{target type}** is the fully qualified class name of the java type that should be used for all
+endpoint content types **{content type}**.
 
 * **generics** defines the list of types that should be used as generic type parameters to the
-java type given by **to**.
+java type given by **{target type}**.
 
 [CAUTION]
 ====
@@ -45,10 +44,9 @@ Given the following (global) response mapping
 ----
 map:
 
-  # list of global parameter mappings, mapped by parameter name
+  # list of global response mappings, mapped by content type
   responses:
-    - content: application/vnd.something
-      to: com.github.hauner.openapi.Something
+    - content: application/vnd.something => com.github.hauner.openapi.Something
 ----
 
 and an openapi.yaml with multiple endpoints returning their result as content type

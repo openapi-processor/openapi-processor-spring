@@ -127,8 +127,7 @@ In case we (globally) enable a result wrapper, e.g. `ResponseEntity` in the `map
 [source, yaml]
 ----
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 ----
 
 the created code will now look like this:

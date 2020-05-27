@@ -23,8 +23,7 @@ type.
 [source,yaml]
 ----
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 ----
 
 NOTE: The processor expects that it takes a single generic parameter.
@@ -53,14 +52,12 @@ The `result` mapping works as endpoint specific mapping too. That way it is poss
 
 So a mapping like this:
 
-
 [source,yaml]
 ----
 map:
 
   /foo:
-    result:
-      to: org.springframework.http.ResponseEntity
+    result: org.springframework.http.ResponseEntity
 ----
 
 will only wrap the result of the endpoint `/foo`.
