@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
@@ -191,6 +192,121 @@ map:
         additional.mapping.sourceTypeFormat == null
         additional.mapping.targetTypeName == 'mapping.Bar'
         additional.mapping.genericTypeNames == []
+    }
+
+    void "reads endpoint exclude flag" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      exclude: ${exclude.toString ()}
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.exclude == exclude
+        endpoint.typeMappings.empty
+
+        where:
+        exclude << [true, false]
+    }
+
+    void "reads endpoint parameter type mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      parameters:
+        - name: foo => mapping.Foo
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+        def parameter = endpoint.typeMappings.first () as ParameterTypeMapping
+        parameter.parameterName == 'foo'
+        parameter.mapping.sourceTypeName == null
+        parameter.mapping.sourceTypeFormat == null
+        parameter.mapping.targetTypeName == 'mapping.Foo'
+        parameter.mapping.genericTypeNames == []
+    }
+
+    void "reads endpoint add mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      parameters:
+        - add: request => javax.servlet.http.HttpServletRequest
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size () == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+
+        def parameter = endpoint.typeMappings.first () as AddParameterTypeMapping
+        parameter.parameterName == 'request'
+        parameter.mapping.sourceTypeName == null
+        parameter.mapping.sourceTypeFormat == null
+        parameter.mapping.targetTypeName == 'javax.servlet.http.HttpServletRequest'
+        parameter.mapping.genericTypeNames == []
+    }
+
+    void "reads endpoint response type mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      responses:
+        - content: application/vnd.array => java.util.List
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+
+        def response = endpoint.typeMappings.first () as ResponseTypeMapping
+        response.contentType == 'application/vnd.array'
+        response.mapping.sourceTypeName == null
+        response.mapping.sourceTypeFormat == null
+        response.mapping.targetTypeName == 'java.util.List'
+        response.mapping.genericTypeNames == []
     }
 
 }

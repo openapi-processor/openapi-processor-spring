@@ -36,6 +36,11 @@ class MappingConverter {
     fun convert(mapping: MappingV2): List<Mapping> {
         val result = ArrayList<Mapping>()
 
+        // todo
+        // result
+        // single
+        // multi
+
 //        if (source?.map?.result) {
 //            result.add (convertResult (source.map.result))
 //        }
@@ -52,9 +57,9 @@ class MappingConverter {
             result.add (convertResponse (it))
         }
 
-//        source?.map?.paths?.each {
-//            result.add(convertPath (it.key, it.value))
-//        }
+        mapping.map.paths.forEach() {
+            result.add(convertPath (it.key, it.value))
+        }
 
         return result
     }
@@ -90,6 +95,29 @@ class MappingConverter {
         val (toName, generics) = parseToType(toType, source.generics)
 
         return ResponseTypeMapping(content, TypeMapping(null, toName, generics))
+    }
+
+    private fun convertPath(path: String, source: Path): Mapping {
+        val result = ArrayList<Mapping>()
+
+        // todo
+        // result
+        // single
+        // multi
+
+        source.types.forEach {
+            result.add(convertType(it))
+        }
+
+        source.parameters.forEach {
+            result.add (convertParameter (it))
+        }
+
+        source.responses.forEach {
+            result.add (convertResponse (it))
+        }
+
+        return EndpointTypeMapping(path, result, source.exclude)
     }
 
     private data class MappingTypes(val result: String, val format: String)
