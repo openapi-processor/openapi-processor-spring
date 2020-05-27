@@ -40,9 +40,13 @@ class MappingConverter {
             result.add(convertResult(mapping.map.result))
         }
 
-        // todo
-        // single
-        // multi
+        if(mapping.map.single != null) {
+            result.add(convertType("single" , mapping.map.single))
+        }
+
+        if(mapping.map.multi != null) {
+            result.add(convertType("multi", mapping.map.multi))
+        }
 
         mapping.map.types.forEach {
             result.add(convertType(it))
@@ -65,6 +69,10 @@ class MappingConverter {
 
     private fun convertResult (result: String): Mapping {
         return ResultTypeMapping (result)
+    }
+
+    private fun convertType (from: String, to: String): Mapping {
+        return TypeMapping (from, to)
     }
 
     private fun convertType(source: Type): Mapping {
@@ -107,9 +115,13 @@ class MappingConverter {
             result.add(convertResult(source.result))
         }
 
-        // todo
-        // single
-        // multi
+        if(source.single != null) {
+            result.add(convertType("single" , source.single))
+        }
+
+        if(source.multi != null) {
+            result.add(convertType("multi", source.multi))
+        }
 
         source.types.forEach {
             result.add(convertType(it))

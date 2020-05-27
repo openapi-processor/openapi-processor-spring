@@ -363,4 +363,65 @@ map:
         'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
     }
 
+    void "reads global single & multi mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  single: $single
+  multi: $multi
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size () == 2
+        def typeSingle = mappings.first () as TypeMapping
+        typeSingle.sourceTypeName == 'single'
+        typeSingle.targetTypeName == single
+        def typeMulti = mappings[1] as TypeMapping
+        typeMulti.sourceTypeName == 'multi'
+        typeMulti.targetTypeName == multi
+
+        where:
+        single << ['reactor.core.publisher.Mono']
+        multi << ['reactor.core.publisher.Flux']
+    }
+    
+    void "reads endpoint single & multi mapping" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      single: $single
+      multi: $multi
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 2
+
+        def typeSingle = endpoint.typeMappings.first () as TypeMapping
+        typeSingle.sourceTypeName == 'single'
+        typeSingle.targetTypeName == single
+        def typeMulti = endpoint.typeMappings[1] as TypeMapping
+        typeMulti.sourceTypeName == 'multi'
+        typeMulti.targetTypeName == multi
+
+        where:
+        single << ['reactor.core.publisher.Mono']
+        multi << ['reactor.core.publisher.Flux']
+    }
+
 }
