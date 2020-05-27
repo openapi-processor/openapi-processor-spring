@@ -22,6 +22,8 @@ import com.github.hauner.openapi.spring.processor.mapping.Mapping as MappingV1
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import com.github.hauner.openapi.spring.processor.mapping.v2.MappingConverter as MappingConverterV2
 import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
@@ -30,12 +32,14 @@ import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV
  *  @author Martin Hauner
  */
 class MappingConverter {
+    static final Logger LOG = LoggerFactory.getLogger (MappingConverter)
 
     List<Mapping> convert (VersionedMapping source) {
         if (source?.isV2()) {
             def converter = new MappingConverterV2 ()
             converter.convert (source as MappingV2)
         } else {
+            LOG.warn ("the mapping.yaml format is deprecated, upgrade to v2")
             def converter = new MappingConverterV1 ()
             converter.convert (source as MappingV1)
         }
