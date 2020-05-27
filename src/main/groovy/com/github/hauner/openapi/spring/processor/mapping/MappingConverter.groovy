@@ -36,6 +36,7 @@ import java.util.regex.Pattern
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class MappingConverter {
     private Pattern GENERIC_INLINE = ~/(.+?)<(.+?)>/
 
