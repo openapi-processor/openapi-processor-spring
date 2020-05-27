@@ -17,11 +17,10 @@
 package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Unroll
 
-@Ignore
 class MappingConverterV2Spec extends Specification {
 
     def reader = new MappingReader()
@@ -29,13 +28,14 @@ class MappingConverterV2Spec extends Specification {
     @Subject
     def converter = new MappingConverter()
 
-    void "reads global type mapping" () {
+    @Unroll
+    void "reads global type mapping: (#input.source)" () {
         String yaml = """\
 openapi-processor-spring: v2.0
 
 map:
   types:
-    - type: array => java.util.Collection
+    - type: ${input.source}
 """
 
         when:
@@ -45,10 +45,47 @@ map:
         then:
         mappings.size () == 1
         def type = mappings.first () as TypeMapping
-        type.sourceTypeName == 'array'
-        type.sourceTypeFormat == null
-        type.targetTypeName == 'java.util.Collection'
-        type.genericTypeNames == []
+        type.sourceTypeName == input.expected.sourceTypeName
+        type.sourceTypeFormat == input.expected.sourceTypeFormat
+        type.targetTypeName == input.expected.targetTypeName
+        type.genericTypeNames == input.expected.genericTypeNames
+
+        where:
+        input << [
+            [
+                // normal
+                source: 'array => java.util.Collection',
+                expected: new TypeMapping (
+                    'array',
+                    null,
+                    'java.util.Collection',
+                    [])
+            ], [
+                // extra whitespaces
+                source: '  array   =>    java.util.Collection   ',
+                expected: new TypeMapping (
+                    'array',
+                    null,
+                    'java.util.Collection',
+                    [])
+            ], [
+                // with format
+                source: 'string:date-time => java.time.ZonedDateTime',
+                expected: new TypeMapping (
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime',
+                    [])
+            ], [
+                // extra whitespaces with format
+                source  : '"  string  :  date-time   =>    java.time.ZonedDateTime   "',
+                expected: new TypeMapping (
+                    'string',
+                    'date-time',
+                    'java.time.ZonedDateTime',
+                    [])
+            ]
+        ]
     }
 
 }
