@@ -1,11 +1,11 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
-  result:
-    to: plain
+  result: plain
 
   paths:
     /bar:
-      result:
-        to: org.springframework.http.ResponseEntity
+      result: org.springframework.http.ResponseEntity

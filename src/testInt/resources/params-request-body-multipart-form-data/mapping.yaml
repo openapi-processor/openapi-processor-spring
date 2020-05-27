@@ -1,10 +1,10 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 
   types:
-    - from: string:binary
-      to: org.springframework.web.multipart.MultipartFile
+    - type: string:binary => org.springframework.web.multipart.MultipartFile

@@ -21,6 +21,7 @@ import com.github.difflib.UnifiedDiffUtils
 import com.github.hauner.openapi.spring.processor.MappingReader
 import com.github.hauner.openapi.spring.processor.SpringProcessor
 import com.github.hauner.openapi.spring.processor.mapping.Mapping
+import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 
@@ -37,12 +38,13 @@ abstract class ProcessorTestBase {
     public TemporaryFolder folder = new TemporaryFolder()
 
     String DEFAULT_OPTIONS = """\
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:  
-  result:
-    to: org.springframework.http.ResponseEntity  
+  result: org.springframework.http.ResponseEntity  
     """
 
     Path project = Path.of ("").toAbsolutePath ()
@@ -70,7 +72,7 @@ map:
         }
 
         def reader = new MappingReader ()
-        Mapping mapping = reader.read (options.mapping as String)
+        VersionedMapping mapping = reader.read (options.mapping as String)
 
         def packageName = mapping.options.packageName
         def expectedPath = project.resolve ("src/testInt/resources/${source}/${packageName}")
@@ -122,7 +124,7 @@ map:
         }
 
         def reader = new MappingReader ()
-        Mapping mapping = reader.read (options.mapping as String)
+        VersionedMapping mapping = reader.read (options.mapping as String)
 
         def packageName = mapping.options.packageName
         def expectedPath = root.resolve (packageName)

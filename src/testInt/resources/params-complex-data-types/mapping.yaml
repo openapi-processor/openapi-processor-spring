@@ -1,19 +1,18 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 
   paths:
 
     /endpoint-map:
       types:
-        - from: Props
-          to: java.util.Map<java.lang.String, java.lang.String>
+        - type: Props => java.util.Map<java.lang.String, java.lang.String>
 
     /endpoint-multi-map:
       types:
-        - from: Props
-          to: org.springframework.util.MultiValueMap<java.lang.String, java.lang.String>
+        - type: Props => org.springframework.util.MultiValueMap<java.lang.String, java.lang.String>
 

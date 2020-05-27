@@ -1,25 +1,21 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 
   types:
-    - from: Pageable
-      to: org.springframework.data.domain.Pageable
-
-    - from: StringPage
-      to: org.springframework.data.domain.Page<java.lang.String>
+    - type: Pageable => org.springframework.data.domain.Pageable
+    - type: StringPage => org.springframework.data.domain.Page<java.lang.String>
 
   paths:
 
     /page-inline:
 
       parameters:
-        - name: pageable
-          to: org.springframework.data.domain.Pageable
+        - name: pageable => org.springframework.data.domain.Pageable
 
       responses:
-        - content: application/json
-          to: org.springframework.data.domain.Page<java.lang.String>
+        - content: application/json => org.springframework.data.domain.Page<java.lang.String>
