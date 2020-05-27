@@ -21,7 +21,7 @@ package com.github.hauner.openapi.spring.processor.mapping.v2
  *
  *  @author Martin Hauner
  */
-class Type(
+data class Type(
 
     /**
      * the mapping from source to target, ie a mapping string like:
@@ -31,7 +31,7 @@ class Type(
     val type: String,
 
     /**
-     * (optional) generic parameters of {@link #to}
+     * (optional) generic parameters of target in {@link #type}
      */
     val generics: List<String>?
 
