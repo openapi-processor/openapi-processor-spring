@@ -31,7 +31,7 @@ data class Response(
     val content: String,
 
     /**
-     * (optional) generic parameters of target in {@link #content}
+     * (optional) generic parameters of {@link #content} target
      */
     val generics: List<String>?
 

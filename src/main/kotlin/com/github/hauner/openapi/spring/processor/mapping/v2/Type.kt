@@ -31,7 +31,7 @@ data class Type(
     val type: String,
 
     /**
-     * (optional) generic parameters of target in {@link #type}
+     * (optional) generic parameters of {@link #type} target
      */
     val generics: List<String>?
 
