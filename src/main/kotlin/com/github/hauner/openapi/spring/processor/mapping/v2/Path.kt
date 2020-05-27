@@ -29,6 +29,21 @@ data class Path(
     val exclude: Boolean = false,
 
     /**
+     * path limited result mapping
+     */
+    val result: String?,
+
+    /**
+     * single mapping, i.e. Mono<>
+     */
+    val single: String?,
+
+    /**
+     * multi mapping, i.e. Flux<>
+     */
+    val multi: String?,
+
+    /**
      * path limited type mappings
      */
     val types: List<Type> = emptyList(),

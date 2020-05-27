@@ -24,6 +24,21 @@ package com.github.hauner.openapi.spring.processor.mapping.v2
 data class Map(
 
     /**
+     * global result mapping
+     */
+    val result: String?,
+
+    /**
+     * single mapping, i.e. Mono<>
+     */
+    val single: String?,
+
+    /**
+     * multi mapping, i.e. Flux<>
+     */
+    val multi: String?,
+
+    /**
      * global type mappings
      */
     val types: List<Type> = emptyList(),

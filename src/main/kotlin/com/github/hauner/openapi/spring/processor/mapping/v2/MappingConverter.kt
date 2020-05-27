@@ -36,14 +36,13 @@ class MappingConverter {
     fun convert(mapping: MappingV2): List<Mapping> {
         val result = ArrayList<Mapping>()
 
+        if(mapping.map.result != null) {
+            result.add(convertResult(mapping.map.result))
+        }
+
         // todo
-        // result
         // single
         // multi
-
-//        if (source?.map?.result) {
-//            result.add (convertResult (source.map.result))
-//        }
 
         mapping.map.types.forEach {
             result.add(convertType(it))
@@ -62,6 +61,10 @@ class MappingConverter {
         }
 
         return result
+    }
+
+    private fun convertResult (result: String): Mapping {
+        return ResultTypeMapping (result)
     }
 
     private fun convertType(source: Type): Mapping {
@@ -100,8 +103,11 @@ class MappingConverter {
     private fun convertPath(path: String, source: Path): Mapping {
         val result = ArrayList<Mapping>()
 
+        if(source.result != null) {
+            result.add(convertResult(source.result))
+        }
+
         // todo
-        // result
         // single
         // multi
 

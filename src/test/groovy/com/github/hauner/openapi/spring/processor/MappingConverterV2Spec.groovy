@@ -20,6 +20,7 @@ import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMappin
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
 import spock.lang.Specification
 import spock.lang.Subject
@@ -307,6 +308,59 @@ map:
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
         response.mapping.genericTypeNames == []
+    }
+
+    void "reads global result mapping #result" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  result: $result
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size () == 1
+        def type = mappings.first () as ResultTypeMapping
+        type.targetTypeName == expected
+
+        where:
+        result                                    | expected
+        'plain'                                   | 'plain'
+        'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
+    }
+
+    void "reads endpoint result mapping #result" () {
+        String yaml = """\
+openapi-processor-spring: v2.0
+    
+map:
+  paths:
+    /foo:
+      result: $result
+"""
+
+        when:
+        def mapping = reader.read (yaml)
+        def mappings = converter.convert (mapping)
+
+        then:
+        mappings.size() == 1
+
+        def endpoint = mappings.first () as EndpointTypeMapping
+        endpoint.path == '/foo'
+        endpoint.typeMappings.size () == 1
+
+        def type = endpoint.typeMappings.first () as ResultTypeMapping
+        type.targetTypeName == expected
+
+        where:
+        result                                    | expected
+        'plain'                                   | 'plain'
+        'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
     }
 
 }
