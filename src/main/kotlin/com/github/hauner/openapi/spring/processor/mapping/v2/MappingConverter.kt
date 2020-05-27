@@ -22,7 +22,7 @@ import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV
 
 private const val SEPARATOR_TYPE = " => "
 private const val SEPARATOR_FORMAT = ":"
-private val PATTERN_GENERICS = "(.+?)<(.+?)>".toPattern()
+private val PATTERN_GENERICS = "(\\S+?)\\s*<(.+?)>".toPattern()
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
@@ -74,54 +74,55 @@ class MappingConverter {
         return TypeMapping(fromName, fromFormat, toName, generics)
     }
 
-}
+    private data class MappingTypes(val result: String, val format: String)
+    private data class FromType(val name: String, val format: String?)
+    private data class ToType(val name: String, val generics: List<String>)
 
-private data class MappingTypes(val result: String, val format: String)
-private data class FromType(val name: String, val format: String?)
-private data class ToType(val name: String, val generics: List<String>)
-
-private fun parseTypes(type: String): MappingTypes {
-    val split = type
-            .split(SEPARATOR_TYPE)
-            .map { it.trim() }
-
-    return MappingTypes(
-            split.component1(),
-            split.component2())
-}
-
-private fun parseFromType(type: String): FromType {
-    var name = type
-    var format: String? = null
-
-    if (type.contains(SEPARATOR_FORMAT)) {
+    private fun parseTypes(type: String): MappingTypes {
         val split = type
-                .split(SEPARATOR_FORMAT)
+                .split(SEPARATOR_TYPE)
                 .map { it.trim() }
 
-        name = split.component1()
-        format = split.component2()
+        return MappingTypes(
+                split.component1(),
+                split.component2())
     }
 
-    return FromType(name, format)
-}
+    private fun parseFromType(type: String): FromType {
+        var name = type
+        var format: String? = null
 
-private fun parseToType(type: String, typeGenerics: List<String>?): ToType {
-    var name: String = type
-    var generics = emptyList<String>()
+        if (type.contains(SEPARATOR_FORMAT)) {
+            val split = type
+                    .split(SEPARATOR_FORMAT)
+                    .map { it.trim() }
 
-    val matcher = PATTERN_GENERICS.matcher(type)
-    if (matcher.find ()) {
-        name = matcher.group (1)
-        generics = matcher
-            .group (2)
-            .split (',')
-                .map { it.trim() }
-                .toList()
+            name = split.component1()
+            format = split.component2()
+        }
 
-    } else if (typeGenerics != null) {
-        generics = typeGenerics
+        return FromType(name, format)
     }
 
-    return ToType(name, generics)
+    private fun parseToType(type: String, typeGenerics: List<String>?): ToType {
+        var name: String = type
+        var generics = emptyList<String>()
+
+        val matcher = PATTERN_GENERICS.matcher(type)
+        if (matcher.find ()) {
+            name = matcher.group (1)
+            generics = matcher
+                .group (2)
+                .split (',')
+                    .map { it.trim() }
+                    .toList()
+
+        } else if (typeGenerics != null) {
+            generics = typeGenerics
+        }
+
+        return ToType(name, generics)
+    }
+
 }
+

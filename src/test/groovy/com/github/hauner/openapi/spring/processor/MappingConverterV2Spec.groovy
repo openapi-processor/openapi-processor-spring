@@ -38,6 +38,18 @@ map:
     - type: ${input.source}
 """
 
+        if (input.generics) {
+            yaml += """\
+      generics:
+"""
+        }
+
+        input.generics?.each {
+            yaml += """\
+        - ${it} 
+"""
+        }
+
         when:
         def mapping = reader.read (yaml)
         def mappings = converter.convert (mapping)
@@ -84,6 +96,40 @@ map:
                     'date-time',
                     'java.time.ZonedDateTime',
                     [])
+            ], [
+                // with inline generics
+                source: 'Foo => mapping.Bar<java.lang.String, java.lang.Boolean>',
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'mapping.Bar',
+                    ['java.lang.String', 'java.lang.Boolean'])
+            ], [
+                // with extracted generics
+                source: 'Foo => mapping.Bar',
+                generics: ['java.lang.String', 'java.lang.Boolean'],
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'mapping.Bar',
+                    ['java.lang.String', 'java.lang.Boolean'])
+            ],  [
+                // inline generics with extra whitespaces
+                source: 'Foo => mapping.Bar  <   java.lang.String  ,   java.lang.Boolean   >   ',
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'mapping.Bar',
+                    ['java.lang.String', 'java.lang.Boolean'])
+            ], [
+                // extracted generics with extra whitespaces
+                source: 'Foo => mapping.Bar',
+                generics: ['   java.lang.String   ', '   java.lang.Boolean   '],
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'mapping.Bar',
+                    ['java.lang.String', 'java.lang.Boolean'])
             ]
         ]
     }
