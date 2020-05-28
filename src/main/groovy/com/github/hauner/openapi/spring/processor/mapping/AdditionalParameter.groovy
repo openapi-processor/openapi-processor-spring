@@ -20,6 +20,7 @@ package com.github.hauner.openapi.spring.processor.mapping
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class AdditionalParameter extends Parameter {
 
     /**
@@ -36,5 +37,5 @@ class AdditionalParameter extends Parameter {
      * (optional) generic parameters of {@link #to}
      */
     List<String> generics
-    
+
 }

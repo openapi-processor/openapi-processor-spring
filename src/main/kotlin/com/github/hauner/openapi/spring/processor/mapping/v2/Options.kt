@@ -14,34 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.spring.processor.mapping.v2
 
 /**
- * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
- * defined in the api description.
+ * general options
  *
- * @author Martin Hauner
+ *  @author Martin Hauner
  */
-class AddParameterTypeMapping implements Mapping {
+data class Options(
 
     /**
-     * The parameter name of this mapping.
+     * the root package name of the generated interfaces & models (required)
+     *
+     * Interfaces and models will be generated into the `api` and `model` subpackages of
+     * `packageName`.
+     * - so the final package name of the generated interfaces will be `"${packageName}.api"`
+     * - and the final package name of the generated models will be `"${packageName}.model"`
      */
-    String parameterName
+    val packageName: String? = null,
 
     /**
-     * additional parameter type mapping.
+     * bean validation (optional)
      */
-    TypeMapping mapping
+    val beanValidation: Boolean = false
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
-    }
-
-    @Override
-    List<TypeMapping> getChildMappings () {
-        [mapping]
-    }
-
-}
+) {}

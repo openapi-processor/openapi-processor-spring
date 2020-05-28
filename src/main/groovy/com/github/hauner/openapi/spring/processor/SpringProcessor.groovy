@@ -52,14 +52,14 @@ class SpringProcessor implements OpenApiProcessor {
             if (processorOptions.showWarnings) {
                 openapi.printWarnings ()
             }
-    
+
             def options = convertOptions (processorOptions)
             def cv = new ApiConverter(options)
             def api = cv.convert (openapi)
-    
+
             def headerWriter = new HeaderWriter()
             def beanValidationFactory = new BeanValidationFactory()
-    
+
             def writer = new ApiWriter (options,
                 new InterfaceWriter(
                     headerWriter: headerWriter,
@@ -77,7 +77,7 @@ class SpringProcessor implements OpenApiProcessor {
                 ),
                 new StringEnumWriter(headerWriter: headerWriter)
             )
-    
+
             writer.write (api)
         } catch (Exception e) {
             LOG.error ("processing failed!", e)
@@ -115,6 +115,8 @@ class SpringProcessor implements OpenApiProcessor {
         if (mapping) {
             if (mapping?.options?.packageName != null) {
                 options.packageName = mapping.options.packageName
+            } else {
+                LOG.warn ("no 'options:package-name' set in mapping!")
             }
 
             if (mapping?.options?.beanValidation != null) {

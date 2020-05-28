@@ -154,8 +154,7 @@ map:
     /foo:
 
       parameters:
-        - add: request
-          as: javax.servlet.http.HttpServletRequest
+        - add: request => javax.servlet.http.HttpServletRequest
 ----
 
 will add the *additional* parameter to the generated interface method.

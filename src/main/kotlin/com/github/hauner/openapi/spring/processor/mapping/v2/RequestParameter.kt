@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,26 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.spring.processor.mapping.v2
+
 
 /**
- * Mapping target result created from {@link TypeMapping}.
+ * a "parameters:" request parameter entry in the mapping yaml
+ *
+ *  @author Martin Hauner
  */
-class TargetType {
-
-    String typeName
-    List<String> genericNames
+data class RequestParameter(
 
     /**
-     * Returns the class name without the package name.
+     * the mapping from parameter name to target, ie a mapping string like:
      *
-     * @return the class name
+     * foo => mapping.Bar
      */
-    String getName () {
-        typeName.substring (typeName.lastIndexOf ('.') + 1)
-    }
+    val name: String,
 
     /**
-     * Returns the package name.
-     *
-     * @return the package name
+     * (optional) generic parameters of {@link #name} target
      */
-    String getPkg () {
-        typeName.substring (0, typeName.lastIndexOf ('.'))
-    }
+    val generics: List<String>?
 
-}
+): Parameter {}

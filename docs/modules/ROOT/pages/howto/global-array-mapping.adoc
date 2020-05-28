@@ -41,8 +41,7 @@ To globally change the mapping of `array` to another collection type we just nee
 map:
   types:
     # map array to java.util.Collection
-    - from: array
-      to: java.util.Collection
+    - type: array => java.util.Collection
 ----
 
 This will change the generated endpoint to:

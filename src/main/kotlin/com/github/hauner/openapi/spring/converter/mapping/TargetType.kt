@@ -17,26 +17,38 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Common interface for type mappings.
+ * Mapping target result created from {@link TypeMapping}.
  */
-interface Mapping {
+class TargetType(
 
     /**
-     * check if this mapping applies to the given schema by delegating to the visitor.
-     * 
-     * @param visitor provides the matching logic
-     * @return true, id mapping applies, false otherwise
+     * type name
      */
-    boolean matches (MappingVisitor visitor)
-    
+    val typeName: String,
+
     /**
-     * Returns the inner mappings.
-     * In case of an ENDPOINT mapping the IO or TYPE mappings.
-     * In case of an IO mappings its type mappings.
-     * In case of a TYPE or RESULT mapping itself.
-     *
-     * @return the inner type mappings.
+     * generic parameters of typeName
      */
-    List<Mapping> getChildMappings ()
+    val genericNames: List<String>
+
+) {
+
+    /**
+     * Returns the class name without the package name.
+     *
+     * @return the class name
+     */
+    fun getName(): String {
+        return typeName.substring(typeName.lastIndexOf('.') + 1)
+    }
+
+    /**
+     * Returns the package name.
+     *
+     * @return the package name
+     */
+    fun getPkg(): String {
+        return typeName.substring(0, typeName.lastIndexOf('.'))
+    }
 
 }

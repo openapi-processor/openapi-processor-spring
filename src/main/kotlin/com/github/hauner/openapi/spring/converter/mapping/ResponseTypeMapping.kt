@@ -17,31 +17,31 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that should represent the schema
- * of the given endpoint parameter.
+ * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
+ * schema for the given endpoint content type.
  *
  * @author Martin Hauner
  */
-class ParameterTypeMapping implements Mapping {
+class ResponseTypeMapping(
 
     /**
-     * The parameter name of this mapping. Must match 1:1 with what is written in the api.
+     * The content type of this mapping. Must match 1:1 with what is written in the api.
      */
-    String parameterName
+    val contentType: String,
 
     /**
-     * Type mapping valid only for requests with parameter {@link #parameterName}.
+     * Type mapping valid only for responses with {@link #contentType}.
      */
-    TypeMapping mapping
+    val mapping: TypeMapping
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+): Mapping {
+
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match (this)
     }
 
-    @Override
-    List<Mapping> getChildMappings () {
-        [mapping]
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(mapping)
     }
 
 }

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.spring.processor.mapping.v2
 
 /**
- * provider of target type information.
- * 
- * @author Martin Hauner
+ * a "parameters:" entry (name or add) in the mapping yaml
+ *
+ *  @author Martin Hauner
  */
-interface TargetTypeMapping {
-    
-    TargetType getTargetType ()
-    
+interface Parameter {
 }

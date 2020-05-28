@@ -1,8 +1,9 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
   bean-validation: true
 
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 

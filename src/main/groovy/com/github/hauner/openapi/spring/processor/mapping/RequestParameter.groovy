@@ -21,6 +21,7 @@ package com.github.hauner.openapi.spring.processor.mapping
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class RequestParameter extends Parameter {
 
     /**
@@ -32,10 +33,10 @@ class RequestParameter extends Parameter {
      * target java type
      */
     String to
-    
+
     /**
      * (optional) generic parameters of {@link #to}
      */
     List<String> generics
-    
+
 }

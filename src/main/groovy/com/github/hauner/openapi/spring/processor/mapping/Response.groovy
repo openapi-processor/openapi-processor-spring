@@ -19,8 +19,9 @@ package com.github.hauner.openapi.spring.processor.mapping
 /**
  * a "responses:" entry in the mapping yaml
  */
+@Deprecated
 class Response {
-    
+
     /**
      * content type
      */
@@ -30,10 +31,10 @@ class Response {
      * target java type
      */
     String to
-    
+
     /**
      * (optional) generic parameters of {@link #to}
      */
     List<String> generics
-    
+
 }

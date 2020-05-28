@@ -41,8 +41,7 @@ type.
 [source,yaml]
 ----
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 ----
 
 NOTE: The processor expects that it takes a single generic parameter.
@@ -81,9 +80,7 @@ To achieve this the processor knows two special mappings:
 [source,yaml]
 ----
 map:
-  types:
-    - from: multi
-      to: reactor.core.publisher.Flux
+  multi: reactor.core.publisher.Flux
 ----
 
 Which will use `Flux<>` as collection wrapper instead of the original java collection type for all
@@ -96,9 +93,7 @@ To map non-array like responses to a `Mono<>` set the `single` mapping:
 [source,yaml]
 ----
 map:
-  types:
-    - from: single
-      to: reactor.core.publisher.Mono
+  single: reactor.core.publisher.Mono
 ----
 
 The processor will now wrap all non-array like response types with the given `single` mapping.

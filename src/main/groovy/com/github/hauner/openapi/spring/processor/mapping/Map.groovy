@@ -21,18 +21,19 @@ package com.github.hauner.openapi.spring.processor.mapping
  *
  *  @author Martin Hauner
  */
+@Deprecated
 class Map {
 
     /**
      * global result mapping
      */
     Result result
-    
+
     /**
      * global type mappings
      */
     List<Type> types
-    
+
     /**
      * global parameter mappings
      */
@@ -45,9 +46,9 @@ class Map {
 
     /**
      * endpoint mappings
-     * 
+     *
      * the LinkedHashMap preserves order
      */
     LinkedHashMap<String, Path> paths
-    
+
 }

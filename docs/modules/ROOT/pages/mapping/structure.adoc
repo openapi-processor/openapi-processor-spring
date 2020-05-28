@@ -6,68 +6,102 @@ kinds of type mappings.
 
 All sections are optional.
 
+== type mapping structure (v2)
+
+[.badge .badge-since]+since 1.0.0.M15+
+
+This is the preferred format for the mapping. It is simpler than the previous format and uses fewer
+keywords.
+
+[IMPORTANT]
+====
+To use the new format the mapping file needs the following key on the top-level. Best place is the
+first line of the `mapping.yaml` file.
+
+[source,yaml]
+----
+openapi-processor-spring: v2
+----
+====
+
+
+To map a source type to a destination type it is using an `=>` arrow as *mapping operator* instead
+of individual keywords:
+
+[source,yaml]
+----
+
+some-key: {source type} => {target type}
+
+----
+
+The structure of the mapping looks like this:
+
+
 [source,yaml]
 ----
 map:
 
-  # single wrapper
-  single:
-    to: ..
-
   # result wrapper
-  result:
-    to: ..
+  result: {target type}
+
+  # single wrapper
+  single: {target type}
+
+  # multi wrapper
+  multi: {target type}
 
   # list of global mappings
   types:
-    - from: ..
-      to: ..
+    - type: {source type}  =>  {target type}
 
   # list of global parameter mappings, mapped by parameter name
   parameters:
-    - name: ..
-      to: ..
+    - name: {parameter name}  =>  {target type}
 
     # the list of parameter mappings can include additional parameters
-    - add: ..
-      as: ..
+    - add: {parameter name}  =>  {target type}
 
   # list of global content mappings, mapped by content type
   responses:
-    - content: ..
-      to: ..
+    - content: {content type}  =>  {target type}
 
   # path mappings, only valid for the given path
   paths:
 
     # the path
-    /foo...:
-
-      # path specific single wrapper
-      single:
-        to: ..
+    /foo:
 
       # path specific result wrapper
-      result:
-        to: ..
+      result: {target type}
+
+      # path specific single wrapper
+      single: {target type}
+
+      # path specific multi wrapper
+      multi: {target type}
 
       # list of path specific mappings
       types:
-        - from: ..
-          to: ..
+        - from: {source type}  =>  {target type}
 
       # list of path specific parameter mappings, mapped by parameter name
       parameters:
-        - name: ..
-          to: ..
+        - name: {parameter name}  =>  {target type}
 
         # the list of parameter mappings can include additional parameters
-        - add: ..
-          as: ..
+        - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type
       responses:
-        - content: ..
-          to: ..
+        - content: {content type}  =>  {target type}
 
 ----
+
+
+
+== type mapping structure (v1)
+
+This format of the mapping ist still available but will go away with the 1.0.0 release.
+
+See xref:1.0.0.M14@mapping/index.adoc[old type mapping].

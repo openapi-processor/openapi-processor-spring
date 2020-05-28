@@ -15,13 +15,13 @@
  */
 
 package com.github.hauner.openapi.spring.processor.mapping
-
 /**
  * *the* Schema of the mapping yaml
  *
  *  @author Martin Hauner
  */
-class Mapping {
+@Deprecated
+class Mapping implements VersionedMapping {
 
     /**
      * version (currently optional)
@@ -37,5 +37,10 @@ class Mapping {
      * the type mappings
      */
     Map map
+
+    @Override
+    boolean isV2() {
+        false
+    }
 
 }

@@ -25,28 +25,39 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class TypeMapping implements Mapping, TargetTypeMapping {
+class TypeMapping (
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
      */
-    String sourceTypeName
+    val sourceTypeName: String?,
 
     /**
      * The OpenAPI format of {@link #sourceTypeName} that should be mapped to the
      * {@link #targetTypeName} java type.
      */
-    String sourceTypeFormat
+    val sourceTypeFormat: String?,
 
     /**
      * The fully qualified java type name that will replace {@link #sourceTypeName}.
      */
-    String targetTypeName
+    val targetTypeName: String,
 
     /**
      * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
      */
-    List<String> genericTypeNames = []
+    val genericTypeNames: List<String> = emptyList()
+
+): Mapping, TargetTypeMapping {
+
+    constructor(sourceTypeName: String?, targetTypeName: String):
+            this (sourceTypeName, null, targetTypeName, emptyList())
+
+    constructor(sourceTypeName: String?, sourceTypeFormat: String?, targetTypeName: String):
+            this (sourceTypeName, sourceTypeFormat, targetTypeName, emptyList())
+
+    constructor(sourceTypeName: String?, targetTypeName: String, genericTypeNames: List<String>):
+            this (sourceTypeName, null, targetTypeName, genericTypeNames)
 
     /**
      * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
@@ -54,29 +65,28 @@ class TypeMapping implements Mapping, TargetTypeMapping {
      *
      * @return the full source type
      */
-    @Deprecated
-    String getFullSourceType () {
-        "$sourceTypeName" + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
+    /*
+    @Deprecated("do not use in new code", ReplaceWith("no replacement"))
+    fun getFullSourceType(): String {
+        return sourceTypeName + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
     }
+    */
 
     /**
      * Returns the target type of this type mapping.
      *
      * @return the target type
      */
-    @Override
-    TargetType getTargetType () {
-        new TargetType (typeName: targetTypeName, genericNames: genericTypeNames)
+    override fun getTargetType (): TargetType {
+        return TargetType (targetTypeName, genericTypeNames)
     }
 
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match (this)
     }
 
-    @Override
-    List<Mapping> getChildMappings () {
-        [this]
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(this)
     }
 
 }

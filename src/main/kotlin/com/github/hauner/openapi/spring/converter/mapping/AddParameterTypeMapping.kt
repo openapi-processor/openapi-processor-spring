@@ -17,18 +17,31 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * interface for type mapping matching logic. 
- * 
- * 
+ * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
+ * defined in the api description.
+ *
  * @author Martin Hauner
  */
-interface MappingVisitor {
+class AddParameterTypeMapping(
 
-    boolean match (EndpointTypeMapping mapping)
-    boolean match (ParameterTypeMapping mapping)
-    boolean match (ResponseTypeMapping mapping)
-    boolean match (TypeMapping mapping)
-    boolean match (AddParameterTypeMapping mapping)
-    boolean match (ResultTypeMapping mapping)
+    /**
+     * The parameter name of this mapping.
+     */
+    val parameterName: String,
+
+    /**
+     * additional parameter type mapping.
+     */
+    val mapping: TypeMapping
+
+): Mapping {
+
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match(this)
+    }
+
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(mapping)
+    }
 
 }

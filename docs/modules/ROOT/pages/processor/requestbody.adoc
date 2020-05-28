@@ -119,8 +119,7 @@ map:
   paths:
     /file-upload:
       types:
-        - from: string:binary
-          to: org.springframework.web.multipart.MultipartFile
+        - type: string:binary => org.springframework.web.multipart.MultipartFile
 ----
 
 To upload multiple files we can define the body `object` with an `array` property:

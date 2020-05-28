@@ -1,11 +1,9 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
 
-  types:
-    - from: single
-      to: reactor.core.publisher.Mono
-
-    - from: multi
-      to: reactor.core.publisher.Flux
+  single: reactor.core.publisher.Mono
+  multi: reactor.core.publisher.Flux

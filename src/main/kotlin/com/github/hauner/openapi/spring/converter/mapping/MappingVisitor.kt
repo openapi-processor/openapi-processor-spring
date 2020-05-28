@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,31 +17,17 @@
 package com.github.hauner.openapi.spring.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure the java type that should represent the response
- * schema for the given endpoint content type.
+ * interface for type mapping matching logic.
  *
  * @author Martin Hauner
  */
-class ResponseTypeMapping implements Mapping {
+interface MappingVisitor {
 
-    /**
-     * The content type of this mapping. Must match 1:1 with what is written in the api.
-     */
-    String contentType
-
-    /**
-     * Type mapping valid only for responses with {@link #contentType}.
-     */
-    TypeMapping mapping
-
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
-    }
-
-    @Override
-    List<Mapping> getChildMappings () {
-        [mapping]
-    }
+    fun match (mapping: EndpointTypeMapping): Boolean
+    fun match (mapping: ParameterTypeMapping): Boolean
+    fun match (mapping: ResponseTypeMapping): Boolean
+    fun match (mapping: TypeMapping): Boolean
+    fun match (mapping: AddParameterTypeMapping): Boolean
+    fun match (mapping: ResultTypeMapping): Boolean
 
 }

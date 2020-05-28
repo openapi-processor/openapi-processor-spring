@@ -22,30 +22,30 @@ package com.github.hauner.openapi.spring.converter.mapping
  *
  * @author Martin Hauner
  */
-class ResultTypeMapping implements Mapping, TargetTypeMapping {
+class ResultTypeMapping(
 
     /**
      * The fully qualified java type name that will be used as the result type.
      */
-    String targetTypeName
+    val targetTypeName: String
+
+): Mapping, TargetTypeMapping {
+
+    override fun matches(visitor: MappingVisitor): Boolean {
+        return visitor.match (this)
+    }
+
+    override fun getChildMappings(): List<Mapping> {
+        return listOf(this)
+    }
 
     /**
      * Returns the target type of this type mapping.
      *
      * @return the target type
      */
-    TargetType getTargetType () {
-        new TargetType (typeName: targetTypeName, genericNames: [])
-    }
-
-    @Override
-    boolean matches (MappingVisitor visitor) {
-        visitor.match (this)
-    }
-
-    @Override
-    List<Mapping> getChildMappings () {
-        [this]
+    override fun getTargetType(): TargetType {
+        return TargetType (targetTypeName, emptyList())
     }
 
 }

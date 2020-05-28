@@ -1,13 +1,13 @@
+openapi-processor-spring: v2
+
 options:
   package-name: generated
 
 map:
-  result:
-    to: org.springframework.http.ResponseEntity
+  result: org.springframework.http.ResponseEntity
 
   paths:
     /foo:
 
       parameters:
-        - add: request
-          as: javax.servlet.http.HttpServletRequest
+        - add: request => javax.servlet.http.HttpServletRequest
