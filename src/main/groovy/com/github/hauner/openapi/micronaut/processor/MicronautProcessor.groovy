@@ -15,18 +15,106 @@
  */
 package com.github.hauner.openapi.micronaut.processor
 
-import com.github.hauner.openapi.spring.processor.SpringProcessor
+import com.github.hauner.openapi.api.OpenApiProcessor
+import com.github.hauner.openapi.micronaut.writer.HeaderWriter
+import com.github.hauner.openapi.spring.converter.ApiConverter
+import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.spring.parser.OpenApi
+import com.github.hauner.openapi.spring.parser.Parser
+import com.github.hauner.openapi.spring.processor.MappingConverter
+import com.github.hauner.openapi.spring.processor.MappingReader
+import com.github.hauner.openapi.spring.writer.ApiWriter
+import com.github.hauner.openapi.spring.writer.BeanValidationFactory
+import com.github.hauner.openapi.spring.writer.DataTypeWriter
+import com.github.hauner.openapi.spring.writer.InterfaceWriter
+import com.github.hauner.openapi.spring.writer.MethodWriter
+import com.github.hauner.openapi.spring.writer.StringEnumWriter
+import org.slf4j.LoggerFactory
 
 /**
  *  Entry point of openapi-processor-micronaut.
  *
  *  @author Martin Hauner
  */
-class MicronautProcessor extends SpringProcessor {
+class MicronautProcessor implements OpenApiProcessor {
+    private static final LOG = LoggerFactory.getLogger (MicronautProcessor)
 
     @Override
     String getName () {
         return 'micronaut'
+    }
+
+    @Override
+    void run (Map<String, ?> processorOptions) {
+        try {
+            def parser = new Parser ()
+            OpenApi openapi = parser.parse (processorOptions)
+            if (processorOptions.showWarnings) {
+                openapi.printWarnings ()
+            }
+
+            def options = convertOptions (processorOptions)
+            def cv = new ApiConverter(options)
+            def api = cv.convert (openapi)
+
+            def headerWriter = new HeaderWriter()
+            def beanValidationFactory = new BeanValidationFactory()
+
+            def writer = new ApiWriter (options,
+                new InterfaceWriter(
+                    headerWriter: headerWriter,
+                    methodWriter: new MethodWriter(
+                        beanValidationFactory: beanValidationFactory,
+                        apiOptions: options
+                    ),
+                    beanValidationFactory: beanValidationFactory,
+                    apiOptions: options
+                ),
+                new DataTypeWriter(
+                    headerWriter: headerWriter,
+                    beanValidationFactory: beanValidationFactory,
+                    apiOptions: options
+                ),
+                new StringEnumWriter(headerWriter: headerWriter)
+            )
+
+            writer.write (api)
+        } catch (Exception e) {
+            LOG.error ("processing failed!", e)
+            throw e
+        }
+    }
+
+    private ApiOptions convertOptions (Map<String, ?> processorOptions) {
+        def reader = new MappingReader ()
+        def converter = new MappingConverter ()
+        def mapping
+
+        if (processorOptions.containsKey ('mapping')) {
+            mapping = reader.read (processorOptions.mapping as String)
+        }
+
+        def options = new ApiOptions ()
+        options.apiPath = processorOptions.apiPath
+        options.targetDir = processorOptions.targetDir
+
+        if (mapping) {
+            if (mapping?.options?.packageName != null) {
+                options.packageName = mapping.options.packageName
+            } else {
+                LOG.warn ("no 'options:package-name' set in mapping!")
+            }
+
+            if (mapping?.options?.beanValidation != null) {
+                options.beanValidation = mapping.options.beanValidation
+            }
+
+            options.typeMappings = converter.convert (mapping)
+        } else {
+            LOG.error ("missing 'mapping.yaml' configuration!")
+        }
+
+        options
     }
 
 }
