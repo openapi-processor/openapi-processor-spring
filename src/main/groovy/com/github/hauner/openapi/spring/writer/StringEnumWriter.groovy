@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.writer.TargetWriter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.support.Identifier
@@ -27,7 +28,7 @@ import com.github.hauner.openapi.support.Identifier
  */
 class StringEnumWriter {
 
-    HeaderWriter headerWriter
+    TargetWriter headerWriter
 
     void write (Writer target, StringEnumDataType dataType) {
         headerWriter.write (target)

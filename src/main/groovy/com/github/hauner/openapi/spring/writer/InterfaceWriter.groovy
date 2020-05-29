@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.writer.TargetWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.Interface
@@ -28,7 +29,7 @@ import com.github.hauner.openapi.spring.model.Interface
  */
 class InterfaceWriter {
     ApiOptions apiOptions
-    HeaderWriter headerWriter
+    TargetWriter headerWriter
     MethodWriter methodWriter
     BeanValidationFactory beanValidationFactory
 

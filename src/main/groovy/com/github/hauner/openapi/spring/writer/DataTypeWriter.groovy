@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.writer.TargetWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
@@ -29,7 +30,7 @@ import com.github.hauner.openapi.support.Identifier
  */
 class DataTypeWriter {
     ApiOptions apiOptions
-    HeaderWriter headerWriter
+    TargetWriter headerWriter
     BeanValidationFactory beanValidationFactory
 
     void write (Writer target, ObjectDataType dataType) {
