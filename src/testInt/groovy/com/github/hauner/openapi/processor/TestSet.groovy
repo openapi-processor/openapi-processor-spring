@@ -16,7 +16,10 @@
 
 package com.github.hauner.openapi.processor
 
+import com.github.hauner.openapi.api.OpenApiProcessor
+import com.github.hauner.openapi.micronaut.processor.MicronautProcessor
 import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.spring.processor.SpringProcessor
 
 class TestSet {
 
@@ -45,8 +48,45 @@ class TestSet {
         'schema-composed'
     ]
 
+    static String DEFAULT_OPTIONS_SPRING = """\
+openapi-processor-spring: v2
+
+options:
+  package-name: generated
+
+map:  
+  result: org.springframework.http.ResponseEntity  
+    """
+
+    static String DEFAULT_OPTIONS_MICRONAUT = """\
+openapi-processor-spring: v2
+
+options:
+  package-name: generated
+
+map:  
+  result: org.springframework.http.ResponseEntity  
+    """
+
     String name
+    String target = 'spring'
     ParserType parser = ParserType.SWAGGER
+
+    OpenApiProcessor getProcessor () {
+        if  (target == 'micronaut') {
+            new MicronautProcessor()
+        } else {
+            new SpringProcessor()
+        }
+    }
+
+    String getDefaultOptions() {
+        if (target == 'micronaut') {
+            DEFAULT_OPTIONS_MICRONAUT
+        } else {
+            DEFAULT_OPTIONS_SPRING
+        }
+    }
 
     @Override
     String toString () {

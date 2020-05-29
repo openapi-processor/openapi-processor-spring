@@ -19,8 +19,6 @@ package com.github.hauner.openapi.processor
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import com.github.hauner.openapi.spring.processor.MappingReader
-import com.github.hauner.openapi.spring.processor.SpringProcessor
-import com.github.hauner.openapi.spring.processor.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -37,16 +35,6 @@ abstract class ProcessorTestBase {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder()
 
-    String DEFAULT_OPTIONS = """\
-openapi-processor-spring: v2
-
-options:
-  package-name: generated
-
-map:  
-  result: org.springframework.http.ResponseEntity  
-    """
-
     Path project = Path.of ("").toAbsolutePath ()
     TestSet testSet
 
@@ -57,7 +45,7 @@ map:
     protected runOnNativeFileSystem () {
         def source = testSet.name
 
-        def processor = new SpringProcessor()
+        def processor = testSet.processor
         def options = [
             parser: testSet.parser.toString (),
             apiPath: "${project.toString ()}/src/testInt/resources/${source}/openapi.yaml",
@@ -68,7 +56,7 @@ map:
         if(Files.exists (mappingYaml)) {
             options.mapping = mappingYaml.toString ()
         } else {
-            options.mapping = DEFAULT_OPTIONS
+            options.mapping = testSet.defaultOptions
         }
 
         def reader = new MappingReader ()
@@ -109,7 +97,7 @@ map:
         Path api = root.resolve ('openapi.yaml')
         Path target = fs.getPath ('target')
 
-        def processor = new SpringProcessor()
+        def processor = testSet.processor
         def options = [
             parser: 'OPENAPI4J', // swagger-parser does not work with fs
             apiPath: api.toUri ().toURL ().toString (),
@@ -120,7 +108,7 @@ map:
         if(Files.exists (mappingYaml)) {
             options.mapping = mappingYaml.toUri ().toURL ().toString ()
         } else {
-            options.mapping = DEFAULT_OPTIONS
+            options.mapping = testSet.defaultOptions
         }
 
         def reader = new MappingReader ()
