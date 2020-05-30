@@ -114,8 +114,4 @@ class MethodWriter {
         ps.join (', ')
     }
 
-    private String quote (String content) {
-        '"' + content + '"'
-    }
-
 }
