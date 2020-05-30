@@ -18,6 +18,7 @@ package com.github.hauner.openapi.core.model
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 
 /**
  * factory for framework model objects.
@@ -27,11 +28,10 @@ interface Framework {
     /**
      * create a model query parameter.
      *
-     * @param name name of the parameter
-     * @param required is the parameter required
+     * @param parameter an OpenAPI parameter
      * @param DataType data type of the parameter
      * @return a query {@Parameter}
      */
-    Parameter createQueryParameter(String name, boolean required, DataType dataType)
+    Parameter createQueryParameter(ParserParameter parameter, DataType dataType)
 
 }

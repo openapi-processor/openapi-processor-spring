@@ -20,6 +20,7 @@ import com.github.hauner.openapi.core.model.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 
 /**
  * Micronaut model factory.
@@ -29,8 +30,11 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
 class MicronautFramework implements Framework {
 
     @Override
-    Parameter createQueryParameter (String name, boolean required, DataType dataType) {
-        new QueryParameter(name: name, required: required, dataType: dataType)
+    Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
+        new QueryParameter(
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
     }
 
 }

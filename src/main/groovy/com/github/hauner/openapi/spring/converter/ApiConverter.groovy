@@ -213,7 +213,7 @@ class ApiConverter {
 
         switch (parameter.in) {
             case 'query':
-                return framework.createQueryParameter (parameter.name, parameter.required, dataType)
+                return framework.createQueryParameter (parameter, dataType)
             case 'path':
                 return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             case 'header':
