@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.model.Framework
+import com.github.hauner.openapi.core.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.converter.mapping.TargetType
@@ -32,9 +34,7 @@ import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
-import com.github.hauner.openapi.spring.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
@@ -45,6 +45,7 @@ import com.github.hauner.openapi.spring.parser.Path
 import com.github.hauner.openapi.spring.parser.RefResolver
 import com.github.hauner.openapi.spring.parser.Response
 import com.github.hauner.openapi.spring.parser.RequestBody
+import com.github.hauner.openapi.spring.processor.SpringFramework
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
 
@@ -59,6 +60,8 @@ class ApiConverter {
     public static final String MULTIPART = "multipart/form-data"
     public static final String INTERFACE_DEFAULT_NAME = ''
 
+    Framework framework
+
     private DataTypeConverter dataTypeConverter
     private ResultDataTypeWrapper dataTypeWrapper
     private SingleDataTypeWrapper singleDataTypeWrapper
@@ -68,6 +71,7 @@ class ApiConverter {
 
     ApiConverter(ApiOptions options) {
         this.options = options
+        this.framework = framework = new SpringFramework()
 
         if (!this.options) {
             this.options = new DefaultApiOptions()
@@ -209,7 +213,7 @@ class ApiConverter {
 
         switch (parameter.in) {
             case 'query':
-                return new QueryParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+                return framework.createQueryParameter (parameter.name, parameter.required, dataType)
             case 'path':
                 return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             case 'header':

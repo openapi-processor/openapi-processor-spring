@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.parameters
+package com.github.hauner.openapi.core.model.parameters
 
-import com.github.hauner.openapi.core.model.parameters.Parameter as CoreParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.parameters.ParameterConstraints
 
-/**
- * Parameter description of an OpenAPI parameter.
- *
- * @author Martin Hauner
- */
-abstract class Parameter implements CoreParameter {
+abstract class ParameterBase implements Parameter {
     String name
-    protected boolean required
+    boolean required
     DataType dataType
-
-    /**
-     * The plain name of the annotation for this parameter (ie. without the @). Possible results
-     * are "RequestParam", "PathVariable", "CookieValue" or "RequestHeader".
-     *
-     * @return the name of the annotation
-     */
-    abstract String getAnnotationName ()
-
-    /**
-     * The fully qualified class name of the annotation.
-     *
-     * @return the fully qualified class name of the annotation
-     */
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
 
     /**
      * The full annotation name with a leading @.
@@ -81,20 +59,5 @@ abstract class Parameter implements CoreParameter {
     boolean isRequired () {
         required
     }
-
-    /**
-     * Create annotation? Some parameters should not have a parameter annotation.
-     *
-     * @return true if the parameter should have an annotation, else false
-     */
-    abstract boolean withAnnotation ()
-
-    /**
-     * Create annotation with parameters? Some parameters should have a parameter annotation but
-     * without any parameters to the annotation.
-     *
-     * @return true if the annotation itself should have parameters, false otherwise
-     */
-    abstract boolean withParameters ()
 
 }

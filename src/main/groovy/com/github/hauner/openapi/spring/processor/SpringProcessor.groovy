@@ -55,6 +55,7 @@ class SpringProcessor implements OpenApiProcessor {
 
             def options = convertOptions (processorOptions)
             def cv = new ApiConverter(options)
+            cv.framework = new SpringFramework()
             def api = cv.convert (openapi)
 
             def headerWriter = new HeaderWriter()

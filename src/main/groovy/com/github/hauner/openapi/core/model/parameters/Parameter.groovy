@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,73 +14,59 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.parameters
+package com.github.hauner.openapi.core.model.parameters
 
-import com.github.hauner.openapi.core.model.parameters.Parameter as CoreParameter
-import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.model.parameters.ParameterConstraints
 
 /**
- * Parameter description of an OpenAPI parameter.
+ * Parameter model of an OpenAPI parameter.
  *
  * @author Martin Hauner
  */
-abstract class Parameter implements CoreParameter {
-    String name
-    protected boolean required
-    DataType dataType
+interface Parameter {
 
     /**
-     * The plain name of the annotation for this parameter (ie. without the @). Possible results
-     * are "RequestParam", "PathVariable", "CookieValue" or "RequestHeader".
+     * The plain name of the annotation for this parameter (ie. without the @).
      *
      * @return the name of the annotation
      */
-    abstract String getAnnotationName ()
+    String getAnnotationName ()
 
     /**
      * The fully qualified class name of the annotation.
      *
      * @return the fully qualified class name of the annotation
      */
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
+    String getAnnotationWithPackage ()
+
 
     /**
      * The full annotation name with a leading @.
      *
      * @return the full annotation name with a leading @
      */
-    String getAnnotation () {
-        "@${annotationName}"
-    }
+    String getAnnotation ()
 
     /**
      * The imports required for the parameter data type.
      *
      * @return the imports of the parameter type.
      */
-    Set<String> getDataTypeImports () {
-        dataType.imports
-    }
+    Set<String> getDataTypeImports ()
 
     /**
      * Provides the parameters constraint details, if any.
      *
      * @return the constraint details or null if the parameter has no constraints
      */
-    ParameterConstraints getConstraints() {
-        new ParameterConstraints(constraints: dataType.constraints)
-    }
+    ParameterConstraints getConstraints()
 
     /**
      * Required or optional parameter?
      *
      * @return true if required, false otherwise
      */
-    boolean isRequired () {
-        required
-    }
+    boolean isRequired ()
 
     /**
      * Create annotation? Some parameters should not have a parameter annotation.

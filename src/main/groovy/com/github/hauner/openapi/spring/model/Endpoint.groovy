@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.model
 
-import com.github.hauner.openapi.spring.model.parameters.Parameter
+import com.github.hauner.openapi.core.model.parameters.Parameter
 
 /**
  * Endpoint properties.
@@ -31,7 +31,7 @@ class Endpoint {
     List<Parameter> parameters = []
     List<RequestBody> requestBodies = []
     LinkedHashMap<String, List<Response>> responses = [:]
-    
+
     // grouped responses
     List<EndpointResponse> endpointResponses = []
 
@@ -43,8 +43,7 @@ class Endpoint {
         endpointResponses = createEndpointResponses ()
         this
     }
-    
-    
+
     RequestBody getRequestBody () {
         requestBodies.first ()
     }

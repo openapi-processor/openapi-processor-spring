@@ -16,11 +16,11 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.RequestBody
-import com.github.hauner.openapi.spring.model.parameters.Parameter
 import com.github.hauner.openapi.support.Identifier
 
 /**
