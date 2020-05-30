@@ -11,7 +11,7 @@ import io.micronaut.http.annotation.QueryValue;
 public interface EndpointApi {
 
     @Get(uri = "/endpoint")
-    void getEndpoint(@QueryValue("foo") String foo);
+    void getEndpoint(@QueryValue(value = "foo") String foo);
 
     @Get(uri = "/endpoint-optional")
     void getEndpointDefault(
