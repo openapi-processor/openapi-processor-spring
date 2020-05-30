@@ -43,7 +43,9 @@ import spock.lang.Unroll
 
 class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
-    def writer = new MethodWriter (apiOptions: apiOptions)
+    def writer = new MethodWriter (
+        apiOptions: apiOptions,
+        parameterAnnotationWriter: new ParameterAnnotationWriter())
     def target = new StringWriter ()
 
     private Endpoint createEndpoint (Map properties) {
@@ -171,6 +173,9 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // todo core: check method writer calls parameter annotation writer
+
+    @Deprecated
     void "writes simple (required) query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType ())]
@@ -188,6 +193,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    @Deprecated
     void "writes simple (optional) query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType ())]

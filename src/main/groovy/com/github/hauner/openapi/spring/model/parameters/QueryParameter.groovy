@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
@@ -25,10 +26,15 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
  *
  * @author Martin Hauner
  */
-class QueryParameter extends Parameter {
+class QueryParameter extends ParameterBase {
 
     String getAnnotationName () {
         "RequestParam"
+    }
+
+    @Override
+    String getAnnotationWithPackage () {
+        "org.springframework.web.bind.annotation.${annotationName}"
     }
 
     /**

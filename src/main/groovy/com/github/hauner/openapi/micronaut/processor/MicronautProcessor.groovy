@@ -17,6 +17,7 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.api.OpenApiProcessor
 import com.github.hauner.openapi.micronaut.writer.HeaderWriter
+import com.github.hauner.openapi.micronaut.writer.ParameterAnnotationWriter
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.parser.OpenApi
@@ -65,6 +66,7 @@ class MicronautProcessor implements OpenApiProcessor {
                 new InterfaceWriter(
                     headerWriter: headerWriter,
                     methodWriter: new MethodWriter(
+                        parameterAnnotationWriter: new ParameterAnnotationWriter(),
                         beanValidationFactory: beanValidationFactory,
                         apiOptions: options
                     ),

@@ -24,6 +24,7 @@ import com.github.hauner.openapi.spring.model.datatypes.DataType
  *
  * @author Martin Hauner
  */
+@Deprecated // use core.ParameterBase
 abstract class Parameter implements CoreParameter {
     String name
     protected boolean required

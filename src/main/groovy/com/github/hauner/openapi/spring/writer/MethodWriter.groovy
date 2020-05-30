@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
+import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.EndpointResponse
@@ -32,6 +33,7 @@ import com.github.hauner.openapi.support.Identifier
 class MethodWriter {
 
     ApiOptions apiOptions
+    CoreParameterAnnotationWriter parameterAnnotationWriter
     BeanValidationFactory beanValidationFactory
 
     void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
@@ -68,28 +70,9 @@ class MethodWriter {
     }
 
     private String createParameterAnnotation (Parameter parameter) {
-        String param = "${parameter.annotation}"
-
-        if (! parameter.withParameters ()) {
-            return param
-        }
-
-        param += '('
-        param += 'name = ' + quote (parameter.name)
-
-        // required is default, so add required only if the parameter is not required
-        if (!parameter.required) {
-            param += ", "
-            param += 'required = false'
-        }
-
-        if (!parameter.required && parameter.constraints?.hasDefault()) {
-            param += ", "
-            param += "defaultValue = ${getDefault(parameter)}"
-        }
-
-        param += ')'
-        param
+        def annotation = new StringWriter ()
+        parameterAnnotationWriter.write (annotation, parameter)
+        annotation.toString ()
     }
 
     private String createRequestBodyAnnotation (RequestBody requestBody) {
@@ -147,10 +130,6 @@ class MethodWriter {
         }
 
         ps.join (', ')
-    }
-
-    private String getDefault (Parameter parameter) {
-        quote(parameter.constraints.default as String)
     }
 
     private String quote (String content) {
