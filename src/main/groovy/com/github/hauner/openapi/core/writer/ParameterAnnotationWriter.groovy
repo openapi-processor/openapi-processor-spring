@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.writer;
 import com.github.hauner.openapi.core.model.parameters.Parameter;
 
 /**
- * parameter writer interface.
+ * parameter annotation writer interface.
  *
  * @author Martin Hauner
  */
