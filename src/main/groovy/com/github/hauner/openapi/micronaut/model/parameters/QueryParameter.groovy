@@ -18,6 +18,11 @@ package com.github.hauner.openapi.micronaut.model.parameters
 
 import com.github.hauner.openapi.core.model.parameters.ParameterBase
 
+/**
+ * OpenAPI query parameter.
+ *
+ * @author Martin Hauner
+ */
 class QueryParameter extends ParameterBase {
 
     @Override
