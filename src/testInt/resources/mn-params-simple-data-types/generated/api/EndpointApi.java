@@ -13,7 +13,7 @@ public interface EndpointApi {
     @Get(uri = "/endpoint")
     void getEndpoint(@QueryValue("foo") String foo);
 
-    @Get(uri = "/endpoint-default")
+    @Get(uri = "/endpoint-optional")
     void getEndpointDefault(
             @QueryValue(value = "foo", defaultValue = "bar") String foo);
 
