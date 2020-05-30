@@ -45,6 +45,7 @@ class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
     def writer = new MethodWriter (
         apiOptions: apiOptions,
+        mappingAnnotationWriter: new MappingAnnotationWriter(),
         parameterAnnotationWriter: new ParameterAnnotationWriter())
     def target = new StringWriter ()
 

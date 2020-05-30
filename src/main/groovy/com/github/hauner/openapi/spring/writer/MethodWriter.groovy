@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
+import com.github.hauner.openapi.core.writer.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
@@ -33,6 +34,7 @@ import com.github.hauner.openapi.support.Identifier
 class MethodWriter {
 
     ApiOptions apiOptions
+    CoreMappingAnnotationWriter mappingAnnotationWriter
     CoreParameterAnnotationWriter parameterAnnotationWriter
     BeanValidationFactory beanValidationFactory
 
@@ -44,29 +46,9 @@ class MethodWriter {
     }
 
     private String createMappingAnnotation (Endpoint endpoint, EndpointResponse endpointResponse) {
-        String mapping = "${endpoint.method.mappingAnnotation}"
-        mapping += "("
-        mapping += 'path = ' + quote(endpoint.path)
-
-        if (!endpoint.requestBodies.empty) {
-            mapping += ", "
-            mapping += 'consumes = {' + quote(endpoint.requestBody.contentType) + '}'
-        }
-
-        def contentTypes = endpointResponse.contentTypes
-        if (!contentTypes.empty) {
-            mapping += ", "
-            mapping += 'produces = {'
-
-            mapping += contentTypes.collect {
-                quote (it)
-            }.join (', ')
-
-            mapping += '}'
-        }
-
-        mapping += ")"
-        mapping
+        def annotation = new StringWriter ()
+        mappingAnnotationWriter.write (annotation, endpoint, endpointResponse)
+        annotation.toString ()
     }
 
     private String createParameterAnnotation (Parameter parameter) {
