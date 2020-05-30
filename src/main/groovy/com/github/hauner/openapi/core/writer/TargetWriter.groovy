@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.core.writer
 
 /**
- * common writer interface.
+ * basic writer interface.
  *
- * author Martin Hauner
+ * @author Martin Hauner
  */
 interface TargetWriter {
 
