@@ -47,15 +47,19 @@ enum HttpMethod {
         }
     }
 
+    @Deprecated // move to writer
     String getClassName () {
         method.capitalize () + "Mapping"
     }
 
+    @Deprecated // move to writer
     String getClassNameWithPackage () {
         "org.springframework.web.bind.annotation.${className}"
     }
 
+    @Deprecated // move to writer
     String getMappingAnnotation () {
         "@${className}"
     }
+
 }
