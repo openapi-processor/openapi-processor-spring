@@ -25,24 +25,4 @@ import com.github.hauner.openapi.core.model.parameters.ParameterBase
  */
 class QueryParameter extends ParameterBase {
 
-    @Override
-    String getAnnotationName () {
-        'QueryValue'
-    }
-
-    @Override
-    String getAnnotationWithPackage () {
-        "io.micronaut.http.annotation.${annotationName}"
-    }
-
-    @Override
-    boolean withAnnotation () {
-        true
-    }
-
-    @Override
-    boolean withParameters () {
-        true
-    }
-
 }

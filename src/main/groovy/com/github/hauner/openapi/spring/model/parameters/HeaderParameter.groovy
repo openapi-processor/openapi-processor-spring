@@ -16,23 +16,13 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
+
 /**
  * OpenAPI header parameter.
  *
  * @author Martin Hauner
  */
-class HeaderParameter extends Parameter {
-
-    String getAnnotationName () {
-        "RequestHeader"
-    }
-
-    boolean withAnnotation () {
-        true
-    }
-
-    boolean withParameters () {
-        true
-    }
+class HeaderParameter extends ParameterBase {
 
 }

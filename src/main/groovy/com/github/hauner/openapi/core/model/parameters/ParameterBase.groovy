@@ -72,4 +72,14 @@ abstract class ParameterBase implements Parameter {
         required
     }
 
+    @Override
+    boolean withAnnotation () {
+        true
+    }
+
+    @Override
+    boolean withParameters () {
+        true
+    }
+
 }
