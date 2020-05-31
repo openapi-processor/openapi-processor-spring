@@ -32,7 +32,7 @@ class QueryParameter extends ParameterBase {
 
     @Override
     String getAnnotationWithPackage () {
-        "io.micronaut.http.annotation.annotation.${annotationName}"
+        "io.micronaut.http.annotation.${annotationName}"
     }
 
     @Override
