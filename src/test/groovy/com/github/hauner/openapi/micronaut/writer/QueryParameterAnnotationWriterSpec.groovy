@@ -17,12 +17,13 @@
 package com.github.hauner.openapi.micronaut.writer
 
 import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
+import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter()
+    def writer = new ParameterAnnotationWriter(annotations: new MicronautFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required, no default value) query parameter" () {

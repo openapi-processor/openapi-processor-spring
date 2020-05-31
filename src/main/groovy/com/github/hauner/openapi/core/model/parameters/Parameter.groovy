@@ -25,11 +25,14 @@ import com.github.hauner.openapi.spring.model.parameters.ParameterConstraints
  */
 interface Parameter {
 
+    String getName()
+
     /**
      * The plain name of the annotation for this parameter (ie. without the @).
      *
      * @return the name of the annotation
      */
+    @Deprecated
     String getAnnotationName ()
 
     /**
@@ -37,14 +40,15 @@ interface Parameter {
      *
      * @return the fully qualified class name of the annotation
      */
+    @Deprecated
     String getAnnotationWithPackage ()
-
 
     /**
      * The full annotation name with a leading @.
      *
      * @return the full annotation name with a leading @
      */
+    @Deprecated
     String getAnnotation ()
 
     /**

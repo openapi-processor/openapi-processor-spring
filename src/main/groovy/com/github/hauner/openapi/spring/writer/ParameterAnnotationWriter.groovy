@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 
@@ -25,6 +26,7 @@ import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CorePa
  * @author Martin Hauner
  */
 class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
+    FrameworkAnnotations annotations
 
     @Override
     void write (Writer target, Parameter parameter) {
@@ -32,28 +34,32 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     }
 
     private String createAnnotation (Parameter parameter) {
-        String param = "${parameter.annotation}"
+        String annotation = getAnnotationName (parameter)
 
         if (! parameter.withParameters ()) {
-            return param
+            return annotation
         }
 
-        param += '('
-        param += 'name = ' + quote (parameter.name)
+        annotation += '('
+        annotation += 'name = ' + quote (parameter.name)
 
         // required is the default, add required only if the parameter is not required
         if (!parameter.required) {
-            param += ", "
-            param += 'required = false'
+            annotation += ", "
+            annotation += 'required = false'
         }
 
         if (!parameter.required && hasDefault (parameter)) {
-            param += ", "
-            param += "defaultValue = ${getDefault(parameter)}"
+            annotation += ", "
+            annotation += "defaultValue = ${getDefault(parameter)}"
         }
 
-        param += ')'
-        param
+        annotation += ')'
+        annotation
+    }
+
+    private String getAnnotationName (Parameter parameter) {
+        annotations.getAnnotation (parameter).annotationName
     }
 
     private boolean hasDefault (Parameter parameter) {

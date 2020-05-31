@@ -55,9 +55,12 @@ class MicronautProcessor implements OpenApiProcessor {
                 openapi.printWarnings ()
             }
 
+            def framework = new MicronautFramework()
+            def annotations = new MicronautFrameworkAnnotations()
+
             def options = convertOptions (processorOptions)
             def cv = new ApiConverter(options)
-            cv.framework = new MicronautFramework()
+            cv.framework = framework
             def api = cv.convert (openapi)
 
             def headerWriter = new HeaderWriter()
@@ -68,12 +71,13 @@ class MicronautProcessor implements OpenApiProcessor {
                     headerWriter: headerWriter,
                     methodWriter: new MethodWriter(
                         mappingAnnotationWriter: new MappingAnnotationWriter (),
-                        parameterAnnotationWriter: new ParameterAnnotationWriter(),
+                        parameterAnnotationWriter: new ParameterAnnotationWriter(
+                            annotations: annotations),
                         beanValidationFactory: beanValidationFactory,
                         apiOptions: options
                     ),
                     beanValidationFactory: beanValidationFactory,
-                    frameworkImports: new MicronautFrameworkImports (),
+                    annotations: annotations,
                     apiOptions: options
                 ),
                 new DataTypeWriter(

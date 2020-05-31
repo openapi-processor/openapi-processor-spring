@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
+import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 
@@ -25,6 +26,7 @@ import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CorePa
  * @author Martin Hauner
  */
 class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
+    FrameworkAnnotations annotations
 
     @Override
     void write (Writer target, Parameter parameter) {
@@ -32,22 +34,26 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     }
 
     private String createAnnotation (Parameter parameter) {
-        String param = "${parameter.annotation}"
+        String annotation = getAnnotationName (parameter)
 
         if (! parameter.withParameters ()) {
-            return param
+            return annotation
         }
 
-        param += '('
-        param += 'value = ' + quote (parameter.name)
+        annotation += '('
+        annotation += 'value = ' + quote (parameter.name)
 
         if (hasDefault (parameter)) {
-            param += ", "
-            param += "defaultValue = ${getDefault(parameter)}"
+            annotation += ", "
+            annotation += "defaultValue = ${getDefault(parameter)}"
         }
 
-        param += ')'
-        param
+        annotation += ')'
+        annotation
+    }
+
+    private String getAnnotationName (Parameter parameter) {
+        annotations.getAnnotation (parameter).annotationName
     }
 
     private boolean hasDefault (Parameter parameter) {

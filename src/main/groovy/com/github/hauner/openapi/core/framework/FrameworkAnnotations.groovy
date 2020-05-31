@@ -14,21 +14,32 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.core.framework
 
-import com.github.hauner.openapi.core.framework.FrameworkImports
+import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.HttpMethod
 
 /**
- * provides Spring imports.
+ * provides annotation details of the framework.
  *
  * @author Martin Hauner
  */
-class SpringFrameworkImports implements FrameworkImports {
+interface FrameworkAnnotations {
 
-    @Override
-    String getMappingAnnotationImport (HttpMethod httpMethod) {
-        "org.springframework.web.bind.annotation.${httpMethod.method.capitalize ()}Mapping"
-    }
+    /**
+     * provides the details of the requested mapping annotation.
+     *
+     * @param httpMethod requested http method
+     * @return annotation details
+     */
+    FrameworkAnnotation getAnnotation (HttpMethod httpMethod)
+
+    /**
+     * provides the details of the requested method parameter annotation.
+     *
+     * @param parameter requested parameter
+     * @return annotation details
+     */
+    FrameworkAnnotation getAnnotation (Parameter parameter)
 
 }

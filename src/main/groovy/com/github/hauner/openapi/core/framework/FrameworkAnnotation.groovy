@@ -16,22 +16,40 @@
 
 package com.github.hauner.openapi.core.framework
 
-import com.github.hauner.openapi.spring.model.HttpMethod
-
 /**
- * provides the imports of the framework.
+ * details of an annotation.
  *
  * @author Martin Hauner
  */
-interface FrameworkImports {
+class FrameworkAnnotation {
+    private String name
+    private String pkg
 
     /**
-     * returns the fully qualified class name of the requested mapping annotation for an import
-     * instruction.
+     * The plain name of the annotation for this parameter (ie. without the @).
      *
-     * @param httpMethod requested http method
-     * @return fully qualified mapping annotation class name
+     * @return the name of the annotation
      */
-    String getMappingAnnotationImport (HttpMethod httpMethod)
+    String getName () {
+        name
+    }
+
+    /**
+     * The fully qualified class name of the annotation.
+     *
+     * @return the fully qualified class name of the annotation
+     */
+    String getFullyQualifiedName () {
+        "${pkg}.${name}"
+    }
+
+    /**
+     * The full annotation name with a leading @.
+     *
+     * @return the full annotation name with a leading @
+     */
+    String getAnnotationName () {
+        "@${name}"
+    }
 
 }

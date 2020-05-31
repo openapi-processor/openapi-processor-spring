@@ -55,9 +55,12 @@ class SpringProcessor implements OpenApiProcessor {
                 openapi.printWarnings ()
             }
 
+            def framework = new SpringFramework()
+            def annotations = new SpringFrameworkAnnotations()
+
             def options = convertOptions (processorOptions)
             def cv = new ApiConverter(options)
-            cv.framework = new SpringFramework()
+            cv.framework = framework
             def api = cv.convert (openapi)
 
             def headerWriter = new HeaderWriter()
@@ -68,12 +71,14 @@ class SpringProcessor implements OpenApiProcessor {
                     headerWriter: headerWriter,
                     methodWriter: new MethodWriter(
                         mappingAnnotationWriter: new MappingAnnotationWriter (),
-                        parameterAnnotationWriter: new ParameterAnnotationWriter (),
+                        parameterAnnotationWriter: new ParameterAnnotationWriter (
+                            annotations: annotations
+                        ),
                         beanValidationFactory: beanValidationFactory,
                         apiOptions: options
                     ),
                     beanValidationFactory: beanValidationFactory,
-                    frameworkImports: new SpringFrameworkImports (),
+                    annotations: annotations,
                     apiOptions: options
                 ),
                 new DataTypeWriter(

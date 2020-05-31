@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.core.framework.FrameworkImports
+
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.EndpointResponse
@@ -30,7 +30,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.processor.SpringFrameworkImports
+import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import com.github.hauner.openapi.spring.support.EmptyResponse
 import spock.lang.Specification
 
@@ -47,7 +47,7 @@ class InterfaceWriterSpec extends Specification {
     def writer = new InterfaceWriter(
         headerWriter: headerWriter,
         methodWriter: methodWriter,
-        frameworkImports: new SpringFrameworkImports(),
+        annotations: new SpringFrameworkAnnotations(),
         apiOptions: apiOptions)
     def target = new StringWriter ()
 

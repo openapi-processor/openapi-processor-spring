@@ -19,10 +19,11 @@ package com.github.hauner.openapi.spring.writer
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter()
+    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) query parameter" () {

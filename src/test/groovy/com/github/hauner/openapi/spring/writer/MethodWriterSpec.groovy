@@ -38,6 +38,7 @@ import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,7 +47,9 @@ class MethodWriterSpec extends Specification {
     def writer = new MethodWriter (
         apiOptions: apiOptions,
         mappingAnnotationWriter: new MappingAnnotationWriter(),
-        parameterAnnotationWriter: new ParameterAnnotationWriter())
+        parameterAnnotationWriter: new ParameterAnnotationWriter(
+            annotations: new SpringFrameworkAnnotations()
+        ))
     def target = new StringWriter ()
 
     private Endpoint createEndpoint (Map properties) {
