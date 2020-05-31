@@ -62,8 +62,8 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.name == 'String'
-        param.annotation == '@RequestParam'
-        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'
+//        param.annotation == '@RequestParam'
+//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'
     }
 
     void "converts simple path parameter"() {

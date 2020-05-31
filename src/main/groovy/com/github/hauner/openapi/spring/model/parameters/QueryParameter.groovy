@@ -28,15 +28,6 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
  */
 class QueryParameter extends ParameterBase {
 
-    String getAnnotationName () {
-        "RequestParam"
-    }
-
-    @Override
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
     /**
      * If the query parameter is mapped to a pojo object it should not have a {@code @RequestParam}
      * annotation.
