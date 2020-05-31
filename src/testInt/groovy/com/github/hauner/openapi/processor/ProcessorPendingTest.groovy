@@ -29,8 +29,8 @@ class ProcessorPendingTest extends ProcessorTestBase {
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
-            new TestSet(name: 'mn-params-simple-data-types', parser: ParserType.SWAGGER, target: 'micronaut'),
-            new TestSet(name: 'mn-params-simple-data-types', parser: ParserType.OPENAPI4J, target: 'micronaut')
+            new TestSet(name: 'params-simple-data-types-micronaut', parser: ParserType.SWAGGER, target: 'micronaut'),
+            new TestSet(name: 'params-simple-data-types-micronaut', parser: ParserType.OPENAPI4J, target: 'micronaut')
         ]
     }
 

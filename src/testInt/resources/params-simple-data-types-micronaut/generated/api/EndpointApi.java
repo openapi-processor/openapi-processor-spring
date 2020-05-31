@@ -5,16 +5,17 @@
 
 package generated.api;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.QueryValue;
 
 public interface EndpointApi {
 
     @Get(uri = "/endpoint")
-    void getEndpoint(@QueryValue(value = "foo") String foo);
+    HttpResponse<Void> getEndpoint(@QueryValue(value = "foo") String foo);
 
     @Get(uri = "/endpoint-optional")
-    void getEndpointOptional(
+    HttpResponse<Void> getEndpointOptional(
             @QueryValue(value = "foo", defaultValue = "bar") String foo);
 
 }
