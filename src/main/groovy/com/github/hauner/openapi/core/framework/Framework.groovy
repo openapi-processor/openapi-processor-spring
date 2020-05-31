@@ -43,4 +43,13 @@ interface Framework {
      */
     Parameter createHeaderParameter(ParserParameter parameter, DataType dataType)
 
+    /**
+     * create a model cookie parameter.
+     *
+     * @param parameter an OpenAPI cookie parameter
+     * @param DataType data type of the parameter
+     * @return a cookie {@Parameter}
+     */
+    Parameter createCookieParameter(ParserParameter parameter, DataType dataType)
+
 }
