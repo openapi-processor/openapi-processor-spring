@@ -29,8 +29,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 class QueryParameter extends ParameterBase {
 
     /**
-     * If the query parameter is mapped to a pojo object it should not have a {@code @RequestParam}
-     * annotation.
+     * controls if a parameter should have not have a {@code @RequestParam} annotation.
      */
     boolean withAnnotation () {
         // Map should be annotated
@@ -52,7 +51,7 @@ class QueryParameter extends ParameterBase {
     }
 
     /**
-     * If the query parameter is mapped to a pojo object it should not have any parameters.
+     * controls if a {@code @RequestParam} should have any parameters.
      */
     boolean withParameters () {
         // Map should not have parameters
