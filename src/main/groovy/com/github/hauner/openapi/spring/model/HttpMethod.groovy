@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,21 +45,6 @@ enum HttpMethod {
         values ().find {
             it.method == method
         }
-    }
-
-    @Deprecated // move to writer
-    String getClassName () {
-        method.capitalize () + "Mapping"
-    }
-
-    @Deprecated // move to writer
-    String getClassNameWithPackage () {
-        "org.springframework.web.bind.annotation.${className}"
-    }
-
-    @Deprecated // move to writer
-    String getMappingAnnotation () {
-        "@${className}"
     }
 
 }
