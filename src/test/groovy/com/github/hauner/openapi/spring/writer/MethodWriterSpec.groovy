@@ -22,27 +22,21 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
 import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
-import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
-import com.github.hauner.openapi.spring.model.datatypes.ListDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
-import com.github.hauner.openapi.spring.model.datatypes.SetDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
-import spock.lang.Unroll
 
+@Deprecated
 class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
     def writer = new MethodWriter (
@@ -55,165 +49,6 @@ class MethodWriterSpec extends Specification {
 
     private Endpoint createEndpoint (Map properties) {
         new Endpoint(properties).initEndpointResponses ()
-    }
-
-    void "writes parameter less method without response" () {
-        def endpoint = createEndpoint (path: '/ping', method: HttpMethod.GET, responses: [
-            '204': [new Response(responseType: new NoneDataType())]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getPing();
-"""
-    }
-
-    @Unroll
-    void "writes parameter less method with simple data type #type" () {
-        def endpoint = createEndpoint (path: "/$type", method: HttpMethod.GET, responses: [
-            '200': [new Response(contentType: contentType, responseType: responseType)]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        def rsp = endpoint.getFirstResponse ('200')
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    ${type.capitalize ()} get${type.capitalize ()}();
-"""
-
-        where:
-        type      | contentType               | responseType
-        'string'  | 'text/plain'              | new StringDataType ()
-        'integer' | 'application/vnd.integer' | new IntegerDataType ()
-        'long'    | 'application/vnd.long'    | new LongDataType ()
-        'float'   | 'application/vnd.float'   | new FloatDataType ()
-        'double'  | 'application/vnd.double'  | new DoubleDataType ()
-        'boolean' | 'application/vnd.boolean' | new BooleanDataType ()
-    }
-
-    void "writes parameter less method with inline object response type" () {
-        def endpoint = createEndpoint (path: '/inline', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json',
-                    responseType: new ObjectDataType (
-                        type: 'GetInlineResponse', properties: [
-                        foo1: new StringDataType (),
-                        foo2: new StringDataType ()
-                    ]))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        def rsp = endpoint.getFirstResponse ('200')
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    GetInlineResponse getInline();
-"""
-    }
-
-    void "writes method with Collection response type" () {
-        def endpoint = createEndpoint (path: '/collection', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json',
-                    responseType: new CollectionDataType (item: new StringDataType ()))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        def rsp = endpoint.getFirstResponse ('200')
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    Collection<String> getCollection();
-"""
-    }
-
-    void "writes method with List response type" () {
-        def endpoint = createEndpoint (path: '/list', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json',
-                    responseType: new ListDataType (item: new StringDataType ()))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        def rsp = endpoint.getFirstResponse ('200')
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    List<String> getList();
-"""
-    }
-
-    void "writes method with Set response type" () {
-        def endpoint = createEndpoint (path: '/set', method: HttpMethod.GET, responses: [
-            '200': [
-                new Response (contentType: 'application/json',
-                    responseType: new SetDataType (item: new StringDataType ()))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        def rsp = endpoint.getFirstResponse ('200')
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${rsp.contentType}"})
-    Set<String> getSet();
-"""
-    }
-
-    // todo core: check method writer calls parameter annotation writer
-
-    @Deprecated
-    void "writes simple (required) query parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType ())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestParam(name = "foo") String foo);
-"""
-    }
-
-    @Deprecated
-    void "writes simple (optional) query parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType ())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: false, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestParam(name = "foo", required = false) String foo);
-"""
     }
 
     void "writes simple (required) header parameter" () {
