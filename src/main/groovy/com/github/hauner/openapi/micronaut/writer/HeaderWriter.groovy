@@ -16,14 +16,14 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
-import com.github.hauner.openapi.core.writer.TargetWriter
+import com.github.hauner.openapi.core.writer.SimpleWriter
 
 /**
  * Writer for a simple header of the generated interfaces & classes.
  *
  * @author Martin Hauner
  */
-class HeaderWriter implements TargetWriter {
+class HeaderWriter implements SimpleWriter {
 
     static String HEADER = """\
 /*

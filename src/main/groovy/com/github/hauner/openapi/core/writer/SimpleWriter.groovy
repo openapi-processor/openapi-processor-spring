@@ -21,7 +21,7 @@ package com.github.hauner.openapi.core.writer
  *
  * @author Martin Hauner
  */
-interface TargetWriter {
+interface SimpleWriter {
 
     void write (Writer target)
 
