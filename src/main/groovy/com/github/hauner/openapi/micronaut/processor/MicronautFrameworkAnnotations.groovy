@@ -18,6 +18,7 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.HttpMethod
@@ -46,7 +47,8 @@ class MicronautFrameworkAnnotations implements FrameworkAnnotations {
 
     def PARAMETER_ANNOTATIONS = [
         query : new FrameworkAnnotation (name: 'QueryValue', pkg: ANNOTATION_PKG),
-        header: new FrameworkAnnotation (name: 'Header', pkg: ANNOTATION_PKG)
+        header: new FrameworkAnnotation (name: 'Header', pkg: ANNOTATION_PKG),
+        cookie: new FrameworkAnnotation (name: 'CookieValue', pkg: ANNOTATION_PKG)
     ]
 
     def UNKNOWN_ANNOTATION = new FrameworkAnnotation(name: 'Unknown', pkg: 'fix.me')
@@ -63,6 +65,8 @@ class MicronautFrameworkAnnotations implements FrameworkAnnotations {
                 return PARAMETER_ANNOTATIONS['query']
             case {it instanceof HeaderParameter}:
                 return PARAMETER_ANNOTATIONS['header']
+            case {it instanceof CookieParameter}:
+                return PARAMETER_ANNOTATIONS['cookie']
             default:
                 log.error ("unknown parameter type: ${parameter.class.name}")
                 return UNKNOWN_ANNOTATION

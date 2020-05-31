@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.Framework
+import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
@@ -41,6 +42,14 @@ class MicronautFramework implements Framework {
     @Override
     Parameter createHeaderParameter (ParserParameter parameter, DataType dataType) {
         new HeaderParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
+
+    @Override
+    Parameter createCookieParameter (ParserParameter parameter, DataType dataType) {
+        new CookieParameter (
             name: parameter.name,
             required: parameter.required,
             dataType: dataType)

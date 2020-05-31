@@ -16,35 +16,35 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import spock.lang.Specification
 
-class HeaderParameterAnnotationWriterSpec extends Specification {
+class CookieParameterAnnotationWriterSpec extends Specification {
     def writer = new ParameterAnnotationWriter(annotations: new MicronautFrameworkAnnotations ())
     def target = new StringWriter()
 
-    void "write simple (required) header parameter" () {
-        def param = new HeaderParameter(name: 'foo', dataType: new StringDataType())
+    void "write simple (required) cookie parameter" () {
+        def param = new CookieParameter(name: 'foo', dataType: new StringDataType())
 
         when:
         writer.write (target, param)
 
         then:
-        target.toString () == '@Header(value = "foo")'
+        target.toString () == '@CookieValue(value = "foo")'
     }
 
-    void "write simple (optional, with default value) header parameter" () {
-        def param = new HeaderParameter(name: 'foo',
+    void "write simple (optional, with default value) cookie parameter" () {
+        def param = new CookieParameter(name: 'foo',
             dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
 
         when:
         writer.write (target, param)
 
         then:
-        target.toString () == '@Header(value = "foo", defaultValue = "bar")'
+        target.toString () == '@CookieValue(value = "foo", defaultValue = "bar")'
     }
 
 }

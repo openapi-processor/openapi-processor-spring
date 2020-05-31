@@ -50,42 +50,6 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
-    @Deprecated
-    void "writes simple (required) cookie parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new CookieParameter(name: 'foo', required: true, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@CookieValue(name = "foo") String foo);
-"""
-    }
-
-    @Deprecated
-    void "writes simple (optional) cookie parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new CookieParameter(name: 'foo', required: false, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@CookieValue(name = "foo", required = false) String foo);
-"""
-    }
-
     void "writes object query parameter without @RequestParam annotation" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
