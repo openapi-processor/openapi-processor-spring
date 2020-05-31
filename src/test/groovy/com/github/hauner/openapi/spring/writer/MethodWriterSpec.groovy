@@ -51,43 +51,6 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
-    @Deprecated
-    void "writes simple (required) header parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())
-            ]
-        ], parameters: [
-            new HeaderParameter(name: 'x-foo', required: true, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestHeader(name = "x-foo") String xFoo);
-"""
-    }
-
-    @Deprecated
-    void "writes simple (optional) header parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new HeaderParameter(name: 'x-foo', required: false, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestHeader(name = "x-foo", required = false) String xFoo);
-"""
-    }
-
     void "writes simple (required) cookie parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200': [new Response (responseType: new NoneDataType())]

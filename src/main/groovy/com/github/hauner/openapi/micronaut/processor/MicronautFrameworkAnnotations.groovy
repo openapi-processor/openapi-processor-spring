@@ -18,6 +18,7 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
@@ -60,6 +61,8 @@ class MicronautFrameworkAnnotations implements FrameworkAnnotations {
         switch (parameter) {
             case {it instanceof QueryParameter}:
                 return PARAMETER_ANNOTATIONS['query']
+            case {it instanceof HeaderParameter}:
+                return PARAMETER_ANNOTATIONS['header']
             default:
                 log.error ("unknown parameter type: ${parameter.class.name}")
                 return UNKNOWN_ANNOTATION
