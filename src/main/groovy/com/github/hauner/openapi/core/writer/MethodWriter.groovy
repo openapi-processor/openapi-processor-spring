@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.MappingAnnotationWriter as CoreMappingAnnotationWriter
@@ -23,6 +23,7 @@ import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.RequestBody
+import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.support.Identifier
 
 /**

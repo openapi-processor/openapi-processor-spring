@@ -22,7 +22,7 @@ import com.github.hauner.openapi.spring.support.ModelAsserts
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MappingAnnotationWriter
-import com.github.hauner.openapi.spring.writer.MethodWriter
+import com.github.hauner.openapi.core.writer.MethodWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 

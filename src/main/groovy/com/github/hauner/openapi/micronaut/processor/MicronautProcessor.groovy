@@ -29,7 +29,7 @@ import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
-import com.github.hauner.openapi.spring.writer.MethodWriter
+import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.spring.writer.StringEnumWriter
 import org.slf4j.LoggerFactory
 

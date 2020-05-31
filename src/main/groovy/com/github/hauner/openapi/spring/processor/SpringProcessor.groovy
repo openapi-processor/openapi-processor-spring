@@ -27,7 +27,7 @@ import com.github.hauner.openapi.spring.writer.DataTypeWriter
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MappingAnnotationWriter
-import com.github.hauner.openapi.spring.writer.MethodWriter
+import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.spring.writer.ParameterAnnotationWriter
 import com.github.hauner.openapi.spring.writer.StringEnumWriter
 import org.slf4j.LoggerFactory
