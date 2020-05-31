@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.core.model.Framework
+import com.github.hauner.openapi.core.framework.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter as ModelParameter
 import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.spring.converter.mapping.Mapping

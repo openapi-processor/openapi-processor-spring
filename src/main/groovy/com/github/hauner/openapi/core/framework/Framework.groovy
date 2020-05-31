@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.model
+package com.github.hauner.openapi.core.framework
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType

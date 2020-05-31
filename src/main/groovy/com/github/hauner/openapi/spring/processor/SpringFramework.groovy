@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.core.model.Framework
+import com.github.hauner.openapi.core.framework.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.micronaut.processor
 
-import com.github.hauner.openapi.core.model.Framework
+import com.github.hauner.openapi.core.framework.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
