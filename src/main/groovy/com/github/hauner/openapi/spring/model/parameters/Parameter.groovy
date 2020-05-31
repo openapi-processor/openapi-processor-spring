@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.model.parameters
 
 import com.github.hauner.openapi.core.model.parameters.Parameter as CoreParameter
+import com.github.hauner.openapi.core.model.parameters.ParameterConstraints
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 
 /**

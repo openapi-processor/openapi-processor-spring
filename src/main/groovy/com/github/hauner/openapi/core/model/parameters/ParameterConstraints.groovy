@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.parameters
+package com.github.hauner.openapi.core.model.parameters
 
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 
