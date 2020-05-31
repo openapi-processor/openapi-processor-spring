@@ -21,6 +21,7 @@ import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
+import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.HttpMethod
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
@@ -48,7 +49,8 @@ class SpringFrameworkAnnotations implements FrameworkAnnotations {
     def PARAMETER_ANNOTATIONS = [
         query : new FrameworkAnnotation (name: 'RequestParam', pkg: ANNOTATION_PKG),
         header: new FrameworkAnnotation (name: 'RequestHeader', pkg: ANNOTATION_PKG),
-        cookie: new FrameworkAnnotation (name: 'CookieValue', pkg: ANNOTATION_PKG)
+        cookie: new FrameworkAnnotation (name: 'CookieValue', pkg: ANNOTATION_PKG),
+        path  : new FrameworkAnnotation (name: 'PathVariable', pkg: ANNOTATION_PKG)
     ]
 
     def UNKNOWN_ANNOTATION = new FrameworkAnnotation(name: 'Unknown', pkg: 'fix.me')
@@ -67,6 +69,8 @@ class SpringFrameworkAnnotations implements FrameworkAnnotations {
                 return PARAMETER_ANNOTATIONS['header']
             case {it instanceof CookieParameter}:
                 return PARAMETER_ANNOTATIONS['cookie']
+            case {it instanceof PathParameter}:
+                return PARAMETER_ANNOTATIONS['path']
             default:
                 def pkg = parameter.annotationWithPackage
                     .substring (0, parameter.annotationWithPackage.lastIndexOf ('.'))

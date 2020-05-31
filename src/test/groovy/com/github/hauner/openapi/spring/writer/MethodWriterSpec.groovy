@@ -30,7 +30,6 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
@@ -50,6 +49,7 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
+    // spring
     void "writes object query parameter without @RequestParam annotation" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -72,6 +72,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // spring
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -93,6 +94,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes method name from path with valid java identifiers" () {
         def endpoint = createEndpoint (path: '/f_o-ooo/b_a-rrr', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -110,6 +112,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes method name from operation id with valid java identifiers" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, operationId: 'get-bar',
             responses: [
@@ -126,6 +129,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes method parameter with valid java identifiers" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -186,6 +190,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // spring/micronaut
     void "writes simple (optional) parameter with string default value" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -205,6 +210,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // spring/micronaut
     void "writes simple (optional) parameter with number default value" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]
@@ -224,6 +230,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes mapping annotation with multiple result content types" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
@@ -245,6 +252,7 @@ class MethodWriterSpec extends Specification {
 """)
     }
 
+    // core
     void "writes method with any response type when it has multiple result contents with default result type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
@@ -267,6 +275,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes method with any response type when it has multiple result contents with wrapped result type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
@@ -295,6 +304,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    // core
     void "writes method with wrapped void response type" () {
         def endpoint = createEndpoint (path: '/ping', method: HttpMethod.GET, responses: [
             '204': [new Response(responseType:

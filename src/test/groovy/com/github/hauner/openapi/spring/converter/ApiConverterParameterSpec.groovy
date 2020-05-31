@@ -102,8 +102,8 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.name == 'String'
-        param.annotation == '@PathVariable'
-        param.annotationWithPackage == 'org.springframework.web.bind.annotation.PathVariable'
+//        param.annotation == '@PathVariable'
+//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.PathVariable'
     }
 
     void "converts simple header parameter"() {

@@ -32,7 +32,6 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
-import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
@@ -213,7 +212,7 @@ class  ApiConverter {
             case 'query':
                 return framework.createQueryParameter (parameter, dataType)
             case 'path':
-                return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+                return framework.createPathParameter (parameter, dataType)
             case 'header':
                 return framework.createHeaderParameter (parameter, dataType)
             case 'cookie':
