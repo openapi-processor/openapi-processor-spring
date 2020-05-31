@@ -31,7 +31,6 @@ import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
-import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
@@ -42,6 +41,7 @@ import com.github.hauner.openapi.spring.parser.Path
 import com.github.hauner.openapi.spring.parser.RefResolver
 import com.github.hauner.openapi.spring.parser.Response
 import com.github.hauner.openapi.spring.parser.RequestBody
+import com.github.hauner.openapi.spring.parser.Schema
 import com.github.hauner.openapi.spring.processor.SpringFramework
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j
@@ -258,7 +258,27 @@ class  ApiConverter {
         }
 
         dataType.getObjectProperties ().collect {
-            new MultipartParameter (name: it.key, required: required, dataType: it.value)
+            def parameter = new Parameter () {
+
+                String getIn () {
+                    'multipart'
+                }
+
+                String getName () {
+                    it.key
+                }
+
+                Schema getSchema () {
+                    null
+                }
+
+                Boolean isRequired () {
+                    true
+                }
+
+            }
+
+            framework.createMultipartParameter (parameter, it.value)
         }
     }
 

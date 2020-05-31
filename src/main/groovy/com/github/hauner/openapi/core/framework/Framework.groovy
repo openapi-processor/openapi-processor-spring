@@ -61,4 +61,13 @@ interface Framework {
      */
     Parameter createPathParameter(ParserParameter parameter, DataType dataType)
 
+    /**
+     * create a model multipart parameter.
+     *
+     * @param parameter an OpenAPI multipart parameter
+     * @param DataType data type of the parameter
+     * @return a multipart {@Parameter}
+     */
+    Parameter createMultipartParameter(ParserParameter parameter, DataType dataType)
+
 }
