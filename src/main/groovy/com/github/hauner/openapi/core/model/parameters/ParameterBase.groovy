@@ -23,24 +23,6 @@ abstract class ParameterBase implements Parameter {
     boolean required
     DataType dataType
 
-    @Override
-    @Deprecated
-    String getAnnotationName () {
-        return null // dummy
-    }
-
-    @Override
-    @Deprecated
-    String getAnnotation () {
-        "@${annotationName}"
-    }
-
-    @Override
-    @Deprecated
-    String getAnnotationWithPackage () {
-        null // dummy
-    }
-
     /**
      * The imports required for the parameter data type.
      *

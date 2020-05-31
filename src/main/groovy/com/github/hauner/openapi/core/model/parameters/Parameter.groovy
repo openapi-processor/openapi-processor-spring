@@ -40,30 +40,6 @@ interface Parameter {
     DataType getDataType ()
 
     /**
-     * The plain name of the annotation for this parameter (ie. without the @).
-     *
-     * @return the name of the annotation
-     */
-    @Deprecated // => framework annotation
-    String getAnnotationName ()
-
-    /**
-     * The fully qualified class name of the annotation.
-     *
-     * @return the fully qualified class name of the annotation
-     */
-    @Deprecated // => framework annotation
-    String getAnnotationWithPackage ()
-
-    /**
-     * The full annotation name with a leading @.
-     *
-     * @return the full annotation name with a leading @
-     */
-    @Deprecated // => framework annotation
-    String getAnnotation ()
-
-    /**
      * The imports required for the parameter data type.
      *
      * @return the imports of the parameter type.
