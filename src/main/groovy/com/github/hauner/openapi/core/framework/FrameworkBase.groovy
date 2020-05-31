@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.framework
 
+import com.github.hauner.openapi.core.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.MultipartParameter
@@ -23,11 +24,12 @@ import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 
 class FrameworkBase implements Framework {
 
     @Override
-        Parameter createQueryParameter (com.github.hauner.openapi.spring.parser.Parameter parameter, DataType dataType) {
+        Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
         new QueryParameter (
             name: parameter.name,
             required: parameter.required,
@@ -35,7 +37,7 @@ class FrameworkBase implements Framework {
     }
 
     @Override
-    Parameter createHeaderParameter (com.github.hauner.openapi.spring.parser.Parameter parameter, DataType dataType) {
+    Parameter createHeaderParameter (ParserParameter parameter, DataType dataType) {
         new HeaderParameter (
             name: parameter.name,
             required: parameter.required,
@@ -43,7 +45,7 @@ class FrameworkBase implements Framework {
     }
 
     @Override
-    Parameter createCookieParameter (com.github.hauner.openapi.spring.parser.Parameter parameter, DataType dataType) {
+    Parameter createCookieParameter (ParserParameter parameter, DataType dataType) {
         new CookieParameter (
             name: parameter.name,
             required: parameter.required,
@@ -51,7 +53,7 @@ class FrameworkBase implements Framework {
     }
 
     @Override
-    Parameter createPathParameter (com.github.hauner.openapi.spring.parser.Parameter parameter, DataType dataType) {
+    Parameter createPathParameter (ParserParameter parameter, DataType dataType) {
         new PathParameter (
             name: parameter.name,
             required: parameter.required,
@@ -59,8 +61,16 @@ class FrameworkBase implements Framework {
     }
 
     @Override
-    Parameter createMultipartParameter (com.github.hauner.openapi.spring.parser.Parameter parameter, DataType dataType) {
+    Parameter createMultipartParameter (ParserParameter parameter, DataType dataType) {
         new MultipartParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
+
+    @Override
+    Parameter createAdditionalParameter (ParserParameter parameter, DataType dataType) {
+        new AdditionalParameter (
             name: parameter.name,
             required: parameter.required,
             dataType: dataType)

@@ -70,4 +70,13 @@ interface Framework {
      */
     Parameter createMultipartParameter(ParserParameter parameter, DataType dataType)
 
+    /**
+     * create a model additional parameter.
+     *
+     * @param parameter an OpenAPI additional parameter
+     * @param DataType data type of the parameter
+     * @return an additional {@Parameter}
+     */
+    Parameter createAdditionalParameter(ParserParameter parameter, DataType dataType)
+
 }
