@@ -31,7 +31,7 @@ import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
-import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification

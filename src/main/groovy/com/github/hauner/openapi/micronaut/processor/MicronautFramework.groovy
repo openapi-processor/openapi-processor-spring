@@ -18,7 +18,8 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 
@@ -31,7 +32,15 @@ class MicronautFramework implements Framework {
 
     @Override
     Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
-        new QueryParameter(
+        new QueryParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
+
+    @Override
+    Parameter createHeaderParameter (ParserParameter parameter, DataType dataType) {
+        new HeaderParameter (
             name: parameter.name,
             required: parameter.required,
             dataType: dataType)

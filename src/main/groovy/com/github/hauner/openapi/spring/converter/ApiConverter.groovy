@@ -32,7 +32,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
-import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse

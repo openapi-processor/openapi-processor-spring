@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
-import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
+import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType

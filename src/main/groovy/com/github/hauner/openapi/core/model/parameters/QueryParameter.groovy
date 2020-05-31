@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.micronaut.model.parameters
-
-import com.github.hauner.openapi.core.model.parameters.ParameterBase
+package com.github.hauner.openapi.core.model.parameters
 
 /**
  * OpenAPI query parameter.
  *
+ * extend {@code ParameterBase} to implement framework specific handling.
+ *
  * @author Martin Hauner
  */
 class QueryParameter extends ParameterBase {
-
 }

@@ -28,10 +28,19 @@ interface Framework {
     /**
      * create a model query parameter.
      *
-     * @param parameter an OpenAPI parameter
+     * @param parameter an OpenAPI query parameter
      * @param DataType data type of the parameter
      * @return a query {@Parameter}
      */
     Parameter createQueryParameter(ParserParameter parameter, DataType dataType)
+
+    /**
+     * create a model header parameter.
+     *
+     * @param parameter an OpenAPI header parameter
+     * @param DataType data type of the parameter
+     * @return a header {@Parameter}
+     */
+    Parameter createHeaderParameter(ParserParameter parameter, DataType dataType)
 
 }

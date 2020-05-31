@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.core.framework.Framework
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
@@ -37,4 +38,11 @@ class SpringFramework implements Framework {
             dataType: dataType)
     }
 
+    @Override
+    Parameter createHeaderParameter (ParserParameter parameter, DataType dataType) {
+        new HeaderParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
 }

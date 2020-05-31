@@ -18,7 +18,7 @@ package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 

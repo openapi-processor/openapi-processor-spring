@@ -18,9 +18,9 @@ package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.HttpMethod
-import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
 

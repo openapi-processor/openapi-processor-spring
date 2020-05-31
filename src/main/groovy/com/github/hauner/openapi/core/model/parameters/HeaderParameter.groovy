@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.parameters
-
-import com.github.hauner.openapi.core.model.parameters.ParameterBase
+package com.github.hauner.openapi.core.model.parameters
 
 /**
- * OpenAPI header parameter.
+ * default implementation of an header parameter.
+ *
+ * extend {@code ParameterBase} to implement framework specific handling.
  *
  * @author Martin Hauner
  */
 class HeaderParameter extends ParameterBase {
-
 }
