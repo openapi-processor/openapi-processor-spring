@@ -31,7 +31,6 @@ import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
-import com.github.hauner.openapi.spring.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
@@ -218,7 +217,7 @@ class  ApiConverter {
             case 'header':
                 return framework.createHeaderParameter (parameter, dataType)
             case 'cookie':
-                return new CookieParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+                return framework.createCookieParameter (parameter, dataType)
             default:
                 // should not reach this, the openapi parser ignores parameters with unknown type.
                 throw new UnknownParameterTypeException(parameter.name, parameter.in)

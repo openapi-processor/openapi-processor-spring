@@ -30,8 +30,7 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
@@ -51,6 +50,7 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
+    @Deprecated
     void "writes simple (required) cookie parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200': [new Response (responseType: new NoneDataType())]
@@ -68,6 +68,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    @Deprecated
     void "writes simple (optional) cookie parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType())]

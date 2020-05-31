@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.core.framework.Framework
+import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
@@ -45,4 +46,13 @@ class SpringFramework implements Framework {
             required: parameter.required,
             dataType: dataType)
     }
+
+    @Override
+    Parameter createCookieParameter (ParserParameter parameter, DataType dataType) {
+        new CookieParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
+
 }
