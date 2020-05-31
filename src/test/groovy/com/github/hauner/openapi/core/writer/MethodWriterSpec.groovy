@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.writer
 
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
 import com.github.hauner.openapi.core.support.TestMappingAnnotationWriter
 import com.github.hauner.openapi.core.support.TestParameterAnnotationWriter
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
@@ -135,11 +136,24 @@ class MethodWriterSpec extends Specification {
         new MappedCollectionDataType (type: 'Set', item: new StringDataType ())  | 'Set<String>'
     }
 
-    void "writes query parameter annotation" () {
+    void "writes parameter annotation" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType ())]
         ], parameters: [
-            new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
+            new ParameterBase () {
+                String getName () {
+                    "foo"
+                }
+
+                DataType getDataType () {
+                    new StringDataType ()
+                }
+
+                @Override
+                boolean isRequired () {
+                    true
+                }
+            }
         ])
 
         when:
@@ -148,15 +162,15 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @CoreMapping
-    void getFoo(@QueryParameter String foo);
+    void getFoo(@Parameter String foo);
 """
     }
 
-    void "does not write query parameter annotation if not wanted" () {
+    void "does not write parameter annotation if not wanted" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response (responseType: new NoneDataType ())]
         ], parameters: [
-            new QueryParameter () {
+            new ParameterBase () {
                 String getName () {
                     "foo"
                 }

@@ -23,7 +23,7 @@ class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
 
     @Override
     void write (Writer target, Parameter parameter) {
-        target.write ("@QueryParameter")
+        target.write ("@Parameter")
     }
 
 }
