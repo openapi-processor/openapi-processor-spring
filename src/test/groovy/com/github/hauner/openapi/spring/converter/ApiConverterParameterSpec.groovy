@@ -142,8 +142,8 @@ paths:
         param.name == 'x-foo'
         param.required
         param.dataType.name == 'String'
-        param.annotation == '@RequestHeader'
-        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestHeader'
+//        param.annotation == '@RequestHeader'
+//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestHeader'
     }
 
     void "converts simple cookie parameter"() {
