@@ -52,12 +52,6 @@ class MethodWriter {
         annotation.toString ()
     }
 
-    private String createParameterAnnotation (Parameter parameter) {
-        def annotation = new StringWriter ()
-        parameterAnnotationWriter.write (annotation, parameter)
-        annotation.toString ()
-    }
-
     private String createRequestBodyAnnotation (RequestBody requestBody) {
         String param = "${requestBody.annotation}"
 
@@ -113,6 +107,12 @@ class MethodWriter {
         }
 
         ps.join (', ')
+    }
+
+    private String createParameterAnnotation (Parameter parameter) {
+        def annotation = new StringWriter ()
+        parameterAnnotationWriter.write (annotation, parameter)
+        annotation.toString ()
     }
 
 }
