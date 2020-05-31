@@ -73,6 +73,7 @@ class SpringProcessor implements OpenApiProcessor {
                         apiOptions: options
                     ),
                     beanValidationFactory: beanValidationFactory,
+                    frameworkImports: new SpringFrameworkImports (),
                     apiOptions: options
                 ),
                 new DataTypeWriter(

@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.framework.FrameworkImports
 import com.github.hauner.openapi.core.writer.TargetWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.Endpoint
@@ -32,6 +33,7 @@ class InterfaceWriter {
     TargetWriter headerWriter
     MethodWriter methodWriter
     BeanValidationFactory beanValidationFactory
+    FrameworkImports frameworkImports
 
     void write (Writer target, Interface itf) {
         headerWriter.write (target)
@@ -59,7 +61,7 @@ class InterfaceWriter {
         Set<String> imports = []
 
         endpoints.each { ep ->
-            imports.add (ep.method.classNameWithPackage)
+            imports.add (frameworkImports.getMappingAnnotationImport (ep.method))
 
             ep.parameters.each { p ->
                 if (apiOptions.beanValidation) {
@@ -67,6 +69,7 @@ class InterfaceWriter {
                 }
 
                 if (p.withAnnotation()) {
+                    // todo move to FrameworkImports
                     imports.add (p.annotationWithPackage)
                 }
 
@@ -74,6 +77,7 @@ class InterfaceWriter {
             }
 
             ep.requestBodies.each { b ->
+                // todo move to FrameworkImports
                 imports.add (b.annotationWithPackage)
                 imports.addAll (b.imports)
                 if (apiOptions.beanValidation) {

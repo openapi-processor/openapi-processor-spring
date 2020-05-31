@@ -73,6 +73,7 @@ class MicronautProcessor implements OpenApiProcessor {
                         apiOptions: options
                     ),
                     beanValidationFactory: beanValidationFactory,
+                    frameworkImports: new MicronautFrameworkImports (),
                     apiOptions: options
                 ),
                 new DataTypeWriter(

@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.spring.processor.SpringFrameworkImports
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import com.github.hauner.openapi.spring.writer.InterfaceWriter
@@ -95,7 +96,8 @@ paths:
         api = new ApiConverter ().convert (openApi)
         def w = new InterfaceWriter (
             headerWriter: new HeaderWriter (),
-            methodWriter: new MethodWriter(mappingAnnotationWriter: new MappingAnnotationWriter()))
+            methodWriter: new MethodWriter(mappingAnnotationWriter: new MappingAnnotationWriter()),
+            frameworkImports: new SpringFrameworkImports())
         def writer = new StringWriter()
         w.write (writer, api.interfaces.get (0))
 
