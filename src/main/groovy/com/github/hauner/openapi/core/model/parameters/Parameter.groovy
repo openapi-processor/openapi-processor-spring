@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.model.parameters
 
+import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.parameters.ParameterConstraints
 
 /**
@@ -25,14 +26,26 @@ import com.github.hauner.openapi.spring.model.parameters.ParameterConstraints
  */
 interface Parameter {
 
-    String getName()
+    /**
+     * the parameter name.
+     *
+     * @return the parameter name.
+     */
+    String getName ()
+
+    /**
+     * the data type of the parameter.
+
+     * @return the data type of the parameter.
+     */
+    DataType getDataType ()
 
     /**
      * The plain name of the annotation for this parameter (ie. without the @).
      *
      * @return the name of the annotation
      */
-    @Deprecated
+    @Deprecated // => framework annotation
     String getAnnotationName ()
 
     /**
@@ -40,7 +53,7 @@ interface Parameter {
      *
      * @return the fully qualified class name of the annotation
      */
-    @Deprecated
+    @Deprecated // => framework annotation
     String getAnnotationWithPackage ()
 
     /**
@@ -48,7 +61,7 @@ interface Parameter {
      *
      * @return the full annotation name with a leading @
      */
-    @Deprecated
+    @Deprecated // => framework annotation
     String getAnnotation ()
 
     /**

@@ -24,13 +24,22 @@ abstract class ParameterBase implements Parameter {
     boolean required
     DataType dataType
 
-    /**
-     * The full annotation name with a leading @.
-     *
-     * @return the full annotation name with a leading @
-     */
+    @Override
+    @Deprecated
+    String getAnnotationName () {
+        return null // dummy
+    }
+
+    @Override
+    @Deprecated
     String getAnnotation () {
         "@${annotationName}"
+    }
+
+    @Override
+    @Deprecated
+    String getAnnotationWithPackage () {
+        null // dummy
     }
 
     /**
@@ -38,6 +47,7 @@ abstract class ParameterBase implements Parameter {
      *
      * @return the imports of the parameter type.
      */
+    @Override
     Set<String> getDataTypeImports () {
         dataType.imports
     }
@@ -47,6 +57,7 @@ abstract class ParameterBase implements Parameter {
      *
      * @return the constraint details or null if the parameter has no constraints
      */
+    @Override
     ParameterConstraints getConstraints() {
         new ParameterConstraints(constraints: dataType.constraints)
     }
@@ -56,6 +67,7 @@ abstract class ParameterBase implements Parameter {
      *
      * @return true if required, false otherwise
      */
+    @Override
     boolean isRequired () {
         required
     }
