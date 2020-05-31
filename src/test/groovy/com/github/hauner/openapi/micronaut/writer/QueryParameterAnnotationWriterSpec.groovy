@@ -28,7 +28,6 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
     void "write simple (required, no default value) query parameter" () {
         def param = new QueryParameter(name: 'foo',
-            required: true, // ignored
             dataType: new StringDataType())
 
         when:
@@ -40,7 +39,6 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
     void "write simple (optional, with default value) query parameter" () {
         def param = new QueryParameter(name: 'foo',
-            required: true, // ignored
             dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
 
         when:
