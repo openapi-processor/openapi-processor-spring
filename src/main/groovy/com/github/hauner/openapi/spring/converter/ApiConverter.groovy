@@ -32,7 +32,6 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.MultipartParameter
 import com.github.hauner.openapi.spring.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
@@ -56,7 +55,7 @@ import groovy.util.logging.Slf4j
  * @author Martin Hauner
  */
 @Slf4j
-class ApiConverter {
+class  ApiConverter {
     public static final String MULTIPART = "multipart/form-data"
     public static final String INTERFACE_DEFAULT_NAME = ''
 
@@ -217,7 +216,7 @@ class ApiConverter {
             case 'path':
                 return new PathParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             case 'header':
-                return new HeaderParameter (name: parameter.name, required: parameter.required, dataType: dataType)
+                return framework.createHeaderParameter (parameter, dataType)
             case 'cookie':
                 return new CookieParameter (name: parameter.name, required: parameter.required, dataType: dataType)
             default:
