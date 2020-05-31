@@ -16,11 +16,8 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.core.framework.Framework
-import com.github.hauner.openapi.core.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
+import com.github.hauner.openapi.core.framework.FrameworkBase
 import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
@@ -30,35 +27,11 @@ import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
  *
  * @author Martin Hauner
  */
-class SpringFramework implements Framework {
+class SpringFramework extends FrameworkBase {
 
     @Override
     Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
         new QueryParameter (
-            name: parameter.name,
-            required: parameter.required,
-            dataType: dataType)
-    }
-
-    @Override
-    Parameter createHeaderParameter (ParserParameter parameter, DataType dataType) {
-        new HeaderParameter (
-            name: parameter.name,
-            required: parameter.required,
-            dataType: dataType)
-    }
-
-    @Override
-    Parameter createCookieParameter (ParserParameter parameter, DataType dataType) {
-        new CookieParameter (
-            name: parameter.name,
-            required: parameter.required,
-            dataType: dataType)
-    }
-
-    @Override
-    Parameter createPathParameter (ParserParameter parameter, DataType dataType) {
-        new PathParameter (
             name: parameter.name,
             required: parameter.required,
             dataType: dataType)
