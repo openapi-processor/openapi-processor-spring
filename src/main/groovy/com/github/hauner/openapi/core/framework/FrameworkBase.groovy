@@ -26,6 +26,13 @@ import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.Parameter as ParserParameter
 
+/**
+ * default implementation of {@link Framework}.
+ *
+ * extend and override where necessary.
+ *
+ * @author Martin Hauner
+ */
 class FrameworkBase implements Framework {
 
     @Override
