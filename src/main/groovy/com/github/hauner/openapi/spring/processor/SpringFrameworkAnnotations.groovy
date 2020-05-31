@@ -20,6 +20,7 @@ import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.spring.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
 
@@ -44,7 +45,8 @@ class SpringFrameworkAnnotations implements FrameworkAnnotations {
     ]
 
     def PARAMETER_ANNOTATIONS = [
-        query: new FrameworkAnnotation (name: 'RequestParam', pkg: ANNOTATION_PKG)
+        query : new FrameworkAnnotation (name: 'RequestParam', pkg: ANNOTATION_PKG),
+        header: new FrameworkAnnotation (name: 'RequestHeader', pkg: ANNOTATION_PKG)
     ]
 
     def UNKNOWN_ANNOTATION = new FrameworkAnnotation(name: 'Unknown', pkg: 'fix.me')
@@ -59,6 +61,8 @@ class SpringFrameworkAnnotations implements FrameworkAnnotations {
         switch (parameter) {
             case {it instanceof QueryParameter}:
                 return PARAMETER_ANNOTATIONS['query']
+            case {it instanceof HeaderParameter}:
+                return PARAMETER_ANNOTATIONS['header']
             default:
                 def pkg = parameter.annotationWithPackage
                     .substring (0, parameter.annotationWithPackage.lastIndexOf ('.'))
