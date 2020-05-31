@@ -30,7 +30,6 @@ import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
 import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.parser.OpenApi
@@ -233,7 +232,27 @@ class  ApiConverter {
             genericTypes: tt.genericNames
         )
 
-        new AdditionalParameter (name: mapping.parameterName, required: true, dataType: addType)
+        def parameter = new Parameter () {
+
+            String getIn () {
+                'add'
+            }
+
+            String getName () {
+                mapping.parameterName
+            }
+
+            Schema getSchema () {
+                null
+            }
+
+            Boolean isRequired () {
+                true
+            }
+
+        }
+
+        framework.createAdditionalParameter (parameter, addType)
     }
 
     private ModelRequestBody createRequestBody (String contentType, SchemaInfo info, boolean required, DataTypes dataTypes) {
