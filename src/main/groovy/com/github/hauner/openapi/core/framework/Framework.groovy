@@ -52,4 +52,13 @@ interface Framework {
      */
     Parameter createCookieParameter(ParserParameter parameter, DataType dataType)
 
+    /**
+     * create a model path parameter.
+     *
+     * @param parameter an OpenAPI path parameter
+     * @param DataType data type of the parameter
+     * @return a path {@Parameter}
+     */
+    Parameter createPathParameter(ParserParameter parameter, DataType dataType)
+
 }
