@@ -65,7 +65,7 @@ options:
   package-name: generated
 
 map:  
-  result: org.springframework.http.ResponseEntity  
+  result: io.micronaut.http.HttpResponse  
     """
 
     String name
