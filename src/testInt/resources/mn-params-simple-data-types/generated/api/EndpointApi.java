@@ -14,7 +14,7 @@ public interface EndpointApi {
     void getEndpoint(@QueryValue(value = "foo") String foo);
 
     @Get(uri = "/endpoint-optional")
-    void getEndpointDefault(
+    void getEndpointOptional(
             @QueryValue(value = "foo", defaultValue = "bar") String foo);
 
 }
