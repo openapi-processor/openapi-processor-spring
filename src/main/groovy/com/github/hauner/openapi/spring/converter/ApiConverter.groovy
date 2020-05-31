@@ -32,15 +32,15 @@ import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.Response as ModelResponse
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.MediaType
-import com.github.hauner.openapi.spring.parser.Operation
-import com.github.hauner.openapi.spring.parser.Parameter
-import com.github.hauner.openapi.spring.parser.Path
-import com.github.hauner.openapi.spring.parser.RefResolver
-import com.github.hauner.openapi.spring.parser.Response
-import com.github.hauner.openapi.spring.parser.RequestBody
-import com.github.hauner.openapi.spring.parser.Schema
+import com.github.hauner.openapi.core.parser.OpenApi
+import com.github.hauner.openapi.core.parser.MediaType
+import com.github.hauner.openapi.core.parser.Operation
+import com.github.hauner.openapi.core.parser.Parameter
+import com.github.hauner.openapi.core.parser.Path
+import com.github.hauner.openapi.core.parser.RefResolver
+import com.github.hauner.openapi.core.parser.Response
+import com.github.hauner.openapi.core.parser.RequestBody
+import com.github.hauner.openapi.core.parser.Schema
 import com.github.hauner.openapi.spring.processor.SpringFramework
 import com.github.hauner.openapi.support.Identifier
 import groovy.util.logging.Slf4j

@@ -19,8 +19,8 @@ package com.github.hauner.openapi.spring.converter
 import com.github.hauner.openapi.spring.model.Api
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.parser.RefResolver
-import com.github.hauner.openapi.spring.parser.Schema
+import com.github.hauner.openapi.core.parser.RefResolver
+import com.github.hauner.openapi.core.parser.Schema
 import com.github.hauner.openapi.spring.support.TestSchema
 
 import spock.lang.Specification

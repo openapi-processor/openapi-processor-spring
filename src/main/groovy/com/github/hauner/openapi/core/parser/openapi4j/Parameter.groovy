@@ -14,27 +14,43 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.core.parser.openapi4j
 
-import com.github.hauner.openapi.core.framework.FrameworkBase
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
+import com.github.hauner.openapi.core.parser.Schema as ParserSchema
+import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 
 /**
- * Spring model factory.
+ * openapi4j Parameter abstraction.
  *
  * @author Martin Hauner
  */
-class SpringFramework extends FrameworkBase {
+class Parameter implements ParserParameter {
+
+    private O4jParameter parameter
+
+    Parameter (O4jParameter parameter) {
+        this.parameter = parameter
+    }
 
     @Override
-    Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
-        new QueryParameter (
-            name: parameter.name,
-            required: parameter.required,
-            dataType: dataType)
+    String getIn () {
+        parameter.in
+    }
+
+    @Override
+    String getName () {
+        parameter.name
+    }
+
+    @Override
+    ParserSchema getSchema () {
+        new Schema (parameter.schema)
+    }
+
+    @Override
+    Boolean isRequired () {
+        parameter.required != null ? parameter.required : false
     }
 
 }

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.processor
 
-import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.core.parser.ParserType
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import org.junit.Test

@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
-import com.github.hauner.openapi.spring.parser.RefResolver as ParserRefResolver
-import com.github.hauner.openapi.spring.parser.Schema
+import com.github.hauner.openapi.core.parser.RefResolver as ParserRefResolver
+import com.github.hauner.openapi.core.parser.Schema
 
 /**
  * Helper for {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}. Holds an OpenAPI
@@ -257,7 +257,7 @@ class SchemaInfo implements MappingSchema {
     boolean isEmpty () {
         !schema
     }
-    
+
     boolean isEnum () {
         schema.enum != null
     }

@@ -19,8 +19,8 @@ package com.github.hauner.openapi.spring.processor
 import com.github.hauner.openapi.api.OpenApiProcessor
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.Parser
+import com.github.hauner.openapi.core.parser.OpenApi
+import com.github.hauner.openapi.core.parser.Parser
 import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter

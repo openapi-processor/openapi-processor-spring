@@ -16,8 +16,8 @@
 
 package com.github.hauner.openapi.spring.support
 
-import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.core.parser.OpenApi
+import com.github.hauner.openapi.core.parser.ParserType
 import com.github.hauner.openapi.spring.support.parser.OpenApi4jParser
 import com.github.hauner.openapi.spring.support.parser.SwaggerParser
 

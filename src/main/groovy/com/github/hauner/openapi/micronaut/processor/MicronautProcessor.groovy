@@ -21,8 +21,8 @@ import com.github.hauner.openapi.micronaut.writer.MappingAnnotationWriter
 import com.github.hauner.openapi.micronaut.writer.ParameterAnnotationWriter
 import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.Parser
+import com.github.hauner.openapi.core.parser.OpenApi
+import com.github.hauner.openapi.core.parser.Parser
 import com.github.hauner.openapi.spring.processor.MappingConverter
 import com.github.hauner.openapi.spring.processor.MappingReader
 import com.github.hauner.openapi.spring.writer.ApiWriter

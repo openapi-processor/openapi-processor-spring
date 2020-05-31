@@ -16,8 +16,8 @@
 
 package com.github.hauner.openapi.spring.parser.swagger
 
-import com.github.hauner.openapi.spring.parser.ParserType
-import com.github.hauner.openapi.spring.parser.Schema
+import com.github.hauner.openapi.core.parser.ParserType
+import com.github.hauner.openapi.core.parser.Schema
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse

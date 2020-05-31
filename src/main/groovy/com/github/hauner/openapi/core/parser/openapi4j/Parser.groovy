@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support.parser
+package com.github.hauner.openapi.core.parser.openapi4j
 
 import com.github.hauner.openapi.core.parser.OpenApi as ParserOpenApi
-import com.github.hauner.openapi.core.parser.openapi4j.OpenApi
-import com.github.hauner.openapi.core.parser.openapi4j.Parser
-import com.github.hauner.openapi.spring.support.memory.Memory
 import org.openapi4j.core.validation.ValidationResults
 import org.openapi4j.parser.OpenApi3Parser
 import org.openapi4j.parser.model.v3.OpenApi3
@@ -30,19 +27,25 @@ import org.openapi4j.parser.validation.v3.OpenApi3Validator
  *
  * @author Martin Hauner
  */
-class OpenApi4jParser extends Parser {
+class Parser {
 
-    ParserOpenApi parseYaml (String apiYaml) {
-        Memory.add ('openapi.yaml', apiYaml)
+    ParserOpenApi parse (String apiPath) {
+        if (!hasScheme (apiPath)) {
+            apiPath = "file://${apiPath}"
+        }
 
         OpenApi3 api = new OpenApi3Parser ()
-            .parse (new URL('memory:openapi.yaml'), true)
+            .parse (new URL (apiPath), true)
 
         ValidationResults results = OpenApi3Validator
             .instance ()
             .validate (api)
 
         new OpenApi (api, results)
+    }
+
+    boolean hasScheme (String path) {
+        path.indexOf ("://") > -1
     }
 
 }

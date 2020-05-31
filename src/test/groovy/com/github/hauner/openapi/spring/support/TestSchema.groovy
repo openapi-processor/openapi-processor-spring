@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.support
 
-import com.github.hauner.openapi.spring.parser.Schema
+import com.github.hauner.openapi.core.parser.Schema
 
 /**
  * simple Schema implementation for testing

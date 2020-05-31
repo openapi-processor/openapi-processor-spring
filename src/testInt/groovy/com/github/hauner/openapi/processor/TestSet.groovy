@@ -18,7 +18,7 @@ package com.github.hauner.openapi.processor
 
 import com.github.hauner.openapi.api.OpenApiProcessor
 import com.github.hauner.openapi.micronaut.processor.MicronautProcessor
-import com.github.hauner.openapi.spring.parser.ParserType
+import com.github.hauner.openapi.core.parser.ParserType
 import com.github.hauner.openapi.spring.processor.SpringProcessor
 
 class TestSet {

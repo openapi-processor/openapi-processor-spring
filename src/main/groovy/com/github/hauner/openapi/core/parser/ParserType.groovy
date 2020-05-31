@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support.parser
-
-import com.github.hauner.openapi.core.parser.OpenApi as ParserOpenApi
-import com.github.hauner.openapi.core.parser.swagger.OpenApi
-import com.github.hauner.openapi.core.parser.swagger.Parser
-import io.swagger.v3.parser.OpenAPIV3Parser
+package com.github.hauner.openapi.core.parser
 
 /**
- * openapi4j parser.
+ * Parser types support by the {@code Parser} abstraction.
  *
  * @author Martin Hauner
  */
-class SwaggerParser extends Parser {
-
-    ParserOpenApi parseYaml (String apiYaml) {
-        def result = new OpenAPIV3Parser ()
-            .readContents (apiYaml)
-
-        return new OpenApi (result)
-    }
-
+enum ParserType {
+    SWAGGER,
+    OPENAPI4J
 }
