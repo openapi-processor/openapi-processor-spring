@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
+import com.github.hauner.openapi.core.model.datatypes.LongDataType
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
@@ -27,7 +28,8 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required, no default value) query parameter" () {
-        def param = new QueryParameter(name: 'foo',
+        def param = new QueryParameter(
+            name: 'foo',
             dataType: new StringDataType())
 
         when:
@@ -38,7 +40,8 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional, with default value) query parameter" () {
-        def param = new QueryParameter(name: 'foo',
+        def param = new QueryParameter(
+            name: 'foo',
             dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
 
         when:
@@ -46,6 +49,32 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
         then:
         target.toString () == '@QueryValue(value = "foo", defaultValue = "bar")'
+    }
+
+    void "writes simple (optional) query parameter with quoted string default value" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            required: false,
+            dataType: new StringDataType(constraints: new DataTypeConstraints (defaultValue: 'bar')))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == '@QueryValue(value = "foo", defaultValue = "bar")'
+    }
+
+    void "writes simple (optional) query parameter with quoted number default value" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            required: false,
+            dataType: new LongDataType (constraints: new DataTypeConstraints (defaultValue: 5)))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == '@QueryValue(value = "foo", defaultValue = "5")'
     }
 
 }

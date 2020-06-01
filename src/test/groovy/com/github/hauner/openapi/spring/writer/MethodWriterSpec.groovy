@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.test.EmptyResponse
 import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
@@ -23,8 +24,6 @@ import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.Response
 import com.github.hauner.openapi.core.model.datatypes.CollectionDataType
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.LongDataType
 import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
@@ -72,10 +71,10 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    // spring
+    // spring => core?
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
+            '204': [new EmptyResponse ()]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new MappedMapDataType (
                 type: 'Map',
@@ -134,46 +133,6 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
     void postFoo(@RequestBody(required = false) FooRequestBody body);
-"""
-    }
-
-    // spring/micronaut
-    void "writes simple (optional) parameter with string default value" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: false,
-                dataType: new StringDataType(
-                    constraints: new DataTypeConstraints (defaultValue: 'bar')))
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
-"""
-    }
-
-    // spring/micronaut
-    void "writes simple (optional) parameter with number default value" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: false,
-                dataType: new LongDataType (
-                    constraints: new DataTypeConstraints (defaultValue: 5)))
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestParam(name = "foo", required = false, defaultValue = "5") Long foo);
 """
     }
 

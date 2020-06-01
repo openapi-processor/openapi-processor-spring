@@ -16,7 +16,11 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.model.HttpMethod
+import com.github.hauner.openapi.core.model.Response
 import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
+import com.github.hauner.openapi.core.model.datatypes.LongDataType
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
@@ -27,7 +31,8 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required) query parameter" () {
-        def param = new QueryParameter(name: 'foo',
+        def param = new QueryParameter(
+            name: 'foo',
             required: true,
             dataType: new StringDataType())
 
@@ -39,7 +44,8 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional) query parameter" () {
-        def param = new QueryParameter(name: 'foo',
+        def param = new QueryParameter(
+            name: 'foo',
             required: false,
             dataType: new StringDataType())
 
@@ -51,7 +57,8 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional with default) query parameter" () {
-        def param = new QueryParameter(name: 'foo',
+        def param = new QueryParameter(
+            name: 'foo',
             required: false,
             dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
 
@@ -60,6 +67,32 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
         then:
         target.toString () == '@RequestParam(name = "foo", required = false, defaultValue = "bar")'
+    }
+
+    void "writes simple (optional) query parameter with quoted string default value" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            required: false,
+            dataType: new StringDataType(constraints: new DataTypeConstraints (defaultValue: 'bar')))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == '@RequestParam(name = "foo", required = false, defaultValue = "bar")'
+    }
+
+    void "writes simple (optional) query parameter with quoted number default value" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            required: false,
+            dataType: new LongDataType (constraints: new DataTypeConstraints (defaultValue: 5)))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == '@RequestParam(name = "foo", required = false, defaultValue = "5")'
     }
 
 }
