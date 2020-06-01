@@ -28,6 +28,7 @@ class HeaderWriterSpec extends Specification {
         headerWriter.write (target)
 
         then:
-        target.toString () == com.github.hauner.openapi.spring.writer.HeaderWriter.HEADER
+        target.toString () == HeaderWriter.HEADER
     }
+
 }
