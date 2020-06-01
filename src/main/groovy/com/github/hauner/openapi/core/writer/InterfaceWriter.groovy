@@ -75,11 +75,10 @@ class InterfaceWriter {
             }
 
             ep.requestBodies.each { b ->
-                // todo move to FrameworkImports
-                imports.add (b.annotationWithPackage)
-                imports.addAll (b.imports)
+                imports.add (annotations.getAnnotation (b).fullyQualifiedName)
+                imports.addAll (b.dataTypeImports)
                 if (apiOptions.beanValidation) {
-                    imports.addAll (beanValidationFactory.collectImports (b.requestBodyType))
+                    imports.addAll (beanValidationFactory.collectImports (b.dataType))
                 }
             }
 

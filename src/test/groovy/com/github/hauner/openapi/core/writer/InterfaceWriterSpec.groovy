@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
-import com.github.hauner.openapi.core.writer.InterfaceWriter
-import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.framework.FrameworkAnnotation
+import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.EndpointResponse
 import com.github.hauner.openapi.core.model.HttpMethod
@@ -30,25 +30,26 @@ import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
+import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import com.github.hauner.openapi.core.test.EmptyResponse
+import com.github.hauner.openapi.spring.writer.HeaderWriter
 import spock.lang.Specification
 
 import java.util.stream.Collectors
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
 
-@Deprecated
 class InterfaceWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
     def methodWriter = Stub MethodWriter
+    def annotations = Stub (FrameworkAnnotations)
     def apiOptions = new ApiOptions()
 
     def writer = new InterfaceWriter(
         headerWriter: headerWriter,
         methodWriter: methodWriter,
-        annotations: new SpringFrameworkAnnotations(),
+        annotations: annotations,
         apiOptions: apiOptions)
     def target = new StringWriter ()
 
@@ -77,9 +78,11 @@ package $pkg;
 """)
     }
 
-    void "writes GetMapping import" () {
+    void "writes mapping import" () {
+        annotations.getAnnotation (_) >> new FrameworkAnnotation(name: 'Mapping', pkg: 'annotation')
+
         def apiItf = new Interface (name: 'name', endpoints: [
-            new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
+            new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [
                 '200': [new EmptyResponse()]])
         ])
 
@@ -89,11 +92,17 @@ package $pkg;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.web.bind.annotation.GetMapping;
+import annotation.Mapping;
 """)
     }
 
     void "writes mapping imports" () {
+        annotations.getAnnotation (_) >>> [
+            new FrameworkAnnotation(name: 'MappingA', pkg: 'annotation'),
+            new FrameworkAnnotation(name: 'MappingB', pkg: 'annotation'),
+            new FrameworkAnnotation(name: 'MappingC', pkg: 'annotation')
+        ]
+
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
             new Endpoint(path: 'path', method: HttpMethod.PUT, responses: ['200': [new EmptyResponse()]]),
@@ -106,24 +115,24 @@ import org.springframework.web.bind.annotation.GetMapping;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.web.bind.annotation.GetMapping;
+import annotation.MappingA;
 """)
         result.contains("""\
-import org.springframework.web.bind.annotation.PutMapping;
+import annotation.MappingB;
 """)
         result.contains("""\
-import org.springframework.web.bind.annotation.PostMapping;
+import annotation.MappingC;
 """)
     }
 
-    void "writes result data type import" () {
+    void "writes result wrapper data type import" () {
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: [
                 '200': [
                     new Response (responseType:
                         new ResultDataType (
-                            type: 'ResponseEntity',
-                            pkg: 'org.springframework.http',
+                            type: 'ResultWrapper',
+                            pkg: 'http',
                             dataType: new NoneDataType ()
                         ))
                 ]]).initEndpointResponses ()
@@ -135,11 +144,13 @@ import org.springframework.web.bind.annotation.PostMapping;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.http.ResponseEntity;
+http.ResultWrapper;
 """)
     }
 
-    void "writes @RequestParam import" () {
+    void "writes parameter annotation import" () {
+        annotations.getAnnotation (_) >> new FrameworkAnnotation(name: 'Parameter', pkg: 'annotation')
+
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]],
                 parameters: [
@@ -153,20 +164,22 @@ import org.springframework.http.ResponseEntity;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.web.bind.annotation.RequestParam;
+import annotation.Parameter;
 """)
     }
 
-    void "does not write @RequestParam annotation import of parameter that does not want the annotation" () {
+    void "does not write parameter annotation import of a parameter that does not want the annotation" () {
         def endpoint = new Endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200': [new Response (contentType: 'application/json', responseType: new NoneDataType())]
         ], parameters: [
-            new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
-                type: 'Foo', properties: [
-                    foo1: new StringDataType (),
-                    foo2: new StringDataType ()
-                ]
-            ))
+            new ParameterBase () {
+                { name = 'foo'; dataType = new StringDataType() }
+
+                @Override
+                boolean withAnnotation () {
+                    false
+                }
+            }
         ])
 
         def apiItf = new Interface (name: 'name', endpoints: [endpoint])
@@ -177,7 +190,7 @@ import org.springframework.web.bind.annotation.RequestParam;
         then:
         def result = extractImports (target.toString ())
         ! result.contains("""\
-import org.springframework.web.bind.annotation.RequestParam;
+import annotation.Parameter;
 """)
     }
 
@@ -205,12 +218,15 @@ import model.Foo;
 """)
     }
 
-    void "writes @RequestBody import" () {
+    void "writes request body annotation import" () {
+        annotations.getAnnotation (_) >> new FrameworkAnnotation(name: 'Body', pkg: 'annotation')
+
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: '/foo', method: HttpMethod.GET, responses: [
                 '200': [new EmptyResponse()]
             ], requestBodies: [
                 new RequestBody (
+                    name: 'body',
                     contentType: 'plain/text',
                     dataType: new StringDataType (),
                     required: true
@@ -224,7 +240,7 @@ import model.Foo;
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.web.bind.annotation.RequestBody;
+import annotation.Body;
 """)
     }
 
@@ -276,7 +292,6 @@ import ${pkg}.${type};
 """)
     }
 
-    //@Ignore
     void "writes multiple response model import"() {
         def pkg = 'model.package'
         def type = 'Model'
@@ -311,6 +326,12 @@ import ${pkg2}.${type2};
     }
 
     void "sorts imports as strings"() {
+        annotations.getAnnotation (_) >>> [
+            new FrameworkAnnotation(name: 'MappingC', pkg: 'annotation'),
+            new FrameworkAnnotation(name: 'MappingB', pkg: 'annotation'),
+            new FrameworkAnnotation(name: 'MappingA', pkg: 'annotation')
+        ]
+
         def apiItf = new Interface (name: 'name', endpoints: [
             new Endpoint(path: 'path', method: HttpMethod.GET, responses: ['200': [new EmptyResponse()]]),
             new Endpoint(path: 'path', method: HttpMethod.PUT, responses: ['200': [new EmptyResponse()]]),
@@ -323,9 +344,9 @@ import ${pkg2}.${type2};
         then:
         def result = extractImports (target.toString ())
         result.contains("""\
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import annotation.MappingA;
+import annotation.MappingB;
+import annotation.MappingC;
 """)
     }
 
@@ -392,7 +413,7 @@ public interface NameApi {
 
     String extractInterfaceBlock (String source) {
         source.readLines ().stream ()
-            .filter {it ==~ /public interface (.+?) \{/ || it ==~ /\}/}
+            .filter {it ==~ /public interface (.+?) \{/ || it ==~ /}/}
             .collect (Collectors.toList ())
             .join ('\n') + '\n'
     }
@@ -400,6 +421,7 @@ public interface NameApi {
     String extractInterfaceBody (String source) {
         source
             .replaceFirst (/(?s)(.*?)interface (.+?) \{\n/, '')
-            .replaceFirst (/(?s)\}\n/, '')
+            .replaceFirst (/(?s)}\n/, '')
     }
+
 }
