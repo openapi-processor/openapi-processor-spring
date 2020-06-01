@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.support
+package com.github.hauner.openapi.core.helper
 
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter
+import com.github.hauner.openapi.core.writer.MappingAnnotationWriter
+import com.github.hauner.openapi.spring.model.Endpoint
+import com.github.hauner.openapi.spring.model.EndpointResponse
 
-class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
+class TestMappingAnnotationWriter implements MappingAnnotationWriter {
 
     @Override
-    void write (Writer target, Parameter parameter) {
-        target.write ("@Parameter")
+    void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
+        target.write ("@CoreMapping")
     }
 
 }

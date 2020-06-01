@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.support
+package com.github.hauner.openapi.core.support
 
+import com.github.hauner.openapi.support.Identifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
