@@ -26,7 +26,6 @@ import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 
-@Deprecated
 class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
     def writer = new MethodWriter (
@@ -41,7 +40,6 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
-    // spring => core?
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new EmptyResponse ()]
