@@ -19,6 +19,9 @@ package com.github.hauner.openapi.core.model.datatypes
 /**
  * OpenAPI schema mapped to a map java type.
  *
+ * only used as marker for {@link com.github.hauner.openapi.core.model.parameters.Parameter}
+ * {@code withAnnotation()}
+ *
  * @author Martin Hauner
  */
 class MappedMapDataType extends MappedDataType {
