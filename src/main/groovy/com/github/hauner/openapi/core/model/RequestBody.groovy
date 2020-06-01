@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.core.model
 
-import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.core.model.parameters.ParameterBase
 
 /**
@@ -27,30 +26,5 @@ import com.github.hauner.openapi.core.model.parameters.ParameterBase
 class RequestBody extends ParameterBase {
 
     String contentType
-
-    @Deprecated // => dataType
-    DataType getRequestBodyType() {
-        dataType
-    }
-
-    @Deprecated // use getDataTypeImport
-    Set<String> getImports () {
-        dataTypeImports
-    }
-
-    @Deprecated
-    String getAnnotationName () {
-        "RequestBody"
-    }
-
-    @Deprecated
-    String getAnnotationWithPackage () {
-        "org.springframework.web.bind.annotation.${annotationName}"
-    }
-
-    @Deprecated
-    String getAnnotation () {
-        "@${annotationName}"
-    }
 
 }
