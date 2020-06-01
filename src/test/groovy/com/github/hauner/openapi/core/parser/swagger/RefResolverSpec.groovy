@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.parser.swagger
+package com.github.hauner.openapi.core.parser.swagger
 
 import com.github.hauner.openapi.core.parser.ParserType
 import com.github.hauner.openapi.core.parser.Schema
