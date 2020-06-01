@@ -113,7 +113,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    // core
+    // spring/micronaut
     void "writes mapping annotation with multiple result content types" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
@@ -135,8 +135,8 @@ class MethodWriterSpec extends Specification {
 """)
     }
 
-    // core
-    void "writes method with any response type when it has multiple result contents with default result type" () {
+    // spring/micronaut ??????
+    void "writes method with any response type when it has multiple result contents with 'default' result type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
                 new Response (contentType: 'application/json',
@@ -158,7 +158,7 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    // core
+    // spring/micronaut
     void "writes method with any response type when it has multiple result contents with wrapped result type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
@@ -187,25 +187,6 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    // core
-    void "writes method with wrapped void response type" () {
-        def endpoint = createEndpoint (path: '/ping', method: HttpMethod.GET, responses: [
-            '204': [new Response(responseType:
-                new ResultDataType (
-                    type: 'ResponseEntity',
-                    pkg: 'org.springframework.http',
-                    dataType: new NoneDataType ().wrappedInResult ()
-                ))]
-        ])
 
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    ResponseEntity<Void> getPing();
-"""
-    }
 
 }

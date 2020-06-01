@@ -16,11 +16,11 @@
 
 package com.github.hauner.openapi.core.writer
 
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.ParameterBase
-import com.github.hauner.openapi.core.test.TestMappingAnnotationWriter
-import com.github.hauner.openapi.core.test.TestParameterAnnotationWriter
-import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.Response
@@ -35,6 +35,8 @@ import com.github.hauner.openapi.core.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.core.test.EmptyResponse
+import com.github.hauner.openapi.core.test.TestMappingAnnotationWriter
+import com.github.hauner.openapi.core.test.TestParameterAnnotationWriter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -233,6 +235,27 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @CoreMapping
     void getFoo(@Parameter String foO);
+"""
+    }
+
+    void "writes method with void response type wrapped by result wrapper" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '204': [new Response(responseType:
+                new ResultDataType (
+                    type: 'ResponseWrapper',
+                    pkg: 'http',
+                    dataType: new NoneDataType ()
+                        .wrappedInResult ()
+                ))]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    ResponseWrapper<Void> getFoo();
 """
     }
 
