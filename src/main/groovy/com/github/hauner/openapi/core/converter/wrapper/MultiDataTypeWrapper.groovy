@@ -14,47 +14,55 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.converter
+package com.github.hauner.openapi.core.converter.wrapper
 
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.mapping.MappingFinder
+import com.github.hauner.openapi.core.converter.SchemaInfo
 import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
-import com.github.hauner.openapi.core.model.datatypes.SingleDataType
 
 /**
- * wraps the data type with the 'singe' data mapping.
+ * replaces a collection wrapper with the 'multi' data mapping.
  *
- * Used to wrap Responses or RequestBody's with {@code Mono<>} or similar types.
+ * Used to replace the collection wrapper at Responses or RequestBody's with  {@code Flux<>} or
+ * similar types.
  *
  * @author Martin Hauner
  */
-class SingleDataTypeWrapper {
+class MultiDataTypeWrapper {
 
     private ApiOptions options
     private MappingFinder finder
 
-    SingleDataTypeWrapper (ApiOptions options) {
+    MultiDataTypeWrapper (ApiOptions options) {
         this.options = options
         this.finder = new MappingFinder(typeMappings: options.typeMappings)
     }
 
     /**
-     * wraps a (converted) non-array data type with the configured single data type like
-     * {@code Mono<>} etc.
+     * replaces an (converted) array data type with a multi data type (like {@code Flux< >})
+     * wrapping the collection item.
      *
-     * If the configuration for the single type is 'plain' or not defined the source data type
-     * is not wrapped.
+     * If the configuration for the result type is 'plain' or not defined the source data type
+     * is not changed.
      *
      * @param dataType the data type to wrap
      * @param schemaInfo the open api type with context information
      * @return the resulting java data type
      */
     DataType wrap (DataType dataType, SchemaInfo schemaInfo) {
-        def targetType = getSingleResultDataType (schemaInfo)
-        if (!targetType || schemaInfo.isArray ()) {
+        if (!schemaInfo.isArray ()) {
+            return dataType
+        }
+
+        def targetType = getMultiDataType (schemaInfo)
+        if (!targetType) {
             return dataType
         }
 
@@ -62,18 +70,19 @@ class SingleDataTypeWrapper {
             return dataType
         }
 
-        def wrappedType = new SingleDataType (
+        DataType item = dataType.item
+
+        def multiType = new MappedCollectionDataType (
             type: targetType.name,
             pkg: targetType.pkg,
-            dataType: checkNone (dataType)
+            item: item
         )
-
-        return wrappedType
+        return multiType
     }
 
-    private TargetType getSingleResultDataType (SchemaInfo info) {
-        // check endpoint single mapping
-        List<Mapping> endpointMatches = finder.findEndpointSingleMapping (info)
+    private TargetType getMultiDataType (SchemaInfo info) {
+        // check endpoint multi mapping
+        List<Mapping> endpointMatches = finder.findEndpointMultiMapping (info)
 
         if (!endpointMatches.empty) {
 
@@ -87,8 +96,8 @@ class SingleDataTypeWrapper {
             }
         }
 
-        // find global single mapping
-        List<Mapping> typeMatches = finder.findSingleMapping (info)
+        // find global multi mapping
+        List<Mapping> typeMatches = finder.findMultiMapping (info)
         if (typeMatches.isEmpty ()) {
             return null
         }

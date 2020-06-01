@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.converter
+package com.github.hauner.openapi.core.converter.mapping
 
+import com.github.hauner.openapi.core.converter.SchemaInfo
 import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping

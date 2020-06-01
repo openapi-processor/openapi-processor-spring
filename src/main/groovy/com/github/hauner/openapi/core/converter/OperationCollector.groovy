@@ -25,6 +25,7 @@ import io.swagger.v3.oas.models.PathItem
  *
  * @author Martin Hauner
  */
+@Deprecated // unused
 class OperationCollector {
 
     Map<HttpMethod, Operation> collect (PathItem item) {

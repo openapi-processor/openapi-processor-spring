@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.core.converter.ApiOptions
-import com.github.hauner.openapi.core.converter.MappingFinder
+import com.github.hauner.openapi.core.converter.mapping.MappingFinder
 import com.github.hauner.openapi.core.converter.SchemaInfo
 import com.github.hauner.openapi.core.converter.UnknownDataTypeException
 import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
