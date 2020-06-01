@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.core.converter.ApiConverter
-import com.github.hauner.openapi.core.converter.ApiOptions
-import com.github.hauner.openapi.core.converter.UnknownParameterTypeException
 import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
@@ -65,8 +62,6 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.name == 'String'
-//        param.annotation == '@RequestParam'
-//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'
     }
 
     void "converts simple path parameter"() {
@@ -105,8 +100,6 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.name == 'String'
-//        param.annotation == '@PathVariable'
-//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.PathVariable'
     }
 
     void "converts simple header parameter"() {
@@ -145,8 +138,6 @@ paths:
         param.name == 'x-foo'
         param.required
         param.dataType.name == 'String'
-//        param.annotation == '@RequestHeader'
-//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestHeader'
     }
 
     void "converts simple cookie parameter"() {
@@ -185,8 +176,6 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.name == 'String'
-//        param.annotation == '@CookieValue'
-//        param.annotationWithPackage == 'org.springframework.web.bind.annotation.CookieValue'
     }
 
     void "adds additional request parameter from endpoint mapping" () {

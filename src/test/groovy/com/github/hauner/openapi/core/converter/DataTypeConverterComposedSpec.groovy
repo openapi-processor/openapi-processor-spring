@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.core.converter.ApiConverter
 import com.github.hauner.openapi.core.model.datatypes.ComposedObjectDataType
 import spock.lang.Specification
 

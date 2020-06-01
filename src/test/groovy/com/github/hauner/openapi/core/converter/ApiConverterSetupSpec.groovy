@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.core.converter.ApiConverter
-import com.github.hauner.openapi.core.converter.DefaultApiOptions
 import spock.lang.Specification
 
 class ApiConverterSetupSpec extends Specification {
