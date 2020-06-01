@@ -94,59 +94,6 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    // core
-    void "writes method name from path with valid java identifiers" () {
-        def endpoint = createEndpoint (path: '/f_o-ooo/b_a-rrr', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: true, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFOOooBARrr(@RequestParam(name = "foo") String foo);
-"""
-    }
-
-    // core
-    void "writes method name from operation id with valid java identifiers" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, operationId: 'get-bar',
-            responses: [
-                '204': [new Response (responseType: new NoneDataType())]
-            ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getBar();
-"""
-    }
-
-    // core
-    void "writes method parameter with valid java identifiers" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new QueryParameter(name: '_fo-o', required: true, dataType: new StringDataType())
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(@RequestParam(name = "_fo-o") String foO);
-"""
-    }
-
     void "writes required request body parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.POST, responses: [
             '204': [new Response (responseType: new NoneDataType())]

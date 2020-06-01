@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support
+package com.github.hauner.openapi.core.test
 
 import com.github.hauner.openapi.core.model.Response
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 
+/**
+ * test only. simpler setup of an empty response.
+ */
 class EmptyResponse extends Response {
 
     EmptyResponse() {
         contentType = null
         responseType = new NoneDataType()
     }
+
 }

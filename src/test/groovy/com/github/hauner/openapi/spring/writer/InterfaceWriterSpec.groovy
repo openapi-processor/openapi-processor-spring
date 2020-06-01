@@ -32,14 +32,14 @@ import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
-import com.github.hauner.openapi.spring.support.EmptyResponse
+import com.github.hauner.openapi.core.test.EmptyResponse
 import spock.lang.Specification
 
 import java.util.stream.Collectors
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
 
-
+@Deprecated
 class InterfaceWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter
     def methodWriter = Stub MethodWriter

@@ -31,9 +31,10 @@ import com.github.hauner.openapi.core.model.datatypes.FloatDataType
 import com.github.hauner.openapi.core.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.core.model.datatypes.LongDataType
 import com.github.hauner.openapi.core.model.datatypes.MappedCollectionDataType
-import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.test.EmptyResponse
+import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -52,7 +53,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes mapping annotation" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response(responseType: new NoneDataType())]
+            '204': [new EmptyResponse ()]
         ])
 
         when:
@@ -137,7 +138,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes parameter annotation" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType ())]
+            '204': [new EmptyResponse ()]
         ], parameters: [
             new ParameterBase () {
                 String getName () {
@@ -167,7 +168,7 @@ class MethodWriterSpec extends Specification {
 
     void "does not write parameter annotation if not wanted" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType ())]
+            '204': [new EmptyResponse ()]
         ], parameters: [
             new ParameterBase () {
                 String getName () {
@@ -191,6 +192,54 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @CoreMapping
     void getFoo(String foo);
+"""
+    }
+
+    void "writes method name from path with valid java identifiers" () {
+        def endpoint = createEndpoint (path: '/f_o-ooo/b_a-rrr', method: HttpMethod.GET, responses: [
+            '204': [new EmptyResponse ()]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    void getFOOooBARrr();
+"""
+    }
+
+    void "writes method name from operation id with valid java identifiers" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, operationId: 'get-bar',
+            responses: [
+                '204': [new EmptyResponse ()]
+            ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    void getBar();
+"""
+    }
+
+    void "writes method parameter with valid java identifiers" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '204': [new EmptyResponse ()]
+        ], parameters: [
+            new QueryParameter(name: '_fo-o', required: true, dataType: new StringDataType())
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    void getFoo(@Parameter String foO);
 """
     }
 
