@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model
+package com.github.hauner.openapi.core.model
 
-import com.github.hauner.openapi.core.model.Endpoint
-import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.Response
 import com.github.hauner.openapi.core.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import spock.lang.Specification

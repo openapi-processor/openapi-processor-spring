@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.datatypes
+package com.github.hauner.openapi.core.model.datatypes
 
-import com.github.hauner.openapi.core.model.datatypes.MappedDataType
 import spock.lang.Specification
 import spock.lang.Unroll
 
