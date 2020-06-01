@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.helper
+package com.github.hauner.openapi.core.test
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter
