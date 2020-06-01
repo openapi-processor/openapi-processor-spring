@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.converter.ApiConverter
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse

@@ -16,6 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.UnknownParameterTypeException
 import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping

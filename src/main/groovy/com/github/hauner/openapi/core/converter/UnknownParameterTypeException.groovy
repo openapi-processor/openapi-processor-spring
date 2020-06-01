@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original authors
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.core.converter
 
 /**
- * Provides the properties required to check if a {@link com.github.hauner.openapi.core.converter.mapping.Mapping} applies to a
- * {@link com.github.hauner.openapi.spring.converter.SchemaInfo}.
+ * thrown when the ApiConverter hits an unknown parameter type.
  *
  * @author Martin Hauner
  */
-interface MappingSchema {
+class UnknownParameterTypeException extends RuntimeException {
 
-    String getPath ()
-    String getName ()
-    String getContentType ()
+    String name
+    String type
 
-    String getType ()
-    String getFormat ()
+    UnknownParameterTypeException(String name, String type) {
+        super()
+        this.name = name
+        this.type = type
+    }
+
+    @Override
+    String getMessage () {
+        "unknown parameter type: $type for parameter $name"
+    }
 
 }

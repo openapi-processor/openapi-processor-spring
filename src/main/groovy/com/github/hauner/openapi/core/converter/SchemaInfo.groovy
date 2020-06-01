@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.MappingSchema
+import com.github.hauner.openapi.core.converter.mapping.MappingSchema
 import com.github.hauner.openapi.core.parser.RefResolver as ParserRefResolver
 import com.github.hauner.openapi.core.parser.Schema
 

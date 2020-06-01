@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.writer.MethodWriter
-import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.RequestBody

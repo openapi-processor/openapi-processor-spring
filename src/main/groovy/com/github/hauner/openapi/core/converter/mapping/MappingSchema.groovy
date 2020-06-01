@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter.mapping
 
 /**
- * thrown when the ApiConverter hits a multipart/form-data response body where
- * the schema is not an object.
+ * Provides the properties required to check if a {@link com.github.hauner.openapi.core.converter.mapping.Mapping} applies to a
+ * {@link com.github.hauner.openapi.core.converter.SchemaInfo}.
  *
  * @author Martin Hauner
  */
-class MultipartResponseBodyException extends RuntimeException {
+interface MappingSchema {
 
-    String path
+    String getPath ()
+    String getName ()
+    String getContentType ()
 
-    MultipartResponseBodyException(String path) {
-        super()
-        this.path = path
-    }
-
-    @Override
-    String getMessage () {
-        "the schema of the multipart response body of ${path} should be an object!"
-    }
+    String getType ()
+    String getFormat ()
 
 }

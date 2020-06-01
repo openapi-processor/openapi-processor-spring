@@ -16,6 +16,11 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.DefaultApiOptions
+import com.github.hauner.openapi.core.converter.SchemaInfo
+import com.github.hauner.openapi.core.converter.UnknownDataTypeException
 import com.github.hauner.openapi.core.model.Api
 import com.github.hauner.openapi.core.model.DataTypes
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType

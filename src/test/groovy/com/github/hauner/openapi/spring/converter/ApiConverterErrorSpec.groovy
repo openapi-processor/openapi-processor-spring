@@ -19,6 +19,8 @@ package com.github.hauner.openapi.spring.converter
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.UnknownDataTypeException
 import spock.lang.Specification
 import spock.lang.Subject
 

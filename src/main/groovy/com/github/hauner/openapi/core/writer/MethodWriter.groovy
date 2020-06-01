@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.writer
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
-import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.EndpointResponse
 import com.github.hauner.openapi.core.model.RequestBody

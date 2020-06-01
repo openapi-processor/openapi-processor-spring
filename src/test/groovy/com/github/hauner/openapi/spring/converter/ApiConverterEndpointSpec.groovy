@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.converter.ApiConverter
 import com.github.hauner.openapi.core.model.Api
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType

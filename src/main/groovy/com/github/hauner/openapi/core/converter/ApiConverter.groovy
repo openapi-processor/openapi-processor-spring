@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
 import com.github.hauner.openapi.core.framework.Framework
 import com.github.hauner.openapi.core.model.parameters.Parameter as ModelParameter
@@ -41,6 +41,7 @@ import com.github.hauner.openapi.core.parser.RefResolver
 import com.github.hauner.openapi.core.parser.Response
 import com.github.hauner.openapi.core.parser.RequestBody
 import com.github.hauner.openapi.core.parser.Schema
+import com.github.hauner.openapi.spring.converter.DataTypeConverter
 import com.github.hauner.openapi.spring.processor.SpringFramework
 import com.github.hauner.openapi.core.support.Identifier
 import groovy.util.logging.Slf4j

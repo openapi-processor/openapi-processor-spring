@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.writer
 import com.github.hauner.openapi.core.model.parameters.ParameterBase
 import com.github.hauner.openapi.core.helper.TestMappingAnnotationWriter
 import com.github.hauner.openapi.core.helper.TestParameterAnnotationWriter
-import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.Response

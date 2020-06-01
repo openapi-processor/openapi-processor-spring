@@ -14,16 +14,29 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
 /**
- * ApiOptions defaults.
+ * thrown when the DataTypeConverter hits an unknown data type.
  *
  * @author Martin Hauner
  */
-class DefaultApiOptions extends ApiOptions {
+class UnknownDataTypeException extends RuntimeException {
 
-    DefaultApiOptions() {
-        packageName = 'package.name.is.not.set'
+    String name
+    String type
+    String format
+
+    UnknownDataTypeException(String name, String type, String format) {
+        super()
+        this.name = name
+        this.type = type
+        this.format = format
     }
+
+    @Override
+    String getMessage () {
+        "unknown schema: ${name} of type $type${format ? "/" + format: ''}"
+    }
+
 }

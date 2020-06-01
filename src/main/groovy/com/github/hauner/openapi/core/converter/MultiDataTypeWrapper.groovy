@@ -14,72 +14,72 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
+import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
-import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 
 /**
- * wraps the result data type with the mapped result type.
+ * replaces a collection wrapper with the 'multi' data mapping.
+ *
+ * Used to replace the collection wrapper at Responses or RequestBody's with  {@code Flux<>} or
+ * similar types.
  *
  * @author Martin Hauner
  */
-class ResultDataTypeWrapper {
+class MultiDataTypeWrapper {
 
     private ApiOptions options
     private MappingFinder finder
 
-    ResultDataTypeWrapper (ApiOptions options) {
+    MultiDataTypeWrapper (ApiOptions options) {
         this.options = options
         this.finder = new MappingFinder(typeMappings: options.typeMappings)
     }
 
     /**
-     * wraps a (converted) result data type with the configured result java data type like
-     * {@code ResponseEntity}.
+     * replaces an (converted) array data type with a multi data type (like {@code Flux< >})
+     * wrapping the collection item.
      *
-     * If the configuration for the result type is 'plain' the source data type is not wrapped.
+     * If the configuration for the result type is 'plain' or not defined the source data type
+     * is not changed.
      *
      * @param dataType the data type to wrap
      * @param schemaInfo the open api type with context information
      * @return the resulting java data type
      */
     DataType wrap (DataType dataType, SchemaInfo schemaInfo) {
-        TargetType targetType = getMappedResultDataType (schemaInfo)
+        if (!schemaInfo.isArray ()) {
+            return dataType
+        }
 
+        def targetType = getMultiDataType (schemaInfo)
         if (!targetType) {
             return dataType
         }
 
         if (targetType.typeName == 'plain') {
             return dataType
-
-        } else {
-            def resultType = new ResultDataType (
-                type: targetType.name,
-                pkg: targetType.pkg,
-                dataType: checkNone (dataType)
-            )
-            return resultType
-        }
-    }
-
-    private DataType checkNone (DataType dataType) {
-        if (dataType instanceof NoneDataType) {
-            return dataType.wrappedInResult ()
         }
 
-        dataType
+        DataType item = dataType.item
+
+        def multiType = new MappedCollectionDataType (
+            type: targetType.name,
+            pkg: targetType.pkg,
+            item: item
+        )
+        return multiType
     }
 
-    private TargetType getMappedResultDataType (SchemaInfo info) {
-        // check endpoint result mapping
-        List<Mapping> endpointMatches = finder.findEndpointResultMapping (info)
+    private TargetType getMultiDataType (SchemaInfo info) {
+        // check endpoint multi mapping
+        List<Mapping> endpointMatches = finder.findEndpointMultiMapping (info)
 
         if (!endpointMatches.empty) {
 
@@ -93,8 +93,8 @@ class ResultDataTypeWrapper {
             }
         }
 
-        // find global result mapping
-        List<Mapping> typeMatches = finder.findResultMapping (info)
+        // find global multi mapping
+        List<Mapping> typeMatches = finder.findMultiMapping (info)
         if (typeMatches.isEmpty ()) {
             return null
         }
@@ -105,6 +105,14 @@ class ResultDataTypeWrapper {
 
         def match = typeMatches.first () as TargetTypeMapping
         return match.targetType
+    }
+
+    private DataType checkNone (DataType dataType) {
+        if (dataType instanceof NoneDataType) {
+            return dataType.wrappedInResult ()
+        }
+
+        dataType
     }
 
 }

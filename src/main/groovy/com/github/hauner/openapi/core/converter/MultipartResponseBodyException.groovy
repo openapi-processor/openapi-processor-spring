@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
 /**
- * thrown when the ApiConverter hits an unknown parameter type.
+ * thrown when the ApiConverter hits a multipart/form-data response body where
+ * the schema is not an object.
  *
  * @author Martin Hauner
  */
-class UnknownParameterTypeException extends RuntimeException {
+class MultipartResponseBodyException extends RuntimeException {
 
-    String name
-    String type
+    String path
 
-    UnknownParameterTypeException(String name, String type) {
+    MultipartResponseBodyException(String path) {
         super()
-        this.name = name
-        this.type = type
+        this.path = path
     }
 
     @Override
     String getMessage () {
-        "unknown parameter type: $type for parameter $name"
+        "the schema of the multipart response body of ${path} should be an object!"
     }
 
 }

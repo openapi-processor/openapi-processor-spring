@@ -16,16 +16,17 @@
 
 package com.github.hauner.openapi.spring.converter
 
-
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.DefaultApiOptions
 import spock.lang.Specification
 
 class ApiConverterSetupSpec extends Specification {
-    
+
     void "initializes 'default' options if no options are provided" () {
-        
+
         when:
         def converter = new ApiConverter()
-        
+
         then:
         converter.options instanceof DefaultApiOptions
     }

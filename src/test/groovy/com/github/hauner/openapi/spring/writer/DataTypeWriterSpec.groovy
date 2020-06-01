@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
-import com.github.hauner.openapi.spring.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.datatypes.ListDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.core.model.datatypes
 
-import com.github.hauner.openapi.spring.converter.SchemaInfo
+import com.github.hauner.openapi.core.converter.SchemaInfo
 import com.github.hauner.openapi.core.model.DataTypes
 
 /**

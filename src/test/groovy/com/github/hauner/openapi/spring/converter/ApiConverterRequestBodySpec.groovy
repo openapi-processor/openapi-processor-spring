@@ -16,6 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.converter.MultipartResponseBodyException
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import spock.lang.Specification
