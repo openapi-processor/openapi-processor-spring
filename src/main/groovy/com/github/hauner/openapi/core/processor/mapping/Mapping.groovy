@@ -15,9 +15,6 @@
  */
 
 package com.github.hauner.openapi.core.processor.mapping
-
-import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
-
 /**
  * *the* Schema of the mapping yaml
  *

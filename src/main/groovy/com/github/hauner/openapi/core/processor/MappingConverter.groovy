@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.processor
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.processor.mapping.MappingConverter as MappingConverterV1
 import com.github.hauner.openapi.core.processor.mapping.Mapping as MappingV1
-import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
+import com.github.hauner.openapi.core.processor.mapping.VersionedMapping
 import com.github.hauner.openapi.core.processor.mapping.v2.MappingConverter as MappingConverterV2
 import com.github.hauner.openapi.core.processor.mapping.v2.Mapping as MappingV2
 import org.slf4j.Logger

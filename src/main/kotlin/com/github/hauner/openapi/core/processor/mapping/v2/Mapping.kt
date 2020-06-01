@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.core.processor.mapping.v2
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
+import com.github.hauner.openapi.core.processor.mapping.VersionedMapping
 
 /**
  * *the* v2 Schema of the mapping yaml

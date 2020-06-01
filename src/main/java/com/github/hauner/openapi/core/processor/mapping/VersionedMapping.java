@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping;
+package com.github.hauner.openapi.core.processor.mapping;
 
 /**
  * check for mapping format
