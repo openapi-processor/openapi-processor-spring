@@ -22,6 +22,8 @@ import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
+import com.github.hauner.openapi.core.processor.MappingConverter
+import com.github.hauner.openapi.core.processor.MappingReader
 import spock.lang.Specification
 import spock.lang.Subject
 

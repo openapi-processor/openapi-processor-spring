@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.core.processor
 
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.processor.mapping.MappingConverter as MappingConverterV1

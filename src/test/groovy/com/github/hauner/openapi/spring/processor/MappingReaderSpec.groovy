@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor
 
+import com.github.hauner.openapi.core.processor.MappingReader
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import org.junit.Rule

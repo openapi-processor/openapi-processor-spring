@@ -23,8 +23,8 @@ import com.github.hauner.openapi.spring.converter.ApiConverter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.core.parser.OpenApi
 import com.github.hauner.openapi.core.parser.Parser
-import com.github.hauner.openapi.spring.processor.MappingConverter
-import com.github.hauner.openapi.spring.processor.MappingReader
+import com.github.hauner.openapi.core.processor.MappingConverter
+import com.github.hauner.openapi.core.processor.MappingReader
 import com.github.hauner.openapi.spring.writer.ApiWriter
 import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.spring.writer.DataTypeWriter

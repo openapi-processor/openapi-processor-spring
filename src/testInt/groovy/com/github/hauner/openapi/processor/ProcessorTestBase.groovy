@@ -18,7 +18,7 @@ package com.github.hauner.openapi.processor
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import com.github.hauner.openapi.spring.processor.MappingReader
+import com.github.hauner.openapi.core.processor.MappingReader
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
