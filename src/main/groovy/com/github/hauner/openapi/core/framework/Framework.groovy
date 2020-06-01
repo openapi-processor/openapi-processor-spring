@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.framework
 
+import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
@@ -30,7 +31,7 @@ interface Framework {
      *
      * @param parameter an OpenAPI query parameter
      * @param DataType data type of the parameter
-     * @return a query {@Parameter}
+     * @return a query {@link Parameter}
      */
     Parameter createQueryParameter(ParserParameter parameter, DataType dataType)
 
@@ -39,7 +40,7 @@ interface Framework {
      *
      * @param parameter an OpenAPI header parameter
      * @param DataType data type of the parameter
-     * @return a header {@Parameter}
+     * @return a header {@link Parameter}
      */
     Parameter createHeaderParameter(ParserParameter parameter, DataType dataType)
 
@@ -48,7 +49,7 @@ interface Framework {
      *
      * @param parameter an OpenAPI cookie parameter
      * @param DataType data type of the parameter
-     * @return a cookie {@Parameter}
+     * @return a cookie {@link Parameter}
      */
     Parameter createCookieParameter(ParserParameter parameter, DataType dataType)
 
@@ -57,7 +58,7 @@ interface Framework {
      *
      * @param parameter an OpenAPI path parameter
      * @param DataType data type of the parameter
-     * @return a path {@Parameter}
+     * @return a path {@link Parameter}
      */
     Parameter createPathParameter(ParserParameter parameter, DataType dataType)
 
@@ -66,7 +67,7 @@ interface Framework {
      *
      * @param parameter an OpenAPI multipart parameter
      * @param DataType data type of the parameter
-     * @return a multipart {@Parameter}
+     * @return a multipart {@link Parameter}
      */
     Parameter createMultipartParameter(ParserParameter parameter, DataType dataType)
 
@@ -75,8 +76,17 @@ interface Framework {
      *
      * @param parameter an OpenAPI additional parameter
      * @param DataType data type of the parameter
-     * @return an additional {@Parameter}
+     * @return an additional {@link Parameter}
      */
     Parameter createAdditionalParameter(ParserParameter parameter, DataType dataType)
+
+    /**
+     * create a model request body.
+     *
+     * @param parameter an OpenAPI additional parameter
+     * @param DataType data type of the parameter
+     * @return an additional {@link RequestBody}
+     */
+    RequestBody createRequestBody(String contentType, boolean required, DataType dataType)
 
 }

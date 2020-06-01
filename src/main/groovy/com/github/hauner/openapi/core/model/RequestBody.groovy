@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,38 @@
 package com.github.hauner.openapi.core.model
 
 import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
 
 /**
  * Endpoint request body properties.
  *
  * @author Martin Hauner
  */
-class RequestBody {
+class RequestBody extends ParameterBase {
 
     String contentType
-    DataType requestBodyType
-    boolean required
 
-    Set<String> getImports () {
-        requestBodyType.imports
+    @Deprecated // => dataType
+    DataType getRequestBodyType() {
+        dataType
     }
 
+    @Deprecated // use getDataTypeImport
+    Set<String> getImports () {
+        dataTypeImports
+    }
+
+    @Deprecated
     String getAnnotationName () {
         "RequestBody"
     }
 
+    @Deprecated
     String getAnnotationWithPackage () {
         "org.springframework.web.bind.annotation.${annotationName}"
     }
 
+    @Deprecated
     String getAnnotation () {
         "@${annotationName}"
     }

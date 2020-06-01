@@ -22,7 +22,6 @@ import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CorePa
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.EndpointResponse
-import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.support.Identifier
 
 /**
@@ -49,17 +48,6 @@ class MethodWriter {
         def annotation = new StringWriter ()
         mappingAnnotationWriter.write (annotation, endpoint, endpointResponse)
         annotation.toString ()
-    }
-
-    private String createRequestBodyAnnotation (RequestBody requestBody) {
-        String param = "${requestBody.annotation}"
-
-        // required is default, so add required only if the parameter is not required
-        if (!requestBody.required) {
-            param += '(required = false)'
-        }
-
-        param
     }
 
     private String createMethodName (Endpoint endpoint, EndpointResponse endpointResponse) {
@@ -100,9 +88,9 @@ class MethodWriter {
             def body = endpoint.requestBody
             def beanValidationAnnotations = ''
             if (apiOptions.beanValidation) {
-                beanValidationAnnotations += " ${beanValidationFactory.createAnnotations (body.requestBodyType)}"
+                beanValidationAnnotations += " ${beanValidationFactory.createAnnotations (body.dataType)}"
             }
-            def param = "${beanValidationAnnotations} ${createRequestBodyAnnotation(body)} ${body.requestBodyType.name} body"
+            def param = "${beanValidationAnnotations} ${createParameterAnnotation(body)} ${body.dataType.name} ${body.name}"
             ps.add (param.trim())
         }
 

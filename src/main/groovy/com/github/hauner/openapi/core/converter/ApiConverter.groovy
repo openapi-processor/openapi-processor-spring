@@ -269,10 +269,7 @@ class  ApiConverter {
             changedType = multiDataTypeWrapper.wrap (dataType, info)
         }
 
-        new ModelRequestBody(
-            contentType: contentType,
-            requestBodyType: changedType,
-            required: required)
+        framework.createRequestBody(contentType, required, changedType)
     }
 
     private Collection<ModelParameter> createMultipartParameter (SchemaInfo info, boolean required) {

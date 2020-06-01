@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.framework
 
+import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.parameters.AdditionalParameter
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
@@ -81,6 +82,16 @@ class FrameworkBase implements Framework {
             name: parameter.name,
             required: parameter.required,
             dataType: dataType)
+    }
+
+    @Override
+    RequestBody createRequestBody (String contentType, boolean required, DataType dataType) {
+        new RequestBody (
+            name: 'body',
+            required: required,
+            dataType: dataType,
+            contentType: contentType
+        )
     }
 
 }
