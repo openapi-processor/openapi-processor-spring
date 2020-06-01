@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 
@@ -30,7 +31,22 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
 
     @Override
     void write (Writer target, Parameter parameter) {
-        target.write (createAnnotation (parameter))
+        if (parameter instanceof RequestBody) {
+            target.write (createAnnotation (parameter as RequestBody))
+        } else {
+            target.write (createAnnotation (parameter))
+        }
+    }
+
+    private String createAnnotation (RequestBody requestBody) {
+        String annotation = getAnnotationName (requestBody)
+
+        // required is default, so add required only if the parameter is not required
+        if (!requestBody.required) {
+            annotation += '(required = false)'
+        }
+
+        annotation
     }
 
     private String createAnnotation (Parameter parameter) {

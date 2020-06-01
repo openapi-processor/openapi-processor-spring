@@ -60,7 +60,7 @@ class MappingAnnotationWriterSpec extends Specification {
         ], requestBodies: [
             new RequestBody(
                 contentType: contentType,
-                requestBodyType: new StringDataType ())
+                dataType: new StringDataType ())
         ])
 
         when:
@@ -104,7 +104,7 @@ class MappingAnnotationWriterSpec extends Specification {
         ], requestBodies: [
             new RequestBody(
                 contentType: requestContentType,
-                requestBodyType: new StringDataType ())
+                dataType: new StringDataType ())
         ])
 
         when:

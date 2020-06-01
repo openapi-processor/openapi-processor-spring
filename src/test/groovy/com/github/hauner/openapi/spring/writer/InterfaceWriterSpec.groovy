@@ -212,7 +212,7 @@ import model.Foo;
             ], requestBodies: [
                 new RequestBody (
                     contentType: 'plain/text',
-                    requestBodyType: new StringDataType (),
+                    dataType: new StringDataType (),
                     required: true
                 )
             ])
@@ -234,7 +234,7 @@ import org.springframework.web.bind.annotation.RequestBody;
         ], requestBodies: [
             new RequestBody (
                 contentType: 'plain/text',
-                requestBodyType: new MappedDataType (
+                dataType: new MappedDataType (
                     pkg: 'com.github.hauner.openapi', type: 'Bar'),
                 required: true
             )

@@ -21,12 +21,7 @@ import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.Response
 import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
-import com.github.hauner.openapi.core.model.datatypes.NoneDataType
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
@@ -65,49 +60,6 @@ class MethodWriterSpec extends Specification {
         target.toString () == """\
     @GetMapping(path = "${endpoint.path}")
     void getFoo(@RequestParam Map<String, String> foo);
-"""
-    }
-
-    void "writes required request body parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.POST, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], requestBodies: [
-            new RequestBody(
-                contentType: 'application/json',
-                requestBodyType: new ObjectDataType (type: 'FooRequestBody',
-                    properties: ['foo': new StringDataType ()] as LinkedHashMap),
-                required: true)
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    void postFoo(@RequestBody FooRequestBody body);
-"""
-    }
-
-    void "writes optional request body parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.POST, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], requestBodies: [
-            new RequestBody(
-                contentType: 'application/json',
-                requestBodyType: new ObjectDataType (
-                    type: 'FooRequestBody',
-                    properties: ['foo': new StringDataType ()] as LinkedHashMap),
-                required: false)
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @PostMapping(path = "${endpoint.path}", consumes = {"application/json"})
-    void postFoo(@RequestBody(required = false) FooRequestBody body);
 """
     }
 
