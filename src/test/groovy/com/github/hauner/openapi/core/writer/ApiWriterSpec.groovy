@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Api
@@ -24,10 +24,6 @@ import com.github.hauner.openapi.core.model.datatypes.MappedDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.core.model.datatypes.StringEnumDataType
-import com.github.hauner.openapi.core.writer.ApiWriter
-import com.github.hauner.openapi.core.writer.DataTypeWriter
-import com.github.hauner.openapi.core.writer.InterfaceWriter
-import com.github.hauner.openapi.core.writer.StringEnumWriter
 import com.github.hauner.openapi.spring.support.Sl4jMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder

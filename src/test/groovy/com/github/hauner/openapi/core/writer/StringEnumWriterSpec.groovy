@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
 import com.github.hauner.openapi.core.model.datatypes.StringEnumDataType
-import com.github.hauner.openapi.core.writer.StringEnumWriter
+import com.github.hauner.openapi.spring.writer.HeaderWriter
 import spock.lang.Specification
 
 class StringEnumWriterSpec extends Specification {

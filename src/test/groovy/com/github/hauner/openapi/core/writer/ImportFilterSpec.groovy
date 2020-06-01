@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
-import com.github.hauner.openapi.core.writer.ImportFilter
 import spock.lang.Specification
 
 class ImportFilterSpec extends Specification {
