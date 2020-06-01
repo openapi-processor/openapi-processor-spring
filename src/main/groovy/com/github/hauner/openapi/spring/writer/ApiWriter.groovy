@@ -28,8 +28,6 @@ import groovy.util.logging.Slf4j
 import java.nio.file.Files
 import java.nio.file.Path
 
-import static com.github.hauner.openapi.support.Identifier.toClass
-
 /**
  * Root writer for the generated api files.
  *

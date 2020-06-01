@@ -16,7 +16,7 @@
 
 @file:JvmName("Identifier")
 
-package com.github.hauner.openapi.support
+package com.github.hauner.openapi.core.support
 
 import java.lang.Character.isJavaIdentifierPart
 import java.lang.Character.isJavaIdentifierStart
