@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
+import com.github.hauner.openapi.core.model.datatypes.ComposedObjectDataType
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.OpenApiParser.parse

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.support
 
-import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.core.model.Api
 
 trait ModelAsserts {
     Api api

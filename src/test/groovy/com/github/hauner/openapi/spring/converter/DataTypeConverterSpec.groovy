@@ -16,9 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.DataTypes
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.Api
+import com.github.hauner.openapi.core.model.DataTypes
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.parser.RefResolver
 import com.github.hauner.openapi.core.parser.Schema
 import com.github.hauner.openapi.spring.support.TestSchema

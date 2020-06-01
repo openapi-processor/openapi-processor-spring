@@ -20,25 +20,25 @@ import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingEx
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.model.DataTypes
-import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
-import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
-import com.github.hauner.openapi.spring.model.datatypes.ComposedObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.LocalDateDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedCollectionDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
-import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
-import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
-import com.github.hauner.openapi.spring.model.datatypes.LongDataType
-import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
-import com.github.hauner.openapi.spring.model.datatypes.LazyDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.github.hauner.openapi.core.model.DataTypes
+import com.github.hauner.openapi.core.model.datatypes.ArrayDataType
+import com.github.hauner.openapi.core.model.datatypes.BooleanDataType
+import com.github.hauner.openapi.core.model.datatypes.ComposedObjectDataType
+import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
+import com.github.hauner.openapi.core.model.datatypes.LocalDateDataType
+import com.github.hauner.openapi.core.model.datatypes.MappedCollectionDataType
+import com.github.hauner.openapi.core.model.datatypes.MappedDataType
+import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.DoubleDataType
+import com.github.hauner.openapi.core.model.datatypes.FloatDataType
+import com.github.hauner.openapi.core.model.datatypes.IntegerDataType
+import com.github.hauner.openapi.core.model.datatypes.LongDataType
+import com.github.hauner.openapi.core.model.datatypes.OffsetDateTimeDataType
+import com.github.hauner.openapi.core.model.datatypes.LazyDataType
+import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.model.datatypes.StringEnumDataType
 
 /**
  * Converter to map OpenAPI schemas to Java data types.

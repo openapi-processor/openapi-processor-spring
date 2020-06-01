@@ -21,7 +21,7 @@ import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.model.Api
+import com.github.hauner.openapi.core.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll
 

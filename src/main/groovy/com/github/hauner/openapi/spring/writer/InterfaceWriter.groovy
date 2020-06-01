@@ -20,8 +20,8 @@ import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.core.writer.SimpleWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.Interface
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.Interface
 
 /**
  * Writer for Java interfaces.

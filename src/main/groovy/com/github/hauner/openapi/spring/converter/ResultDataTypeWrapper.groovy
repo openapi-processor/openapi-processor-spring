@@ -20,9 +20,9 @@ import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingEx
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
-import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
+import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 
 /**
  * wraps the result data type with the mapped result type.

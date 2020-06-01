@@ -18,8 +18,8 @@ package com.github.hauner.openapi.micronaut.writer
 
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
-import com.github.hauner.openapi.spring.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
+import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
 class HeaderParameterAnnotationWriterSpec extends Specification {

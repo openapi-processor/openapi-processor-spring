@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.core.framework
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.core.model.HttpMethod
 
 /**
  * provides annotation details of the framework.

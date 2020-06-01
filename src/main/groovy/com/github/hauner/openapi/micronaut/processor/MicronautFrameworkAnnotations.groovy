@@ -23,7 +23,7 @@ import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.MultipartParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.PathParameter
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
 

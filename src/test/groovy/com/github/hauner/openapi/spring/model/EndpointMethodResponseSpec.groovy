@@ -16,8 +16,11 @@
 
 package com.github.hauner.openapi.spring.model
 
-import com.github.hauner.openapi.spring.model.datatypes.CollectionDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.HttpMethod
+import com.github.hauner.openapi.core.model.Response
+import com.github.hauner.openapi.core.model.datatypes.CollectionDataType
+import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
 class EndpointMethodResponseSpec extends Specification {

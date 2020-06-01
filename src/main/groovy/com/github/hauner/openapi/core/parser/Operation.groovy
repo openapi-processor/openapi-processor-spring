@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.core.parser
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.core.model.HttpMethod
 
 /**
  * OpenAPI Operation abstraction.

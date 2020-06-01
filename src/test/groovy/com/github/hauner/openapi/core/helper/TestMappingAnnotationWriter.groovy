@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.core.helper
 
 import com.github.hauner.openapi.core.writer.MappingAnnotationWriter
-import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.EndpointResponse
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.EndpointResponse
 
 class TestMappingAnnotationWriter implements MappingAnnotationWriter {
 

@@ -16,9 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.HttpMethod
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.Api
+import com.github.hauner.openapi.core.model.HttpMethod
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import spock.lang.Specification
 

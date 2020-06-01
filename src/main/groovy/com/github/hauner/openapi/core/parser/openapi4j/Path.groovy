@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.core.parser.openapi4j
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.parser.Operation as ParserOperation
 import com.github.hauner.openapi.core.parser.Path as ParserPath
 import org.openapi4j.parser.model.v3.Path as Oa4jPath

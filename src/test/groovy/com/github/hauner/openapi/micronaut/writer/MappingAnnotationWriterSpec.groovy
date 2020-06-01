@@ -16,12 +16,12 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
-import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.HttpMethod
-import com.github.hauner.openapi.spring.model.RequestBody
-import com.github.hauner.openapi.spring.model.Response
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.HttpMethod
+import com.github.hauner.openapi.core.model.RequestBody
+import com.github.hauner.openapi.core.model.Response
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
 class MappingAnnotationWriterSpec extends Specification {

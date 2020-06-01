@@ -17,10 +17,10 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.Interface
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.StringEnumDataType
+import com.github.hauner.openapi.core.model.Api
+import com.github.hauner.openapi.core.model.Interface
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.datatypes.StringEnumDataType
 import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import groovy.util.logging.Slf4j

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.core.parser.swagger
 
-import com.github.hauner.openapi.spring.model.HttpMethod
+import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.parser.Operation as ParserOperation
 import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
 import com.github.hauner.openapi.core.parser.RequestBody as ParserRequestBody

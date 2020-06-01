@@ -22,16 +22,16 @@ import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.model.Api
-import com.github.hauner.openapi.spring.model.DataTypes
-import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.Interface
-import com.github.hauner.openapi.spring.model.RequestBody as ModelRequestBody
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.Response as ModelResponse
-import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.Api
+import com.github.hauner.openapi.core.model.DataTypes
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.Interface
+import com.github.hauner.openapi.core.model.RequestBody as ModelRequestBody
+import com.github.hauner.openapi.core.model.datatypes.MappedDataType
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.Response as ModelResponse
+import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.core.parser.OpenApi
 import com.github.hauner.openapi.core.parser.MediaType
 import com.github.hauner.openapi.core.parser.Operation

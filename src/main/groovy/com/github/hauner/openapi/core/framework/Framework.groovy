@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.core.framework
 
 import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
 
 /**

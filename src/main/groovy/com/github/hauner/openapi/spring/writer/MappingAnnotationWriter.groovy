@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.writer.MappingAnnotationWriter as CoreMappingAnnotationWriter
-import com.github.hauner.openapi.spring.model.Endpoint
-import com.github.hauner.openapi.spring.model.EndpointResponse
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.EndpointResponse
 
 /**
  * spring mapping annotation writer

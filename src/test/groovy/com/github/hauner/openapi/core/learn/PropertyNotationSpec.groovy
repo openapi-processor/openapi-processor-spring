@@ -1,7 +1,7 @@
 package com.github.hauner.openapi.core.learn
 
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.spring.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.datatypes.DataType
 import spock.lang.Specification
 
 class PropertyNotationSpec extends Specification {
