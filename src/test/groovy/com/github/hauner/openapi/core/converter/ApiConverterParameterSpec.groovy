@@ -22,7 +22,7 @@ import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterParameterSpec extends Specification {
 

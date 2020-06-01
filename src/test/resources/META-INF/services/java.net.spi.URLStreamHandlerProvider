@@ -1,1 +1,1 @@
-com.github.hauner.openapi.spring.support.memory.MemoryStreamHandlerProvider
+com.github.hauner.openapi.core.test.memory.MemoryStreamHandlerProvider

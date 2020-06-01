@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.converter
 import com.github.hauner.openapi.core.model.datatypes.ComposedObjectDataType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterComposedSpec extends Specification {
 

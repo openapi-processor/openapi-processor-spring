@@ -23,7 +23,7 @@ import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.writer.HeaderWriter
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
+import static com.github.hauner.openapi.core.test.AssertHelper.extractImports
 
 class DataTypeWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter

@@ -38,7 +38,7 @@ import spock.lang.Specification
 
 import java.util.stream.Collectors
 
-import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports
+import static com.github.hauner.openapi.core.test.AssertHelper.extractImports
 
 class InterfaceWriterSpec extends Specification {
     def headerWriter = Mock HeaderWriter

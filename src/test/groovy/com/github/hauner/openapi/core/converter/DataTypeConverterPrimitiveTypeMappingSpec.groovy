@@ -24,7 +24,7 @@ import com.github.hauner.openapi.core.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
 

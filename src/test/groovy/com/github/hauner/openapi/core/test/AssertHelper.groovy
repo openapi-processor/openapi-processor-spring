@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support
+package com.github.hauner.openapi.core.test
 
 import java.util.stream.Collectors
 

@@ -22,7 +22,7 @@ import ch.qos.logback.core.read.ListAppender
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterErrorSpec extends Specification {
 

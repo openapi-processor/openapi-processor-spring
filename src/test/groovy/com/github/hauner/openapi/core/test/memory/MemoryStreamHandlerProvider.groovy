@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support.memory
+package com.github.hauner.openapi.core.test.memory
 
 import java.net.spi.URLStreamHandlerProvider
 

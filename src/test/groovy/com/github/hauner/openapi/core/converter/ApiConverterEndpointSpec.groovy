@@ -19,10 +19,10 @@ package com.github.hauner.openapi.core.converter
 import com.github.hauner.openapi.core.model.Api
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.support.ModelAsserts
+import com.github.hauner.openapi.core.test.ModelAsserts
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterEndpointSpec extends Specification implements ModelAsserts {
 

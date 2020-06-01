@@ -22,12 +22,12 @@ import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.parser.RefResolver
 import com.github.hauner.openapi.core.parser.Schema
 import com.github.hauner.openapi.spring.converter.DataTypeConverter
-import com.github.hauner.openapi.spring.support.TestSchema
+import com.github.hauner.openapi.core.test.TestSchema
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter(new DefaultApiOptions())

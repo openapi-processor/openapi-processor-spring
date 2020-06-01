@@ -14,35 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support.parser
+package com.github.hauner.openapi.core.test.parser
 
 import com.github.hauner.openapi.core.parser.OpenApi as ParserOpenApi
-import com.github.hauner.openapi.core.parser.openapi4j.OpenApi
-import com.github.hauner.openapi.core.parser.openapi4j.Parser
-import com.github.hauner.openapi.spring.support.memory.Memory
-import org.openapi4j.core.validation.ValidationResults
-import org.openapi4j.parser.OpenApi3Parser
-import org.openapi4j.parser.model.v3.OpenApi3
-import org.openapi4j.parser.validation.v3.OpenApi3Validator
+import com.github.hauner.openapi.core.parser.swagger.OpenApi
+import com.github.hauner.openapi.core.parser.swagger.Parser
+import io.swagger.v3.parser.OpenAPIV3Parser
 
 /**
  * openapi4j parser.
  *
  * @author Martin Hauner
  */
-class OpenApi4jParser extends Parser {
+class SwaggerParser extends Parser {
 
     ParserOpenApi parseYaml (String apiYaml) {
-        Memory.add ('openapi.yaml', apiYaml)
+        def result = new OpenAPIV3Parser ()
+            .readContents (apiYaml)
 
-        OpenApi3 api = new OpenApi3Parser ()
-            .parse (new URL('memory:openapi.yaml'), true)
-
-        ValidationResults results = OpenApi3Validator
-            .instance ()
-            .validate (api)
-
-        new OpenApi (api, results)
+        return new OpenApi (result)
     }
 
 }

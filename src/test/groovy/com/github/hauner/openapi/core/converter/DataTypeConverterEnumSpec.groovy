@@ -18,7 +18,7 @@ package com.github.hauner.openapi.core.converter
 
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 
 class DataTypeConverterEnumSpec extends Specification {

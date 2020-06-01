@@ -20,7 +20,7 @@ import com.github.hauner.openapi.core.model.datatypes.LazyDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.spring.support.OpenApiParser.parse
+import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 
 class DataTypeConverterLoopSpec extends Specification {

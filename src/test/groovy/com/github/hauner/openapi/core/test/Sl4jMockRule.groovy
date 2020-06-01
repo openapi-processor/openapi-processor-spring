@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support
+package com.github.hauner.openapi.core.test
 
 import org.junit.rules.ExternalResource
 import org.slf4j.Logger

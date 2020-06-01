@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.support
+package com.github.hauner.openapi.core.test
 
 import com.github.hauner.openapi.core.parser.OpenApi
 import com.github.hauner.openapi.core.parser.ParserType
-import com.github.hauner.openapi.spring.support.parser.OpenApi4jParser
-import com.github.hauner.openapi.spring.support.parser.SwaggerParser
+import com.github.hauner.openapi.core.test.parser.OpenApi4jParser
+import com.github.hauner.openapi.core.test.parser.SwaggerParser
 
 /**
  * OpenAPI parser to read yaml from memory (swagger or openapi4j).
