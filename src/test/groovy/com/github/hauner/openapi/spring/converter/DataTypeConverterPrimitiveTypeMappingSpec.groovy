@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import com.github.hauner.openapi.spring.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll

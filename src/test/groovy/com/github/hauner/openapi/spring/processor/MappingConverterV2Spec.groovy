@@ -16,12 +16,12 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
@@ -389,7 +389,7 @@ map:
         single << ['reactor.core.publisher.Mono']
         multi << ['reactor.core.publisher.Flux']
     }
-    
+
     void "reads endpoint single & multi mapping" () {
         String yaml = """\
 openapi-processor-spring: v2.0

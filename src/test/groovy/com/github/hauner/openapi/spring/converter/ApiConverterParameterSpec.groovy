@@ -16,9 +16,9 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
+import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import spock.lang.Ignore
 import spock.lang.Specification
 

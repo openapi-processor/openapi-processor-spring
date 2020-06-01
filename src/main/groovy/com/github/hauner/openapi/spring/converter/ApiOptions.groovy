@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
 
 /**
  * Options of the generatr.
@@ -55,10 +55,10 @@ class ApiOptions {
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
-     * {@link com.github.hauner.openapi.spring.converter.mapping.TypeMapping}: used to globally
+     * {@link com.github.hauner.openapi.core.converter.mapping.TypeMapping}: used to globally
      * override the mapping of an OpenAPI schema to a specific java type.
      *
-     * {@link com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping}: used to
+     * {@link com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping}: used to
      * override parameter/response type mappings or to add additional parameters on a single
      * endpoint.
      */

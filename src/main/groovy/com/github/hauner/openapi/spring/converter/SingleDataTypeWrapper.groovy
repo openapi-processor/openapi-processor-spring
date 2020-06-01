@@ -17,22 +17,22 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.TargetType
-import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.TargetType
+import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.SingleDataType
 
 /**
- * wraps the data type with the 'singe' data mapping. 
- * 
+ * wraps the data type with the 'singe' data mapping.
+ *
  * Used to wrap Responses or RequestBody's with {@code Mono<>} or similar types.
  *
  * @author Martin Hauner
  */
 class SingleDataTypeWrapper {
-    
+
     private ApiOptions options
     private MappingFinder finder
 
@@ -40,7 +40,7 @@ class SingleDataTypeWrapper {
         this.options = options
         this.finder = new MappingFinder(typeMappings: options.typeMappings)
     }
-    
+
     /**
      * wraps a (converted) non-array data type with the configured single data type like
      * {@code Mono<>} etc.
@@ -108,5 +108,5 @@ class SingleDataTypeWrapper {
 
         dataType
     }
-    
+
 }

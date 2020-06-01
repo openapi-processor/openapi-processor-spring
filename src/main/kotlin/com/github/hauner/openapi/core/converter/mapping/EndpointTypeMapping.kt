@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.core.converter.mapping
+
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions} to override parameter or
  * response type mappings on a single endpoint. It can also be used to add parameters that are not
@@ -29,17 +30,17 @@ package com.github.hauner.openapi.spring.converter.mapping
  */
 class EndpointTypeMapping @JvmOverloads constructor(
 
-    /**
+        /**
      * Full path of the endpoint that is configured by this object.
      */
     var path: String,
 
-    /**
+        /**
      * Provides type mappings for the endpoint.
      */
     var typeMappings: List<Mapping> = emptyList(),
 
-    /**
+        /**
      * Exclude endpoint.
      */
     var exclude: Boolean = false

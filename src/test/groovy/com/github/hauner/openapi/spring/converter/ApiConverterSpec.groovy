@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.converter
 
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import com.github.hauner.openapi.spring.writer.HeaderWriter

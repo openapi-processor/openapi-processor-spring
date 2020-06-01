@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.core.converter.mapping
 
 /**
- * provider of target type information.
+ * interface for type mapping matching logic.
  *
  * @author Martin Hauner
  */
-interface TargetTypeMapping {
+interface MappingVisitor {
 
-    fun getTargetType (): TargetType
+    fun match (mapping: EndpointTypeMapping): Boolean
+    fun match (mapping: ParameterTypeMapping): Boolean
+    fun match (mapping: ResponseTypeMapping): Boolean
+    fun match (mapping: TypeMapping): Boolean
+    fun match (mapping: AddParameterTypeMapping): Boolean
+    fun match (mapping: ResultTypeMapping): Boolean
 
 }

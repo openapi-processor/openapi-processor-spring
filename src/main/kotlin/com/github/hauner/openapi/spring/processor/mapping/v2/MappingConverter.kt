@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor.mapping.v2
 
-import com.github.hauner.openapi.spring.converter.mapping.*
+import com.github.hauner.openapi.core.converter.mapping.*
 import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
 
 
@@ -68,11 +68,11 @@ class MappingConverter {
     }
 
     private fun convertResult (result: String): Mapping {
-        return ResultTypeMapping (result)
+        return ResultTypeMapping(result)
     }
 
     private fun convertType (from: String, to: String): Mapping {
-        return TypeMapping (from, to)
+        return TypeMapping(from, to)
     }
 
     private fun convertType(source: Type): Mapping {

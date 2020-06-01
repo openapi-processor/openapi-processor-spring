@@ -17,24 +17,23 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.TargetType
-import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.TargetType
+import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.MappedCollectionDataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
-import com.github.hauner.openapi.spring.model.datatypes.SingleDataType
 
 /**
  * replaces a collection wrapper with the 'multi' data mapping.
- * 
+ *
  * Used to replace the collection wrapper at Responses or RequestBody's with  {@code Flux<>} or
  * similar types.
  *
  * @author Martin Hauner
  */
 class MultiDataTypeWrapper {
-    
+
     private ApiOptions options
     private MappingFinder finder
 
@@ -42,7 +41,7 @@ class MultiDataTypeWrapper {
         this.options = options
         this.finder = new MappingFinder(typeMappings: options.typeMappings)
     }
-    
+
     /**
      * replaces an (converted) array data type with a multi data type (like {@code Flux< >})
      * wrapping the collection item.
@@ -63,7 +62,7 @@ class MultiDataTypeWrapper {
         if (!targetType) {
             return dataType
         }
-        
+
         if (targetType.typeName == 'plain') {
             return dataType
         }
@@ -115,5 +114,5 @@ class MultiDataTypeWrapper {
 
         dataType
     }
-    
+
 }

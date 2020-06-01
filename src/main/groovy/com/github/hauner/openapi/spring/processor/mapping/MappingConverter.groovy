@@ -16,13 +16,13 @@
 
 package com.github.hauner.openapi.spring.processor.mapping
 
-import com.github.hauner.openapi.spring.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.ResultTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.TypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.TypeMapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
 
 import com.github.hauner.openapi.spring.processor.mapping.Mapping as MappingV1
 

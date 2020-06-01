@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.core.converter.mapping
 
 /**
  * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
@@ -78,7 +78,7 @@ class TypeMapping (
      * @return the target type
      */
     override fun getTargetType (): TargetType {
-        return TargetType (targetTypeName, genericTypeNames)
+        return TargetType(targetTypeName, genericTypeNames)
     }
 
     override fun matches(visitor: MappingVisitor): Boolean {

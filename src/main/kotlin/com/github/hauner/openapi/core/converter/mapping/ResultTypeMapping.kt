@@ -14,34 +14,38 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter.mapping
+package com.github.hauner.openapi.core.converter.mapping
 
 /**
- * Used with {@link EndpointTypeMapping} to configure an additional endpoint parameter that is not
- * defined in the api description.
+ * Used with {@link com.github.hauner.openapi.spring.converter.ApiOptions#typeMappings} to map an
+ * OpenAPI response to a plain java type or to a wrapper type of the plain type.
  *
  * @author Martin Hauner
  */
-class AddParameterTypeMapping(
+class ResultTypeMapping(
 
     /**
-     * The parameter name of this mapping.
+     * The fully qualified java type name that will be used as the result type.
      */
-    val parameterName: String,
+    val targetTypeName: String
 
-    /**
-     * additional parameter type mapping.
-     */
-    val mapping: TypeMapping
-
-): Mapping {
+): Mapping, TargetTypeMapping {
 
     override fun matches(visitor: MappingVisitor): Boolean {
-        return visitor.match(this)
+        return visitor.match (this)
     }
 
     override fun getChildMappings(): List<Mapping> {
-        return listOf(mapping)
+        return listOf(this)
+    }
+
+    /**
+     * Returns the target type of this type mapping.
+     *
+     * @return the target type
+     */
+    override fun getTargetType(): TargetType {
+        return TargetType(targetTypeName, emptyList())
     }
 
 }

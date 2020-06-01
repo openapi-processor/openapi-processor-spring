@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.TargetType
-import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.TargetType
+import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.model.DataTypes
 import com.github.hauner.openapi.spring.model.datatypes.ArrayDataType
 import com.github.hauner.openapi.spring.model.datatypes.BooleanDataType
@@ -35,7 +35,6 @@ import com.github.hauner.openapi.spring.model.datatypes.DoubleDataType
 import com.github.hauner.openapi.spring.model.datatypes.FloatDataType
 import com.github.hauner.openapi.spring.model.datatypes.IntegerDataType
 import com.github.hauner.openapi.spring.model.datatypes.LongDataType
-import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.OffsetDateTimeDataType
 import com.github.hauner.openapi.spring.model.datatypes.LazyDataType
 import com.github.hauner.openapi.spring.model.datatypes.StringDataType
@@ -284,7 +283,7 @@ class DataTypeConverter {
     private TargetType getMappedDataType (SchemaInfo info) {
         // check endpoint mappings
         List<Mapping> endpointMatches = finder.findEndpointMappings (info)
-        
+
         if (!endpointMatches.empty) {
 
             if (endpointMatches.size () != 1) {
@@ -324,7 +323,7 @@ class DataTypeConverter {
         def match = typeMatches.first () as TargetTypeMapping
         return match.targetType
     }
-    
+
     /**
      * push the current schema info.
      *

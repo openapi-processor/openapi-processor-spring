@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.spring.converter
 
 import com.github.hauner.openapi.spring.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
-import com.github.hauner.openapi.spring.converter.mapping.TargetType
-import com.github.hauner.openapi.spring.converter.mapping.TargetTypeMapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.TargetType
+import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
 import com.github.hauner.openapi.spring.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.datatypes.NoneDataType
 import com.github.hauner.openapi.spring.model.datatypes.ResultDataType
@@ -68,12 +68,12 @@ class ResultDataTypeWrapper {
             return resultType
         }
     }
-    
+
     private DataType checkNone (DataType dataType) {
         if (dataType instanceof NoneDataType) {
             return dataType.wrappedInResult ()
         }
-        
+
         dataType
     }
 

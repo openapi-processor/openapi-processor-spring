@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.spring.converter.mapping.Mapping
+import com.github.hauner.openapi.core.converter.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.MappingConverter as MappingConverterV1
 import com.github.hauner.openapi.spring.processor.mapping.Mapping as MappingV1
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping

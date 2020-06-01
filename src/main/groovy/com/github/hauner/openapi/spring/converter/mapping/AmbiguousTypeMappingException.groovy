@@ -16,6 +16,8 @@
 
 package com.github.hauner.openapi.spring.converter.mapping
 
+import com.github.hauner.openapi.core.converter.mapping.Mapping
+
 /**
  * thrown when the DataTypeConverter finds an ambiguous data type mapping.
  *
