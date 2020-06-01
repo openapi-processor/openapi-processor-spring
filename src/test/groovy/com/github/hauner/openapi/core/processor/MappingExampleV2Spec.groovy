@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.core.processor
 
-import com.github.hauner.openapi.core.processor.MappingConverter
-import com.github.hauner.openapi.core.processor.MappingReader
 import spock.lang.Specification
 import spock.lang.Subject
 
-class MappingExampleSpec extends Specification {
+class MappingExampleV2Spec extends Specification {
 
     @Subject
     def reader = new MappingReader()
@@ -31,78 +29,52 @@ class MappingExampleSpec extends Specification {
 
 
     String yaml = """
+openapi-processor-spring: v2
+
 options:
     package-name: com.github.hauner.openapi
     bean-validation: true 
 
 map:
-  result: 
-    to: plain
+  result: plain
+  single: reactor.core.publisher.Mono
+  multi: reactor.core.publisher.Flux
 
   types:
-    - from: single
-      to: reactor.core.publisher.Mono
+    - type: array => java.util.Collection
 
-    - from: multi
-      to: reactor.core.publisher.Flux
-
-    - from: array
-      to: java.util.Collection
-
-    - from: Schema
-      to: java.util.Map
+    - type: Schema => java.util.Map
       generics:
         - java.lang.String
         - java.lang.Double
 
-  result: 
-    to: plain
-
   parameters:
-    - name: foo
-      to: java.util.List
-      
-    - name: bar
-      to: com.github.hauner.openapi.Bar  
+    - name: foo => java.util.List
+    - name: bar => com.github.hauner.openapi.Bar  
 
   responses:
-    - content: application/vnd.something
-      to: java.util.List
-
-    - content: application/json
-      to: com.github.hauner.openapi.FooBar  
+    - content: application/vnd.something => java.util.List
+    - content: application/json => com.github.hauner.openapi.FooBar  
 
   paths:
     /first:
       exclude: true
 
     /second:
-      result:
-        to: org.springframework.http.ResponseEntity
+      result: org.springframework.http.ResponseEntity
+      single: reactor.core.publisher.Mono
+      multi: reactor.core.publisher.Flux
 
       types:
-        - from: single
-          to: reactor.core.publisher.Mono
-      
-        - from: Schema
-          to: java.util.Collection
-
-      result:
-        to: org.springframework.http.ResponseEntity
+        - type: Schema => java.util.Collection
 
       parameters:
-        - name: foo
-          to: java.util.List
-
-        - add: bar
-          as: java.util.Set
+        - name: foo => java.util.List
+        - add: bar => java.util.Set
 
       responses:
-        - content: application/vnd.any
-          to: java.util.Set
-
-        - content: application/json
-          to: java.util.Map
+        - content: application/vnd.any => java.util.Set
+        - content: application/json => java.util.Map
 """
 
     void "parses mapping yaml" () {

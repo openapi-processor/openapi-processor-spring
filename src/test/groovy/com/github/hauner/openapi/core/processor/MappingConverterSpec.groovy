@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.core.processor
 
 import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
@@ -22,11 +22,12 @@ import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
-import com.github.hauner.openapi.core.processor.MappingConverter
-import com.github.hauner.openapi.core.processor.MappingReader
 import spock.lang.Specification
 import spock.lang.Subject
 
+/**
+ * obsolete
+ */
 class MappingConverterSpec extends Specification {
 
     def reader = new MappingReader()
@@ -355,7 +356,7 @@ openapi-processor-spring: v1.0
     
 map:
   result:
-    to: org.springframework.http.ResponseEntity
+    to: http.ResultWrapper
 """
 
         when:
@@ -365,7 +366,7 @@ map:
         then:
         mappings.size () == 1
         def type = mappings.first () as ResultTypeMapping
-        type.targetTypeName == 'org.springframework.http.ResponseEntity'
+        type.targetTypeName == 'http.ResultWrapper'
     }
 
 }
