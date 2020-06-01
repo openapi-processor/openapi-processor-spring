@@ -17,16 +17,6 @@
 package com.github.hauner.openapi.core.converter.mapping
 
 import com.github.hauner.openapi.core.converter.SchemaInfo
-import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
-import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
-import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
-import com.github.hauner.openapi.core.converter.mapping.Mapping
-import com.github.hauner.openapi.core.converter.mapping.MappingSchema
-import com.github.hauner.openapi.core.converter.mapping.MappingVisitor
-import com.github.hauner.openapi.core.converter.mapping.ParameterTypeMapping
-import com.github.hauner.openapi.core.converter.mapping.ResponseTypeMapping
-import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
-import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 
 /**
  * find mapping in type mapping list for a schema info.
