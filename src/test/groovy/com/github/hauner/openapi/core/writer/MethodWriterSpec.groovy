@@ -242,7 +242,7 @@ class MethodWriterSpec extends Specification {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new Response(responseType:
                 new ResultDataType (
-                    type: 'ResponseWrapper',
+                    type: 'ResultWrapper',
                     pkg: 'http',
                     dataType: new NoneDataType ()
                         .wrappedInResult ()
@@ -255,7 +255,57 @@ class MethodWriterSpec extends Specification {
         then:
         target.toString () == """\
     @CoreMapping
-    ResponseWrapper<Void> getFoo();
+    ResultWrapper<Void> getFoo();
+"""
+    }
+
+    void "writes method with 'Object' response when it has multiple result content types (200, default)" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response (contentType: 'application/json',
+                    responseType: new StringDataType ())
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new StringDataType ())
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    Object getFoo();
+"""
+    }
+
+    void "writes method with '?' response when it has multiple result contents types & wrapper result type" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response (contentType: 'application/json',
+                    responseType: new ResultDataType (
+                        type: 'ResultWrapper',
+                        pkg: 'http',
+                        dataType: new StringDataType ()))
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new ResultDataType (
+                        type: 'ResultWrapper',
+                        pkg: 'http',
+                        dataType: new StringDataType ()))
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @CoreMapping
+    ResultWrapper<?> getFoo();
 """
     }
 

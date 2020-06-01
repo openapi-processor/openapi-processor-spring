@@ -20,7 +20,9 @@ import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.Response
+import com.github.hauner.openapi.core.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
+import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
@@ -114,6 +116,25 @@ class MappingAnnotationWriterSpec extends Specification {
         where:
         requestContentType | responseContentType | expected
         'foo/in'           | 'foo/out'           | """@GetMapping(path = "/foo", consumes = {"foo/in"}, produces = {"foo/out"})"""
+    }
+
+    void "writes mapping annotation with multiple result content types" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response (contentType: 'application/json',
+                    responseType: new StringDataType ())
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new StringDataType ())
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
     }
 
     private Endpoint createEndpoint (Map properties) {

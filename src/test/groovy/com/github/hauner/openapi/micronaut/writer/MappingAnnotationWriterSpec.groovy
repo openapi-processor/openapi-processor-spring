@@ -115,6 +115,25 @@ class MappingAnnotationWriterSpec extends Specification {
         'foo/in'           | 'foo/out'           | """@Get(uri = "/foo", consumes = {"foo/in"}, produces = {"foo/out"})"""
     }
 
+    void "writes mapping annotation with multiple result content types" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response (contentType: 'application/json',
+                    responseType: new StringDataType ())
+            ],
+            'default': [
+                new Response (contentType: 'text/plain',
+                    responseType: new StringDataType ())
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """@Get(uri = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
+    }
+
     private Endpoint createEndpoint (Map properties) {
         new Endpoint(properties).initEndpointResponses ()
     }

@@ -23,11 +23,9 @@ import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.Response
-import com.github.hauner.openapi.core.model.datatypes.CollectionDataType
 import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.datatypes.ResultDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
@@ -112,81 +110,5 @@ class MethodWriterSpec extends Specification {
     void postFoo(@RequestBody(required = false) FooRequestBody body);
 """
     }
-
-    // spring/micronaut
-    void "writes mapping annotation with multiple result content types" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200' : [
-                new Response (contentType: 'application/json',
-                    responseType: new CollectionDataType (item: new StringDataType ()))
-            ],
-            'default': [
-                new Response (contentType: 'text/plain',
-                    responseType: new CollectionDataType (item: new StringDataType ()))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString ().contains ("""\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
-""")
-    }
-
-    // spring/micronaut ??????
-    void "writes method with any response type when it has multiple result contents with 'default' result type" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200' : [
-                new Response (contentType: 'application/json',
-                    responseType: new CollectionDataType (item: new StringDataType ()))
-            ],
-            'default': [
-                new Response (contentType: 'text/plain',
-                    responseType: new CollectionDataType (item: new StringDataType ()))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
-    Object getFoo();
-"""
-    }
-
-    // spring/micronaut
-    void "writes method with any response type when it has multiple result contents with wrapped result type" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200' : [
-                new Response (contentType: 'application/json',
-                    responseType: new ResultDataType (
-                        type: 'ResponseEntity',
-                        pkg: 'org.springframework.http',
-                        dataType: new CollectionDataType (item: new StringDataType ())))
-            ],
-            'default': [
-                new Response (contentType: 'text/plain',
-                    responseType: new ResultDataType (
-                        type: 'ResponseEntity',
-                        pkg: 'org.springframework.http',
-                        dataType: new CollectionDataType (item: new StringDataType ())))
-            ]
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})
-    ResponseEntity<?> getFoo();
-"""
-    }
-
-
 
 }
