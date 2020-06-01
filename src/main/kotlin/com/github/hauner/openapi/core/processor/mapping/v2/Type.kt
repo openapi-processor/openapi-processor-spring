@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 /**
- * general options
+ * a "type:" entry in the "types:" list of the mapping yaml
  *
  *  @author Martin Hauner
  */
-data class Options(
+data class Type(
 
     /**
-     * the root package name of the generated interfaces & models (required)
+     * the mapping from source to target, ie a mapping string like:
      *
-     * Interfaces and models will be generated into the `api` and `model` subpackages of
-     * `packageName`.
-     * - so the final package name of the generated interfaces will be `"${packageName}.api"`
-     * - and the final package name of the generated models will be `"${packageName}.model"`
+     * array => java.util.Collection
      */
-    val packageName: String? = null,
+    val type: String,
 
     /**
-     * bean validation (optional)
+     * (optional) generic parameters of {@link #type} target
      */
-    val beanValidation: Boolean = false
+    val generics: List<String>?
 
 ) {}

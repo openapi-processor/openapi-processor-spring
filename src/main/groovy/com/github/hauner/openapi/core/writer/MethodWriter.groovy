@@ -24,7 +24,7 @@ import com.github.hauner.openapi.spring.model.Endpoint
 import com.github.hauner.openapi.spring.model.EndpointResponse
 import com.github.hauner.openapi.spring.model.RequestBody
 import com.github.hauner.openapi.spring.writer.BeanValidationFactory
-import com.github.hauner.openapi.support.Identifier
+import com.github.hauner.openapi.core.support.Identifier
 
 /**
  * Writer for Java interface methods, i.e. endpoints.

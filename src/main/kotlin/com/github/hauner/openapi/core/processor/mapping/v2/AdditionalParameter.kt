@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 /**
- * a "responses:" entry in the mapping yaml
+ * a "parameters:" add parameter entry in the mapping yaml
  *
- * @author Martin Hauner
+ *  @author Martin Hauner
  */
-data class Response(
+data class AdditionalParameter(
 
     /**
-     * the mapping from content to target, ie a mapping string like:
+     * the mapping of an additional parameter name to target, ie a mapping string like:
      *
-     * application/json => org.springframework.data.domain.Page<java.lang.String>
+     * foo => mapping.Bar
      */
-    val content: String,
+    val add: String,
 
     /**
-     * (optional) generic parameters of {@link #content} target
+     * (optional) generic parameters of {@link #name} target
      */
     val generics: List<String>?
 
-) {}
+): Parameter {}

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.model
 
-import com.github.hauner.openapi.support.Identifier
+import com.github.hauner.openapi.core.support.Identifier
 
 /**
  * Java interface properties.

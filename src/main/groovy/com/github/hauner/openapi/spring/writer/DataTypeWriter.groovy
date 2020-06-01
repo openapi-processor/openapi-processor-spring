@@ -20,7 +20,7 @@ import com.github.hauner.openapi.core.writer.SimpleWriter
 import com.github.hauner.openapi.spring.converter.ApiOptions
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
-import com.github.hauner.openapi.support.Identifier
+import com.github.hauner.openapi.core.support.Identifier
 
 /**
  * Writer for POJO classes.

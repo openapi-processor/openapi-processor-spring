@@ -42,7 +42,7 @@ import com.github.hauner.openapi.core.parser.Response
 import com.github.hauner.openapi.core.parser.RequestBody
 import com.github.hauner.openapi.core.parser.Schema
 import com.github.hauner.openapi.spring.processor.SpringFramework
-import com.github.hauner.openapi.support.Identifier
+import com.github.hauner.openapi.core.support.Identifier
 import groovy.util.logging.Slf4j
 
 /**

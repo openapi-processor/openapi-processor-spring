@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 /**
  * the "map:" entry in the mapping yaml
@@ -23,37 +23,37 @@ package com.github.hauner.openapi.spring.processor.mapping.v2
  */
 data class Map(
 
-    /**
+        /**
      * global result mapping
      */
     val result: String?,
 
-    /**
+        /**
      * single mapping, i.e. Mono<>
      */
     val single: String?,
 
-    /**
+        /**
      * multi mapping, i.e. Flux<>
      */
     val multi: String?,
 
-    /**
+        /**
      * global type mappings
      */
     val types: List<Type> = emptyList(),
 
-    /**
+        /**
      * global parameter mappings
      */
     val parameters: List<Parameter> = emptyList(),
 
-    /**
+        /**
      * global response mappings
      */
     val responses: List<Response> = emptyList(),
 
-    /**
+        /**
      * endpoint mappings
      *
      * the LinkedHashMap preserves order

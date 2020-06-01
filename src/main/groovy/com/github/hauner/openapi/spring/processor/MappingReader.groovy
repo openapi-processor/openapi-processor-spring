@@ -26,10 +26,10 @@ import com.github.hauner.openapi.spring.processor.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 import com.github.hauner.openapi.spring.processor.mapping.Parameter
 import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
-import com.github.hauner.openapi.spring.processor.mapping.version.Mapping as VersionMapping
-import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
-import com.github.hauner.openapi.spring.processor.mapping.v2.Parameter as ParameterV2
-import com.github.hauner.openapi.spring.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
+import com.github.hauner.openapi.core.processor.mapping.version.Mapping as VersionMapping
+import com.github.hauner.openapi.core.processor.mapping.v2.Mapping as MappingV2
+import com.github.hauner.openapi.core.processor.mapping.v2.Parameter as ParameterV2
+import com.github.hauner.openapi.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
 
 /**
  *  Reader for mapping yaml.

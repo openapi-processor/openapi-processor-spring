@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 import com.github.hauner.openapi.core.converter.mapping.*
-import com.github.hauner.openapi.spring.processor.mapping.v2.Mapping as MappingV2
-
+import com.github.hauner.openapi.core.processor.mapping.v2.Mapping as MappingV2
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information

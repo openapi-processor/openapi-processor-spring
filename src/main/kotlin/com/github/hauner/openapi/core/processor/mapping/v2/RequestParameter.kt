@@ -14,37 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
-
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 /**
- * *the* v2 Schema of the mapping yaml
+ * a "parameters:" request parameter entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
-data class Mapping(
+data class RequestParameter(
 
     /**
-     * mapping format version
+     * the mapping from parameter name to target, ie a mapping string like:
+     *
+     * foo => mapping.Bar
      */
-    @JsonProperty("openapi-processor-spring") val version: String,
+    val name: String,
 
     /**
-     * general options
+     * (optional) generic parameters of {@link #name} target
      */
-    val options: Options = Options(),
+    val generics: List<String>?
 
-    /**
-     * the type mappings
-     */
-    val map: Map
-
-): VersionedMapping {
-
-    override fun isV2(): Boolean {
-        return version.startsWith("v2")
-    }
-
-}
+): Parameter {}

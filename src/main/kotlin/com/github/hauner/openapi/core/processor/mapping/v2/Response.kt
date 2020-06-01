@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping.v2
-
+package com.github.hauner.openapi.core.processor.mapping.v2
 
 /**
- * a "parameters:" request parameter entry in the mapping yaml
+ * a "responses:" entry in the mapping yaml
  *
- *  @author Martin Hauner
+ * @author Martin Hauner
  */
-data class RequestParameter(
+data class Response(
 
     /**
-     * the mapping from parameter name to target, ie a mapping string like:
+     * the mapping from content to target, ie a mapping string like:
      *
-     * foo => mapping.Bar
+     * application/json => org.springframework.data.domain.Page<java.lang.String>
      */
-    val name: String,
+    val content: String,
 
     /**
-     * (optional) generic parameters of {@link #name} target
+     * (optional) generic parameters of {@link #content} target
      */
     val generics: List<String>?
 
-): Parameter {}
+) {}
