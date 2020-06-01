@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.learn
+package com.github.hauner.openapi.core.learn
 
 import spock.lang.Specification
 

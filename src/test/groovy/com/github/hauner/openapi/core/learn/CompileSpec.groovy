@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.learn
+package com.github.hauner.openapi.core.learn
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder

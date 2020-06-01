@@ -1,4 +1,4 @@
-package com.github.hauner.openapi.learn
+package com.github.hauner.openapi.core.learn
 
 import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.spring.model.datatypes.DataType
