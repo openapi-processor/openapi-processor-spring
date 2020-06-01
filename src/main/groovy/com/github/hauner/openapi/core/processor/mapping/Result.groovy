@@ -14,29 +14,19 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * a "types:" entry in the mapping yaml
+ * the "result:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class Type {
-
-    /**
-     * source type
-     */
-    String from
+class Result {
 
     /**
      * target java type
      */
     String to
-
-    /**
-     * (optional) generic parameters of {@link #to}
-     */
-    List<String> generics
 
 }

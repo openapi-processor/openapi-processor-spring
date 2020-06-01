@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * a "parameters:" entry in the mapping yaml
+ * general options
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class Parameter {
+class Options {
+
+    /**
+     * the root package name of the generated interfaces & models (required)
+     *
+     * Interfaces and models will be generated into the `api` and `model` subpackages of `packageName`.
+     * - so the final package name of the generated interfaces will be `"${packageName}.api"`
+     * - and the final package name of the generated models will be `"${packageName}.model"`
+     */
+    String packageName
+
+    /**
+     * bean validation (optional)
+     */
+    Boolean beanValidation
+
 }

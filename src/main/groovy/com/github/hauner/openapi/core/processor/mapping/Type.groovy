@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * a "responses:" entry in the mapping yaml
+ * a "types:" entry in the mapping yaml
+ *
+ *  @author Martin Hauner
  */
 @Deprecated
-class Response {
+class Type {
 
     /**
-     * content type
+     * source type
      */
-    String content
+    String from
 
     /**
      * target java type

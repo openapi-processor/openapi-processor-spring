@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.github.hauner.openapi.spring.processor.mapping.Mapping
+import com.github.hauner.openapi.core.processor.mapping.Mapping
 import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
-import com.github.hauner.openapi.spring.processor.mapping.Parameter
-import com.github.hauner.openapi.spring.processor.mapping.ParameterDeserializer
+import com.github.hauner.openapi.core.processor.mapping.Parameter
+import com.github.hauner.openapi.core.processor.mapping.ParameterDeserializer
 import com.github.hauner.openapi.core.processor.mapping.version.Mapping as VersionMapping
 import com.github.hauner.openapi.core.processor.mapping.v2.Mapping as MappingV2
 import com.github.hauner.openapi.core.processor.mapping.v2.Parameter as ParameterV2

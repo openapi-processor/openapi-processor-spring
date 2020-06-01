@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
+
 /**
- * a "parameters:" add parameter entry in the mapping yaml
- *
- *  @author Martin Hauner
+ * a "responses:" entry in the mapping yaml
  */
 @Deprecated
-class AdditionalParameter extends Parameter {
+class Response {
 
     /**
-     * name of the additional parameter
+     * content type
      */
-    String add
+    String content
 
     /**
      * target java type

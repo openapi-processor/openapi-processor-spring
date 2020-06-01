@@ -14,41 +14,36 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
+
+import com.github.hauner.openapi.spring.processor.mapping.VersionedMapping
 
 /**
- * the "map:" entry in the mapping yaml
+ * *the* Schema of the mapping yaml
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class Map {
+class Mapping implements VersionedMapping {
 
     /**
-     * global result mapping
+     * version (currently optional)
      */
-    Result result
+    String openapiProcessorSpring
 
     /**
-     * global type mappings
+     * general options
      */
-    List<Type> types
+    Options options
 
     /**
-     * global parameter mappings
+     * the type mappings
      */
-    List<Parameter> parameters
+    Map map
 
-    /**
-     * global response mappings
-     */
-    List<Response> responses
-
-    /**
-     * endpoint mappings
-     *
-     * the LinkedHashMap preserves order
-     */
-    LinkedHashMap<String, Path> paths
+    @Override
+    boolean isV2() {
+        false
+    }
 
 }

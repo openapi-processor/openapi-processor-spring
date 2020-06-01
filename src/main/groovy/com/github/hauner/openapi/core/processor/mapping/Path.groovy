@@ -14,29 +14,39 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * a "parameters:" request parameter entry in the mapping yaml
+ * a "paths:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class RequestParameter extends Parameter {
+class Path {
 
     /**
-     * name of the parameter
+     * path should be excluded
      */
-    String name
+    boolean exclude = false
 
     /**
-     * target java type
+     * path limited result mapping
      */
-    String to
+    Result result
 
     /**
-     * (optional) generic parameters of {@link #to}
+     * path limited type mappings
      */
-    List<String> generics
+    List<Type> types
+
+    /**
+     * path limited parameter mappings
+     */
+    List<Parameter> parameters
+
+    /**
+     * path limited response mappings
+     */
+    List<Response> responses
 
 }

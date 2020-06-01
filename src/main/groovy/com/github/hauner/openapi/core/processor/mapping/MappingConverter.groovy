@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 import com.github.hauner.openapi.core.converter.mapping.AddParameterTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
@@ -24,7 +24,7 @@ import com.github.hauner.openapi.core.converter.mapping.ResultTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import com.github.hauner.openapi.core.converter.mapping.Mapping
 
-import com.github.hauner.openapi.spring.processor.mapping.Mapping as MappingV1
+import com.github.hauner.openapi.core.processor.mapping.Mapping as MappingV1
 
 
 import java.util.regex.Matcher

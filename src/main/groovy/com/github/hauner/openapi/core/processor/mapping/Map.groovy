@@ -14,19 +14,41 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * the "result:" entry in the mapping yaml
+ * the "map:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class Result {
+class Map {
 
     /**
-     * target java type
+     * global result mapping
      */
-    String to
+    Result result
+
+    /**
+     * global type mappings
+     */
+    List<Type> types
+
+    /**
+     * global parameter mappings
+     */
+    List<Parameter> parameters
+
+    /**
+     * global response mappings
+     */
+    List<Response> responses
+
+    /**
+     * endpoint mappings
+     *
+     * the LinkedHashMap preserves order
+     */
+    LinkedHashMap<String, Path> paths
 
 }

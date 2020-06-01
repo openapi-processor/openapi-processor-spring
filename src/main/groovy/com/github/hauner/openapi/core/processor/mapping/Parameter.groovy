@@ -14,39 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor.mapping
+package com.github.hauner.openapi.core.processor.mapping
 
 /**
- * a "paths:" entry in the mapping yaml
+ * a "parameters:" entry in the mapping yaml
  *
  *  @author Martin Hauner
  */
 @Deprecated
-class Path {
-
-    /**
-     * path should be excluded
-     */
-    boolean exclude = false
-
-    /**
-     * path limited result mapping
-     */
-    Result result
-
-    /**
-     * path limited type mappings
-     */
-    List<Type> types
-
-    /**
-     * path limited parameter mappings
-     */
-    List<Parameter> parameters
-
-    /**
-     * path limited response mappings
-     */
-    List<Response> responses
-
+class Parameter {
 }
