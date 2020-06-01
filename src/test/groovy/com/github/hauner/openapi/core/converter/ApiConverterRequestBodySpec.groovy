@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.core.converter.ApiConverter
-import com.github.hauner.openapi.core.converter.ApiOptions
-import com.github.hauner.openapi.core.converter.MultipartResponseBodyException
 import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.core.converter.mapping.TypeMapping
 import spock.lang.Specification
@@ -62,10 +59,8 @@ paths:
         def ep = itf.endpoints.first ()
         def body = ep.requestBodies.first ()
         body.contentType == 'application/json'
-        body.requestBodyType.type == 'EndpointRequestBody'
+        body.dataType.type == 'EndpointRequestBody'
         !body.required
-        body.annotation == '@RequestBody'
-        body.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestBody'
     }
 
     void "converts request body multipart/form-data object schema properties to request parameters" () {
@@ -102,7 +97,7 @@ paths:
                 new TypeMapping (
                     'string',
                     'binary',
-                    'org.springframework.web.multipart.MultipartFile')
+                    'multipart.Multipart')
             ])
         ])
 
@@ -117,18 +112,12 @@ paths:
 
         file.name == 'file'
         file.required
-        file.dataType.name == 'MultipartFile'
-        file.dataType.imports == ['org.springframework.web.multipart.MultipartFile'] as Set
-//        file.withAnnotation ()
-//        file.annotation == '@RequestParam'
-//        file.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'
+        file.dataType.name == 'Multipart'
+        file.dataType.imports == ['multipart.Multipart'] as Set
 
         other.name == 'other'
         other.required
         other.dataType.name == 'String'
-//        file.withAnnotation ()
-//        other.annotation == '@RequestParam'
-//        other.annotationWithPackage == 'org.springframework.web.bind.annotation.RequestParam'
     }
 
     void "throws when request body multipart/form-data schema is not an object schema" () {
