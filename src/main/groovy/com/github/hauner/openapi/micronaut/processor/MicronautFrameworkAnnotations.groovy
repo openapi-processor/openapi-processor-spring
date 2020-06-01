@@ -19,6 +19,7 @@ package com.github.hauner.openapi.micronaut.processor
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.core.model.HttpMethod
+import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.MultipartParameter
@@ -53,6 +54,7 @@ class MicronautFrameworkAnnotations implements FrameworkAnnotations {
         cookie   : new FrameworkAnnotation (name: 'CookieValue', pkg: ANNOTATION_PKG),
         path     : new FrameworkAnnotation (name: 'PathVariable', pkg: ANNOTATION_PKG),
         multipart: new FrameworkAnnotation (name: 'Part', pkg: ANNOTATION_PKG),
+        body     : new FrameworkAnnotation(name: 'Body', pkg: ANNOTATION_PKG)
     ]
 
     def UNKNOWN_ANNOTATION = new FrameworkAnnotation(name: 'Unknown', pkg: 'fix.me')
@@ -66,15 +68,17 @@ class MicronautFrameworkAnnotations implements FrameworkAnnotations {
     FrameworkAnnotation getAnnotation (Parameter parameter) {
         switch (parameter) {
             case {it instanceof QueryParameter}:
-                return PARAMETER_ANNOTATIONS['query']
+                return PARAMETER_ANNOTATIONS.'query'
             case {it instanceof HeaderParameter}:
-                return PARAMETER_ANNOTATIONS['header']
+                return PARAMETER_ANNOTATIONS.header
             case {it instanceof CookieParameter}:
-                return PARAMETER_ANNOTATIONS['cookie']
+                return PARAMETER_ANNOTATIONS.cookie
             case {it instanceof PathParameter}:
-                return PARAMETER_ANNOTATIONS['path']
+                return PARAMETER_ANNOTATIONS.path
             case {it instanceof MultipartParameter}:
-                return PARAMETER_ANNOTATIONS['multipart']
+                return PARAMETER_ANNOTATIONS.multipart
+            case {it instanceof RequestBody}:
+                return PARAMETER_ANNOTATIONS.body
             default:
                 log.error ("unknown parameter type: ${parameter.class.name}")
                 return UNKNOWN_ANNOTATION

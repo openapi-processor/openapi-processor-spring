@@ -16,8 +16,10 @@
 
 package com.github.hauner.openapi.micronaut.writer
 
+import com.github.hauner.openapi.core.model.RequestBody
 import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.core.model.datatypes.LongDataType
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
@@ -70,6 +72,20 @@ class ParameterAnnotationWriterSpec extends Specification {
         PathParameter   | "@PathVariable"
         CookieParameter | "@CookieValue"
         HeaderParameter | "@Header"
+    }
+
+    void "writes request body parameter" () {
+        def body = new RequestBody (
+            name: 'body',
+            dataType: new ObjectDataType (type: 'FooRequestBody',
+                properties: ['foo': new StringDataType ()] as LinkedHashMap),
+            contentType: 'application/json')
+
+        when:
+        writer.write (target, body)
+
+        then:
+        target.toString () == "@Body"
     }
 
 }
