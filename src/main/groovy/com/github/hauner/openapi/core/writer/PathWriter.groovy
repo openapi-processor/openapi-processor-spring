@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
 import java.nio.file.Files
 import java.nio.file.Path

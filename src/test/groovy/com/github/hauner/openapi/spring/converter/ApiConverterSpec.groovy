@@ -22,7 +22,7 @@ import com.github.hauner.openapi.core.converter.mapping.EndpointTypeMapping
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import com.github.hauner.openapi.spring.support.ModelAsserts
 import com.github.hauner.openapi.spring.writer.HeaderWriter
-import com.github.hauner.openapi.spring.writer.InterfaceWriter
+import com.github.hauner.openapi.core.writer.InterfaceWriter
 import com.github.hauner.openapi.spring.writer.MappingAnnotationWriter
 import com.github.hauner.openapi.core.writer.MethodWriter
 import spock.lang.Specification

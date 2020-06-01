@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer
+package com.github.hauner.openapi.core.writer
 
-import com.github.hauner.openapi.core.writer.SimpleWriter
+
 import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.core.model.datatypes.StringEnumDataType
 import com.github.hauner.openapi.core.support.Identifier

@@ -20,6 +20,7 @@ import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.datatypes.ListDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.writer.DataTypeWriter
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.spring.support.AssertHelper.extractImports

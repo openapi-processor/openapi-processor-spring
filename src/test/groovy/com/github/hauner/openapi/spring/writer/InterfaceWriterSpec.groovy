@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.writer.InterfaceWriter
 import com.github.hauner.openapi.core.writer.MethodWriter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint

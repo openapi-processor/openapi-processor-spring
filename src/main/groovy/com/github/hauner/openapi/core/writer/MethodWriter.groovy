@@ -23,7 +23,6 @@ import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.EndpointResponse
 import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.spring.writer.BeanValidationFactory
 import com.github.hauner.openapi.core.support.Identifier
 
 /**

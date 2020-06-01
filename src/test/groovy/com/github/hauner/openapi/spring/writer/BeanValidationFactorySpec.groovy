@@ -29,6 +29,7 @@ import com.github.hauner.openapi.core.model.datatypes.MappedDataType
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.SetDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import com.github.hauner.openapi.core.writer.BeanValidationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 

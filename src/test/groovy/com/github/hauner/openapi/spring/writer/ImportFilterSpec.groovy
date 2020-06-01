@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer
 
+import com.github.hauner.openapi.core.writer.ImportFilter
 import spock.lang.Specification
 
 class ImportFilterSpec extends Specification {
