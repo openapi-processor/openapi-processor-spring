@@ -48,29 +48,6 @@ class MethodWriterSpec extends Specification {
         new Endpoint(properties).initEndpointResponses ()
     }
 
-    // spring
-    void "writes object query parameter without @RequestParam annotation" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
-        ], parameters: [
-            new QueryParameter(name: 'foo', required: false, dataType: new ObjectDataType (
-                type: 'Foo', properties: [
-                    foo1: new StringDataType (),
-                    foo2: new StringDataType ()
-                ]
-            ))
-        ])
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @GetMapping(path = "${endpoint.path}")
-    void getFoo(Foo foo);
-"""
-    }
-
     // spring => core?
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [

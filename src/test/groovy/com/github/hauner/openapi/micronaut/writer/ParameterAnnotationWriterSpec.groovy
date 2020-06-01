@@ -22,7 +22,7 @@ import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.PathParameter
-import com.github.hauner.openapi.core.model.parameters.QueryParameter
+import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import spock.lang.Specification
 import spock.lang.Unroll

@@ -34,6 +34,10 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     }
 
     private String createAnnotation (Parameter parameter) {
+        if (! parameter.withAnnotation ()) {
+            return ""
+        }
+
         String annotation = getAnnotationName (parameter)
 
         if (! parameter.withParameters ()) {

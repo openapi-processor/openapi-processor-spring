@@ -87,8 +87,9 @@ class MethodWriter {
                 methodDefinition += " ${beanValidationFactory.createAnnotations (it.dataType)}"
             }
 
-            if (it.withAnnotation ()) {
-                methodDefinition += " ${createParameterAnnotation (it)}"
+            def annotation = createParameterAnnotation (it)
+            if (! annotation.empty) {
+                methodDefinition += " ${annotation}"
             }
 
             methodDefinition += " ${it.dataType.name} ${Identifier.toCamelCase (it.name)}"

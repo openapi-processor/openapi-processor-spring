@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer
 
 import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
@@ -63,6 +64,24 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
         then:
         target.toString () == '@RequestParam(name = "foo", required = false, defaultValue = "bar")'
+    }
+
+    void "writes object query parameter without annotation" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            required: false,
+            dataType: new ObjectDataType (
+                type: 'Foo', properties: [
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
+                ]
+            ))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == ""
     }
 
 }

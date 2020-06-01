@@ -17,6 +17,10 @@
 package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkBase
+import com.github.hauner.openapi.core.model.datatypes.DataType
+import com.github.hauner.openapi.core.model.parameters.Parameter
+import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
+import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
 
 /**
  * Micronaut model factory.
@@ -24,4 +28,13 @@ import com.github.hauner.openapi.core.framework.FrameworkBase
  * @author Martin Hauner
  */
 class MicronautFramework extends FrameworkBase {
+
+    @Override
+        Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
+        new QueryParameter (
+            name: parameter.name,
+            required: parameter.required,
+            dataType: dataType)
+    }
+
 }

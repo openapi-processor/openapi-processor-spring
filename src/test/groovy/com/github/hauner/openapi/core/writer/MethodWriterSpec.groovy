@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.core.writer
 
+import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.ParameterBase
 import com.github.hauner.openapi.core.test.TestMappingAnnotationWriter
 import com.github.hauner.openapi.core.test.TestParameterAnnotationWriter
@@ -166,24 +167,16 @@ class MethodWriterSpec extends Specification {
 """
     }
 
-    void "does not write parameter annotation if not wanted" () {
+    void "does not write parameter annotation if empty" () {
+        def stubWriter = Stub (ParameterAnnotationWriter) {}
+
+        writer.parameterAnnotationWriter = stubWriter
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new EmptyResponse ()]
-        ], parameters: [
-            new ParameterBase () {
-                String getName () {
-                    "foo"
-                }
-
-                DataType getDataType () {
-                    new StringDataType ()
-                }
-
-                boolean withAnnotation () {
-                    false
-                }
-            }
-        ])
+        ], parameters: [Stub (Parameter) {
+            getName () >> 'foo'
+            getDataType () >> new StringDataType()
+        }])
 
         when:
         writer.write (target, endpoint, endpoint.endpointResponses.first ())

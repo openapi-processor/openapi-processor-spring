@@ -17,10 +17,11 @@
 package com.github.hauner.openapi.micronaut.writer
 
 import com.github.hauner.openapi.core.model.datatypes.LongDataType
-import com.github.hauner.openapi.core.model.parameters.QueryParameter
-import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
 import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
+import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
@@ -54,7 +55,6 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     void "writes simple (optional) query parameter with quoted string default value" () {
         def param = new QueryParameter(
             name: 'foo',
-            required: false,
             dataType: new StringDataType(constraints: new DataTypeConstraints (defaultValue: 'bar')))
 
         when:
@@ -67,7 +67,6 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     void "writes simple (optional) query parameter with quoted number default value" () {
         def param = new QueryParameter(
             name: 'foo',
-            required: false,
             dataType: new LongDataType (constraints: new DataTypeConstraints (defaultValue: 5)))
 
         when:
@@ -75,6 +74,23 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
         then:
         target.toString () == '@QueryValue(value = "foo", defaultValue = "5")'
+    }
+
+    void "writes object query parameter without annotation" () {
+        def param = new QueryParameter(
+            name: 'foo',
+            dataType: new ObjectDataType (
+                type: 'Foo', properties: [
+                    foo1: new StringDataType (),
+                    foo2: new StringDataType ()
+                ]
+            ))
+
+        when:
+        writer.write (target, param)
+
+        then:
+        target.toString () == ""
     }
 
 }

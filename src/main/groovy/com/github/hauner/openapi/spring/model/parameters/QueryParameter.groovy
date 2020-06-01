@@ -29,7 +29,7 @@ import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 class QueryParameter extends ParameterBase {
 
     /**
-     * controls if a parameter should have not have a {@code @RequestParam} annotation.
+     * controls if a parameter should have a {@code @RequestParam} annotation.
      */
     boolean withAnnotation () {
         // Map should be annotated

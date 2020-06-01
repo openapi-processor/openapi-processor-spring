@@ -18,13 +18,13 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import com.github.hauner.openapi.core.model.HttpMethod
 import com.github.hauner.openapi.core.model.parameters.CookieParameter
 import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.core.model.parameters.MultipartParameter
 import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.model.parameters.PathParameter
-import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.parameters.QueryParameter
+import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
 
 /**
