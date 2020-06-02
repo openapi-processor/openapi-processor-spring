@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
- *  into the format used by {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}.
+ *  into the format used by {@link com.github.hauner.openapi.core.converter.DataTypeConverter}.
  *
  *  @author Martin Hauner
  */

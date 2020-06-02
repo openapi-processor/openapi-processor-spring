@@ -21,7 +21,7 @@ import com.github.hauner.openapi.core.parser.RefResolver as ParserRefResolver
 import com.github.hauner.openapi.core.parser.Schema
 
 /**
- * Helper for {@link com.github.hauner.openapi.spring.converter.DataTypeConverter}. Holds an OpenAPI
+ * Helper for {@link DataTypeConverter}. Holds an OpenAPI
  * schema with context information, i.e. name and if this is an inline type with a generated name.
  *
  * @author Martin Hauner

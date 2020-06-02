@@ -21,7 +21,6 @@ import com.github.hauner.openapi.core.model.DataTypes
 import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 import com.github.hauner.openapi.core.parser.RefResolver
 import com.github.hauner.openapi.core.parser.Schema
-import com.github.hauner.openapi.spring.converter.DataTypeConverter
 import com.github.hauner.openapi.core.test.TestSchema
 
 import spock.lang.Specification

@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.converter
+package com.github.hauner.openapi.core.converter
 
-import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.converter.mapping.MappingFinder
-import com.github.hauner.openapi.core.converter.SchemaInfo
-import com.github.hauner.openapi.core.converter.UnknownDataTypeException
 import com.github.hauner.openapi.core.converter.mapping.AmbiguousTypeMappingException
 import com.github.hauner.openapi.core.converter.mapping.TargetType
 import com.github.hauner.openapi.core.converter.mapping.TargetTypeMapping
