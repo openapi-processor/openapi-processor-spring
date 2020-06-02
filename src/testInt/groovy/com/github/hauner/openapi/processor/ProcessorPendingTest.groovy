@@ -20,6 +20,7 @@ import com.github.hauner.openapi.core.parser.ParserType
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import spock.lang.Ignore
 
 @Ignore
 @RunWith(Parameterized)
