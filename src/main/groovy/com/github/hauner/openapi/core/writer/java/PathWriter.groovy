@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.test
+package com.github.hauner.openapi.core.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter
+import java.nio.file.Files
+import java.nio.file.Path
 
-class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
+/**
+ * Path based Writer
+ *
+ * @author Martin Haner
+ */
+class PathWriter extends OutputStreamWriter {
 
-    @Override
-    void write (Writer target, Parameter parameter) {
-        target.write ("@Parameter")
+    PathWriter(Path target) throws IOException {
+        super(Files.newOutputStream (target));
     }
 
 }

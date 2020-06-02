@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.test
+package com.github.hauner.openapi.core.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter
+import com.github.hauner.openapi.core.model.Endpoint
+import com.github.hauner.openapi.core.model.EndpointResponse
 
-class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
+/**
+ * mapping annotation writer interface.
+ *
+ * @author Martin Hauner
+ */
+interface MappingAnnotationWriter {
 
-    @Override
-    void write (Writer target, Parameter parameter) {
-        target.write ("@Parameter")
-    }
+    void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse)
 
 }

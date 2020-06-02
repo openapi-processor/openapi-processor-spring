@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.core.test
 
-import com.github.hauner.openapi.core.writer.MappingAnnotationWriter
+import com.github.hauner.openapi.core.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.core.model.EndpointResponse
 

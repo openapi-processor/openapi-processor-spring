@@ -16,21 +16,21 @@
 package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.api.OpenApiProcessor
-import com.github.hauner.openapi.micronaut.writer.HeaderWriter
-import com.github.hauner.openapi.micronaut.writer.MappingAnnotationWriter
-import com.github.hauner.openapi.micronaut.writer.ParameterAnnotationWriter
+import com.github.hauner.openapi.micronaut.writer.java.HeaderWriter
+import com.github.hauner.openapi.micronaut.writer.java.MappingAnnotationWriter
+import com.github.hauner.openapi.micronaut.writer.java.ParameterAnnotationWriter
 import com.github.hauner.openapi.core.converter.ApiConverter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.parser.OpenApi
 import com.github.hauner.openapi.core.parser.Parser
 import com.github.hauner.openapi.core.processor.MappingConverter
 import com.github.hauner.openapi.core.processor.MappingReader
-import com.github.hauner.openapi.core.writer.ApiWriter
-import com.github.hauner.openapi.core.writer.BeanValidationFactory
-import com.github.hauner.openapi.core.writer.DataTypeWriter
-import com.github.hauner.openapi.core.writer.InterfaceWriter
-import com.github.hauner.openapi.core.writer.MethodWriter
-import com.github.hauner.openapi.core.writer.StringEnumWriter
+import com.github.hauner.openapi.core.writer.java.ApiWriter
+import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
+import com.github.hauner.openapi.core.writer.java.DataTypeWriter
+import com.github.hauner.openapi.core.writer.java.InterfaceWriter
+import com.github.hauner.openapi.core.writer.java.MethodWriter
+import com.github.hauner.openapi.core.writer.java.StringEnumWriter
 import org.slf4j.LoggerFactory
 
 /**

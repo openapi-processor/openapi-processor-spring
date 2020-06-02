@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.test
+package com.github.hauner.openapi.micronaut.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter
+import spock.lang.Specification
 
-class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
+class HeaderWriterSpec extends Specification {
 
-    @Override
-    void write (Writer target, Parameter parameter) {
-        target.write ("@Parameter")
+    void "writes generated header"() {
+        def headerWriter = new HeaderWriter()
+        def target = new StringWriter()
+
+        when:
+        headerWriter.write (target)
+
+        then:
+        target.toString () == HeaderWriter.HEADER
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.test
+package com.github.hauner.openapi.core.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter
+/**
+ * Removes imports from the list of import that are not needed.
+ *
+ * @author Martin Hauner
+ */
+class ImportFilter {
 
-class TestParameterAnnotationWriter implements ParameterAnnotationWriter {
-
-    @Override
-    void write (Writer target, Parameter parameter) {
-        target.write ("@Parameter")
+    Set<String> filter(String packageName, Set<String> imports) {
+        imports.findAll {
+           !it.startsWith ('java.lang.') && !it.startsWith (packageName)
+        }
     }
 
 }
