@@ -26,12 +26,12 @@ import com.github.hauner.openapi.core.parser.Parser
 import com.github.hauner.openapi.core.writer.java.ApiWriter
 import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
 import com.github.hauner.openapi.core.writer.java.DataTypeWriter
-import com.github.hauner.openapi.spring.writer.java.HeaderWriter
 import com.github.hauner.openapi.core.writer.java.InterfaceWriter
-import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.core.writer.java.MethodWriter
-import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import com.github.hauner.openapi.core.writer.java.StringEnumWriter
+import com.github.hauner.openapi.spring.writer.java.HeaderWriter
+import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
+import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import org.slf4j.LoggerFactory
 
 /**
