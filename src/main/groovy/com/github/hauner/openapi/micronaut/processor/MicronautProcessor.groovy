@@ -59,8 +59,7 @@ class MicronautProcessor implements OpenApiProcessor {
             def annotations = new MicronautFrameworkAnnotations()
 
             def options = convertOptions (processorOptions)
-            def cv = new ApiConverter(options)
-            cv.framework = framework
+            def cv = new ApiConverter(options, framework)
             def api = cv.convert (openapi)
 
             def headerWriter = new HeaderWriter()
