@@ -1,7 +1,0 @@
-Book:
-  type: object
-  properties:
-    isbn:
-      type: string
-    title:
-      type: string
