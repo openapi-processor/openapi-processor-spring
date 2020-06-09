@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.test.EmptyResponse
+import com.github.hauner.openapi.core.model.Response
+import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.writer.java.MethodWriter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
@@ -42,7 +43,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new EmptyResponse ()]
+            '204': [new Response (responseType: new NoneDataType())]
         ], parameters: [
             new QueryParameter(name: 'foo', required: false, dataType: new MappedMapDataType (
                 type: 'Map',
