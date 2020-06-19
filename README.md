@@ -1,4 +1,3 @@
-[![][badge-license]][oap-license]
 [![][badge-ci]][workflow-ci]
 
 
