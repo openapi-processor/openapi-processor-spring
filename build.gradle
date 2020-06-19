@@ -20,7 +20,7 @@ java {
 
 
 ext {
-    processorApiVersion = '1.0.0'
+    processorApiVersion = '1.1.0.M1'
     jacksonVersion = '2.11.0'
 
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
@@ -35,7 +35,7 @@ repositories {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
     maven {
-        url  "https://dl.bintray.com/hauner/openapi-processor"
+        setUrl("https://dl.bintray.com/openapi-processor/primary")
     }
 }
 
@@ -68,15 +68,15 @@ dependencies {
     components.all(JacksonPlatformRule)
     components.all(KotlinPlatformRule)
 
-    compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0'
-    implementation 'com.github.hauner.openapi:openapi-processor-core:1.0.0.M1'
+    compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
+    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0.M1'
 
     implementation 'org.codehaus.groovy:groovy:2.5.12'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
-    testImplementation ("com.github.hauner.openapi:openapi-processor-api:$processorApiVersion")
+    testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('com.github.hauner.openapi:openapi-processor-test:1.0.0.M1') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0.M1') {
         exclude group: 'com.google.guava'
     }
 
