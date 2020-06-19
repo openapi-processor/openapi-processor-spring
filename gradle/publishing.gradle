@@ -1,0 +1,81 @@
+def pomConfig = {
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id 'hauner'
+            name 'Martin Hauner'
+        }
+    }
+
+    scm {
+       url "https://github.com/${project.projectGithubRepo}".toString ()
+    }
+}
+
+publishing {
+    publications {
+        projectArtifacts (MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', project.projectTitle)
+                root.appendNode('description', project.projectDesc)
+                root.appendNode('url', project.projectUrl)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+
+artifactory {
+    contextUrl = 'https://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = bintrayUser
+            password = bintrayKey
+        }
+        defaults {
+            publications('projectArtifacts')
+            publishArtifacts = true
+            publishPom = true
+        }
+    }
+    resolve {
+        repoKey = 'jcenter'
+    }
+}
+
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['projectArtifacts']
+
+    pkg {
+        repo = 'primary'
+        name = project.name
+        userOrg = 'openapi-processor'
+        licenses = ['Apache-2.0']
+        vcsUrl = "https://github.com/${project.projectGithubRepo}".toString ()
+        websiteUrl = projectUrl
+        desc = "${project.projectTitle} - ${project.projectDesc} - ${project.name} module".toString()
+        version {
+            name = project.version
+        }
+    }
+}
