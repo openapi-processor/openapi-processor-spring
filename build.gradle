@@ -85,14 +85,14 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0.M1'
+    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0.M3-SNAPSHOT'
 
     implementation 'org.codehaus.groovy:groovy:2.5.12'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0.M1') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0.M1-SNAPSHOT') {
         exclude group: 'com.google.guava'
     }
 
