@@ -16,24 +16,20 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.spring.model.datatypes.MappedDataType
-import com.github.hauner.openapi.spring.model.datatypes.MappedMapDataType
-import com.github.hauner.openapi.spring.model.datatypes.ObjectDataType
+import com.github.hauner.openapi.core.model.parameters.ParameterBase
+import com.github.hauner.openapi.core.model.datatypes.MappedDataType
+import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
+import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
 
 /**
  * OpenAPI query parameter.
  *
  * @author Martin Hauner
  */
-class QueryParameter extends Parameter {
-
-    String getAnnotationName () {
-        "RequestParam"
-    }
+class QueryParameter extends ParameterBase {
 
     /**
-     * If the query parameter is mapped to a pojo object it should not have a {@code @RequestParam}
-     * annotation.
+     * controls if a parameter should have a {@code @RequestParam} annotation.
      */
     boolean withAnnotation () {
         // Map should be annotated
@@ -55,7 +51,7 @@ class QueryParameter extends Parameter {
     }
 
     /**
-     * If the query parameter is mapped to a pojo object it should not have any parameters.
+     * controls if a {@code @RequestParam} should have any parameters.
      */
     boolean withParameters () {
         // Map should not have parameters

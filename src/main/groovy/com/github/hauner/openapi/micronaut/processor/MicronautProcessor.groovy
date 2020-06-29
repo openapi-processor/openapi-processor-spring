@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 the original authors
+ * Copyright 2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,39 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.hauner.openapi.spring.processor
+package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.api.OpenApiProcessor
-import com.github.hauner.openapi.core.processor.MappingConverter
-import com.github.hauner.openapi.core.processor.MappingReader
+import com.github.hauner.openapi.micronaut.writer.java.HeaderWriter
+import com.github.hauner.openapi.micronaut.writer.java.MappingAnnotationWriter
+import com.github.hauner.openapi.micronaut.writer.java.ParameterAnnotationWriter
 import com.github.hauner.openapi.core.converter.ApiConverter
 import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.parser.OpenApi
 import com.github.hauner.openapi.core.parser.Parser
+import com.github.hauner.openapi.core.processor.MappingConverter
+import com.github.hauner.openapi.core.processor.MappingReader
 import com.github.hauner.openapi.core.writer.java.ApiWriter
 import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
 import com.github.hauner.openapi.core.writer.java.DataTypeWriter
 import com.github.hauner.openapi.core.writer.java.InterfaceWriter
 import com.github.hauner.openapi.core.writer.java.MethodWriter
 import com.github.hauner.openapi.core.writer.java.StringEnumWriter
-import com.github.hauner.openapi.spring.writer.java.HeaderWriter
-import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
-import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import org.slf4j.LoggerFactory
 
 /**
- *  Entry point of openapi-processor-spring.
+ *  Entry point of openapi-processor-micronaut.
  *
  *  @author Martin Hauner
- *  @author Bastian Wilhelm
  */
-class SpringProcessor implements OpenApiProcessor {
-    private static final LOG = LoggerFactory.getLogger (SpringProcessor)
+class MicronautProcessor implements OpenApiProcessor {
+    private static final LOG = LoggerFactory.getLogger (MicronautProcessor)
 
     @Override
     String getName () {
-        return 'spring'
+        return 'micronaut'
     }
 
     @Override
@@ -57,8 +55,8 @@ class SpringProcessor implements OpenApiProcessor {
                 openapi.printWarnings ()
             }
 
-            def framework = new SpringFramework()
-            def annotations = new SpringFrameworkAnnotations()
+            def framework = new MicronautFramework()
+            def annotations = new MicronautFrameworkAnnotations()
 
             def options = convertOptions (processorOptions)
             def cv = new ApiConverter(options, framework)
@@ -72,9 +70,8 @@ class SpringProcessor implements OpenApiProcessor {
                     headerWriter: headerWriter,
                     methodWriter: new MethodWriter(
                         mappingAnnotationWriter: new MappingAnnotationWriter (),
-                        parameterAnnotationWriter: new ParameterAnnotationWriter (
-                            annotations: annotations
-                        ),
+                        parameterAnnotationWriter: new ParameterAnnotationWriter(
+                            annotations: annotations),
                         beanValidationFactory: beanValidationFactory,
                         apiOptions: options
                     ),
@@ -104,25 +101,11 @@ class SpringProcessor implements OpenApiProcessor {
 
         if (processorOptions.containsKey ('mapping')) {
             mapping = reader.read (processorOptions.mapping as String)
-
-        } else if (processorOptions.containsKey ('typeMappings')) {
-            mapping = reader.read (processorOptions.typeMappings as String)
-            println "warning: 'typeMappings' option is deprecated, use 'mapping'!"
         }
 
         def options = new ApiOptions ()
         options.apiPath = processorOptions.apiPath
         options.targetDir = processorOptions.targetDir
-
-        if (processorOptions.packageName) {
-            options.packageName = processorOptions.packageName
-            println "warning: 'options:package-name' should be set in the mapping yaml!"
-        }
-
-        if (processorOptions.containsKey ('beanValidation')) {
-            options.beanValidation = processorOptions.beanValidation
-            println "warning: 'options:bean-validation' should be set in the mapping yaml!"
-        }
 
         if (mapping) {
             if (mapping?.options?.packageName != null) {
@@ -136,6 +119,8 @@ class SpringProcessor implements OpenApiProcessor {
             }
 
             options.typeMappings = converter.convert (mapping)
+        } else {
+            LOG.error ("missing 'mapping.yaml' configuration!")
         }
 
         options
