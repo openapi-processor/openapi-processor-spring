@@ -9,7 +9,7 @@ A mapping yaml looks like this:
 [source,yaml]
 ----
 options:
-  package-name: com.github.hauner.openapi
+  package-name: io.openapiprocessor.sample
   bean-validation: true
 
 map:
