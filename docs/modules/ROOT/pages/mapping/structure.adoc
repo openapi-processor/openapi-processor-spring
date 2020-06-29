@@ -20,7 +20,7 @@ first line of the `mapping.yaml` file.
 
 [source,yaml]
 ----
-openapi-processor-spring: v2
+openapi-processor-mapping: v2
 ----
 ====
 
