@@ -10,23 +10,22 @@ A single global parameter mapping can have the following properties:
 
 [source,yaml]
 ----
- - name: ..
-   to: ..
+ - name: {parameter name}  =>  {target type}
    generics:
-     - ..
-     - ..
+     - {a generic type}
+     - {another generic type}
 ----
 
-* **name** and **to** are required.
+* **name** is required.
 
-* **name** is the name of an endpoint parameter used in the OpenAPI description that should be
-replaced by **to**.
+** **{parameter name}** is the name of an endpoint parameter used in the OpenAPI description that
+should be  replaced by **{target type}**.
 
-* **to** is the fully qualified class name of the java type that should be used for all endpoint
- parameters of **name**.
+** **{target type}** is the fully qualified class name of the java type that should be used for all
+endpoint content types **{parameter name}**.
 
 * **generics** defines the list of types that should be used as generic type parameters to the
-java type given by **to**.
+java type given by **{target type}**.
 
 
 [CAUTION]
@@ -45,8 +44,7 @@ map:
 
   # list of global parameter mappings, mapped by parameter name
   parameters:
-    - name: date
-      to: java.time.ZonedDateTime
+    - name: date => java.time.ZonedDateTime
 ----
 
 and an openapi.yaml with multiple endpoints having a parameter named "date"

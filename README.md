@@ -1,4 +1,3 @@
-[![][badge-license]][oap-license]
 [![][badge-ci]][workflow-ci]
 
 
@@ -9,7 +8,7 @@
 an [OpenAPI][openapi] interface only & model java code generator for [Spring Boot][springboot].
  
 
-# Documentation
+# openapi-processor documentation
 
 See [here][oap-docs].
   

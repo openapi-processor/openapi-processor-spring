@@ -1,0 +1,54 @@
+publishing {
+    publications {
+        OpenApiProcessor (MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = project.projectTitle
+//                description = project.projectDesc
+                description = "${project.projectTitle} - ${project.projectDesc} - ${project.name} module".toString()
+                url = project.projectUrl
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = "repo"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'hauner'
+                        name  = 'Martin Hauner'
+                    }
+                }
+
+                scm {
+                   url = "https://github.com/${project.projectGithubRepo}".toString ()
+                }
+            }
+
+        }
+    }
+
+    repositories {
+
+        maven {
+            def releaseRepository = uri("https://api.bintray.com/maven/openapi-processor/primary/${project.name}/;publish=1;override=0")
+            def snapshotRepository = uri("https://oss.jfrog.org/oss-snapshot-local/")
+            url = version.endsWith('SNAPSHOT') ? snapshotRepository : releaseRepository
+
+            credentials {
+                username = bintrayUser
+                password = bintrayKey
+            }
+        }
+    }
+}

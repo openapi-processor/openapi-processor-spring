@@ -1,0 +1,10 @@
+openapi-processor-spring: v2
+
+options:
+  package-name: generated
+
+map:
+  result: org.springframework.http.ResponseEntity
+
+  types:
+    - type: string:binary => org.springframework.web.multipart.MultipartFile

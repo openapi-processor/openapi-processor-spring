@@ -16,18 +16,22 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.api.OpenApiProcessor
-import com.github.hauner.openapi.spring.converter.ApiConverter
-import com.github.hauner.openapi.spring.converter.ApiOptions
-import com.github.hauner.openapi.spring.parser.OpenApi
-import com.github.hauner.openapi.spring.parser.Parser
-import com.github.hauner.openapi.spring.writer.ApiWriter
-import com.github.hauner.openapi.spring.writer.BeanValidationFactory
-import com.github.hauner.openapi.spring.writer.DataTypeWriter
-import com.github.hauner.openapi.spring.writer.HeaderWriter
-import com.github.hauner.openapi.spring.writer.InterfaceWriter
-import com.github.hauner.openapi.spring.writer.MethodWriter
-import com.github.hauner.openapi.spring.writer.StringEnumWriter
+import com.github.hauner.openapi.core.processor.MappingConverter
+import com.github.hauner.openapi.core.processor.MappingReader
+import com.github.hauner.openapi.core.converter.ApiConverter
+import com.github.hauner.openapi.core.converter.ApiOptions
+import com.github.hauner.openapi.core.parser.OpenApi
+import com.github.hauner.openapi.core.parser.Parser
+import com.github.hauner.openapi.core.writer.java.ApiWriter
+import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
+import com.github.hauner.openapi.core.writer.java.DataTypeWriter
+import com.github.hauner.openapi.core.writer.java.InterfaceWriter
+import com.github.hauner.openapi.core.writer.java.MethodWriter
+import com.github.hauner.openapi.core.writer.java.StringEnumWriter
+import com.github.hauner.openapi.spring.writer.java.HeaderWriter
+import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
+import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
+import io.openapiprocessor.api.OpenApiProcessor
 import org.slf4j.LoggerFactory
 
 /**
@@ -52,22 +56,30 @@ class SpringProcessor implements OpenApiProcessor {
             if (processorOptions.showWarnings) {
                 openapi.printWarnings ()
             }
-    
+
+            def framework = new SpringFramework()
+            def annotations = new SpringFrameworkAnnotations()
+
             def options = convertOptions (processorOptions)
-            def cv = new ApiConverter(options)
+            def cv = new ApiConverter(options, framework)
             def api = cv.convert (openapi)
-    
+
             def headerWriter = new HeaderWriter()
             def beanValidationFactory = new BeanValidationFactory()
-    
+
             def writer = new ApiWriter (options,
                 new InterfaceWriter(
                     headerWriter: headerWriter,
                     methodWriter: new MethodWriter(
+                        mappingAnnotationWriter: new MappingAnnotationWriter (),
+                        parameterAnnotationWriter: new ParameterAnnotationWriter (
+                            annotations: annotations
+                        ),
                         beanValidationFactory: beanValidationFactory,
                         apiOptions: options
                     ),
                     beanValidationFactory: beanValidationFactory,
+                    annotations: annotations,
                     apiOptions: options
                 ),
                 new DataTypeWriter(
@@ -77,7 +89,7 @@ class SpringProcessor implements OpenApiProcessor {
                 ),
                 new StringEnumWriter(headerWriter: headerWriter)
             )
-    
+
             writer.write (api)
         } catch (Exception e) {
             LOG.error ("processing failed!", e)
@@ -115,6 +127,8 @@ class SpringProcessor implements OpenApiProcessor {
         if (mapping) {
             if (mapping?.options?.packageName != null) {
                 options.packageName = mapping.options.packageName
+            } else {
+                LOG.warn ("no 'options:package-name' set in mapping!")
             }
 
             if (mapping?.options?.beanValidation != null) {

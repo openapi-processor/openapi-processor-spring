@@ -11,59 +11,61 @@ map:
   # path mappings, only valid for the given path
   paths:
 
-    # the path
+    # a path
     /foo:
 
-      # single wrapper
-      single:
-        to: ..
+      # path specific result wrapper
+      result: {target type}
 
-      # result wrapper
-      result:
-        to: ..
+      # path specific single wrapper
+      single: {target type}
+
+      # path specific multi wrapper
+      multi: {target type}
 
       # list of path specific mappings
       types:
-        - from: ..
-          to: ..
+        - from: {source type}  =>  {target type}
 
       # list of path specific parameter mappings, mapped by parameter name
       parameters:
-        - name: ..
-          to: ..
+        - name: {parameter name}  =>  {target type}
+
+        # the list of parameter mappings can include additional parameters
+        - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type
       responses:
-        - content: ..
-          to: ..
+        - content: {content type}  =>  {target type}
 
-    # another path
-    /foo2:
+    # a path
+    /foobar:
       # excluding an endpoint
       exclude: true
 
-      # single wrapper
-      single:
-        to: ..
+      # path specific result wrapper
+      result: {target type}
 
-      # result wrapper
-      result:
-        to: ..
+      # path specific single wrapper
+      single: {target type}
+
+      # path specific multi wrapper
+      multi: {target type}
 
       # list of path specific mappings
       types:
-        - from: ..
-          to: ..
+        - from: {source type}  =>  {target type}
 
       # list of path specific parameter mappings, mapped by parameter name
       parameters:
-        - name: ..
-          to: ..
+        - name: {parameter name}  =>  {target type}
+
+        # the list of parameter mappings can include additional parameters
+        - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type
       responses:
-        - content: ..
-          to: ..
+        - content: {content type}  =>  {target type}
 ----
 
 The mappings defined as properties of an endpoint will be used only for this endpoint. They don't

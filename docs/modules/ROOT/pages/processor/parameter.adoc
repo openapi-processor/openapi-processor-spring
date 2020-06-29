@@ -34,15 +34,108 @@ ResponseEntity<Void> getEndpoint(@RequestParam(name = "foo", required = false, d
 
 == path parameters
 
-todo...
+Path parameters get converted to method parameters with a `@PathVariable()` annotation.
+
+For example the following endpoint description:
+
+
+[source, yaml]
+----
+paths:
+  /endpoint/{foo}:
+    get:
+      parameters:
+        - name: foo
+          description: a path parameter
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: plain text response
+          content:
+            plain/text:
+              schema:
+                type: string
+----
+
+
+will generate the following interface method:
+
+[source,java]
+----
+@GetMapping(
+        path = "/path/{foo}",
+        produces = {"plain/text"})
+String getEndpointFoo(@PathVariable(name = "foo") String foo);
+----
 
 == header parameters
 
-todo...
+Header parameters use the `@RequestHeader` annotation.
+
+Given the following endpoint description:
+
+[source, yaml]
+----
+paths:
+  /endpoint:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: x-foo
+          description: a header parameter
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor generates the following interface method:
+
+[source,java]
+----
+@GetMapping(path = "/endpoint")
+void getEndpoint(@RequestHeader(name = "x-foo") String xFoo);
+----
 
 == cookie parameters
 
-todo...
+Cookie parameters use the `@CookieValue` annotation.
+
+Given the following endpoint description:
+
+
+[source, yaml]
+----
+paths:
+  /endpoint:
+
+    get:
+      parameters:
+        - name: foo
+          description: a cookie
+          in: cookie
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor generates the following interface method:
+
+[source,java]
+----
+@GetMapping(path = "/endpoint")
+void getEndpoint(@CookieValue(name = "foo") String foo);
+----
 
 == additional parameters
 
@@ -61,8 +154,7 @@ map:
     /foo:
 
       parameters:
-        - add: request
-          as: javax.servlet.http.HttpServletRequest
+        - add: request => javax.servlet.http.HttpServletRequest
 ----
 
 will add the *additional* parameter to the generated interface method.
