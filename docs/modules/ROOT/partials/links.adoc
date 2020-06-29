@@ -2,14 +2,14 @@
 // external openapi-processor links
 //
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-:badge-ci: https://github.com/hauner/openapi-processor-spring/workflows/ci/badge.svg
-:oaps-ci: https://github.com/hauner/openapi-processor-spring/actions?query=workflow%3Aci
-:oaps-issues: https://github.com/hauner/openapi-processor-spring/issues
-:oaps-inttests: https://github.com/hauner/openapi-processor-spring/tree/master/src/testInt/resources
-:oaps-license: https://github.com/hauner/openapi-processor-spring/blob/master/LICENSE
-:oaps-releases: https://github.com/hauner/openapi-processor-spring/releases
-:oaps-bintray: https://bintray.com/hauner/openapi-processor
-:oap-gradle: https://github.com/hauner/openapi-processor-gradle
+:badge-ci: https://github.com/openapi-processor/openapi-processor-spring/workflows/ci/badge.svg
+:oaps-ci: https://github.com/openapi-processor/openapi-processor-spring/actions?query=workflow%3Aci
+:oaps-issues: https://github.com/openapi-processor/openapi-processor-spring/issues
+:oaps-inttests: https://github.com/openapi-processor/openapi-processor-spring/tree/master/src/testInt/resources
+:oaps-license: https://github.com/openapi-processor/openapi-processor-spring/blob/master/LICENSE
+:oaps-releases: https://github.com/openapi-processor/openapi-processor-spring/releases
+:oaps-bintray: https://bintray.com/openapi-processor/openapi-processor
+:oap-gradle: https://github.com/openapi-processor/openapi-processor-gradle
 :oap-playground: https://openapi-processor-playground.appspot.com
 
 //
