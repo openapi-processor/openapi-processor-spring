@@ -3,15 +3,14 @@ plugins {
     id 'groovy'
     id 'java-library'
     id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.8.5'
     id 'org.jetbrains.kotlin.jvm' version '1.3.72'
     id 'org.jetbrains.dokka' version '0.10.1'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id "com.github.ben-manes.versions" version "0.28.0"
 }
 
-group 'com.github.hauner.openapi'
-version '1.0.0.M14'
+group projectGroupId
+version projectVersion
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,8 +33,25 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
+
     maven {
-        setUrl("https://dl.bintray.com/openapi-processor/primary")
+        url "https://dl.bintray.com/openapi-processor/primary"
+        content {
+           includeGroup "io.openapiprocessor"
+        }
+        mavenContent {
+            releasesOnly()
+        }
+    }
+
+    maven {
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+        content {
+           includeGroup "io.openapiprocessor"
+        }
+        mavenContent {
+            snapshotsOnly()
+        }
     }
 }
 
@@ -69,14 +85,14 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0.M1'
+    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0.M3-SNAPSHOT'
 
     implementation 'org.codehaus.groovy:groovy:2.5.12'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0.M1') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0.M1-SNAPSHOT') {
         exclude group: 'com.google.guava'
     }
 
@@ -140,36 +156,4 @@ dokka {
     outputDirectory = "$buildDir/docs/kotlin"
 }
 
-
-bintray {
-    user = bintrayUser
-    key = bintrayKey
-    publications = ['processor']
-
-    pkg {
-        repo = 'openapi-processor'
-        name = 'openapi-processor-spring'
-        //userOrg = 'openapi-generatr'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/hauner/openapi-processor-spring'
-
-        version {
-            name = project.version
-        }
-    }
-}
-
-
-publishing {
-    publications {
-        processor (MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-
-            groupId project.group
-            artifactId project.name
-            version project.version
-        }
-    }
-}
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
