@@ -58,7 +58,7 @@ repositories {
 sourceSets {
   main {
     java {
-        srcDirs += "${buildDir}/version/java/main"
+        srcDirs "${buildDir}/version"
     }
   }
 }

@@ -28,9 +28,7 @@ class VersionTask extends DefaultTask {
      */
     @TaskAction
     void generateVersion () {
-        def path = Path.of (
-            targetDir, "version", "main", "java", "io", "openapiprocessor", "spring")
-
+        def path = Path.of (targetDir, "version", "io", "openapiprocessor", "spring")
         Files.createDirectories(path)
 
         def target = path.resolve ("Version.java")
