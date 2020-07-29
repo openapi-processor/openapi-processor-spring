@@ -55,6 +55,17 @@ repositories {
     }
 }
 
+sourceSets {
+  main {
+    java {
+        srcDirs "${buildDir}/version"
+    }
+  }
+}
+
+compileKotlin.dependsOn "generateVersion"
+
+
 test {
     useJUnitPlatform()
 }
@@ -156,4 +167,5 @@ dokka {
     outputDirectory = "$buildDir/docs/kotlin"
 }
 
+apply plugin: VersionPlugin
 apply from: "${rootProject.rootDir}/gradle/publishing.gradle"

@@ -27,7 +27,7 @@ import org.junit.runners.Parameterized
 
 //@Ignore
 @RunWith(Parameterized)
-class ProcessorPendingTest extends ProcessorTestBase {
+class ProcessorPendingTest extends EndToEndBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
