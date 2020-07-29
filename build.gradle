@@ -63,7 +63,7 @@ sourceSets {
   }
 }
 
-compileJava.dependsOn "generateVersion"
+compileKotlin.dependsOn "generateVersion"
 
 
 test {
