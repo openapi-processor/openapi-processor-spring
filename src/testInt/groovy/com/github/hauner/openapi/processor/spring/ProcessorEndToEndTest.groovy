@@ -18,7 +18,6 @@ package com.github.hauner.openapi.processor.spring
 
 import com.github.hauner.openapi.core.parser.ParserType
 import com.github.hauner.openapi.spring.processor.SpringProcessor
-import com.github.hauner.openapi.test.ProcessorTestBase
 import com.github.hauner.openapi.test.TestSet
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +27,7 @@ import org.junit.runners.Parameterized
  * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
  */
 @RunWith(Parameterized)
-class ProcessorEndToEndTest extends ProcessorTestBase {
+class ProcessorEndToEndTest extends EndToEndBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
