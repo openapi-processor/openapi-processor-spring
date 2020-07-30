@@ -98,7 +98,7 @@ dependencies {
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
     implementation 'io.openapiprocessor:openapi-processor-core:1.1.0-SNAPSHOT'
 
-    implementation 'org.codehaus.groovy:groovy:2.5.12'
+    implementation 'org.codehaus.groovy:groovy:2.5.13'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
@@ -114,10 +114,10 @@ dependencies {
          exclude group: 'com.google.guava'
      }
 
-    testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-2.5') {
+    testImplementation ('org.spockframework:spock-core:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
-    testImplementation ('org.spockframework:spock-junit4:2.0-M2-groovy-2.5') {
+    testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
