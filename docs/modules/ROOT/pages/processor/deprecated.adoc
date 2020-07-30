@@ -1,0 +1,134 @@
+= Deprecated items
+
+OpenAPI allows adding `deprecated: true` at several places. openapi-processor-spring translates them to Java's `@Deprecated` annotation.
+
+
+== deprecated endpoint
+
+
+[cols="2*",grid=row,frame=none]
+|===
+a|OpenAPI
+a|Java Code
+
+a|[source,yaml]
+----
+/foo:
+  get:
+    deprecated: true # <1>
+----
+
+a|[source,java]
+----
+@Deprecated // <2>
+@GetMapping("/foo")
+/*...*/ getFoo();
+----
+|===
+
+<1> a deprecated endpoint
+<2> the generated endpoint method with a `@Deprecated` annotation
+
+== deprecated parameter
+
+
+[cols="2*",grid=row,frame=none]
+|===
+a|OpenAPI
+a|Java Code
+
+
+a|[source,yaml]
+----
+/foo:
+  get:
+    parameters:
+      - name: bar
+        deprecated: true # <1>
+        in: query
+        schema:
+          type: string
+----
+a|[source,java]
+----
+@GetMapping("/foo")
+/* ... */ getFoo(@Deprecated String bar); // <2>
+----
+|===
+
+<1> a deprecated parameter
+<2> the generated endpoint method with a `@Deprecated` annotation on the `bar` parameter.
+
+== deprecated schema
+
+[cols="2*",grid=row,frame=none]
+|===
+a|OpenAPI
+a|Java Code
+
+a|[source,yaml]
+----
+Bar:
+  type: object
+  deprecated: true # <1>
+  properties:
+    foobar:
+      type: string
+
+----
+
+a|[source,java]
+----
+@Deprecated // <2>
+public class Bar {
+    /* ... */
+}
+
+----
+|===
+
+<1> a deprecated schema
+<2> the generated model class with a `@Deprecated` annotation.
+
+== deprecated schema property
+
+[cols="2*",grid=row,frame=none]
+|===
+a|OpenAPI
+a|Java Code
+
+a|[source,yaml]
+----
+Bar:
+  type: object
+  properties:
+    foobar:
+      deprecated: true # <1>
+      type: string
+----
+
+a|[source,java]
+----
+public class Bar {
+
+    @Deprecated  // <2>
+    @JsonProperty("foobar")
+    private String foobar;
+
+    @Deprecated // <2>
+    public String getFoobar() {
+        return foobar;
+    }
+
+    @Deprecated // <2>
+    public void setFoobar(String foobar) {
+        this.foobar = foobar;
+    }
+
+}
+
+----
+|===
+
+<1> a deprecated schema property
+<2> the generated model class with `@Deprecated` annotations at the property, getter and setter. (hmm, the annotated property may be a bit too much... )
