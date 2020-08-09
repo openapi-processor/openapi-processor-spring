@@ -86,12 +86,11 @@ correct code for an endpoint. That way the processor can still be used for all t
 
 - the generated code does not use swagger annotations. There is no need to generate the
 documentation from the code when the code originates from the documentation (i.e. an openapi.yaml).
-+
-NOTE: The generated source code has to be included in a project to compile it. This is easily done
-with the xref:gradle::index.adoc[openapi-processor-gradle] plugin. See xref:gradle.adoc[Using Gradle].
 
-- gradle support via xref:gradle::index.adoc[openapi-processor-gradle] plugin (the plugin is
-currently the only option to run the processor).
+- *maven & gradle support* The plugin docs show how to run a processor and how to add the generated sources to the build.
+
+** xref:maven::index.adoc[openapi-processor-maven] plugin.
+** xref:gradle::index.adoc[openapi-processor-gradle] plugin.
 
 == Releases
 

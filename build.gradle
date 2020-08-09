@@ -55,6 +55,17 @@ repositories {
     }
 }
 
+sourceSets {
+  main {
+    java {
+        srcDirs "${buildDir}/version"
+    }
+  }
+}
+
+compileKotlin.dependsOn "generateVersion"
+
+
 test {
     useJUnitPlatform()
 }
@@ -85,14 +96,14 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.0.0'
+    implementation 'io.openapiprocessor:openapi-processor-core:1.1.0'
 
-    implementation 'org.codehaus.groovy:groovy:2.5.12'
+    implementation 'org.codehaus.groovy:groovy:2.5.13'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.1') {
         exclude group: 'com.google.guava'
     }
 
@@ -103,10 +114,10 @@ dependencies {
          exclude group: 'com.google.guava'
      }
 
-    testImplementation ('org.spockframework:spock-core:2.0-M2-groovy-2.5') {
+    testImplementation ('org.spockframework:spock-core:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
-    testImplementation ('org.spockframework:spock-junit4:2.0-M2-groovy-2.5') {
+    testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
@@ -156,4 +167,5 @@ dokka {
     outputDirectory = "$buildDir/docs/kotlin"
 }
 
+apply plugin: VersionPlugin
 apply from: "${rootProject.rootDir}/gradle/publishing.gradle"

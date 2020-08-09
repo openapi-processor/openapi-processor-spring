@@ -30,7 +30,7 @@ import org.junit.runners.Parameterized
  * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
  */
 @RunWith(Parameterized)
-class ProcessorJimsFileSystemTest extends ProcessorTestBase {
+class ProcessorJimsFileSystemTest extends EndToEndBase {
 
     @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
