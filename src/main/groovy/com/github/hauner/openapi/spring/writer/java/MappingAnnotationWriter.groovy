@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.writer.java
 
 import com.github.hauner.openapi.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
-import com.github.hauner.openapi.core.model.Endpoint
+import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 
 /**

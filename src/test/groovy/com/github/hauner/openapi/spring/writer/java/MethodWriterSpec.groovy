@@ -17,10 +17,10 @@
 package com.github.hauner.openapi.spring.writer.java
 
 import com.github.hauner.openapi.core.writer.java.MethodWriter
-import com.github.hauner.openapi.core.model.Endpoint
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.datatypes.NoneDataType
@@ -37,8 +37,18 @@ class MethodWriterSpec extends Specification {
         ))
     def target = new StringWriter ()
 
+    @Deprecated
     private Endpoint createEndpoint (Map properties) {
-        new Endpoint(properties).initEndpointResponses ()
+        def ep = new Endpoint(
+            properties.path as String ?: '',
+            properties.method as HttpMethod ?: HttpMethod.GET,
+            properties.operationId as String ?: null,
+            properties.deprecated as boolean ?: false
+        )
+        ep.parameters = properties.parameters ?: []
+        ep.responses = properties.responses ?: [:]
+        ep.requestBodies = properties.requestBodies ?: []
+        ep.initEndpointResponses ()
     }
 
     void "writes map from single query parameter" () {

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.micronaut.writer.java
 
-import com.github.hauner.openapi.core.model.Endpoint
+import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.Response
@@ -128,8 +128,17 @@ class MappingAnnotationWriterSpec extends Specification {
         target.toString () == """@Get(uri = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
     }
 
+    @Deprecated
     private Endpoint createEndpoint (Map properties) {
-        new Endpoint(properties).initEndpointResponses ()
+        def ep = new Endpoint(
+            properties.path as String ?: '',
+            properties.method as HttpMethod ?: HttpMethod.GET,
+            properties.operationId as String ?: null,
+            properties.deprecated as boolean ?: false
+        )
+        ep.responses = properties.responses ?: [:]
+        ep.requestBodies = properties.requestBodies ?: []
+        ep.initEndpointResponses ()
     }
 
 }
