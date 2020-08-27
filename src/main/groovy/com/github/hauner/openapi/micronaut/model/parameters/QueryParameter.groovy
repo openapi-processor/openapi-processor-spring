@@ -16,8 +16,9 @@
 
 package com.github.hauner.openapi.micronaut.model.parameters
 
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.model.datatypes.ObjectDataType
 
 /**
  * OpenAPI query parameter.
@@ -26,10 +27,14 @@ import com.github.hauner.openapi.core.model.parameters.ParameterBase
  */
 class QueryParameter extends ParameterBase {
 
+    QueryParameter(String name, DataType dataType, boolean required, boolean deprecated) {
+        super(name, dataType, required, deprecated)
+    }
+
     /**
      * controls if a parameter should have a {@code @QueryValue} annotation.
      */
-    boolean withAnnotation () {
+    boolean getWithAnnotation () {
         // Pojo's should NOT be annotated
         if (dataType instanceof ObjectDataType) {
             return false

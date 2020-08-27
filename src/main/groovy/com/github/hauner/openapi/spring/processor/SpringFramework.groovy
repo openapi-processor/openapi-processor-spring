@@ -17,10 +17,10 @@
 package com.github.hauner.openapi.spring.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkBase
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.model.datatypes.DataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.core.parser.Parameter as ParserParameter
+import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.parameters.Parameter
+import io.openapiprocessor.core.parser.Parameter as ParserParameter
 
 /**
  * Spring model factory.

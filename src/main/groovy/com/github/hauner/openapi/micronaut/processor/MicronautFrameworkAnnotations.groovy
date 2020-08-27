@@ -18,15 +18,15 @@ package com.github.hauner.openapi.micronaut.processor
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotation
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
-import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
-import com.github.hauner.openapi.core.model.parameters.MultipartParameter
-import com.github.hauner.openapi.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
+import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.model.RequestBody
+import io.openapiprocessor.core.model.parameters.CookieParameter
+import io.openapiprocessor.core.model.parameters.HeaderParameter
+import io.openapiprocessor.core.model.parameters.MultipartParameter
+import io.openapiprocessor.core.model.parameters.Parameter
+import io.openapiprocessor.core.model.parameters.PathParameter
 
 /**
  * provides Micronaut annotation details.

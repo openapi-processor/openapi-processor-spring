@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.micronaut.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.parameters.PathParameter
 import spock.lang.Specification
 
 class PathParameterAnnotationWriterSpec extends Specification {
@@ -27,8 +27,7 @@ class PathParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required, no default value) path parameter" () {
-        def param = new PathParameter(name: 'foo',
-            dataType: new StringDataType())
+        def param = new PathParameter('foo', new StringDataType(), false, false)
 
         when:
         writer.write (target, param)
@@ -38,14 +37,28 @@ class PathParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional, with default value) path parameter" () {
-        def param = new PathParameter(name: 'foo',
-            dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
+        def param = new PathParameter('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
 
         then:
         target.toString () == '@PathVariable(value = "foo", defaultValue = "bar")'
+    }
+
+    DataTypeConstraints createConstraints(def defaultValue) {
+        new DataTypeConstraints(defaultValue,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
     }
 
 }

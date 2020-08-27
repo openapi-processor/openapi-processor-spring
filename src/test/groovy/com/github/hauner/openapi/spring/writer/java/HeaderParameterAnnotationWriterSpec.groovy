@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.parameters.HeaderParameter
 import spock.lang.Specification
 
 class HeaderParameterAnnotationWriterSpec extends Specification {
@@ -27,9 +27,7 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required) header parameter" () {
-        def param = new HeaderParameter(name: 'foo',
-            required: true,
-            dataType: new StringDataType())
+        def param = new HeaderParameter('foo', new StringDataType(), true, false)
 
         when:
         writer.write (target, param)
@@ -39,9 +37,7 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional) header parameter" () {
-        def param = new HeaderParameter(name: 'foo',
-            required: false,
-            dataType: new StringDataType())
+        def param = new HeaderParameter('foo', new StringDataType(), false, false)
 
         when:
         writer.write (target, param)
@@ -51,9 +47,9 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional with default) header parameter" () {
-        def param = new HeaderParameter(name: 'foo',
-            required: false,
-            dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
+        def param = new HeaderParameter('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -62,6 +58,17 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
         target.toString () == '@RequestHeader(name = "foo", required = false, defaultValue = "bar")'
     }
 
+    DataTypeConstraints createConstraints(def defaultValue) {
+        new DataTypeConstraints(defaultValue,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
+    }
+
 }
-
-

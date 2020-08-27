@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.micronaut.writer.java
 
-import com.github.hauner.openapi.core.model.datatypes.LongDataType
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.datatypes.LongDataType
+import io.openapiprocessor.core.model.datatypes.ObjectDataType
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.StringDataType
 import com.github.hauner.openapi.micronaut.model.parameters.QueryParameter
 import com.github.hauner.openapi.micronaut.processor.MicronautFrameworkAnnotations
 import spock.lang.Specification
@@ -29,9 +29,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required, no default value) query parameter" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            dataType: new StringDataType())
+        def param = new QueryParameter('foo',
+            new StringDataType(),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -41,9 +41,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional, with default value) query parameter" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
+        def param = new QueryParameter('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -53,9 +53,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "writes simple (optional) query parameter with quoted string default value" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            dataType: new StringDataType(constraints: new DataTypeConstraints (defaultValue: 'bar')))
+        def param = new QueryParameter('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -65,9 +65,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "writes simple (optional) query parameter with quoted number default value" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            dataType: new LongDataType (constraints: new DataTypeConstraints (defaultValue: 5)))
+        def param = new QueryParameter('foo',
+            new LongDataType (createConstraints (5), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -78,19 +78,32 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
     void "writes object query parameter without annotation" () {
         def param = new QueryParameter(
-            name: 'foo',
-            dataType: new ObjectDataType (
-                type: 'Foo', properties: [
+            'foo',
+            new ObjectDataType (
+                'Foo', '', [
                     foo1: new StringDataType (),
                     foo2: new StringDataType ()
-                ]
-            ))
+                ], null, false
+            ), false, false)
 
         when:
         writer.write (target, param)
 
         then:
         target.toString () == ""
+    }
+
+    DataTypeConstraints createConstraints(def defaultValue) {
+        new DataTypeConstraints(defaultValue,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
     }
 
 }

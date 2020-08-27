@@ -16,10 +16,11 @@
 
 package com.github.hauner.openapi.spring.model.parameters
 
-import com.github.hauner.openapi.core.model.parameters.ParameterBase
-import com.github.hauner.openapi.core.model.datatypes.MappedDataType
-import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
+import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.model.datatypes.MappedDataType
+import io.openapiprocessor.core.model.datatypes.MappedMapDataType
+import io.openapiprocessor.core.model.datatypes.ObjectDataType
 
 /**
  * OpenAPI query parameter.
@@ -28,10 +29,14 @@ import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
  */
 class QueryParameter extends ParameterBase {
 
+    QueryParameter(String name, DataType dataType, boolean required, boolean deprecated) {
+        super(name, dataType, required, deprecated)
+    }
+
     /**
      * controls if a parameter should have a {@code @RequestParam} annotation.
      */
-    boolean withAnnotation () {
+    boolean getWithAnnotation () {
         // Map should be annotated
         if (dataType instanceof MappedMapDataType) {
             return true
@@ -53,7 +58,7 @@ class QueryParameter extends ParameterBase {
     /**
      * controls if a {@code @RequestParam} should have any parameters.
      */
-    boolean withParameters () {
+    boolean getWithParameters () {
         // Map should not have parameters
         if (dataType instanceof MappedMapDataType) {
             return false

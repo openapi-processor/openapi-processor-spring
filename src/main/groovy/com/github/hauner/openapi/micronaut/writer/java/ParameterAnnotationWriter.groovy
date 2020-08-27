@@ -17,9 +17,9 @@
 package com.github.hauner.openapi.micronaut.writer.java
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
+import io.openapiprocessor.core.model.RequestBody
+import io.openapiprocessor.core.model.parameters.Parameter
 
 /**
  * micronaut parameter annotation writer
@@ -43,13 +43,13 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     }
 
     private String createAnnotation (Parameter parameter) {
-        if (! parameter.withAnnotation ()) {
+        if (! parameter.withAnnotation) {
             return ""
         }
 
         String annotation = getAnnotationName (parameter)
 
-        if (! parameter.withParameters ()) {
+        if (! parameter.withParameters) {
             return annotation
         }
 

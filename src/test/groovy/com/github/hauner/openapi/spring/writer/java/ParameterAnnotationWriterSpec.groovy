@@ -16,16 +16,16 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.LongDataType
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.core.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.parameters.HeaderParameter
-import com.github.hauner.openapi.core.model.parameters.PathParameter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.core.model.RequestBody
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.LongDataType
+import io.openapiprocessor.core.model.datatypes.ObjectDataType
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.parameters.CookieParameter
+import io.openapiprocessor.core.model.parameters.HeaderParameter
+import io.openapiprocessor.core.model.parameters.PathParameter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -35,10 +35,9 @@ class ParameterAnnotationWriterSpec extends Specification {
 
     @Unroll
     void "writes simple (optional) query parameter with quoted string default value" () {
-        def param = clazz.newInstance(
-            name: 'foo',
-            required: false,
-            dataType: new StringDataType(constraints: new DataTypeConstraints (defaultValue: 'bar')))
+        def param = clazz.newInstance('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -55,10 +54,9 @@ class ParameterAnnotationWriterSpec extends Specification {
     }
 
     void "writes simple (optional) query parameter with quoted number default value" () {
-        def param = clazz.newInstance (
-            name: 'foo',
-            required: false,
-            dataType: new LongDataType (constraints: new DataTypeConstraints (defaultValue: 5)))
+        def param = clazz.newInstance ('foo',
+            new LongDataType (createConstraints (5), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -76,11 +74,10 @@ class ParameterAnnotationWriterSpec extends Specification {
 
     void "writes required request body parameter" () {
         def body = new RequestBody (
-            name: 'body',
-            required: true,
-            dataType: new ObjectDataType (type: 'FooRequestBody',
-                properties: ['foo': new StringDataType ()] as LinkedHashMap),
-            contentType: 'application/json')
+            'body', 'application/json',
+            new ObjectDataType ('FooRequestBody', '',
+                ['foo': new StringDataType ()], null, false),
+            true, false)
 
         when:
         writer.write (target, body)
@@ -91,18 +88,29 @@ class ParameterAnnotationWriterSpec extends Specification {
 
     void "writes optional request body parameter" () {
         def body = new RequestBody (
-            name: 'body',
-            required: false,
-            dataType: new ObjectDataType (
-                type: 'FooRequestBody',
-                properties: ['foo': new StringDataType ()] as LinkedHashMap),
-            contentType: 'application/json')
+            'body', 'application/json',
+            new ObjectDataType ('FooRequestBody', '',
+                ['foo': new StringDataType ()], null, false),
+            false, false)
 
         when:
         writer.write (target, body)
 
         then:
         target.toString () == "@RequestBody(required = false)"
+    }
+
+    DataTypeConstraints createConstraints(def defaultValue) {
+        new DataTypeConstraints(defaultValue,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
     }
 
 }

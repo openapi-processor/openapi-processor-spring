@@ -20,11 +20,6 @@ import com.github.hauner.openapi.micronaut.writer.java.HeaderWriter
 import com.github.hauner.openapi.micronaut.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.micronaut.writer.java.ParameterAnnotationWriter
 import com.github.hauner.openapi.core.converter.ApiConverter
-import com.github.hauner.openapi.core.converter.ApiOptions
-import com.github.hauner.openapi.core.parser.OpenApi
-import com.github.hauner.openapi.core.parser.Parser
-import com.github.hauner.openapi.core.processor.MappingConverter
-import com.github.hauner.openapi.core.processor.MappingReader
 import com.github.hauner.openapi.core.writer.java.ApiWriter
 import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
 import com.github.hauner.openapi.core.writer.java.DataTypeWriter
@@ -32,6 +27,11 @@ import com.github.hauner.openapi.core.writer.java.InterfaceWriter
 import com.github.hauner.openapi.core.writer.java.MethodWriter
 import com.github.hauner.openapi.core.writer.java.StringEnumWriter
 import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.parser.OpenApi
+import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.processor.MappingConverter
+import io.openapiprocessor.core.processor.MappingReader
 
 /**
  *  Entry point of openapi-processor-micronaut.

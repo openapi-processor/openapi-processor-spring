@@ -16,15 +16,15 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.model.Response
-import com.github.hauner.openapi.core.model.datatypes.NoneDataType
 import com.github.hauner.openapi.core.writer.java.MethodWriter
-import com.github.hauner.openapi.core.converter.ApiOptions
 import com.github.hauner.openapi.core.model.Endpoint
-import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.datatypes.MappedMapDataType
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.model.Response
+import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.model.datatypes.NoneDataType
+import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {
@@ -43,13 +43,15 @@ class MethodWriterSpec extends Specification {
 
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response (responseType: new NoneDataType())]
+            '204': [new Response ("", new NoneDataType())]
         ], parameters: [
-            new QueryParameter(name: 'foo', required: false, dataType: new MappedMapDataType (
-                type: 'Map',
-                pkg: 'java.util',
-                genericTypes: ['java.lang.String', 'java.lang.String']
-            ))
+            new QueryParameter('foo', new MappedMapDataType (
+                'Map',
+                'java.util',
+                ['java.lang.String', 'java.lang.String'],
+                null,
+                false
+            ), false, false)
         ])
 
         when:

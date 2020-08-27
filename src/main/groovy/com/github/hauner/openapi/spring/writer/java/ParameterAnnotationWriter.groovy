@@ -17,8 +17,8 @@
 package com.github.hauner.openapi.spring.writer.java
 
 import com.github.hauner.openapi.core.framework.FrameworkAnnotations
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.parameters.Parameter
+import io.openapiprocessor.core.model.RequestBody
+import io.openapiprocessor.core.model.parameters.Parameter
 import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 
 /**
@@ -50,13 +50,13 @@ class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     }
 
     private String createAnnotation (Parameter parameter) {
-        if (! parameter.withAnnotation ()) {
+        if (! parameter.withAnnotation) {
             return ""
         }
 
         String annotation = getAnnotationName (parameter)
 
-        if (! parameter.withParameters ()) {
+        if (! parameter.withParameters) {
             return annotation
         }
 

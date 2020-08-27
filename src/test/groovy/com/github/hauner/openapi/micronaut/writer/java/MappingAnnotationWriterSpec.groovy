@@ -17,11 +17,11 @@
 package com.github.hauner.openapi.micronaut.writer.java
 
 import com.github.hauner.openapi.core.model.Endpoint
-import com.github.hauner.openapi.core.model.HttpMethod
-import com.github.hauner.openapi.core.model.RequestBody
-import com.github.hauner.openapi.core.model.Response
-import com.github.hauner.openapi.core.model.datatypes.NoneDataType
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.model.RequestBody
+import io.openapiprocessor.core.model.Response
+import io.openapiprocessor.core.model.datatypes.NoneDataType
+import io.openapiprocessor.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
 class MappingAnnotationWriterSpec extends Specification {
@@ -30,7 +30,7 @@ class MappingAnnotationWriterSpec extends Specification {
 
     void "writes http method specific mapping annotation" () {
         def endpoint = createEndpoint (path: path, method: httpMethod, responses: [
-            '204' : [new Response(responseType: new NoneDataType())]
+            '204' : [new Response("", new NoneDataType())]
         ])
 
         when:
@@ -53,11 +53,10 @@ class MappingAnnotationWriterSpec extends Specification {
 
     void "writes 'consumes' parameter with body content type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204' : [new Response(responseType: new NoneDataType())]
+            '204' : [new Response("", new NoneDataType())]
         ], requestBodies: [
-            new RequestBody(
-                contentType: contentType,
-                dataType: new StringDataType ())
+            new RequestBody('body', contentType, new StringDataType (),
+                false, false)
         ])
 
         when:
@@ -75,8 +74,7 @@ class MappingAnnotationWriterSpec extends Specification {
     void "writes 'produces' parameter with response content type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
-                new Response (contentType: contentType,
-                    responseType: new StringDataType ())
+                new Response (contentType, new StringDataType ())
             ],
         ])
 
@@ -95,13 +93,11 @@ class MappingAnnotationWriterSpec extends Specification {
     void "writes 'consumes' & 'produces' parameters" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
-                new Response (contentType: responseContentType,
-                    responseType: new StringDataType ())
+                new Response (responseContentType, new StringDataType ())
             ]
         ], requestBodies: [
-            new RequestBody(
-                contentType: requestContentType,
-                dataType: new StringDataType ())
+            new RequestBody('body', requestContentType, new StringDataType (),
+                false, false)
         ])
 
         when:
@@ -118,12 +114,10 @@ class MappingAnnotationWriterSpec extends Specification {
     void "writes mapping annotation with multiple result content types" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
-                new Response (contentType: 'application/json',
-                    responseType: new StringDataType ())
+                new Response ('application/json', new StringDataType ())
             ],
             'default': [
-                new Response (contentType: 'text/plain',
-                    responseType: new StringDataType ())
+                new Response ('text/plain', new StringDataType ())
             ]
         ])
 
