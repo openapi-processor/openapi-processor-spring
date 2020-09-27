@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.framework.FrameworkAnnotations
+import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.Parameter
-import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
+import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 
 /**
  * spring parameter annotation writer
@@ -29,7 +29,6 @@ import com.github.hauner.openapi.core.writer.java.ParameterAnnotationWriter as C
 class ParameterAnnotationWriter implements CoreParameterAnnotationWriter {
     FrameworkAnnotations annotations
 
-    @Override
     void write (Writer target, Parameter parameter) {
         if (parameter instanceof RequestBody) {
             target.write (createAnnotation (parameter as RequestBody))

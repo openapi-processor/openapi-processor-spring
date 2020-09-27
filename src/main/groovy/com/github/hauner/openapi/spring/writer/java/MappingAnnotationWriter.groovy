@@ -16,9 +16,9 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
+import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 
 /**
  * spring mapping annotation writer
@@ -27,7 +27,6 @@ import io.openapiprocessor.core.model.EndpointResponse
  */
 class MappingAnnotationWriter implements CoreMappingAnnotationWriter {
 
-    @Override
     void write (Writer target, Endpoint endpoint, EndpointResponse endpointResponse) {
         target.write (createAnnotation (endpoint, endpointResponse))
     }

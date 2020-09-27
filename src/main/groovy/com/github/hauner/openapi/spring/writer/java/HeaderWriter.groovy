@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.writer.java.SimpleWriter
+import io.openapiprocessor.core.writer.java.SimpleWriter
 import io.openapiprocessor.spring.Version
 
 import java.time.Instant

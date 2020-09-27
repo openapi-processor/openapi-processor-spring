@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
+import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
@@ -31,7 +32,7 @@ class MappingAnnotationWriterSpec extends Specification {
 
     void "writes http method specific mapping annotation" () {
         def endpoint = createEndpoint (path: path, method: httpMethod, responses: [
-            '204' : [new Response('', new NoneDataType())]
+            '204' : [new EmptyResponse ()]
         ])
 
         when:
@@ -54,7 +55,7 @@ class MappingAnnotationWriterSpec extends Specification {
 
     void "writes 'consumes' parameter with body content type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204' : [new Response('', new NoneDataType())]
+            '204' : [new EmptyResponse()]
         ], requestBodies: [
             new RequestBody('body', contentType, new StringDataType (), false, false)
         ])
@@ -73,9 +74,7 @@ class MappingAnnotationWriterSpec extends Specification {
 
     void "writes 'produces' parameter with response content type" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '200' : [
-                new Response (contentType, new StringDataType ())
-            ]
+            '200' : [new Response (contentType, new StringDataType ())]
         ])
 
         when:

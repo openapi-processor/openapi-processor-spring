@@ -16,25 +16,26 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.writer.java.MethodWriter
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.datatypes.NoneDataType
 import io.openapiprocessor.core.model.datatypes.MappedMapDataType
+import io.openapiprocessor.core.writer.java.BeanValidationFactory
+import io.openapiprocessor.core.writer.java.MethodWriter
 import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
     def writer = new MethodWriter (
-        apiOptions: apiOptions,
-        mappingAnnotationWriter: new MappingAnnotationWriter(),
-        parameterAnnotationWriter: new ParameterAnnotationWriter(
-            annotations: new SpringFrameworkAnnotations()
-        ))
+        apiOptions,
+        new MappingAnnotationWriter(),
+        new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations()),
+        new BeanValidationFactory ())
     def target = new StringWriter ()
 
     @Deprecated
@@ -53,7 +54,7 @@ class MethodWriterSpec extends Specification {
 
     void "writes map from single query parameter" () {
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
-            '204': [new Response ("", new NoneDataType())]
+            '204': [new EmptyResponse()]
         ], parameters: [
             new QueryParameter('foo', new MappedMapDataType (
                 'Map',

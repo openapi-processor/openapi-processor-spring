@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.core.framework.FrameworkAnnotation
-import com.github.hauner.openapi.core.framework.FrameworkAnnotations
 import com.github.hauner.openapi.spring.model.parameters.QueryParameter
 import groovy.util.logging.Slf4j
+import io.openapiprocessor.core.framework.FrameworkAnnotation
+import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.CookieParameter
@@ -38,26 +38,26 @@ class SpringFrameworkAnnotations implements FrameworkAnnotations {
     private static ANNOTATION_PKG = 'org.springframework.web.bind.annotation'
 
     def MAPPING_ANNOTATIONS = [
-        (HttpMethod.DELETE) : new FrameworkAnnotation (name: 'DeleteMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.GET)    : new FrameworkAnnotation (name: 'GetMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.HEAD)   : new FrameworkAnnotation (name: 'HeadMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.OPTIONS): new FrameworkAnnotation (name: 'OptionsMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.PATCH)  : new FrameworkAnnotation (name: 'PatchMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.POST)   : new FrameworkAnnotation (name: 'PostMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.PUT)    : new FrameworkAnnotation (name: 'PutMapping', pkg: ANNOTATION_PKG),
-        (HttpMethod.TRACE)  : new FrameworkAnnotation (name: 'TraceMapping', pkg: ANNOTATION_PKG)
+        (HttpMethod.DELETE) : new FrameworkAnnotation ('DeleteMapping', ANNOTATION_PKG),
+        (HttpMethod.GET)    : new FrameworkAnnotation ('GetMapping', ANNOTATION_PKG),
+        (HttpMethod.HEAD)   : new FrameworkAnnotation ('HeadMapping', ANNOTATION_PKG),
+        (HttpMethod.OPTIONS): new FrameworkAnnotation ('OptionsMapping', ANNOTATION_PKG),
+        (HttpMethod.PATCH)  : new FrameworkAnnotation ('PatchMapping', ANNOTATION_PKG),
+        (HttpMethod.POST)   : new FrameworkAnnotation ('PostMapping', ANNOTATION_PKG),
+        (HttpMethod.PUT)    : new FrameworkAnnotation ('PutMapping', ANNOTATION_PKG),
+        (HttpMethod.TRACE)  : new FrameworkAnnotation ('TraceMapping', ANNOTATION_PKG)
     ]
 
     def PARAMETER_ANNOTATIONS = [
-        query    : new FrameworkAnnotation (name: 'RequestParam', pkg: ANNOTATION_PKG),
-        header   : new FrameworkAnnotation (name: 'RequestHeader', pkg: ANNOTATION_PKG),
-        cookie   : new FrameworkAnnotation (name: 'CookieValue', pkg: ANNOTATION_PKG),
-        path     : new FrameworkAnnotation (name: 'PathVariable', pkg: ANNOTATION_PKG),
-        multipart: new FrameworkAnnotation (name: 'RequestParam', pkg: ANNOTATION_PKG),
-        body     : new FrameworkAnnotation (name: 'RequestBody', pkg: ANNOTATION_PKG)
+        query    : new FrameworkAnnotation ('RequestParam', ANNOTATION_PKG),
+        header   : new FrameworkAnnotation ('RequestHeader', ANNOTATION_PKG),
+        cookie   : new FrameworkAnnotation ('CookieValue', ANNOTATION_PKG),
+        path     : new FrameworkAnnotation ('PathVariable', ANNOTATION_PKG),
+        multipart: new FrameworkAnnotation ('RequestParam', ANNOTATION_PKG),
+        body     : new FrameworkAnnotation ('RequestBody', ANNOTATION_PKG)
     ]
 
-    def UNKNOWN_ANNOTATION = new FrameworkAnnotation(name: 'Unknown', pkg: 'fix.me')
+    def UNKNOWN_ANNOTATION = new FrameworkAnnotation('Unknown', 'fix.me')
 
     @Override
     FrameworkAnnotation getAnnotation (HttpMethod httpMethod) {

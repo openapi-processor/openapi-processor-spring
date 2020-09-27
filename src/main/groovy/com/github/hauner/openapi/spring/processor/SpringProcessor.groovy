@@ -16,22 +16,23 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.core.converter.ApiConverter
-import com.github.hauner.openapi.core.writer.java.ApiWriter
-import com.github.hauner.openapi.core.writer.java.BeanValidationFactory
-import com.github.hauner.openapi.core.writer.java.DataTypeWriter
-import com.github.hauner.openapi.core.writer.java.InterfaceWriter
-import com.github.hauner.openapi.core.writer.java.MethodWriter
-import com.github.hauner.openapi.core.writer.java.StringEnumWriter
 import com.github.hauner.openapi.spring.writer.java.HeaderWriter
 import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import io.openapiprocessor.api.OpenApiProcessor
+import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.parser.OpenApi
 import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.writer.java.ApiWriter
+import io.openapiprocessor.core.writer.java.BeanValidationFactory
+import io.openapiprocessor.core.writer.java.DataTypeWriter
+import io.openapiprocessor.core.writer.java.DefaultImportFilter
+import io.openapiprocessor.core.writer.java.InterfaceWriter
+import io.openapiprocessor.core.writer.java.MethodWriter
+import io.openapiprocessor.core.writer.java.StringEnumWriter
 import org.slf4j.LoggerFactory
 
 /**
@@ -67,27 +68,27 @@ class SpringProcessor implements OpenApiProcessor {
             def headerWriter = new HeaderWriter()
             def beanValidationFactory = new BeanValidationFactory()
 
-            def writer = new ApiWriter (options,
+            def writer = new ApiWriter(
+                options,
                 new InterfaceWriter(
-                    headerWriter: headerWriter,
-                    methodWriter: new MethodWriter(
-                        mappingAnnotationWriter: new MappingAnnotationWriter (),
-                        parameterAnnotationWriter: new ParameterAnnotationWriter (
-                            annotations: annotations
-                        ),
-                        beanValidationFactory: beanValidationFactory,
-                        apiOptions: options
+                    options,
+                    headerWriter,
+                    new MethodWriter(
+                        options,
+                        new MappingAnnotationWriter (),
+                        new ParameterAnnotationWriter (annotations: annotations),
+                        beanValidationFactory
                     ),
-                    beanValidationFactory: beanValidationFactory,
-                    annotations: annotations,
-                    apiOptions: options
+                    annotations,
+                    beanValidationFactory,
+                    new DefaultImportFilter ()
                 ),
                 new DataTypeWriter(
-                    headerWriter: headerWriter,
-                    beanValidationFactory: beanValidationFactory,
-                    apiOptions: options
-                ),
-                new StringEnumWriter(headerWriter: headerWriter)
+                    options,
+                    headerWriter,
+                    beanValidationFactory),
+                new StringEnumWriter(headerWriter),
+                true
             )
 
             writer.write (api)

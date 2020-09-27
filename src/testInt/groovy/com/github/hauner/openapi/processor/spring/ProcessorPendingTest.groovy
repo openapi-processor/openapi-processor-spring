@@ -16,10 +16,9 @@
 
 package com.github.hauner.openapi.processor.spring
 
-import com.github.hauner.openapi.core.parser.ParserType
 import com.github.hauner.openapi.spring.processor.SpringProcessor
-import com.github.hauner.openapi.test.ProcessorTestBase
 import com.github.hauner.openapi.test.TestSet
+import io.openapiprocessor.core.parser.ParserType
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith

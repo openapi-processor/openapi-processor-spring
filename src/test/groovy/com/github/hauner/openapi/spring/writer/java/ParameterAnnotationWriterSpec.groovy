@@ -101,16 +101,9 @@ class ParameterAnnotationWriterSpec extends Specification {
     }
 
     DataTypeConstraints createConstraints(def defaultValue) {
-        new DataTypeConstraints(defaultValue,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null)
+        def c = new DataTypeConstraints()
+        c.defaultValue = defaultValue
+        c
     }
 
 }
