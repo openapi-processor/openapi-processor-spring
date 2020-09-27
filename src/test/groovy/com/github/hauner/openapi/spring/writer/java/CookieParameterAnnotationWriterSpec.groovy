@@ -20,10 +20,11 @@ import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.model.parameters.CookieParameter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class CookieParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
+    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) cookie parameter" () {

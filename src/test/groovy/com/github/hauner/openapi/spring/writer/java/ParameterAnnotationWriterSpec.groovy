@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import io.openapiprocessor.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
@@ -26,11 +25,13 @@ import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter
 import io.openapiprocessor.core.model.parameters.PathParameter
+import io.openapiprocessor.spring.model.parameters.QueryParameter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class ParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
+    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     @Unroll

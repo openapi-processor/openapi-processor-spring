@@ -26,6 +26,7 @@ import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.MethodWriter
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {
@@ -33,7 +34,7 @@ class MethodWriterSpec extends Specification {
     def writer = new MethodWriter (
         apiOptions,
         new MappingAnnotationWriter(),
-        new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations()),
+        new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
         new BeanValidationFactory ())
     def target = new StringWriter ()
 

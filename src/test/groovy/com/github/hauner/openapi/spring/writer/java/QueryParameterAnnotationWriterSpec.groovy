@@ -21,10 +21,11 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
+    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) query parameter" () {

@@ -16,7 +16,6 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import io.openapiprocessor.api.OpenApiProcessor
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
@@ -34,6 +33,7 @@ import io.openapiprocessor.core.writer.java.StringEnumWriter
 import io.openapiprocessor.spring.processor.SpringFramework
 import io.openapiprocessor.spring.writer.java.HeaderWriter
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import org.slf4j.LoggerFactory
 
 /**
@@ -77,7 +77,7 @@ class SpringProcessor implements OpenApiProcessor {
                     new MethodWriter(
                         options,
                         new MappingAnnotationWriter (),
-                        new ParameterAnnotationWriter (annotations: annotations),
+                        new ParameterAnnotationWriter (annotations),
                         beanValidationFactory
                     ),
                     annotations,
