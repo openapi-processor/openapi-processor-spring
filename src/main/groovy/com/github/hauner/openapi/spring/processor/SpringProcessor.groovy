@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import com.github.hauner.openapi.spring.writer.java.HeaderWriter
+import io.openapiprocessor.spring.writer.java.HeaderWriter
 import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import io.openapiprocessor.api.OpenApiProcessor
