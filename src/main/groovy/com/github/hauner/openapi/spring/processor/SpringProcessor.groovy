@@ -16,9 +16,6 @@
 
 package com.github.hauner.openapi.spring.processor
 
-import io.openapiprocessor.spring.processor.SpringFramework
-import io.openapiprocessor.spring.writer.java.HeaderWriter
-import com.github.hauner.openapi.spring.writer.java.MappingAnnotationWriter
 import com.github.hauner.openapi.spring.writer.java.ParameterAnnotationWriter
 import io.openapiprocessor.api.OpenApiProcessor
 import io.openapiprocessor.core.converter.ApiConverter
@@ -34,6 +31,9 @@ import io.openapiprocessor.core.writer.java.DefaultImportFilter
 import io.openapiprocessor.core.writer.java.InterfaceWriter
 import io.openapiprocessor.core.writer.java.MethodWriter
 import io.openapiprocessor.core.writer.java.StringEnumWriter
+import io.openapiprocessor.spring.processor.SpringFramework
+import io.openapiprocessor.spring.writer.java.HeaderWriter
+import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import org.slf4j.LoggerFactory
 
 /**

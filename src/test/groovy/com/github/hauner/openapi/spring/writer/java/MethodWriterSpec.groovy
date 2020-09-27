@@ -25,6 +25,7 @@ import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.MethodWriter
+import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {

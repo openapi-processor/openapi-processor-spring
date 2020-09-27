@@ -21,8 +21,8 @@ import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.Response
-import io.openapiprocessor.core.model.datatypes.NoneDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import spock.lang.Specification
 
 class MappingAnnotationWriterSpec extends Specification {
