@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.processor
+package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.core.framework.FrameworkBase
@@ -27,15 +27,15 @@ import io.openapiprocessor.core.parser.Parameter as ParserParameter
  *
  * @author Martin Hauner
  */
-class SpringFramework extends FrameworkBase {
+class SpringFramework: FrameworkBase() {
 
     @Override
-    Parameter createQueryParameter (ParserParameter parameter, DataType dataType) {
-        new QueryParameter (
-            parameter.name,
+    override fun createQueryParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+        return QueryParameter (
+            parameter.getName(),
             dataType,
-            parameter.required,
-            parameter.deprecated)
+            parameter.isRequired(),
+            parameter.isDeprecated())
     }
 
 }
