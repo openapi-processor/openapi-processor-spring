@@ -19,7 +19,7 @@ package com.github.hauner.openapi.spring.writer.java
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+import io.openapiprocessor.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 

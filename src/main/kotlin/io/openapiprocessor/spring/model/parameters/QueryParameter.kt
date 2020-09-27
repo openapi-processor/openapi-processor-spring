@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.model.parameters
+package io.openapiprocessor.spring.model.parameters
 
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
@@ -27,49 +27,48 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
  *
  * @author Martin Hauner
  */
-class QueryParameter extends ParameterBase {
-
-    QueryParameter(String name, DataType dataType, boolean required, boolean deprecated) {
-        super(name, dataType, required, deprecated)
-    }
+class QueryParameter(name: String, dataType: DataType, required: Boolean, deprecated: Boolean)
+    : ParameterBase(name, dataType, required, deprecated) {
 
     /**
      * controls if a parameter should have a {@code @RequestParam} annotation.
      */
-    boolean getWithAnnotation () {
-        // Map should be annotated
-        if (dataType instanceof MappedMapDataType) {
+    override val withAnnotation: Boolean
+        get() {
+            // Map should be annotated
+            if (dataType is MappedMapDataType) {
+                return true
+            }
+
+            // Pojo's should NOT be annotated
+            if (dataType is ObjectDataType) {
+                return false
+            }
+
+            // usually a pojo....
+            if (dataType is MappedDataType) {
+                return false
+            }
+
             return true
         }
-
-        // Pojo's should NOT be annotated
-        if (dataType instanceof ObjectDataType) {
-            return false
-        }
-
-        // usually a pojo....
-        if (dataType instanceof MappedDataType) {
-            return false
-        }
-
-        true
-    }
 
     /**
      * controls if a {@code @RequestParam} should have any parameters.
      */
-    boolean getWithParameters () {
-        // Map should not have parameters
-        if (dataType instanceof MappedMapDataType) {
-            return false
-        }
+    override val withParameters: Boolean
+        get() {
+            // Map should not have parameters
+            if (dataType is MappedMapDataType) {
+                return false
+            }
 
-        // Pojo should not have parameters
-        if (dataType instanceof ObjectDataType) {
-            return false
-        }
+            // Pojo should not have parameters
+            if (dataType is ObjectDataType) {
+                return false
+            }
 
-        true
-    }
+            return true
+        }
 
 }

@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
+import io.openapiprocessor.spring.model.parameters.QueryParameter
 import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
