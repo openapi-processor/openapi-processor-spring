@@ -17,7 +17,7 @@
 package com.github.hauner.openapi.spring.writer.java
 
 import io.openapiprocessor.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint

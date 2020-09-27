@@ -20,7 +20,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 

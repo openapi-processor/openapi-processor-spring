@@ -31,6 +31,7 @@ import io.openapiprocessor.core.writer.java.InterfaceWriter
 import io.openapiprocessor.core.writer.java.MethodWriter
 import io.openapiprocessor.core.writer.java.StringEnumWriter
 import io.openapiprocessor.spring.processor.SpringFramework
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.spring.writer.java.HeaderWriter
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter

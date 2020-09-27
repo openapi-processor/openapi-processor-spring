@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.model.parameters.HeaderParameter
