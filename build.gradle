@@ -77,10 +77,10 @@ testSets {
 check.dependsOn testInt
 
 
-compileGroovy {
-    dependsOn 'compileKotlin'
-    classpath += files(compileKotlin.destinationDir)
-}
+//compileGroovy {
+//    dependsOn 'compileKotlin'
+//    classpath += files(compileKotlin.destinationDir)
+//}
 
 compileTestGroovy {
     dependsOn 'compileKotlin'
@@ -98,7 +98,6 @@ dependencies {
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
     implementation 'io.openapiprocessor:openapi-processor-core:1.2.0-SNAPSHOT'
 
-    implementation 'org.codehaus.groovy:groovy:2.5.13'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
@@ -114,6 +113,7 @@ dependencies {
          exclude group: 'com.google.guava'
      }
 
+    testImplementation 'org.codehaus.groovy:groovy:2.5.13'
     testImplementation ('org.spockframework:spock-core:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
@@ -148,7 +148,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: [groovydoc, dokkaHtml]) {
+task javadocJar(type: Jar, dependsOn: [dokkaHtml]) {
     archiveClassifier.set ('javadoc')
     from "$buildDir/docs"
 }
@@ -158,9 +158,9 @@ artifacts {
     archives javadocJar
 }
 
-groovydoc {
-    destinationDir file("$buildDir/docs/groovy")
-}
+//groovydoc {
+//    destinationDir file("$buildDir/docs/groovy")
+//}
 
 dokkaHtml {
     outputDirectory = "$buildDir/docs/kotlin".toString ()
