@@ -20,7 +20,7 @@ java {
 
 ext {
     processorApiVersion = '1.1.0'
-    jacksonVersion = '2.11.0'
+    jacksonVersion = '2.11.3'
 
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
     bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'
@@ -114,7 +114,7 @@ dependencies {
     testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.16'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     constraints {
