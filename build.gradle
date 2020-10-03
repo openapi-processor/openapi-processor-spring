@@ -76,12 +76,6 @@ testSets {
 
 check.dependsOn testInt
 
-
-//compileGroovy {
-//    dependsOn 'compileKotlin'
-//    classpath += files(compileKotlin.destinationDir)
-//}
-
 compileTestGroovy {
     dependsOn 'compileKotlin'
     classpath += files(compileKotlin.destinationDir)
