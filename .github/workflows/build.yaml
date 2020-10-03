@@ -44,13 +44,6 @@ jobs:
     - name: gradle check
       run: ./gradlew check
 
-    - name: archive artifacts
-      uses: actions/upload-artifact@v1
-      if: success()
-      with:
-        name: artifacts
-        path: build/libs
-
     - name: archive test results
       uses: actions/upload-artifact@v1
       if: always()
