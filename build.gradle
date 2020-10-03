@@ -115,6 +115,8 @@ dependencies {
     testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
+    testImplementation("io.mockk:mockk:1.10.2")
+    testImplementation("io.kotest:kotest-runner-junit5:4.2.5")
     testImplementation 'net.bytebuddy:byte-buddy:1.10.16'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
