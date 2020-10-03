@@ -16,20 +16,19 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.model.parameters.CookieParameter
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.model.parameters.CookieParameter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class CookieParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
+    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) cookie parameter" () {
-        def param = new CookieParameter(name: 'foo',
-            required: true,
-            dataType: new StringDataType())
+        def param = new CookieParameter('foo', new StringDataType(), true, false)
 
         when:
         writer.write (target, param)
@@ -39,9 +38,7 @@ class CookieParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional) cookie parameter" () {
-        def param = new CookieParameter(name: 'foo',
-            required: false,
-            dataType: new StringDataType())
+        def param = new CookieParameter('foo', new StringDataType(), false, false)
 
         when:
         writer.write (target, param)
@@ -51,15 +48,21 @@ class CookieParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional with default) cookie parameter" () {
-        def param = new CookieParameter(name: 'foo',
-            required: false,
-            dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
+        def param = new CookieParameter('foo',
+            new StringDataType(createConstraints ('bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
 
         then:
         target.toString () == '@CookieValue(name = "foo", required = false, defaultValue = "bar")'
+    }
+
+    DataTypeConstraints createConstraints(def defaultValue) {
+        def c = new DataTypeConstraints()
+        c.defaultValue = defaultValue
+        c
     }
 
 }

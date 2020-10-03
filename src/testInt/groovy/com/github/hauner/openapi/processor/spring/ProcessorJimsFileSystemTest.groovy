@@ -16,12 +16,11 @@
 
 package com.github.hauner.openapi.processor.spring
 
-import com.github.hauner.openapi.core.parser.ParserType
-import com.github.hauner.openapi.spring.processor.SpringProcessor
-import com.github.hauner.openapi.test.ProcessorTestBase
+import io.openapiprocessor.spring.processor.SpringProcessor
 import com.github.hauner.openapi.test.TestSet
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
+import io.openapiprocessor.core.parser.ParserType
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

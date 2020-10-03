@@ -16,22 +16,20 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
-import com.github.hauner.openapi.core.model.datatypes.DataTypeConstraints
-import com.github.hauner.openapi.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.model.datatypes.StringDataType
-import com.github.hauner.openapi.spring.model.parameters.QueryParameter
-import com.github.hauner.openapi.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.ObjectDataType
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.spring.model.parameters.QueryParameter
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(annotations: new SpringFrameworkAnnotations())
+    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) query parameter" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            required: true,
-            dataType: new StringDataType())
+        def param = new QueryParameter('foo', new StringDataType(), true, false)
 
         when:
         writer.write (target, param)
@@ -41,10 +39,7 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional) query parameter" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            required: false,
-            dataType: new StringDataType())
+        def param = new QueryParameter('foo', new StringDataType(), false, false)
 
         when:
         writer.write (target, param)
@@ -54,10 +49,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional with default) query parameter" () {
-        def param = new QueryParameter(
-            name: 'foo',
-            required: false,
-            dataType: new StringDataType(constraints: new DataTypeConstraints(defaultValue: 'bar')))
+        def param = new QueryParameter('foo',
+            new StringDataType(new DataTypeConstraints(defaultValue: 'bar'), false),
+            false, false)
 
         when:
         writer.write (target, param)
@@ -68,14 +62,13 @@ class QueryParameterAnnotationWriterSpec extends Specification {
 
     void "writes object query parameter without annotation" () {
         def param = new QueryParameter(
-            name: 'foo',
-            required: false,
-            dataType: new ObjectDataType (
-                type: 'Foo', properties: [
+            'foo',
+            new ObjectDataType (
+                'Foo', '', [
                     foo1: new StringDataType (),
                     foo2: new StringDataType ()
-                ]
-            ))
+                ], null, false
+            ), false, false)
 
         when:
         writer.write (target, param)

@@ -3,10 +3,11 @@ plugins {
     id 'groovy'
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
-    id 'org.jetbrains.dokka' version '0.10.1'
+    id "org.sonarqube" version "3.0"
+    id 'org.jetbrains.dokka' version '1.4.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
-    id "com.github.ben-manes.versions" version "0.28.0"
+    id "com.github.ben-manes.versions" version "0.33.0"
 }
 
 group projectGroupId
@@ -20,7 +21,7 @@ java {
 
 ext {
     processorApiVersion = '1.1.0'
-    jacksonVersion = '2.11.0'
+    jacksonVersion = '2.11.3'
 
     bintrayUser = project.hasProperty ('BINTRAY_USER') ? BINTRAY_USER : 'n/a'
     bintrayKey =  project.hasProperty ('BINTRAY_KEY')  ? BINTRAY_KEY  : 'n/a'
@@ -76,12 +77,6 @@ testSets {
 
 check.dependsOn testInt
 
-
-compileGroovy {
-    dependsOn 'compileKotlin'
-    classpath += files(compileKotlin.destinationDir)
-}
-
 compileTestGroovy {
     dependsOn 'compileKotlin'
     classpath += files(compileKotlin.destinationDir)
@@ -96,14 +91,13 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.1.0'
+    implementation 'io.openapiprocessor:openapi-processor-core:1.2.0-SNAPSHOT'
 
-    implementation 'org.codehaus.groovy:groovy:2.5.13'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.0') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.1') {
         exclude group: 'com.google.guava'
     }
 
@@ -114,13 +108,14 @@ dependencies {
          exclude group: 'com.google.guava'
      }
 
+    testImplementation 'org.codehaus.groovy:groovy:2.5.13'
     testImplementation ('org.spockframework:spock-core:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
     testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.16'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     constraints {
@@ -133,22 +128,26 @@ tasks.withType(Test) {
     finalizedBy jacocoTestReport
 }
 
-
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.6"
 }
 
-project.jacocoTestReport {
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+    }
+
     getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
 }
-
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set ('sources')
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: [groovydoc, dokka]) {
+task javadocJar(type: Jar, dependsOn: [dokkaHtml]) {
     archiveClassifier.set ('javadoc')
     from "$buildDir/docs"
 }
@@ -158,13 +157,17 @@ artifacts {
     archives javadocJar
 }
 
-groovydoc {
-    destinationDir file("$buildDir/docs/groovy")
+dokkaHtml {
+    outputDirectory = file("$buildDir/docs/kotlin".toString ())
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/docs/kotlin"
+sonarqube {
+  properties {
+    property "sonar.projectKey", "openapi-processor_openapi-processor-spring"
+    property "sonar.organization", "openapi-processor"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+  }
 }
 
 apply plugin: VersionPlugin
