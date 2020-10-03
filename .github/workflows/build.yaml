@@ -91,7 +91,7 @@ jobs:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build publishSnapshot sonarqube
+        run: ./gradlew build publishSnapshot sonarqube --stacktrace
 
       - name: archive test results
         uses: actions/upload-artifact@v1
