@@ -44,6 +44,20 @@ jobs:
     - name: gradle check
       run: ./gradlew check
 
+    - name: archive artifacts
+      uses: actions/upload-artifact@v1
+      if: success()
+      with:
+        name: artifacts
+        path: build/libs
+
+    - name: archive test results
+      uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: test results
+        path: build/reports
+
   publish:
     needs: [test]
     name: publish snapshot
@@ -85,3 +99,10 @@ jobs:
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build publishSnapshot sonarqube
+
+      - name: archive test results
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: test results
+          path: build/reports
