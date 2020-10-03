@@ -3,6 +3,7 @@ plugins {
     id 'groovy'
     id 'java-library'
     id 'maven-publish'
+    id "org.sonarqube" version "3.0"
     id 'org.jetbrains.dokka' version '1.4.10'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
@@ -127,15 +128,19 @@ tasks.withType(Test) {
     finalizedBy jacocoTestReport
 }
 
-
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.6"
 }
 
-project.jacocoTestReport {
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+    }
+
     getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
 }
-
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set ('sources')
@@ -154,6 +159,15 @@ artifacts {
 
 dokkaHtml {
     outputDirectory = file("$buildDir/docs/kotlin".toString ())
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "openapi-processor_openapi-processor-spring"
+    property "sonar.organization", "openapi-processor"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+  }
 }
 
 apply plugin: VersionPlugin
