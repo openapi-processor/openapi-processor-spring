@@ -1,0 +1,87 @@
+name: build
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'LICENSE'
+      - 'README.md'
+      - 'docs/**'
+    tags-ignore:
+      - 'v*'
+
+jobs:
+
+
+  test:
+    name: test
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: set up jdk
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: gradle check
+      run: ./gradlew check
+
+  publish:
+    needs: [test]
+    name: publish snapshot
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: cache SonarCloud
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: |
+            ${{ runner.os }}-sonar
+
+      - name: set up jdk
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: publish snapshot to ojo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build publishSnapshot sonarqube
