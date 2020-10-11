@@ -36,9 +36,9 @@ jobs:
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
         run: ./gradlew publishRelease
 
-      - name: archive test results
-        uses: actions/upload-artifact@v1
-        if: always()
-        with:
-          name: test results
-          path: build/reports
+#      - name: archive test results
+#        uses: actions/upload-artifact@v1
+#        if: always()
+#        with:
+#          name: test results
+#          path: build/reports
