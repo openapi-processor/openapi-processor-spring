@@ -91,7 +91,7 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.2.0'
+    implementation 'io.openapiprocessor:openapi-processor-core:1.2.1'
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
