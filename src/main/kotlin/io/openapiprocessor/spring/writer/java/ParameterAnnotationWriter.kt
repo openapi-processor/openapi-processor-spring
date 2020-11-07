@@ -34,7 +34,7 @@ class ParameterAnnotationWriter(
 
     override fun write(target: Writer, parameter: Parameter) {
         if (parameter is RequestBody) {
-            target.write(createAnnotation(parameter as RequestBody))
+            target.write(createAnnotation(parameter))
         } else {
             target.write(createAnnotation(parameter))
         }
