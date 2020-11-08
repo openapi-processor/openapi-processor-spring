@@ -34,14 +34,13 @@ class ParameterAnnotationWriter(
 
     override fun write(target: Writer, parameter: Parameter) {
         if (parameter is RequestBody) {
-            target.write(createAnnotation(parameter))
+            target.write(createRequestBodyAnnotation(parameter))
         } else {
-            target.write(createAnnotation(parameter))
+            target.write(createParameterAnnotation(parameter))
         }
     }
 
-
-    private fun createAnnotation(requestBody: RequestBody): String {
+    private fun createRequestBodyAnnotation(requestBody: RequestBody): String {
         var annotation = getAnnotationName(requestBody)
 
         // required is default, so add required only if the parameter is not required
@@ -52,7 +51,7 @@ class ParameterAnnotationWriter(
         return annotation
     }
 
-    private fun createAnnotation(parameter: Parameter): String {
+    private fun createParameterAnnotation(parameter: Parameter): String {
         if (! parameter.withAnnotation) {
             return ""
         }
