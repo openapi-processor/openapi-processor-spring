@@ -4,10 +4,10 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "org.sonarqube" version "3.0"
-    id 'org.jetbrains.dokka' version '1.4.10'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.dokka' version '1.4.10.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.20'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
-    id "com.github.ben-manes.versions" version "0.33.0"
+    id "com.github.ben-manes.versions" version "0.36.0"
 }
 
 group projectGroupId
@@ -20,8 +20,8 @@ java {
 
 
 ext {
-    processorApiVersion = '1.1.0'
-    jacksonVersion = '2.11.3'
+    processorApiVersion = '1.2.0'
+    jacksonVersion = '2.12.0'
 
     bintrayUser = project.findProperty ('BINTRAY_USER') ?: System.getenv ("BINTRAY_USER") ?: 'n/a'
     bintrayKey =  project.findProperty ('BINTRAY_KEY') ?: System.getenv ("BINTRAY_KEY") ?: 'n/a'
@@ -91,13 +91,13 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:1.3.0'
+    implementation 'io.openapiprocessor:openapi-processor-core:2020.4-SNAPSHOT'
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:1.0.1') {
+    testImplementation ('io.openapiprocessor:openapi-processor-test:2020.1.0') {
         exclude group: 'com.google.guava'
     }
 
@@ -116,8 +116,8 @@ dependencies {
         exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
     }
     testImplementation("io.mockk:mockk:1.10.2")
-    testImplementation("io.kotest:kotest-runner-junit5:4.2.5")
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.16'
+    testImplementation("io.kotest:kotest-runner-junit5:4.3.1")
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.18'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     constraints {
