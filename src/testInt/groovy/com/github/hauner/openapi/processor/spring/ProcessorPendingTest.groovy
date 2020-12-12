@@ -19,11 +19,12 @@ package com.github.hauner.openapi.processor.spring
 import io.openapiprocessor.spring.processor.SpringProcessor
 import com.github.hauner.openapi.test.TestSet
 import io.openapiprocessor.core.parser.ParserType
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-//@Ignore
+@Ignore
 @RunWith(Parameterized)
 class ProcessorPendingTest extends EndToEndBase {
 
@@ -31,7 +32,7 @@ class ProcessorPendingTest extends EndToEndBase {
     static Collection<TestSet> sources () {
         return [
             new TestSet(name: 'params-request-body-multipart-mapping', processor: new SpringProcessor (), parser: ParserType.SWAGGER),
-//            new TestSet(name: 'params-simple-data-types-micronaut', processor: new SpringProcessor (), parser: ParserType.OPENAPI4J)
+            new TestSet(name: 'params-request-body-multipart-mapping', processor: new SpringProcessor (), parser: ParserType.OPENAPI4J)
         ]
     }
 
