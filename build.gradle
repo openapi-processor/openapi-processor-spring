@@ -20,7 +20,9 @@ java {
 
 
 ext {
-    processorApiVersion = '1.2.0'
+    processorApiVersion = '2020.3'
+    processorCoreVersion = '2020.4'
+    processorTestVersion = '2020.2'
     jacksonVersion = '2.12.0'
 
     bintrayUser = project.findProperty ('BINTRAY_USER') ?: System.getenv ("BINTRAY_USER") ?: 'n/a'
@@ -91,13 +93,13 @@ dependencies {
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
-    implementation 'io.openapiprocessor:openapi-processor-core:2020.4'
+    implementation "io.openapiprocessor:openapi-processor-core:$processorCoreVersion"
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
 
-    testImplementation ('io.openapiprocessor:openapi-processor-test:2020.1.0') {
+    testImplementation ("io.openapiprocessor:openapi-processor-test:$processorTestVersion") {
         exclude group: 'com.google.guava'
     }
 
