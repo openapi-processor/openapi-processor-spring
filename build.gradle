@@ -20,9 +20,9 @@ java {
 
 
 ext {
-    processorApiVersion = '2020.3'
-    processorCoreVersion = '2020.4'
-    processorTestVersion = '2020.2'
+    processorApiVersion = '2020.4-SNAPSHOT' // '2020.3'
+    processorCoreVersion = '2020.4-SNAPSHOT' // '2020.4'
+    processorTestVersion = '2020.3-SNAPSHOT' // '2020.2'
     jacksonVersion = '2.12.0'
 
     bintrayUser = project.findProperty ('BINTRAY_USER') ?: System.getenv ("BINTRAY_USER") ?: 'n/a'
