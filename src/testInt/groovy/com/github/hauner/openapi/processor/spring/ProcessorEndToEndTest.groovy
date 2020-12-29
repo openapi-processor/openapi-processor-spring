@@ -19,17 +19,15 @@ package com.github.hauner.openapi.processor.spring
 import io.openapiprocessor.spring.processor.SpringProcessor
 import com.github.hauner.openapi.test.TestSet
 import io.openapiprocessor.core.parser.ParserType
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import io.openapiprocessor.test.TestSetRunner
+import spock.lang.TempDir
+import spock.lang.Unroll
 
 /**
  * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
  */
-@RunWith(Parameterized)
 class ProcessorEndToEndTest extends EndToEndBase {
 
-    @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         def swagger = TestSets.ALL.collect {
            new TestSet (name: it, processor: new SpringProcessor(), parser: ParserType.SWAGGER)
@@ -42,13 +40,19 @@ class ProcessorEndToEndTest extends EndToEndBase {
         swagger + openapi4j
     }
 
-    ProcessorEndToEndTest (TestSet testSet) {
-        super (testSet)
-    }
+    @TempDir
+    public File folder
 
-    @Test
-    void "native - processor creates expected files for api set "() {
-        runOnNativeFileSystem ()
+    @Unroll
+    void "native - #testSet"() {
+        def runner = new TestSetRunner (testSet)
+        def success = runner.runOnNativeFileSystem (folder)
+
+        expect:
+        assert success: "** found differences! **"
+
+        where:
+        testSet << sources ()
     }
 
 }

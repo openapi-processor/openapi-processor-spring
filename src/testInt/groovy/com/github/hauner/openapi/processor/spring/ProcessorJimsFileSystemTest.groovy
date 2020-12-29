@@ -21,17 +21,11 @@ import com.github.hauner.openapi.test.TestSet
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import io.openapiprocessor.core.parser.ParserType
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import io.openapiprocessor.test.TestSetRunner
+import spock.lang.Unroll
 
-/**
- * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
- */
-@RunWith(Parameterized)
 class ProcessorJimsFileSystemTest extends EndToEndBase {
 
-    @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         // the swagger parser does not work with a custom FileSystem so we just run the test with
         // openapi4j
@@ -41,13 +35,16 @@ class ProcessorJimsFileSystemTest extends EndToEndBase {
         }
     }
 
-    ProcessorJimsFileSystemTest (TestSet testSet) {
-        super (testSet)
-    }
+    @Unroll
+    void "jimfs - #testSet"() {
+        def runner = new TestSetRunner (testSet)
+        def success = runner.runOnCustomFileSystem (Jimfs.newFileSystem (Configuration.unix ()))
 
-    @Test
-    void "jimfs - processor creates expected files for api set "() {
-        runOnCustomFileSystem (Jimfs.newFileSystem (Configuration.unix ()))
+        expect:
+        assert success: "** found differences! **"
+
+        where:
+        testSet << sources ()
     }
 
 }

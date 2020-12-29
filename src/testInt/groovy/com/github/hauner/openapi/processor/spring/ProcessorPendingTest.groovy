@@ -19,16 +19,14 @@ package com.github.hauner.openapi.processor.spring
 import io.openapiprocessor.spring.processor.SpringProcessor
 import com.github.hauner.openapi.test.TestSet
 import io.openapiprocessor.core.parser.ParserType
-import org.junit.Ignore
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import io.openapiprocessor.test.TestSetRunner
+import spock.lang.Ignore
+import spock.lang.TempDir
+import spock.lang.Unroll
 
-@Ignore
-@RunWith(Parameterized)
+//@Ignore
 class ProcessorPendingTest extends EndToEndBase {
 
-    @Parameterized.Parameters(name = "{0}")
     static Collection<TestSet> sources () {
         return [
             new TestSet(name: 'params-request-body-multipart-mapping', processor: new SpringProcessor (), parser: ParserType.SWAGGER),
@@ -36,13 +34,19 @@ class ProcessorPendingTest extends EndToEndBase {
         ]
     }
 
-    ProcessorPendingTest (TestSet testSet) {
-        super (testSet)
-    }
+    @TempDir
+    public File folder
 
-    @Test
-    void "native - processor creates expected files for api set "() {
-        runOnNativeFileSystem ()
+    @Unroll
+    void "native - #testSet"() {
+        def runner = new TestSetRunner (testSet)
+        def success = runner.runOnNativeFileSystem (folder)
+
+        expect:
+        assert success: "** found differences! **"
+
+        where:
+        testSet << sources ()
     }
 
 }
