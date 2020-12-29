@@ -24,6 +24,9 @@ import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.TestSetRunner
 import spock.lang.Unroll
 
+/**
+ * run integration tests with Jimfs.
+ */
 class ProcessorJimsFileSystemTest extends EndToEndBase {
 
     static Collection<TestSet> sources () {

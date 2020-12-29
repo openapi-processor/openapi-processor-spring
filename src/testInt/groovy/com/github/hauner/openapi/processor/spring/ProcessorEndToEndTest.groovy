@@ -24,7 +24,7 @@ import spock.lang.TempDir
 import spock.lang.Unroll
 
 /**
- * using Junit so IDEA adds a "<Click to see difference>" when using assertEquals().
+ * run integration tests.
  */
 class ProcessorEndToEndTest extends EndToEndBase {
 
