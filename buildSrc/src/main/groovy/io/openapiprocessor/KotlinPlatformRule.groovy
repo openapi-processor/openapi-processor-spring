@@ -1,3 +1,5 @@
+package io.openapiprocessor
+
 import org.gradle.api.artifacts.ComponentMetadataContext
 import org.gradle.api.artifacts.ComponentMetadataRule
 
