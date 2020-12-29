@@ -4,7 +4,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "org.sonarqube" version "3.0"
-    id 'org.jetbrains.dokka' version '1.4.10.2'
+    id 'org.jetbrains.dokka' version '1.4.20'
     id 'org.jetbrains.kotlin.jvm' version '1.4.20'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id "com.github.ben-manes.versions" version "0.36.0"
@@ -69,7 +69,7 @@ sourceSets {
 compileKotlin.dependsOn "generateVersion"
 
 
-test {
+tasks.withType(Test) {
     useJUnitPlatform()
 }
 
@@ -89,43 +89,21 @@ compileKotlin {
 }
 
 dependencies {
-    components.all(JacksonPlatformRule)
     components.all(KotlinPlatformRule)
 
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
     implementation "io.openapiprocessor:openapi-processor-core:$processorCoreVersion"
-
     implementation 'org.slf4j:slf4j-api:1.7.30'
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
+    testImplementation ("io.openapiprocessor:openapi-processor-test:$processorTestVersion")
 
-    testImplementation ("io.openapiprocessor:openapi-processor-test:$processorTestVersion") {
-        exclude group: 'com.google.guava'
-    }
-
-    testImplementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-
-    testImplementation("com.google.jimfs:jimfs:1.1") {
-         exclude group: 'com.google.guava'
-     }
-
-    testImplementation 'org.codehaus.groovy:groovy:2.5.13'
-    testImplementation ('org.spockframework:spock-core:2.0-M3-groovy-2.5') {
-        exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
-    }
-    testImplementation ('org.spockframework:spock-junit4:2.0-M3-groovy-2.5') {
-        exclude group: 'org.codehaus.groovy' // avoid unused groovy packages
-    }
-    testImplementation("io.mockk:mockk:1.10.2")
-    testImplementation("io.kotest:kotest-runner-junit5:4.3.1")
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.18'
+    testImplementation ('org.spockframework:spock-core:2.0-M4-groovy-3.0') // 3.0.6
+    testImplementation("io.mockk:mockk:1.10.3")
+    testImplementation("io.kotest:kotest-runner-junit5:4.3.2")
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
-    constraints {
-        testImplementation ('org.junit.platform:junit-platform-engine:1.6.2')
-        testImplementation ('junit:junit:4.13')
-    }
+    testIntImplementation("com.google.jimfs:jimfs:1.1")
 }
 
 tasks.withType(Test) {
