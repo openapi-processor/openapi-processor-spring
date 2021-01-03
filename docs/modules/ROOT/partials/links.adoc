@@ -10,7 +10,7 @@
 :oaps-releases: https://github.com/openapi-processor/openapi-processor-spring/releases
 :oaps-bintray: https://bintray.com/openapi-processor/openapi-processor
 :oap-gradle: https://github.com/openapi-processor/openapi-processor-gradle
-:oap-playground: https://openapi-processor-playground.appspot.com
+:oap-playground: https://playground.openapiprocessor.io
 
 //
 // other external links
