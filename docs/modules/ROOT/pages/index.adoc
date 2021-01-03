@@ -1,6 +1,5 @@
 :author: Martin Hauner
 :page-title: openapi-processor-spring
-//:page-aliases: latest@spring:ROOT:index.adoc
 include::partial$links.adoc[]
 
 //
