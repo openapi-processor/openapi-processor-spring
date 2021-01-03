@@ -1,3 +1,5 @@
+:json-schema: https://github.com/openapi-processor/openapi-processor-core/blob/master/src/main/resources/mapping/v2/mapping.yaml.json
+
 = type mapping structure
 
 The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration])
@@ -98,7 +100,9 @@ map:
 
 ----
 
+== json schema
 
+Some IDEs support json schemas to provide editing support (auto completion & validation) for text based files. To support this openapi-processor has a link:{json-schema}[json schema] for the v2 mapping format.
 
 == type mapping structure (v1)
 
