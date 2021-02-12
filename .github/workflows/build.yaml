@@ -88,8 +88,10 @@ jobs:
       - name: publish snapshot to ojo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+          PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
+          PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
+          SIGN_KEY: ${{ secrets.SIGN_KEY }}
+          SIGN_PWD: ${{ secrets.SIGN_PWD }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build publishSnapshot sonarqube --stacktrace
 

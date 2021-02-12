@@ -32,8 +32,10 @@ jobs:
 
       - name: publish release to bintray
         env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+          PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
+          PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
+          SIGN_KEY: ${{ secrets.SIGN_KEY }}
+          SIGN_PWD: ${{ secrets.SIGN_PWD }}
         run: ./gradlew publishRelease
 
 #      - name: archive test results
