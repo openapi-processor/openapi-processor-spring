@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
+import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
@@ -35,7 +36,8 @@ class MethodWriterSpec extends Specification {
         apiOptions,
         new MappingAnnotationWriter(),
         new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
-        new BeanValidationFactory ())
+        new BeanValidationFactory (),
+        new JavaDocWriter())
     def target = new StringWriter ()
 
     @Deprecated
@@ -44,7 +46,8 @@ class MethodWriterSpec extends Specification {
             properties.path as String ?: '',
             properties.method as HttpMethod ?: HttpMethod.GET,
             properties.operationId as String ?: null,
-            properties.deprecated as boolean ?: false
+            properties.deprecated as boolean ?: false,
+            properties.description as String ?: null
         )
         ep.parameters = properties.parameters ?: []
         ep.responses = properties.responses ?: [:]
@@ -62,7 +65,7 @@ class MethodWriterSpec extends Specification {
                 ['java.lang.String', 'java.lang.String'],
                 null,
                 false
-            ), false, false)
+            ), false, false, null)
         ])
 
         when:
