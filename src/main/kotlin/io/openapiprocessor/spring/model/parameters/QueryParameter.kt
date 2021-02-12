@@ -27,8 +27,13 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
  *
  * @author Martin Hauner
  */
-class QueryParameter(name: String, dataType: DataType, required: Boolean, deprecated: Boolean)
-    : ParameterBase(name, dataType, required, deprecated) {
+class QueryParameter(
+    name: String,
+    dataType: DataType,
+    required: Boolean = false,
+    deprecated: Boolean = false,
+    description: String? = null
+): ParameterBase(name, dataType, required, deprecated, description) {
 
     /**
      * controls if a parameter should have a {@code @RequestParam} annotation.

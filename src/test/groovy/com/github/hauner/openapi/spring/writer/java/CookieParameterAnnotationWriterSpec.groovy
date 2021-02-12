@@ -28,7 +28,8 @@ class CookieParameterAnnotationWriterSpec extends Specification {
     def target = new StringWriter()
 
     void "write simple (required) cookie parameter" () {
-        def param = new CookieParameter('foo', new StringDataType(), true, false)
+        def param = new CookieParameter(
+            'foo', new StringDataType(), true, false, null)
 
         when:
         writer.write (target, param)
@@ -38,7 +39,8 @@ class CookieParameterAnnotationWriterSpec extends Specification {
     }
 
     void "write simple (optional) cookie parameter" () {
-        def param = new CookieParameter('foo', new StringDataType(), false, false)
+        def param = new CookieParameter(
+            'foo', new StringDataType(), false, false, null)
 
         when:
         writer.write (target, param)
@@ -50,7 +52,7 @@ class CookieParameterAnnotationWriterSpec extends Specification {
     void "write simple (optional with default) cookie parameter" () {
         def param = new CookieParameter('foo',
             new StringDataType(createConstraints ('bar'), false),
-            false, false)
+            false, false, null)
 
         when:
         writer.write (target, param)
