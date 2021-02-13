@@ -42,7 +42,7 @@ jobs:
         java-version: 11
 
     - name: gradle check
-      run: ./gradlew check
+      run: ./gradlew check --refresh-dependencies
 
     - name: archive test results
       uses: actions/upload-artifact@v1
