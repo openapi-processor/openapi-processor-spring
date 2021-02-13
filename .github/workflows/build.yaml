@@ -85,7 +85,7 @@ jobs:
         with:
           java-version: 11
 
-      - name: publish snapshot to ojo
+      - name: publish snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
