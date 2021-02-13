@@ -23,6 +23,7 @@ class TestSets {
         'params-complex-data-types',
         'params-pageable-mapping',
         'params-path-simple-data-types',
+        'params-query-annotate-simple-mapping',
         'params-request-body',
         'params-request-body-multipart-mapping',
         'params-simple-data-types'

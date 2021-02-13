@@ -1,0 +1,8 @@
+openapi-processor-mapping: v2
+
+options:
+  package-name: generated
+
+map:
+ types:
+   - type: string:uuid => java.util.UUID
