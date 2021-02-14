@@ -32,7 +32,7 @@ String getBuildSignKey(String property) {
 
 ext {
     processorApiVersion = '2021.1'
-    processorCoreVersion = '2021.1-SNAPSHOT'
+    processorCoreVersion = '2021.1'
     processorTestVersion = '2021.1'
     jacksonVersion = '2.12.0'
 
