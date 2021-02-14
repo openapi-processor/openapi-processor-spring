@@ -127,6 +127,8 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
             }
 
             options.typeMappings = converter.convert(mapping)
+        } else {
+            log.warn("missing 'mapping.yaml' configuration!")
         }
 
         return options
