@@ -1,6 +1,6 @@
 [![][badge-ci]][workflow-ci]
 [![][sonar-coverage]][sonar]
-
+[![][badge-central]][oap-central]
 
 ![openapi-processor-spring logo](images/openapi-processor-spring@1280x200.png)
 
@@ -12,8 +12,9 @@ an [OpenAPI][openapi] interface only & model java code generator for [Spring Boo
 # documentation
 
 See [here][oap-docs].
-  
 
+[oap-central]: https://search.maven.org/search?q=io.openapiprocessor
+[badge-central]: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-spring?label=Maven%20Central
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 [badge-ci]: https://github.com/openapi-processor/openapi-processor-spring/workflows/ci/badge.svg
 [oap-license]: https://github.com/openapi-processor/openapi-processor-spring/blob/master/LICENSE
