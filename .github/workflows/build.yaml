@@ -5,14 +5,15 @@ on:
     branches:
       - '**'
     paths-ignore:
+      - 'gradle.properties'
       - 'LICENSE'
       - 'README.md'
       - 'docs/**'
     tags-ignore:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
-
 
   test:
     name: test
@@ -42,7 +43,9 @@ jobs:
         java-version: 11
 
     - name: gradle check
-      run: ./gradlew check --refresh-dependencies
+      run: |
+        ./gradlew check
+        ./gradlew --stop
 
     - name: archive test results
       uses: actions/upload-artifact@v1
@@ -58,46 +61,87 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v1
+    - name: checkout
+      uses: actions/checkout@v1
 
-      - name: cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+    - name: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
-      - name: cache SonarCloud
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: |
-            ${{ runner.os }}-sonar
+    - name: set up jdk
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
 
-      - name: set up jdk
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
+    - name: publish snapshot
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGN_KEY: ${{ secrets.SIGN_KEY }}
+        SIGN_PWD: ${{ secrets.SIGN_PWD }}
+        PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
+        PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
+      run: |
+        ./gradlew publishSnapshot
+        ./gradlew --stop
 
-      - name: publish snapshot
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
-          PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
-          SIGN_PWD: ${{ secrets.SIGN_PWD }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build publishSnapshot sonarqube --stacktrace
+    - name: archive test results
+      uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: publish results
+        path: build
 
-      - name: archive test results
-        uses: actions/upload-artifact@v1
-        if: always()
-        with:
-          name: test results
-          path: build/reports
+  sonarqube:
+    needs: [publish]
+    name: sonarqube
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: cache SonarCloud
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: |
+          ${{ runner.os }}-sonar
+
+    - name: set up jdk
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: sonarqube
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        ./gradlew test sonarqube
+        ./gradlew --stop
+
+    - name: sonarqube results
+      uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: sonarqube results
+        path: build
