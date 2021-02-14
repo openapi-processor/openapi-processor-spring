@@ -11,6 +11,7 @@ image:openapi-processor-spring$$@$$1280x200.png[openapi-processor-spring]
 // badges
 link:{oaps-ci}[image:{badge-ci}[]]
 link:{oaps-license}[image:{badge-license}[]]
+link:{oap-central}[image:{badge-central}[]]
 
 
 *openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model java code generator
