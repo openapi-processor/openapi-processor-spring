@@ -1,5 +1,5 @@
 [![][badge-ci]][workflow-ci]
-[![Coverage][sonar-coverage]]()
+[![][sonar-coverage]][sonar]
 
 
 ![openapi-processor-spring logo](images/openapi-processor-spring@1280x200.png)
