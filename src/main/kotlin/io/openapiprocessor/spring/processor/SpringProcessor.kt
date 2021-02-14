@@ -113,7 +113,6 @@ class SpringProcessor: OpenApiProcessor {
         }
 
         val options = ApiOptions()
-        options.apiPath = processorOptions["apiPath"].toString()
         options.targetDir = processorOptions["targetDir"].toString()
 
         if (processorOptions.containsKey("packageName")) {
@@ -127,38 +126,24 @@ class SpringProcessor: OpenApiProcessor {
         }
 
         if (mapping != null) {
-            val packageName: String? = getPackageName(mapping)
-            if (packageName != null) {
-                options.packageName = packageName
-            } else {
-                log.warn("no 'options:package-name' set in mapping!")
+            if (mapping is MappingV1) {
+                options.packageName = mapping.options.packageName
+                options.beanValidation = mapping.options.beanValidation
+
+            } else if (mapping is MappingV2) {
+                options.packageName = mapping.options.packageName
+                options.beanValidation = mapping.options.beanValidation
+                options.javadoc = mapping.options.javadoc
             }
 
-            val validation: Boolean? = getBeanValidation(mapping)
-            if (validation != null) {
-                options.beanValidation = validation
+            if (options.packageName.contains("io.openapiprocessor.")) {
+                log.warn("is 'options:package-name' set in mapping? found: '{}'.", options.packageName)
             }
 
             options.typeMappings = converter.convert(mapping)
         }
 
         return options
-    }
-
-    private fun getPackageName(mapping: MappingVersion): String? {
-        return if (mapping is MappingV2) {
-            mapping.options.packageName
-        } else {
-            (mapping as MappingV1).options.packageName
-        }
-    }
-
-    private fun getBeanValidation(mapping: MappingVersion): Boolean? {
-        return if (mapping is MappingV2) {
-            mapping.options.beanValidation
-        } else {
-            (mapping as MappingV1).options.beanValidation
-        }
     }
 
 }
