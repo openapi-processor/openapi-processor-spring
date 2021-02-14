@@ -25,6 +25,11 @@ String getBuildProperty(String property) {
     project.findProperty (property) ?: System.getenv (property) ?: 'n/a'
 }
 
+String getBuildSignKey(String property) {
+    project.findProperty (property) ?:
+        System.getenv (property) ? System.getenv (property).replace("\\n", "\n"): 'n/a'
+}
+
 ext {
     processorApiVersion = '2021.1'
     processorCoreVersion = '2021.1-SNAPSHOT'
@@ -34,7 +39,7 @@ ext {
     publishUser = getBuildProperty ('PUBLISH_USER')
     publishKey =  getBuildProperty ('PUBLISH_KEY')
 
-    signKey = getBuildProperty ('SIGN_KEY')
+    signKey = getBuildSignKey ('SIGN_KEY')
     signPwd = getBuildProperty ('SIGN_PWD')
 
     isReleaseVersion = !version.endsWith("SNAPSHOT")
