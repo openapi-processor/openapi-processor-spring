@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory
 /**
  *  Entry point of openapi-processor-spring.
  */
-class SpringProcessor: OpenApiProcessor {
+class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProcessor {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getName(): String {
