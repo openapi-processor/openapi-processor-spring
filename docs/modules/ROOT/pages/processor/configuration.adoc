@@ -11,6 +11,7 @@ A mapping yaml looks like this:
 options:
   package-name: io.openapiprocessor.sample
   bean-validation: true
+  javadoc: true
 
 map:
    # java type mappings
@@ -29,6 +30,8 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 * `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
 annotations. Default is `false`. See link:{bean-validation}[Bean Validation, window="_blank"].
+
+* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos. Default is `false`. This is still experimental.
 
 == map:
 

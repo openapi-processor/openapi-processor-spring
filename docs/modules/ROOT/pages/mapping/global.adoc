@@ -45,7 +45,7 @@ can be mapped to an existing `Book` java type/class by the following mapping:
 
 [source,yaml]
 ----
-- type: Book => com.github.hauner.openapi.oap.Book
+- type: Book => io.openapiprocessor.oap.Book
 ----
 
 It is also possible to use a predefined OpenAPI type in the `from` type of the type mapping:
@@ -88,6 +88,14 @@ to the **{source type}** property value separated by a ':' like this:
 This maps the `string` type with a `date-time` format from the default `java.time.OffsetDateTime` to
 `java.time.ZonedDateTime`. The mapping does not affect `string` without a format or `string` with
 other formats.
+
+Another example:
+
+[source,yaml]
+----
+- type: string:uuid => java.util.UUID
+----
+
 
 == mapping with generic types
 

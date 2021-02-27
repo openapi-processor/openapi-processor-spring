@@ -11,33 +11,30 @@ The following sections describe how to activate & configure **openapi-processor-
 
 == adding the plugin
 
-To [openapi-processor-gradle][oap-gradle] activate the plugin add it to (like any other gradle
-plugin) the `plugins` configuration:
+To activate the plugin add it to (like any other gradle plugin) the `plugins` configuration:
 
 [source,groovy]
 ----
 plugins {
     ....
     // add openapi-processor-gradle plugin
-    id 'com.github.hauner.openapi-processor' version '<version>'
+    id 'io.openapiprocessor.openapi-processor' version '<version>'
 }
 ----
 
 == configuring processor-spring
 
-The plugin will add an `openapiProcessor` configuration block that is used to configure the processors.
-Configuration for a specific processor belongs inside it with the processor name as configuration
-block name.
+The plugin will add an `openapiProcessor` configuration block that is used to configure the processors. Configuration for a specific processor belongs inside it with the processor name as configuration block name.
 
 [source,groovy]
 ----
 openapiProcessor {
 
     spring {
-        processor 'com.github.hauner.openapi:openapi-processor-spring:<version>'
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
         apiPath "$projectDir/src/api/openapi.yaml"
         targetDir "$projectDir/build/openapi"
-        mapping "$projectDir/openapi-mapping.yaml"
+        mapping "$projectDir/mapping.yaml"
         showWarnings true
     }
 

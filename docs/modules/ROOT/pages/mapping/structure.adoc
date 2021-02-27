@@ -10,7 +10,7 @@ All sections are optional.
 
 == type mapping structure (v2)
 
-[.badge .badge-since]+since 1.0.0.M15+
+//[.badge .badge-since]+since 1.0.0.M15+
 
 This is the preferred format for the mapping. It is simpler than the previous format and uses fewer
 keywords.
@@ -37,8 +37,7 @@ some-key: {source type} => {target type}
 
 ----
 
-The structure of the mapping looks like this:
-
+The full structure of the mapping looks like this (a real mapping file will usually use just a few of the possible keys):
 
 [source,yaml]
 ----
@@ -73,6 +72,8 @@ map:
 
     # the path
     /foo:
+      # exclude endpoint
+      exclude: {true|false}
 
       # path specific result wrapper
       result: {target type}
@@ -82,6 +83,9 @@ map:
 
       # path specific multi wrapper
       multi: {target type}
+
+      # nullable mapping with optional initial value
+      null: {target type} (= {initializer})
 
       # list of path specific mappings
       types:
@@ -98,7 +102,17 @@ map:
       responses:
         - content: {content type}  =>  {target type}
 
+      # limit mapping to specific http method (all methods are allowed)
+      get:
+         # .... allows any of the above keys below the endpoint path (except http methods)
+
+      patch:
+         # ....
+
+
 ----
+
+The structure below `paths` is similar to an OpenAPI yaml file to make it easier to locate a specific mapping.
 
 == json schema
 

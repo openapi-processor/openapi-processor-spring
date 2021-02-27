@@ -63,7 +63,7 @@ paths:
         - in: query
           name: date
           schema:
-            type: int32
+            type: integer
       responses:
         '200':
           description: none

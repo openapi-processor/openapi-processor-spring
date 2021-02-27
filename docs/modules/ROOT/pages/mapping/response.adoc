@@ -46,7 +46,7 @@ map:
 
   # list of global response mappings, mapped by content type
   responses:
-    - content: application/vnd.something => com.github.hauner.openapi.Something
+    - content: application/vnd.something => io.openapiprocessor.Something
 ----
 
 and an openapi.yaml with multiple endpoints returning their result as content type
@@ -81,6 +81,6 @@ paths:
                 type: string
 ----
 
-the processor will use `com.github.hauner.openapi.Something` as java type for **all** responses with
+the processor will use `io.openapiprocessor.Something` as java type for **all** responses with
 the content type `application/vnd.something`.
 

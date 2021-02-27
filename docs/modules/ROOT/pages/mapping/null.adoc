@@ -1,0 +1,77 @@
+:nullable: https://github.com/OpenAPITools/jackson-databind-nullable
+
+= Null mapping
+
+The `null` mapping is used to map (or better wrap) OpenAPI `nullable` properties to link:{nullable}[jackson-databind-nullable].
+
+This is useful to implement a link:{https://tools.ietf.org/html/rfc7386}[json merge patch] api that needs to know if a property was not set at all or explicitly set to *"null"* ("null" means to clear the property value).
+
+After the (standard jackson) binding of the request payload to pojos there is no way to distinguish between `null`, and non-existing properties in Java. That's where link:{nullable}[jackson-databind-nullable] comes into play.
+
+It provides a wrapper type that distinguishes between `null` and non-existent.
+
+For example, the `/foo` api endpoint uses the following schema as the request body
+
+[source,yaml]
+----
+components:
+  schemas:
+
+    Foo:
+      description: a Foo
+      type: object
+      properties:
+        bar:
+          nullable: true
+          type: string
+----
+
+Normally the processor would generate a simple pojo with a `String` property.
+
+By adding a `null` mapping for the `/foo` endpoint (this does work only on the endpoint level, a global null mapping gets ignored):
+
+[source,yaml]
+----
+openapi-processor-mapping: v2
+
+map:
+  paths:
+    /foo:
+      null: org.openapitools.jackson.nullable.JsonNullable
+      # with initialization:
+      # null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
+
+    # or even better limiting it to the patch http method
+    /bar:
+      patch:
+        null: org.openapitools.jackson.nullable.JsonNullable
+        # with initialization:
+        # null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
+----
+
+it will generate the following code:
+
+[source,java]
+----
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.openapitools.jackson.nullable.JsonNullable;
+
+public class Foo {
+
+    @JsonProperty("bar")
+    private JsonNullable<String> bar;
+    // with initialization:
+    // private JsonNullable<String> bar = JsonNullable.undefined();
+
+    public JsonNullable<String> getBar() {
+        return bar;
+    }
+
+    public void setBar(JsonNullable<String> bar) {
+        this.bar = bar;
+    }
+
+}
+----
+
+It is now possible to check if a property was explicitly set to `null` or if it was not set at all.

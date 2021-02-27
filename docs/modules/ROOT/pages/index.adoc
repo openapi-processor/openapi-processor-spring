@@ -48,42 +48,40 @@ out some samples, or your own yaml and view the code that the processor generate
 
 == Features
 
-- generates only java interfaces and java model classes (get/set POJOs) for all defined endpoints
+- generates **only java interfaces and java model classes** (get/set POJOs) for all defined endpoints
 and schemas to allow full control of the endpoint implementation. It does not generate any other
 file. See xref:processor/index.adoc[processor].
 
-- powerful type mappings with generic support (one level) to map schemas defined in the openapi.yaml
+- **powerful type mappings with generic support** (one level) to map schemas defined in the openapi.yaml
 to existing java types.
 +
 For example to map the openapi `array` type to a different java collections or to map paging
 parameters and results to th Spring types like `Page<>` & `Pageable`.
 +
-mappings can be defined globally or for a specific response or parameter or even only for a specific
-endpoint. See xref:mapping/index.adoc[type mapping].
+mappings can be defined globally, for a specific response, parameter or endpoint and or http method (of an endpoint). See xref:mapping/index.adoc[type mapping].
 
-- Annotation based WebFlux support. Actually there is *no* explicit WebFlux support, but the mapping
+- Annotation based **WebFlux support**. Actually there is *no* explicit WebFlux support, but the mapping
 allows defining a *single*, and a *multi* wrapper class. *single* wraps non-array like result types
 (e.g. `Mono<>`). *multi* replaces array like result types or parameters with the given multi mapping.
 For example, it will replace `List<String>` with `Flux<String>` if the multi mapping contains the
 fully qualified `Flux` type. +
-[.badge .badge-since]+since 1.0.0.M13+
+//[.badge .badge-since]+since 1.0.0.M13+
 
-- generates human readable code.
+- generates **human-readable code**.
 
-- add additional parameters to an endpoint which are not defined in the OpenAPI description. For
+- add **additional parameters** to an endpoint which are not defined in the OpenAPI description. For
 example to pass a `HttpServletRequest` to the endpoint implementation. +
-[.badge .badge-since]+since 1.0.0.M6+
+//[.badge .badge-since]+since 1.0.0.M6+
 
-- supports bean validations. The constraints of the openapi description map to java bean
-validation annotations. +
-[.badge .badge-since]+since 1.0.0.M6+
+- supports **bean validations**. The constraints of the openapi description map to java bean validation annotations.
+//[.badge .badge-since]+since 1.0.0.M6+
 
-- allows excluding endpoints from generation. This is useful if the processor does not create the
+- allows **excluding endpoints** from generation. This is useful if the processor does not create the
 correct code for an endpoint. That way the processor can still be used for all the other endpoints. +
-[.badge .badge-since]+since 1.0.0.M6+
+//[.badge .badge-since]+since 1.0.0.M6+
 
-- handle multiple responses by generating one endpoint method for each response content type. +
-[.badge .badge-since]+since 1.0.0.M11+
+- handle **multiple responses** by generating one endpoint method for each response content type. +
+//[.badge .badge-since]+since 1.0.0.M11+
 
 - the generated code does not use swagger annotations. There is no need to generate the
 documentation from the code when the code originates from the documentation (i.e. an openapi.yaml).
@@ -109,7 +107,7 @@ In case some feature is missing, or the generated code is not 100% what you woul
 link:{oaps-issues}[issue]. Preferably with a test case. Providing a test case will help
 significantly :-)
 
-A test case is a single folder with two subfolders containing the source files, and the expected output files:
+A _perfect_ test case is a single folder with two sub folders containing the source files, and the expected output files:
 
  my-test-case
  +--- inputs.yaml
@@ -119,7 +117,7 @@ A test case is a single folder with two subfolders containing the source files, 
  +--- generated.yaml
  \--- generated
       +--- api
-      |    \--- EndpointApi.java
+      |    \--- Api.java
       \--- model
            \--- Foo.java
 
@@ -132,8 +130,9 @@ A test case is a single folder with two subfolders containing the source files, 
 or
 
  items:
-    - generated/api/EndpointApi.java
+    - generated/api/Api.java
     - generated/model/Foo.java
 
 
-See the link:{oaps-inttests}[existing integration tests] for some examples.
+The link:{oapc-intests}[core project], and the link:{oaps-inttests}[spring processor] have a number of existing integration tests that can be used as examples.
+

@@ -71,9 +71,48 @@ map:
 The mappings defined as properties of an endpoint will be used only for this endpoint. They don't
 have any effect on other endpoints.
 
+== Endpoint mappings by http method
+
+It is possible to add mappings that apply only to a specific http method. Motivation for this is limiting the mapping only to the place where it is needed. Http method mappings have priority over other mappings. In general, the most specific mapping is used.
+
+Here are a few examples of possible http endpoint mappings:
+
+[source,yaml]
+----
+openapi-processor-mapping: v2
+
+map:
+
+  paths:
+    /foo:
+
+      # normal endpoint mappings apply to all http methods (behaves exactly as before)
+      types:
+        - type: Foo => java.util.Collection
+
+      # endpoint http method mappings apply only the specified http method
+      get:
+        result: org.springframework.http.ResponseEntity
+
+      post:
+        parameters:
+           - add: request => javax.servlet.http.HttpServletRequest
+
+      patch:
+        null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
+----
+
+The structure follows the OpenAPI, i.e. the http methods (or OpenAPI operations) are properties of the endpoint path.
+
+An http method mapping allows the same mappings as the endpoint mapping without http method, i.e.  `exclude`, `result`,  `single`, `multi`, `null`, `types`, `parameters` and `responses` (see the link:{json-schema}[json schema]).
+
+The last example is using the a `null` mapping that may only be interesting for the `PATCH` http method because there is no need for `nullable` properties for `GET` or `PUT`.
+
+Note that it is **not** possible to use different `null` mappings (or one http mapping with `null` and one without) on the **same** model schema. The processor generates only a *single* class for model schemas and with two different and ambiguous mappings the result is (currently) undefined. It is recommended to use two different schemas if the `null` mapping should only apply to a single method.
+
 == excluding endpoints
 
-[.badge .badge-since]+since 1.0.0.M6+
+//[.badge .badge-since]+since 1.0.0.M6+
 
 It is possible to exclude endpoints from generation to make it easier to provide a hand written
 interface for the excluded endpoint.

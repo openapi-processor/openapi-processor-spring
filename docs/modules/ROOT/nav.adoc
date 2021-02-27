@@ -18,6 +18,7 @@
 ** xref:mapping/result.adoc[Global Result Mapping]
 ** xref:mapping/single-multi.adoc[Global Single & Multi Mapping]
 ** xref:mapping/endpoint.adoc[Endpoint Mapping]
+** xref:mapping/null.adoc[Null Mapping]
 ** xref:mapping/package-name.adoc[package-name Mapping]
 * xref:gradle.adoc[Gradle Integration]
 * xref:howto/index.adoc[HowTo]
