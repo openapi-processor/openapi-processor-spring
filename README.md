@@ -24,3 +24,7 @@ See [here][oap-docs].
 [oap-docs]: https://docs.openapiprocessor.io/spring
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot
+
+# snapshot repository
+
+to use snapshot versions add `https://oss.sonatype.org/content/repositories/snapshots` as maven repository to your build file.
