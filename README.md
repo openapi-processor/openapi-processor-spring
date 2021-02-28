@@ -13,6 +13,11 @@ an [OpenAPI][openapi] interface only & model java code generator for [Spring Boo
 
 See [here][oap-docs].
 
+# snapshot repository
+
+to use snapshot versions add `https://oss.sonatype.org/content/repositories/snapshots` as maven repository to your build file.
+
+
 [oap-central]: https://search.maven.org/search?q=io.openapiprocessor
 [badge-central]: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-spring?label=Maven%20Central
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
@@ -24,7 +29,3 @@ See [here][oap-docs].
 [oap-docs]: https://docs.openapiprocessor.io/spring
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot
-
-# snapshot repository
-
-to use snapshot versions add `https://oss.sonatype.org/content/repositories/snapshots` as maven repository to your build file.
