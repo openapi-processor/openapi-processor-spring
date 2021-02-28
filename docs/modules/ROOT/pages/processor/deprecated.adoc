@@ -5,38 +5,29 @@ OpenAPI allows adding `deprecated: true` at several places. openapi-processor-sp
 
 == deprecated endpoint
 
-
-[cols="2*",grid=none,frame=none]
-|===
-a|[underline]#OpenAPI#
-a|[underline]#Java Code#
-a|[source,yaml]
+*OpenAPI*
+[source,yaml]
 ----
 /foo:
   get:
     deprecated: true # <1>
 ----
 
-a|[source,java]
+*Java*
+[source,java]
 ----
 @Deprecated // <2>
 @GetMapping("/foo")
 /*...*/ getFoo();
 ----
-|===
 
 <1> a deprecated endpoint
 <2> the generated endpoint method with a `@Deprecated` annotation
 
 == deprecated parameter
 
-[cols="2*",grid=none,frame=none]
-|===
-a|[underline]#OpenAPI#
-a|[underline]#Java Code#
-
-
-a|[source,yaml]
+*OpenAPI*
+[source,yaml]
 ----
 /foo:
   get:
@@ -47,24 +38,21 @@ a|[source,yaml]
         schema:
           type: string
 ----
-a|[source,java]
+
+*Java*
+[source,java]
 ----
 @GetMapping("/foo")
 /* ... */ getFoo(@Deprecated String bar); // <2>
 ----
-|===
 
 <1> a deprecated parameter
 <2> the generated endpoint method with a `@Deprecated` annotation on the `bar` parameter.
 
 == deprecated schema
 
-[cols="2*",grid=none,frame=none]
-|===
-a|[underline]#OpenAPI#
-a|[underline]#Java Code#
-
-a|[source,yaml]
+*OpenAPI*
+[source,yaml]
 ----
 Bar:
   type: object
@@ -75,27 +63,23 @@ Bar:
 
 ----
 
-a|[source,java]
+*Java*
+[source,java]
 ----
 @Deprecated // <2>
 public class Bar {
     /* ... */
 }
-
 ----
-|===
 
 <1> a deprecated schema
 <2> the generated model class with a `@Deprecated` annotation.
 
+
 == deprecated schema property
 
-[cols="2*",grid=none,frame=none]
-|===
-a|[underline]#OpenAPI#
-a|[underline]#Java Code#
-
-a|[source,yaml]
+*OpenAPI*
+[source,yaml]
 ----
 Bar:
   type: object
@@ -105,7 +89,8 @@ Bar:
       type: string
 ----
 
-a|[source,java]
+*Java*
+[source,java]
 ----
 public class Bar {
 
@@ -124,9 +109,7 @@ public class Bar {
     }
 
 }
-
 ----
-|===
 
 <1> a deprecated schema property
-<2> the generated model class with `@Deprecated` annotations at the property, getter and setter. (hmm, the annotated property may be a bit too much... )
+<2> the generated model class with `@Deprecated` annotations at the property, getter and setter. (the annotated property may be a bit too much... )
