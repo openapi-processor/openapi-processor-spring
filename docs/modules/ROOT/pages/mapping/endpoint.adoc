@@ -1,4 +1,5 @@
 = Endpoint mappings
+include::partial$links.adoc[]
 
 The global mapping variations are also available as explicit endpoint mappings. Instead of adding
 the mapping in the global sections `map/types`, `map/parameters` and `map/responses` they can

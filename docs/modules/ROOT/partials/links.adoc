@@ -14,6 +14,7 @@
 :oap-central: https://search.maven.org/search?q=io.openapiprocessor
 :badge-central: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-spring?label=Maven%20Central
 :oapc-inttests:https://github.com/openapi-processor/openapi-processor-core/tree/master/src/testInt/resources/tests
+:json-schema: https://github.com/openapi-processor/openapi-processor-core/blob/master/src/main/resources/mapping/v2/mapping.yaml.json
 
 //
 // other external links

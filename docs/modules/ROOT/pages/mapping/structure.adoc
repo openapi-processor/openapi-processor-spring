@@ -1,6 +1,5 @@
-:json-schema: https://github.com/openapi-processor/openapi-processor-core/blob/master/src/main/resources/mapping/v2/mapping.yaml.json
-
 = type mapping structure
+include::partial$links.adoc[]
 
 The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration])
 and configured under the `map` key. The `map` key contains multiple sections to define the different
