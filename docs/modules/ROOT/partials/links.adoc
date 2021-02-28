@@ -13,7 +13,7 @@
 :oap-playground: https://playground.openapiprocessor.io
 :oap-central: https://search.maven.org/search?q=io.openapiprocessor
 :badge-central: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-spring?label=Maven%20Central
-:oapc-intests:https://github.com/openapi-processor/openapi-processor-core/tree/master/src/testInt/resources/tests
+:oapc-inttests:https://github.com/openapi-processor/openapi-processor-core/tree/master/src/testInt/resources/tests
 
 //
 // other external links

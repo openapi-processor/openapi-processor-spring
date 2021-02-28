@@ -134,5 +134,5 @@ or
     - generated/model/Foo.java
 
 
-The link:{oapc-intests}[core project], and the link:{oaps-inttests}[spring processor] have a number of existing integration tests that can be used as examples.
+The link:{oapc-inttests}[core project], and the link:{oaps-inttests}[spring processor] have a number of existing integration tests that can be used as examples.
 
