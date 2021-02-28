@@ -6,11 +6,10 @@ OpenAPI allows adding `deprecated: true` at several places. openapi-processor-sp
 == deprecated endpoint
 
 
-[cols="2*",grid=row,frame=none]
+[cols="2*",grid=none,frame=none]
 |===
-a|OpenAPI
-a|Java Code
-
+a|[underline]#OpenAPI#
+a|[underline]#Java Code#
 a|[source,yaml]
 ----
 /foo:
@@ -31,11 +30,10 @@ a|[source,java]
 
 == deprecated parameter
 
-
-[cols="2*",grid=row,frame=none]
+[cols="2*",grid=none,frame=none]
 |===
-a|OpenAPI
-a|Java Code
+a|[underline]#OpenAPI#
+a|[underline]#Java Code#
 
 
 a|[source,yaml]
@@ -61,10 +59,10 @@ a|[source,java]
 
 == deprecated schema
 
-[cols="2*",grid=row,frame=none]
+[cols="2*",grid=none,frame=none]
 |===
-a|OpenAPI
-a|Java Code
+a|[underline]#OpenAPI#
+a|[underline]#Java Code#
 
 a|[source,yaml]
 ----
@@ -92,10 +90,10 @@ public class Bar {
 
 == deprecated schema property
 
-[cols="2*",grid=row,frame=none]
+[cols="2*",grid=none,frame=none]
 |===
-a|OpenAPI
-a|Java Code
+a|[underline]#OpenAPI#
+a|[underline]#Java Code#
 
 a|[source,yaml]
 ----
