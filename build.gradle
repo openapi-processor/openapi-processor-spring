@@ -102,6 +102,14 @@ dependencies {
     testIntImplementation("com.google.jimfs:jimfs:1.1")
 }
 
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        String v = it.candidate.version
+        println "candidate: $v"
+        return v.endsWith ("-M1") || v.contains ("alpha") || v.contains ("beta")
+    }
+}
+
 tasks.withType(Test) {
     finalizedBy jacocoTestReport
 }
