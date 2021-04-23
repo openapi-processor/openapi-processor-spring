@@ -127,6 +127,48 @@ class MappingAnnotationWriterSpec extends Specification {
         target.toString () == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
     }
 
+    void "writes unique 'consumes' parameter" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '204' : [new EmptyResponse ()]
+        ], requestBodies: [
+            new RequestBody('body', 'foo/in', new StringDataType (),
+                false, false),
+            new RequestBody('body', 'foo/in', new StringDataType (),
+                false, false),
+            new RequestBody('body', 'foo/in', new StringDataType (),
+                false, false)
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString ().contains ('consumes = {"foo/in"}')
+    }
+
+    void "writes unique 'produces' parameters" () {
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+            '200' : [
+                new Response ('foo/out', new StringDataType (), null)
+            ],
+            '400' : [
+                new Response ('foo/out', new StringDataType (), null)
+            ],
+            '401' : [
+                new Response ('foo/out', new StringDataType (), null)
+            ],
+            '403': [
+                new Response ('foo/out', new StringDataType (), null)
+            ]
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString ().contains ('produces = {"foo/out"}')
+    }
+
     @Deprecated
     private Endpoint createEndpoint (Map properties) {
         def ep = new Endpoint(
