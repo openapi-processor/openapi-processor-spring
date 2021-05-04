@@ -22,13 +22,12 @@ import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter
-import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.PathParameter
+import io.openapiprocessor.spring.model.parameters.MultipartParameter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 
 /**
  * provides Spring annotation details.
@@ -49,7 +48,7 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
             is QueryParameter -> getAnnotation("query")
             is HeaderParameter -> getAnnotation("header")
             is CookieParameter -> getAnnotation("cookie")
-            is MultipartParameter -> getAnnotation("multipart")
+            is MultipartParameter -> getMultipartAnnotation(parameter.contentType)
             else -> {
                 log.error("unknown parameter type: ${parameter::class.java.name}")
                 UNKNOWN_ANNOTATION
@@ -59,6 +58,14 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
 
     private fun getAnnotation(key: String): FrameworkAnnotation {
         return PARAMETER_ANNOTATIONS[key]!!
+    }
+
+    private fun getMultipartAnnotation(contentType: String?): FrameworkAnnotation {
+        return if (contentType != null) {
+            PARAMETER_ANNOTATIONS["multipart-part"]!!
+        } else {
+            PARAMETER_ANNOTATIONS["multipart-param"]!!
+        }
     }
 
 }
@@ -81,7 +88,8 @@ private val PARAMETER_ANNOTATIONS = hashMapOf(
     "header"    to FrameworkAnnotation ("RequestHeader", ANNOTATION_PKG),
     "cookie"    to FrameworkAnnotation ("CookieValue", ANNOTATION_PKG),
     "path"      to FrameworkAnnotation ("PathVariable", ANNOTATION_PKG),
-    "multipart" to FrameworkAnnotation ("RequestParam", ANNOTATION_PKG),
+    "multipart-param" to FrameworkAnnotation ("RequestParam", ANNOTATION_PKG),
+    "multipart-part"  to FrameworkAnnotation ("RequestPart", ANNOTATION_PKG),
     "body"      to FrameworkAnnotation ("RequestBody", ANNOTATION_PKG)
 )
 

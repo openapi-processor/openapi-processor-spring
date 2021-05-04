@@ -16,11 +16,13 @@
 
 package io.openapiprocessor.spring.processor
 
-import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.parameters.Parameter
+import io.openapiprocessor.core.parser.MultipartParameter as MultipartParserParameter
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
+import io.openapiprocessor.spring.model.parameters.MultipartParameter
+import io.openapiprocessor.spring.model.parameters.QueryParameter
 
 /**
  * Spring model factory.
@@ -38,4 +40,16 @@ class SpringFramework: FrameworkBase() {
             parameter.isDeprecated())
     }
 
+    override fun createMultipartParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+        val mpp = parameter as MultipartParserParameter
+
+        return MultipartParameter(
+            parameter.getName(),
+            dataType,
+            parameter.isRequired(),
+            parameter.isDeprecated(),
+            parameter.description,
+            mpp.contentType
+        )
+    }
 }
