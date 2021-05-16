@@ -17,10 +17,10 @@
 package com.github.hauner.openapi.processor.spring
 
 import io.openapiprocessor.spring.processor.SpringProcessor
-import com.github.hauner.openapi.test.TestSet
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
 import spock.lang.Unroll
 
