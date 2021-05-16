@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.spring.writer.java
 
+import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
@@ -76,7 +77,7 @@ class ParameterAnnotationWriterSpec extends Specification {
     void "writes required request body parameter" () {
         def body = new RequestBody (
             'body', 'application/json',
-            new ObjectDataType ('FooRequestBody', '',
+            new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
                 ['foo': new StringDataType ()], null, false, null),
             true, false)
 
@@ -90,7 +91,7 @@ class ParameterAnnotationWriterSpec extends Specification {
     void "writes optional request body parameter" () {
         def body = new RequestBody (
             'body', 'application/json',
-            new ObjectDataType ('FooRequestBody', '',
+            new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
                 ['foo': new StringDataType ()], null, false, null),
             false, false)
 

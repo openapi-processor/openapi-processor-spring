@@ -17,6 +17,7 @@
 package com.github.hauner.openapi.spring.writer.java
 
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
+import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.spring.model.parameters.QueryParameter
@@ -67,7 +68,7 @@ class QueryParameterAnnotationWriterSpec extends Specification {
         def param = new QueryParameter(
             'foo',
             new ObjectDataType (
-                'Foo', '', [
+                new DataTypeName('Foo', 'Foo'), '', [
                     foo1: new StringDataType (),
                     foo2: new StringDataType ()
                 ], null, false, null
