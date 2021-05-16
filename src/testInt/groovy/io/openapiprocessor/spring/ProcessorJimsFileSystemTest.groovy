@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor.spring
+package io.openapiprocessor.spring
 
 import io.openapiprocessor.spring.processor.SpringProcessor
 import com.google.common.jimfs.Configuration

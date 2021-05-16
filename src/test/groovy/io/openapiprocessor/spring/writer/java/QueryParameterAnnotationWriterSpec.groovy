@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer.java
+package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.DataTypeName
@@ -22,7 +22,6 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
-import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {

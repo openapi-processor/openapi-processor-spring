@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer.java
+package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
@@ -26,8 +26,6 @@ import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.MethodWriter
-import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
-import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {

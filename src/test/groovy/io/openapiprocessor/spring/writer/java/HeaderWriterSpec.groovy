@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original authors
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor.spring
+package io.openapiprocessor.spring.writer.java
 
-class TestSets {
+import spock.lang.Specification
 
-    static List<String> ALL = [
-        'endpoint-http-mapping',
-        'params-complex-data-types',
-        'params-pageable-mapping',
-        'params-path-simple-data-types',
-        'params-query-annotate-simple-mapping',
-        'params-request-body',
-        'params-request-body-multipart-mapping',
-        'params-simple-data-types'
-    ]
+class HeaderWriterSpec extends Specification {
 
+    void "writes generated header"() {
+        def headerWriter = new HeaderWriter()
+        def target = new StringWriter()
+
+        when:
+        headerWriter.write (target)
+
+        then:
+        target.toString () == HeaderWriterKt.HEADER
+    }
 }

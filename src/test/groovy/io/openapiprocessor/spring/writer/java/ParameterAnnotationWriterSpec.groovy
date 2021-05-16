@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer.java
+package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
@@ -27,7 +27,6 @@ import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter
 import io.openapiprocessor.core.model.parameters.PathParameter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
-import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 

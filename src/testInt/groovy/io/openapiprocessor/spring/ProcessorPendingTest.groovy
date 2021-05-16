@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.processor.spring
+package io.openapiprocessor.spring
 
 import io.openapiprocessor.spring.processor.SpringProcessor
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
+import spock.lang.Ignore
 import spock.lang.TempDir
 import spock.lang.Unroll
 
-/**
- * run integration tests.
- */
-class ProcessorEndToEndTest extends EndToEndBase {
+@Ignore
+class ProcessorPendingTest extends EndToEndBase {
 
     static Collection<TestSet> sources () {
-        def swagger = TestSets.ALL.collect {
-           new TestSet (name: it, processor: new SpringProcessor(), parser: ParserType.SWAGGER)
-        }
-
-        def openapi4j = TestSets.ALL.collect {
-           new TestSet (name: it, processor: new SpringProcessor(), parser: ParserType.OPENAPI4J)
-        }
-
-        swagger + openapi4j
+        return [
+            new TestSet(name: 'params-request-body-multipart-mapping', processor: new SpringProcessor (), parser: ParserType.SWAGGER),
+            new TestSet(name: 'params-request-body-multipart-mapping', processor: new SpringProcessor (), parser: ParserType.OPENAPI4J)
+        ]
     }
 
     @TempDir

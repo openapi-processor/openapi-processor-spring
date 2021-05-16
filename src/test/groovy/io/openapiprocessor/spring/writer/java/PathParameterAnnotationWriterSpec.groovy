@@ -14,43 +14,42 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.spring.writer.java
+package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.model.parameters.HeaderParameter
-import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
+import io.openapiprocessor.core.model.parameters.PathParameter
 import spock.lang.Specification
 
-class HeaderParameterAnnotationWriterSpec extends Specification {
+class PathParameterAnnotationWriterSpec extends Specification {
     def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
-    void "write simple (required) header parameter" () {
-        def param = new HeaderParameter(
+    void "write simple (required) path parameter" () {
+        def param = new PathParameter(
             'foo', new StringDataType(), true, false, null)
 
         when:
         writer.write (target, param)
 
         then:
-        target.toString () == '@RequestHeader(name = "foo")'
+        target.toString () == '@PathVariable(name = "foo")'
     }
 
-    void "write simple (optional) header parameter" () {
-        def param = new HeaderParameter(
+    void "write simple (optional) path parameter" () {
+        def param = new PathParameter(
             'foo', new StringDataType(), false, false, null)
 
         when:
         writer.write (target, param)
 
         then:
-        target.toString () == '@RequestHeader(name = "foo", required = false)'
+        target.toString () == '@PathVariable(name = "foo", required = false)'
     }
 
-    void "write simple (optional with default) header parameter" () {
-        def param = new HeaderParameter('foo',
+    void "write simple (optional with default) path parameter" () {
+        def param = new PathParameter('foo',
             new StringDataType(createConstraints ('bar'), false, null),
             false, false, null)
 
@@ -58,7 +57,7 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
         writer.write (target, param)
 
         then:
-        target.toString () == '@RequestHeader(name = "foo", required = false, defaultValue = "bar")'
+        target.toString () == '@PathVariable(name = "foo", required = false, defaultValue = "bar")'
     }
 
     DataTypeConstraints createConstraints(def defaultValue) {
