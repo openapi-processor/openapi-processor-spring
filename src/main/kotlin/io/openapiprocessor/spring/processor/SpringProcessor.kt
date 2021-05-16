@@ -8,12 +8,8 @@ package io.openapiprocessor.spring.processor
 import io.openapiprocessor.api.OpenApiProcessor
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
-import io.openapiprocessor.core.processor.MappingConverter
-import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.processor.mapping.MappingVersion
-import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.writer.java.ApiWriter
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.DataTypeWriter
@@ -86,51 +82,8 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
     }
 
     private fun convertOptions(processorOptions: Map<String, *>): ApiOptions {
-        val reader = MappingReader()
-        val converter = MappingConverter()
-        var mapping: MappingVersion? = null
-
-        if (processorOptions.containsKey("mapping")) {
-            mapping = reader.read(processorOptions["mapping"].toString())
-
-        } else if (processorOptions.containsKey("typeMappings")) {
-            mapping = reader.read(processorOptions["typeMappings"].toString())
-            log.warn("'typeMappings' option is deprecated, use 'mapping'!")
-        }
-
-        val options = ApiOptions()
-        options.targetDir = processorOptions["targetDir"].toString()
-
-        if (processorOptions.containsKey("packageName")) {
-            options.packageName = processorOptions["packageName"].toString()
-            log.warn("'options:package-name' should be set in the mapping yaml!")
-        }
-
-        if (processorOptions.containsKey("beanValidation")) {
-            options.beanValidation = processorOptions["beanValidation"] as Boolean
-            log.warn("options:bean-validation' should be set in the mapping yaml!")
-        }
-
-        if (mapping != null) {
-            if (mapping is MappingV1) {
-                options.packageName = mapping.options.packageName
-                options.beanValidation = mapping.options.beanValidation
-
-            } else if (mapping is MappingV2) {
-                options.packageName = mapping.options.packageName
-                options.beanValidation = mapping.options.beanValidation
-                options.javadoc = mapping.options.javadoc
-            }
-
-            if (options.packageName.contains("io.openapiprocessor.")) {
-                log.warn("is 'options:package-name' set in mapping? found: '{}'.", options.packageName)
-            }
-
-            options.typeMappings = converter.convert(mapping)
-        } else {
-            log.warn("missing 'mapping.yaml' configuration!")
-        }
-
+        val options = OptionsConverter().convertOptions (processorOptions as Map<String, Any>)
+        options.validate ()
         return options
     }
 
