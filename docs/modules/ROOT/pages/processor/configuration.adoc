@@ -1,15 +1,18 @@
 = Configuration
 include::partial$links.adoc[]
 
-The processor reads the configuration from the (mandatory) `mapping.yaml` file. It does contain
-some  general options and the xref:mapping/index.adoc[mapping] type information.
+The processor reads the configuration from the (mandatory) `mapping.yaml` file.It does contain
+some general options and the xref:mapping/index.adoc[mapping] type information.
 
 A mapping yaml looks like this:
 
 [source,yaml]
 ----
+openapi-processor-mapping: v2
+
 options:
   package-name: io.openapiprocessor.sample
+  model-name-suffix: Resource
   bean-validation: true
   javadoc: true
 
@@ -17,21 +20,116 @@ map:
    # java type mappings
 ----
 
+The only required option is `package-name`.All other options or the type mappings are optional.
 
 == options:
 
-* `package-name`: (**required**) the root package name of the generated interfaces & models. The
-package  folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
+* `package-name`: (**required**) the root package name of the generated interfaces & models.The
+package folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
 +
 Interfaces and models will be generated into the `api` and `model` subpackages of `package-name`.
 +
 ** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
 ** and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-* `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
-annotations. Default is `false`. See link:{bean-validation}[Bean Validation, window="_blank"].
+* `model-suffix-name` (**optional**, default is empty).See xref:_model_name_suffix[below].
 
-* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos. Default is `false`. This is still experimental.
+* `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
+annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
+
+* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
+
+[#_model_name_suffix]
+=== `model-name-suffix`
+
+**optional** (string, default is empty (i.e. it is disabled))
+
+The `model-name-suffix` option sets a suffix that is automatically appended to all generated model and enum classes.
+
+The suffix helps to
+
+* avoid duplicate class names in generated code and normal code
+* makes it easier to recognize which role or in which context a class is used. Is it a data transfer class or is it a domain class?
+* keeps the suffix "_noise_" out of the OpenAPI description
+
+Usually you will separate the classes by putting them in different packages. This helps to distinguish the classes, but when both are used in the same code, i.e. when converting one format to the other, it is a lot easier to distinguish them by their class name instead of their package name.
+
+If a schema name from the OpenAPI description already ends with the `model-name-suffix`, the processor will **not** append the suffix. This allows to migrate an existing api with a suffix in the API to `model-name-suffix` step by step.
+
+==== Example:
+
+*OpenAPI*
+[source,yaml]
+----
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo' # <1>
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        nested:
+          $ref: '#/components/schemas/BarResource' # <1>
+
+    BarResource:
+      type: object
+      properties:
+        prop:
+          type: string
+----
+
+*mapping.yaml*
+[source,yaml]
+----
+openapi-processor-mapping: v2
+
+options:
+  package-name: io.openapiprocessor.sample
+  model-name-suffix: Resource # <2>
+----
+
+*Java*
+[source,java]
+----
+// interface
+public interface Api {
+
+    @Mapping("/foo")
+    FooResource getFoo(); // <3>
+
+}
+
+// pojos
+public class FooResource { // <3>
+
+    // ...
+
+    @JsonProperty("nested")
+    private BarResource nested;
+
+    // ...
+}
+
+public class BarResource { // <4>
+
+    // ...
+}
+----
+
+<1> a schema name without suffix
+<2> the suffix configuration
+<3> the class name of the `Foo` schema got the configured `Resource` suffix
+<4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
 
 == map:
 
