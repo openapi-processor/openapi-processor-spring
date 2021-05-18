@@ -11,6 +11,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
     id "com.github.ben-manes.versions" version "0.38.0"
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 group projectGroupId
@@ -158,6 +159,15 @@ sonarqube {
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
   }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype() {
+            username = publishUser
+            password = publishKey
+        }
+    }
 }
 
 apply plugin: VersionPlugin
