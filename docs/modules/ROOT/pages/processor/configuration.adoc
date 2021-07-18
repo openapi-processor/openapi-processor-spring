@@ -40,7 +40,7 @@ annotations. Default is `false`. See link:{bean-validation}[Bean Validation Spec
 * `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
 
 [#_model_name_suffix]
-=== `model-name-suffix`
+=== model name suffix:
 
 **optional** (string, default is empty (i.e. it is disabled))
 
