@@ -18,4 +18,4 @@ map:
 
 
 
-See xref:processor/endpoint-content.adoc#result_style[endpoint content types] for a more detailed description.
+See xref:processor/endpoint-content.adoc[endpoint content types] for a more detailed description.
