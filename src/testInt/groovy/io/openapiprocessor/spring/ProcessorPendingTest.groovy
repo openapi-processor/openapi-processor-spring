@@ -18,6 +18,7 @@ package io.openapiprocessor.spring
 
 import io.openapiprocessor.spring.processor.SpringProcessor
 import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.test.FileSupport
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
 import spock.lang.Ignore
@@ -39,7 +40,7 @@ class ProcessorPendingTest extends EndToEndBase {
 
     @Unroll
     void "native - #testSet"() {
-        def runner = new TestSetRunner (testSet)
+        def runner = new TestSetRunner (testSet, new FileSupport(getClass ()))
         def success = runner.runOnNativeFileSystem (folder)
 
         expect:
