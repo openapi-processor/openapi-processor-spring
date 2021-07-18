@@ -20,6 +20,7 @@ import io.openapiprocessor.spring.processor.SpringProcessor
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.test.FileSupport
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
 import spock.lang.Unroll
@@ -40,7 +41,7 @@ class ProcessorJimsFileSystemTest extends EndToEndBase {
 
     @Unroll
     void "jimfs - #testSet"() {
-        def runner = new TestSetRunner (testSet)
+        def runner = new TestSetRunner (testSet, new FileSupport(getClass ()))
         def success = runner.runOnCustomFileSystem (Jimfs.newFileSystem (Configuration.unix ()))
 
         expect:
