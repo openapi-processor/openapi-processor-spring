@@ -97,9 +97,9 @@ If an endpoint returns multiple types, a success response (typically 200 ok) and
 
 With versions *before 2021.5* the processor generates (by default) endpoint methods with an `Object` return value (or if generic something like `ResponseType<?>`) to handle the unrelated success and error response types.
 
-This has the drawback that an important piece of information is missing: the success response type.With `Object` as return type it not clear what the success response type is.
+This has the drawback that an important piece of information is missing: the success response type. With `Object` as return type it not clear what the success response type is.
 
-With version *2021.5* it is possible to generate the endpoints with the success response type even with error responses.It is _ignoring_ the error result types.
+With version *2021.5* it is possible to generate the endpoints with the success response type even with error responses. It is _ignoring_ the error result types.
 
 Since it is common practice to handle errors by throwing exceptions (e.g. in combination with the Spring `@ResponseStatus` annotation) the endpoint methods don't need to handle different return types, and it is possible to simply use the type of the success response.
 
@@ -147,7 +147,7 @@ public interface Api {
 
 **previous behavior, before 2021.5**
 
-Example of the previous code, using `result-style: all`.The setting is required to generate the previous code.
+Example of the previous code, using `result-style: all`. The setting is required to generate the previous code.
 
 [source,java]
 ----
