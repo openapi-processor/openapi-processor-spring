@@ -1,10 +1,6 @@
 = Result mapping
 include::partial$links.adoc[]
 
-
-[.badge .badge-since]+since 1.0.0.M13+
-
-
 A link:{spring-responseentity}[`ResponseEntity<>`] allows an endpoint implementation full control of
 the response.
 
