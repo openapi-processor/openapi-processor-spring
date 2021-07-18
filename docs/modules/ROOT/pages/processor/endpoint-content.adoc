@@ -4,7 +4,7 @@ A simple path of the OpenAPI description will usually produce a single endpoint 
 interface as described in the introduction.
 
 OpenAPI allows us to define more complex apis that behave differently based on the request header.
-For example the following api definition can return its response in different formats. As json or as
+For example the following api definition can return its response in different formats.As json or as
 plain text:
 
 [source,yaml]
@@ -53,8 +53,8 @@ components:
 A client request uses the request `Accept` header to tell the api which result content types it can
 handle.
 
-Using a single endpoint method it has to decide which response to create. This leads to some boring
-`if/else` code. To avoid this the processor creates one endpoint method for each possible response.
+Using a single endpoint method it has to decide which response to create.This leads to some boring
+`if/else` code.To avoid this the processor creates one endpoint method for each possible response.
 
 == multiple content types
 
@@ -85,14 +85,69 @@ public interface Api {
 The apis normal response (status '200') can return the result as json or as plain text which leads
 to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
 
-One method when json gets requested and one when plain text gets requested. Spring will take care of
+One method when json gets requested and one when plain text gets requested.Spring will take care of
 selecting the correct endpoint.
 
-
+[#result_style]
 == multiple content types & default content type
 
-In the (contrived) example our api does also define another content type for all other result status
-codes (usually the errors): xml. This results in the following code:
+In the (contrived) example our api does also define another content type for all other result status codes (usually the errors): xml.
+
+If an endpoint returns multiple types, a success response (typically 200 ok) and at least one error response, the processor has to pick a return type for the endpoint methods.
+
+With versions *before 2021.5* the processor generates (by default) endpoint methods with an `Object` return value (or if generic something like `ResponseType<?>`) to handle the unrelated success and error response types.
+
+This has the drawback that an important piece of information is missing: the success response type.With `Object` as return type it not clear what the success response type is.
+
+With version *2021.5* it is possible to generate the endpoints with the success response type even with error responses.It is _ignoring_ the error result types.
+
+Since it is common practice to handle errors by throwing exceptions (e.g. in combination with the Spring `@ResponseStatus` annotation) the endpoint methods don't need to handle different return types, and it is possible to simply use the type of the success response.
+
+To switch between previous and new behavior there is a new mapping configuration to control the style of the return type named `result-style`.It has two possible values: `success` or `all`.This is currently a global mapping switch.
+
+The default is `success`, i.e. the processor will automatically generate the code using the new behavior.In case the previous behavior is required set the `result-style` to `all`.
+
+[source,yaml]
+----
+openapi-processor-mapping: v2
+
+options:
+  package-name: ...
+
+map:
+  #result-style: success  # use the success result type, this is the default
+  result-style: all # use an Object return type
+----
+
+**new behavior, since 2021.5**
+
+Example of the new code, using `result-style: success`.This is the default if `result-style` is not set.
+
+[source,java]
+----
+package generated.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface Api {
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"application/json", "application/xml"})
+    Foo getFooApplicationJson();
+
+    @GetMapping(
+            path = "/foo",
+            produces = {"text/plain", "application/xml"})
+    String getFooTextPlain();
+
+}
+----
+
+**previous behavior, before 2021.5**
+
+Example of the previous code, using `result-style: all`.The setting is required to generate the previous code.
 
 [source,java]
 ----
@@ -116,9 +171,6 @@ public interface Api {
 }
 ----
 
-Both endpoints need to handle the success case (json or text), and the error (xml) case. So both
-mappings contain the xml content type. To handle the multiple responses the return type is now
-`Object`.
 
 == multiple content types, default content type & result wrapper
 

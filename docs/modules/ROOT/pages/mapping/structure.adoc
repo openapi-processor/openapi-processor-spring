@@ -45,6 +45,9 @@ map:
   # result wrapper
   result: {target type}
 
+  #result-style:
+  result-style: {success|all}
+
   # single wrapper
   single: {target type}
 
