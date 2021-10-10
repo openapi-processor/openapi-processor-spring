@@ -7,8 +7,8 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id "org.sonarqube" version "3.3"
-    id 'org.jetbrains.dokka' version '1.5.0'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.dokka' version '1.5.31'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
     id "com.github.ben-manes.versions" version "0.39.0"
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
@@ -33,9 +33,8 @@ String getBuildSignKey(String property) {
 
 ext {
     processorApiVersion = '2021.1'
-    processorCoreVersion = '2021.5'
-    processorTestVersion = '2021.3'
-    groovyVersion = '3.0.8'
+    processorCoreVersion = '2021.6'
+    processorTestVersion = '2021.5'
 
     publishUser = getBuildProperty ('PUBLISH_USER')
     publishKey =  getBuildProperty ('PUBLISH_KEY')
@@ -85,25 +84,28 @@ compileKotlin {
 }
 
 dependencies {
-    components.all(KotlinPlatformRule)
-
     compileOnly "io.openapiprocessor:openapi-processor-api:$processorApiVersion"
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:1.5.31")
+    implementation platform("com.fasterxml.jackson:jackson-bom:2.13.0")
+
     implementation "io.openapiprocessor:openapi-processor-core:$processorCoreVersion"
-    implementation 'org.slf4j:slf4j-api:1.7.31'
-    implementation ('com.google.guava:guava:30.1.1-jre')
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation ('com.google.guava:guava:31.0.1-jre')
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
     testImplementation ("io.openapiprocessor:openapi-processor-test:$processorTestVersion")
 
-    testImplementation ("org.codehaus.groovy:groovy:$groovyVersion")
-    testImplementation ("org.codehaus.groovy:groovy-nio:$groovyVersion")
+    testImplementation platform("org.codehaus.groovy:groovy-bom:3.0.9")
+    testImplementation ("org.codehaus.groovy:groovy")
+    testImplementation ("org.codehaus.groovy:groovy-nio")
     testImplementation ('org.spockframework:spock-core:2.0-groovy-3.0')
-    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testImplementation ("org.junit.jupiter:junit-jupiter-params:5.7.2")
-    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation platform("org.junit:junit-bom:5.8.1")
+    testImplementation ("org.junit.jupiter:junit-jupiter-api")
+    testImplementation ("org.junit.jupiter:junit-jupiter-params")
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
-    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.6'
     testImplementation("com.google.jimfs:jimfs:1.2")
 }
 
