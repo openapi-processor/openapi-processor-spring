@@ -7,10 +7,10 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id "org.sonarqube" version "3.3"
-    id 'org.jetbrains.dokka' version '1.5.31'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
+    id 'org.jetbrains.dokka' version '1.6.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
-    id "com.github.ben-manes.versions" version "0.39.0"
+    id "com.github.ben-manes.versions" version "0.41.0"
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
@@ -33,7 +33,7 @@ String getBuildSignKey(String property) {
 
 ext {
     processorApiVersion = '2021.1'
-    processorCoreVersion = '2021.6'
+    processorCoreVersion = '2021.6' // '2022.1'
     processorTestVersion = '2021.5'
 
     publishUser = getBuildProperty ('PUBLISH_USER')
@@ -89,7 +89,7 @@ dependencies {
     implementation platform("com.fasterxml.jackson:jackson-bom:2.13.0")
 
     implementation "io.openapiprocessor:openapi-processor-core:$processorCoreVersion"
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'org.slf4j:slf4j-api:1.7.33'
     implementation ('com.google.guava:guava:31.0.1-jre')
 
     testImplementation ("io.openapiprocessor:openapi-processor-api:$processorApiVersion")
@@ -99,13 +99,13 @@ dependencies {
     testImplementation ("org.codehaus.groovy:groovy")
     testImplementation ("org.codehaus.groovy:groovy-nio")
     testImplementation ('org.spockframework:spock-core:2.0-groovy-3.0')
-    testImplementation platform("org.junit:junit-bom:5.8.1")
+    testImplementation platform("org.junit:junit-bom:5.8.2")
     testImplementation ("org.junit.jupiter:junit-jupiter-api")
     testImplementation ("org.junit.jupiter:junit-jupiter-params")
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("io.mockk:mockk:1.12.0")
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
-    testImplementation 'ch.qos.logback:logback-classic:1.2.6'
+    testImplementation("io.mockk:mockk:1.12.2")
+    testImplementation("io.kotest:kotest-runner-junit5:5.1.0")
+    testImplementation 'ch.qos.logback:logback-classic:1.2.10'
     testImplementation("com.google.jimfs:jimfs:1.2")
 }
 
