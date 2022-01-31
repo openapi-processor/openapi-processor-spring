@@ -14,6 +14,7 @@ options:
   package-name: io.openapiprocessor.sample
   model-name-suffix: Resource
   bean-validation: true
+  format-code: false
   javadoc: true
 
 map:
@@ -38,6 +39,8 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
 
 * `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
+
+* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `true`.
 
 [#_model_name_suffix]
 === model name suffix:
