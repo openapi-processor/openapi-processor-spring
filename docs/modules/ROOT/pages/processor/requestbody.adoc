@@ -60,8 +60,6 @@ and a `Book` pojo.
 
 == multipart/form-data
 
-[.badge .badge-since]+since 1.0.0.M5+
-
 For file uploads, where the `content` of the `requestBody` is `multipart/form-data`, the resulting
 code looks a bit different and requires a specific type mapping.
 
@@ -141,4 +139,49 @@ to get the following code:
 ----
 @PostMapping(path = "/file-upload")
 ResponseEntity<Void> postFileUpload(@RequestParam(name = "files") MultipartFile[] files);
+----
+
+=== multi-part encoding
+
+[.badge .badge-since]+since 2021.4+
+
+the parsing step extracts the `encoding/contentType` of a multipart content. This allows a processor to consider the encoding content type when selecting the annotation for the part.
+
+the Spring processor uses this to select between `@RequestPart` and `@RequestParam` annotation. If an `encoding/contentType` is available it will use `@RequestPart`, if no `encoding/contentType` is available it will use `@RequestParam`.
+
+[source,yaml]
+----
+openapi: 3.0.2
+info:
+  title: params-request-body-multipart
+  version: 1.0.0
+
+paths:
+  /multipart:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                json:
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+                    bar:
+                      type: string
+            encoding:
+              file:
+                contentType: application/octet-stream
+              json:
+                contentType: application/json
+      responses:
+        '204':
+          description: empty
 ----
