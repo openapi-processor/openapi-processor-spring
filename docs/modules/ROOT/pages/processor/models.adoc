@@ -103,4 +103,38 @@ which is finally the bulky `BookInlineResponse200`.
 Apart from the generated name it will have exactly the same content (i.e. properties &
 setter/getter) since the schema description is identical.
 
+== `readOnly`/`writeOnly`
+
+Using `readOnly`/`writeOnly` on object schema properties
+
+[source,yaml]
+----
+Foo:
+  type: object
+  properties:
+    barRead:
+      readOnly: true
+      allOf:
+        - $ref: '#/components/schemas/Bar'
+    barWrite:
+      writeOnly: true
+      allOf:
+        - $ref: '#/components/schemas/Bar'
+----
+
+will translate to `@JsonProperty` annotations with read-only or write-only `access`:
+
+[source,java]
+----
+public class Foo {
+
+    @JsonProperty(value = "barRead", access = JsonProperty.Access.READ_ONLY)
+    private Bar barRead;
+
+    @JsonProperty(value = "barWrite", access = JsonProperty.Access.WRITE_ONLY)
+    private Bar barWrite;
+
+   // ....
+}
+----
 
