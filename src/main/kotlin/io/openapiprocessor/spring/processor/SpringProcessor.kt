@@ -70,8 +70,7 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                     options,
                     headerWriter,
                     beanValidationFactory),
-                StringEnumWriter (headerWriter),
-                true
+                StringEnumWriter (headerWriter)
             )
 
             writer.write (api)
