@@ -122,6 +122,4 @@ Some IDEs support json schemas to provide editing support (auto completion & val
 
 == type mapping structure (v1)
 
-This format of the mapping ist still available but will go away with the 1.0.0 release.
-
-See xref:1.0.0.M14@mapping/index.adoc[old type mapping].
+This format of the mapping ist still available but should not be used anymore.
