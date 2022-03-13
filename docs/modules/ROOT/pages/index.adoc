@@ -6,7 +6,7 @@ include::partial$links.adoc[]
 //
 // content
 //
-image:openapi-processor-spring$$@$$1280x200.png[openapi-processor-spring]
+image:openapi-processor-spring-at-1280x200.png[openapi-processor-spring]
 
 // badges
 link:{oaps-ci}[image:{badge-ci}[]]
