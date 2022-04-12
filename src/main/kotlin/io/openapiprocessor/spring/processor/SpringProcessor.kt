@@ -10,13 +10,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
-import io.openapiprocessor.core.writer.java.ApiWriter
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.DataTypeWriter
-import io.openapiprocessor.core.writer.java.DefaultImportFilter
-import io.openapiprocessor.core.writer.java.InterfaceWriter
-import io.openapiprocessor.core.writer.java.MethodWriter
-import io.openapiprocessor.core.writer.java.StringEnumWriter
+import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.writer.java.HeaderWriter
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
@@ -50,6 +44,7 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
 
             val headerWriter = HeaderWriter()
             val beanValidationFactory = BeanValidationFactory()
+            val javaDocWriter = JavaDocWriter()
 
             val writer = ApiWriter(
                 options,
@@ -60,7 +55,8 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                         options,
                         MappingAnnotationWriter(),
                         ParameterAnnotationWriter(annotations),
-                        beanValidationFactory
+                        beanValidationFactory,
+                        javaDocWriter
                     ),
                     annotations,
                     beanValidationFactory,
@@ -70,7 +66,12 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                     options,
                     headerWriter,
                     beanValidationFactory),
-                StringEnumWriter (headerWriter)
+                StringEnumWriter (headerWriter),
+                InterfaceDataTypeWriter(
+                    options,
+                    headerWriter,
+                    javaDocWriter
+                )
             )
 
             writer.write (api)
