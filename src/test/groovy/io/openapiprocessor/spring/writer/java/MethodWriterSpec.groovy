@@ -67,6 +67,7 @@ class MethodWriterSpec extends Specification {
                 'java.util',
                 [dataTypeName, dataTypeName],
                 null,
+                false,
                 false
             ), false, false, null)
         ])
