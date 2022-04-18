@@ -33,7 +33,7 @@ String getBuildSignKey(String property) {
 
 ext {
     processorApiVersion = '2021.1'
-    processorCoreVersion = '2022.3-SNAPSHOT'
+    processorCoreVersion = '2022.4'
     processorTestVersion = '2022.1'
 
     publishUser = getBuildProperty ('PUBLISH_USER')
