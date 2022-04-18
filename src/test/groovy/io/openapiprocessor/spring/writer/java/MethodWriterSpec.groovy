@@ -16,6 +16,9 @@
 
 package io.openapiprocessor.spring.writer.java
 
+import io.openapiprocessor.core.model.Documentation
+import io.openapiprocessor.core.model.datatypes.DataTypeName
+import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
@@ -23,7 +26,6 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.HttpMethod
-import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.MethodWriter
 import spock.lang.Specification
@@ -45,7 +47,8 @@ class MethodWriterSpec extends Specification {
             properties.method as HttpMethod ?: HttpMethod.GET,
             properties.operationId as String ?: null,
             properties.deprecated as boolean ?: false,
-            properties.description as String ?: null
+            new Documentation(null, properties.description as String ?: null)
+
         )
         ep.parameters = properties.parameters ?: []
         ep.responses = properties.responses ?: [:]
@@ -54,13 +57,15 @@ class MethodWriterSpec extends Specification {
     }
 
     void "writes map from single query parameter" () {
+        def dataTypeName = new DataTypeName('java.lang.String', 'java.lang.String')
+
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new EmptyResponse()]
         ], parameters: [
-            new QueryParameter('foo', new MappedMapDataType (
+            new QueryParameter('foo', new MappedDataType (
                 'Map',
                 'java.util',
-                ['java.lang.String', 'java.lang.String'],
+                [dataTypeName, dataTypeName],
                 null,
                 false
             ), false, false, null)

@@ -8,8 +8,12 @@ package io.openapiprocessor.spring.model.parameters
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.model.datatypes.MappedDataType
-import io.openapiprocessor.core.model.datatypes.MappedMapDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
+
+val Maps = listOf(
+    Map::class.java.name,
+    "org.springframework.util.MultiValueMap"
+)
 
 /**
  * OpenAPI query parameter.
@@ -28,7 +32,7 @@ class QueryParameter(
     override val withAnnotation: Boolean
         get() {
             // Map should be annotated
-            if (dataType is MappedMapDataType) {
+            if (isMappedMap) {
                 return true
             }
 
@@ -40,7 +44,7 @@ class QueryParameter(
             // Mapped should NOT be annotated if it was object schema
             // Mapped should be annotated if it was a simple schema
             if (dataType is MappedDataType) {
-                return dataType.simpleDataType
+                return false
             }
 
             return true
@@ -52,7 +56,7 @@ class QueryParameter(
     override val withParameters: Boolean
         get() {
             // Map should not have parameters
-            if (dataType is MappedMapDataType) {
+            if (isMappedMap) {
                 return false
             }
 
@@ -64,4 +68,13 @@ class QueryParameter(
             return true
         }
 
+    private val isMappedMap: Boolean
+        get() {
+            if (dataType !is MappedDataType) {
+                return false
+            }
+
+            val type = dataType.getImports().first()
+            return Maps.contains(type)
+        }
 }
