@@ -1,0 +1,99 @@
+= oneOf
+
+Generating model classes from an `oneOf` has the challenge to handle a number of usually unrelated objects with different properties.
+
+Java has no way to define a class member that can have multiple unrelated types (e.g. it can be of class `Foo` or class `Bar`), except using `Object`.
+
+This is the default behavior of the processor.
+
+The problem with `Object` is that it doesn't provide any information at all. You have to know (from the OpenAPI) what that `Object` could be.
+
+To improve usability the processor is able to generate marker interfaces to provide a bit more information than `Object`.
+
+[#_marker_interfaces]
+== marker interfaces
+
+[.badge .badge-since]+since 2022.3+
+
+Generation of marker interfaces is enabled by setting the `one-of-interface` option to `true` (See xref:processor/configuration.adoc[configuration]). For backward compatibility it is `false` by default.
+
+[source,yaml]
+----
+openapi-processor-mapping: v2
+
+options:
+  one-of-interface: true
+----
+
+The processor will now create a marker interface for a `oneOf` of  `object` s that is implemented by all `object` s in the `oneOf` list.
+
+Here is an example. The response is an object `Foo` with a `foo` property that can have the type `Foo` or `Bar`.
+
+[source,yaml]
+----
+openapi: 3.0.3
+info:
+  title: oneOf marker interface
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          description: oneOf
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        foo:
+          $ref: '#/components/schemas/FooOneOf'
+
+    FooOneOf:
+      oneOf:
+        - $ref: '#/components/schemas/Foo'
+        - $ref: '#/components/schemas/Bar'
+
+    # omitted description of Foo & Bar
+----
+
+The processor generates the class `Foo` as
+
+[source,java]
+----
+// simplified
+public class Foo {
+    private FooOneOf foo;
+}
+----
+
+with the type `FooOneOf` instead of `Object`. `FooOneOf` is the marker interface:
+
+[source,java]
+----
+public interface FooOneOf {}
+----
+
+The two model classes `Foo` & `Bar` implement the marker interface:
+
+[source,java]
+----
+// simplified
+public class Foo implements FooOneOf { /* ... */ }
+----
+
+[source,java]
+----
+// simplified
+public class Bar implements FooOneOf { /* ... */ }
+----
+
+Which is better than having `foo` just as `Object`. The marker interface helps to find the possible types of `foo`.
+

@@ -13,6 +13,7 @@ openapi-processor-mapping: v2
 options:
   package-name: io.openapiprocessor.sample
   model-name-suffix: Resource
+  one-of-interface: true
   bean-validation: true
   format-code: false
   javadoc: true
@@ -33,7 +34,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 ** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
 ** and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-* `model-suffix-name` (**optional**, default is empty).See xref:_model_name_suffix[below].
+* `model-suffix-name` (**optional**, default is empty). See xref:_model_name_suffix[below].
 
 * `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
 annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
@@ -41,6 +42,8 @@ annotations. Default is `false`. See link:{bean-validation}[Bean Validation Spec
 * `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
 
 * `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `true`.
+
+* `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
 [#_model_name_suffix]
 === model name suffix:
@@ -133,6 +136,10 @@ public class BarResource { // <4>
 <2> the suffix configuration
 <3> the class name of the `Foo` schema got the configured `Resource` suffix
 <4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
+
+
+
+
 
 == map:
 

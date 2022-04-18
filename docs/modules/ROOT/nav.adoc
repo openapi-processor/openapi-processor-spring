@@ -7,6 +7,7 @@
 ** xref:processor/parameter.adoc[Parameter]
 ** xref:processor/requestbody.adoc[Request Body]
 ** xref:processor/response.adoc[Responses]
+** xref:processor/one-of-interface.adoc[oneOf]
 ** xref:processor/deprecated.adoc[Deprecated]
 ** xref:processor/identifier.adoc[Identifier]
 * xref:mapping/index.adoc[Type Mapping]
