@@ -26,6 +26,6 @@ to use snapshot versions add `https://oss.sonatype.org/content/repositories/snap
 [workflow-ci]: https://github.com/openapi-processor/openapi-processor-spring/actions?query=workflow%3Abuild
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-spring&metric=coverage
 [sonar]: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-spring
-[oap-docs]: https://docs.openapiprocessor.io/spring
+[oap-docs]: https://docs.openapiprocessor.io
 [openapi]: https://www.openapis.org/
 [springboot]: https://spring.io/projects/spring-boot
