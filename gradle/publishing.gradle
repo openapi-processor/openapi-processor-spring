@@ -11,8 +11,6 @@ publishing {
             version project.version
 
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
 
             pom {
                 name = project.projectTitle
