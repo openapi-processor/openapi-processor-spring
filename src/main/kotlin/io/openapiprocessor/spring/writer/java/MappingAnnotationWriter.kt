@@ -18,6 +18,7 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
+import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import java.io.Writer
 
@@ -64,7 +65,7 @@ class MappingAnnotationWriter: CoreMappingAnnotationWriter {
     }
 
     private fun getMappingAnnotation(endpoint: Endpoint): String {
-        return "@${endpoint.method.method.capitalize ()}Mapping"
+        return "@${endpoint.method.method.capitalizeFirstChar ()}Mapping"
     }
 
     private fun quote(content: String): String {
