@@ -81,6 +81,7 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun convertOptions(processorOptions: Map<String, *>): ApiOptions {
         val options = OptionsConverter().convertOptions (processorOptions as Map<String, Any>)
         options.validate ()
