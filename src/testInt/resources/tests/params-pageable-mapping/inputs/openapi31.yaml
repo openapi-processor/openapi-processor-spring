@@ -1,0 +1,82 @@
+openapi: 3.1.0
+info:
+  title: Spring Page/Pageable API
+  version: 1.0.0
+
+paths:
+  /page:
+    get:
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringPage'
+
+  /page-inline:
+    get:
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            type: object
+            properties:
+              page:
+                type: integer
+              size:
+                type: integer
+      responses:
+        '200':
+          description: none
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Page'
+                  - $ref: '#/components/schemas/StringContent'
+
+components:
+  schemas:
+
+    Pageable:
+      description: minimal Pageable query parameters
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+
+    Page:
+      description: minimal Page response without content property
+      type: object
+      properties:
+        number:
+          type: integer
+        size:
+          type: integer
+
+    StringContent:
+      description: specific content List of the Page response
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: string
+
+    StringPage:
+      description: typed Page
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - $ref: '#/components/schemas/StringContent'
