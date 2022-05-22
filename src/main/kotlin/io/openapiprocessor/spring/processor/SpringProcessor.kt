@@ -3,6 +3,8 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
+@file:Suppress("DEPRECATION")
+
 package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.api.OpenApiProcessor
