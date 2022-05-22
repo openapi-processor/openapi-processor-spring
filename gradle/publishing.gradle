@@ -1,11 +1,18 @@
-// does not work on oss.sonatype.org
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
+configure(project.rootProject) {
+    ext {
+        publishUser = getBuildProperty ('PUBLISH_USER')
+        publishKey =  getBuildProperty ('PUBLISH_KEY')
+
+        signKey = getBuildSignKey ('SIGN_KEY')
+        signPwd = getBuildProperty ('SIGN_PWD')
+
+        isReleaseVersion = !version.endsWith("SNAPSHOT")
+    }
 }
 
 publishing {
     publications {
-        OpenApiProcessor (MavenPublication) {
+        processorSpring (MavenPublication) {
             groupId project.group
             artifactId project.name
             version project.version
@@ -20,7 +27,7 @@ publishing {
                 licenses {
                     license {
                         name = 'The Apache Software License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                         distribution = "repo"
                     }
                 }
@@ -62,6 +69,26 @@ signing {
     useInMemoryPgpKeys(signKey, signPwd)
 
     signing {
-        sign publishing.publications.OpenApiProcessor
+        sign publishing.publications.processorSpring
     }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype() {
+            username = publishUser
+            password = publishKey
+        }
+    }
+}
+
+// helper
+
+String getBuildProperty(String property) {
+    project.findProperty (property) ?: System.getenv (property) ?: 'n/a'
+}
+
+String getBuildSignKey(String property) {
+    project.findProperty (property) ?: System.getenv (property) ?
+        System.getenv (property).replace("\\n", "\n"): 'n/a'
 }
