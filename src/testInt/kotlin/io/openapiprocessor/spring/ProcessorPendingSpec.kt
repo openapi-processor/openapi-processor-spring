@@ -19,7 +19,7 @@ import io.openapiprocessor.test.TestSetRunner
 class ProcessorPendingSpec: StringSpec({
 
     for (testSet in sources()) {
-        "native - $testSet".config(enabled = true) {
+        "native - $testSet".config(enabled = false) {
             val folder = tempdir()
 
             val support = FileSupport(
