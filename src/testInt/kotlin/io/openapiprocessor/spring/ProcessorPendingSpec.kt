@@ -3,16 +3,12 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.core
+package io.openapiprocessor.spring
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType.INTERNAL
-import io.openapiprocessor.spring.API_30
-import io.openapiprocessor.spring.API_31
-import io.openapiprocessor.spring.setTestHeader
-import io.openapiprocessor.spring.testSet
 import io.openapiprocessor.test.FileSupport
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
