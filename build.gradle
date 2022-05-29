@@ -15,8 +15,8 @@ version projectVersion
 
 ext {
     processorApiVersion = '2021.1'
-    processorCoreVersion = '2022.5-SNAPSHOT'
-    processorTestVersion = '2022.2-SNAPSHOT'
+    processorCoreVersion = '2022.5'
+    processorTestVersion = '2022.2'
 }
 
 repositories {
