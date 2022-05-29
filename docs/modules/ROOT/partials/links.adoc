@@ -27,6 +27,7 @@
 
 :swagger-parser: https://github.com/swagger-api/swagger-parser
 :openapi4j: https://github.com/openapi4j/openapi4j
+:openapi-parser: https://github.com/openapi-processor/openapi-parser
 
 :springboot: https://spring.io/projects/spring-boot
 :license: http://www.apache.org/licenses/LICENSE-2.0.txt
