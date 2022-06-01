@@ -63,9 +63,9 @@ yaml. This replaces the `typeMappings` option.
 (default) to show no warnings (this option has currently no effect).
 
 * `parser`: (**optional**), sets the openapi parser used to read the OpenAPI description. Available values are `SWAGGER` (default), `OPENAPI4J` or `INTERNAL`.
-** `SWAGGER`: link:{swagger-parser}:[Swagger OpenAPI parser, window="_blank"], supports *OpenAPI 3.0.x*
+** `SWAGGER`: link:{swagger-parser}[Swagger OpenAPI parser, window="_blank"], supports *OpenAPI 3.0.x*
 ** `OPENAPI4J`: link:{openapi4j}[openapi4j OpenAPI parser, window="_blank"], supports *OpenAPI 3.0.x*. It provides better validation than `SWAGGER`, unfortunately it is no longer maintained.
-** `INTERNAL`: link:{openapi-parser}:[internal OpenAPI parser, window="_blank"], supports *OpenAPI 3.0.x* & *OpenAPI 3.1.0*.
+** `INTERNAL`: link:{openapi-parser}[internal OpenAPI parser, window="_blank"], supports *OpenAPI 3.0.x* & *OpenAPI 3.1.0*.
 *** the 3.0.x parser provides JSON schema validation.
 *** the 3.1.0 parser is *experimental* and has no validation at the moment.
 
