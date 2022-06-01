@@ -55,7 +55,7 @@ directory.
 +
 See <<running processor-spring>> how to include the `targetDir` in compilation & packing.
 
-* `mapping`: (**required**, since 1.0.0.M6) provides the processor mapping options. This is a path
+* `mapping`: (**required**) provides the processor mapping options. This is a path
 to yaml file. See xref:processor/configuration.adoc[Configuration] for a description of the mapping
 yaml. This replaces the `typeMappings` option.
 
