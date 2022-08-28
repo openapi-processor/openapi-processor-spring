@@ -65,6 +65,9 @@ map:
     # add a (usually technical) parameter that is not described in the OpenAPI
     - add: {parameter name}  =>  {target type}
 
+    # add an extra annotation to parameters of type source type
+    - type: {source type}  @  {annotation type}
+
   # list of global content mappings, mapped by content type
   responses:
     - content: {content type}  =>  {target type}
@@ -99,6 +102,9 @@ map:
 
         # add a (usually technical) parameter that is not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
+
+        # add an extra annotation to parameters of type source type
+        - type: {source type}  @  {annotation type}
 
       # list of path specific content mappings, mapped by content type
       responses:
