@@ -32,14 +32,14 @@ map:
       parameters:
         - name: {parameter name}  =>  {target type}
 
-        # the list of parameter mappings can include additional parameters
+        # add a (usually technical) parameter that is not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type
       responses:
         - content: {content type}  =>  {target type}
 
-    # a path
+    # another path
     /foobar:
       # excluding an endpoint
       exclude: true
@@ -61,7 +61,7 @@ map:
       parameters:
         - name: {parameter name}  =>  {target type}
 
-        # the list of parameter mappings can include additional parameters
+        # add a (usually technical) parameter that is not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type

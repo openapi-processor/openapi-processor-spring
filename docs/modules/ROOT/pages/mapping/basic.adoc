@@ -61,7 +61,7 @@ The following table shows the automatic mapping of OpenAPIs primitive types to J
 
 | `string`
 | `date-time`
-| `java.time.OffsetDataTime`
+| `java.time.OffsetDataTime` (better would be `java.time.Instant`)
 
 | `string`
 | `password`

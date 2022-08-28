@@ -58,11 +58,11 @@ map:
   types:
     - type: {source type}  =>  {target type}
 
-  # list of global parameter mappings, mapped by parameter name
+  # list of global parameter mappings
   parameters:
     - name: {parameter name}  =>  {target type}
 
-    # the list of parameter mappings can include additional parameters
+    # add a (usually technical) parameter that is not described in the OpenAPI
     - add: {parameter name}  =>  {target type}
 
   # list of global content mappings, mapped by content type
@@ -93,11 +93,11 @@ map:
       types:
         - from: {source type}  =>  {target type}
 
-      # list of path specific parameter mappings, mapped by parameter name
+      # list of path specific parameter mappings
       parameters:
         - name: {parameter name}  =>  {target type}
 
-        # the list of parameter mappings can include additional parameters
+        # add a (usually technical) parameter that is not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
 
       # list of path specific content mappings, mapped by content type
