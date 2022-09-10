@@ -11,6 +11,7 @@
 :oaps-bintray: https://bintray.com/openapi-processor/openapi-processor
 :oap-gradle: https://github.com/openapi-processor/openapi-processor-gradle
 :oap-playground: https://playground.openapiprocessor.io
+:oap-samples: https://github.com/openapi-processor/openapi-processor-samples
 :oap-central: https://search.maven.org/search?q=io.openapiprocessor
 :badge-central: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-spring?label=Maven%20Central
 :oapc-inttests: https://github.com/openapi-processor/openapi-processor-core/tree/master/src/testInt/resources/tests
