@@ -73,7 +73,8 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                     options,
                     headerWriter,
                     javaDocWriter
-                )
+                ),
+                GradlePluginFileHandler(options)
             )
 
             writer.write (api)
