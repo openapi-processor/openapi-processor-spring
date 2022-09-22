@@ -1,4 +1,4 @@
-= annotations
+= annotation mapping
 include::partial$links.adoc[]
 
 It is possible to add additional annotations to a `source type`. Currently, this is available as
