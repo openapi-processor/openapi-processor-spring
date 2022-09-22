@@ -20,7 +20,7 @@
 ** xref:mapping/result-style.adoc[Global Result Style]
 ** xref:mapping/single-multi.adoc[Global Single & Multi Mapping]
 ** xref:mapping/endpoint.adoc[Endpoint Mapping]
-** xref:mapping/annotation.adoc[Additional Annotation]
+** xref:mapping/annotation.adoc[Annotation Mapping]
 ** xref:mapping/null.adoc[Null Mapping]
 ** xref:mapping/package-name.adoc[package-name Mapping]
 * xref:gradle.adoc[Gradle Integration]
