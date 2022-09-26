@@ -18,9 +18,10 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
+import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.support.capitalizeFirstChar
-import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import java.io.Writer
+import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 
 /**
  * spring mapping annotation writer
@@ -60,12 +61,23 @@ class MappingAnnotationWriter: CoreMappingAnnotationWriter {
             mapping += "}"
         }
 
+        val method = endpoint.method.method
+        if (method in arrayOf("head","trace","options")) {
+            mapping += ", "
+            mapping += "method = RequestMethod.${method.uppercase()}"
+        }
+
         mapping += ")"
         return mapping
     }
 
     private fun getMappingAnnotation(endpoint: Endpoint): String {
-        return "@${endpoint.method.method.capitalizeFirstChar ()}Mapping"
+        return when(endpoint.method){
+            HttpMethod.HEAD, HttpMethod.OPTIONS, HttpMethod.TRACE -> "@RequestMapping"
+            else -> {
+                "@${endpoint.method.method.capitalizeFirstChar ()}Mapping"
+            }
+        }
     }
 
     private fun quote(content: String): String {

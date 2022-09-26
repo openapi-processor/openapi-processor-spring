@@ -46,10 +46,10 @@ class MappingAnnotationWriterSpec extends Specification {
         HttpMethod.PUT     | "put-it"     | """@PutMapping(path = "put-it")"""
         HttpMethod.POST    | "post-it"    | """@PostMapping(path = "post-it")"""
         HttpMethod.DELETE  | "delete-it"  | """@DeleteMapping(path = "delete-it")"""
-        HttpMethod.OPTIONS | "options-it" | """@OptionsMapping(path = "options-it")"""
-        HttpMethod.HEAD    | "head-it"    | """@HeadMapping(path = "head-it")"""
+        HttpMethod.OPTIONS | "options-it" | """@RequestMapping(path = "options-it", method = RequestMethod.OPTIONS)"""
+        HttpMethod.HEAD    | "head-it"    | """@RequestMapping(path = "head-it", method = RequestMethod.HEAD)"""
         HttpMethod.PATCH   | "patch-it"   | """@PatchMapping(path = "patch-it")"""
-        HttpMethod.TRACE   | "trace-it"   | """@TraceMapping(path = "trace-it")"""
+        HttpMethod.TRACE   | "trace-it"   | """@RequestMapping(path = "trace-it", method = RequestMethod.TRACE)"""
     }
 
     void "writes 'consumes' parameter with body content type" () {

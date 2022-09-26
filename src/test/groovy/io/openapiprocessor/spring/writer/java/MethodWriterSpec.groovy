@@ -82,4 +82,82 @@ class MethodWriterSpec extends Specification {
 """
     }
 
+    void "head method" () {
+        def dataTypeName = new DataTypeName('java.lang.String', 'java.lang.String')
+
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.HEAD, responses: [
+                '200': [new EmptyResponse()]
+        ], parameters: [
+                new QueryParameter('foo', new MappedDataType (
+                        'String',
+                        'java.util',
+                        [],
+                        null,
+                        false,
+                        true
+                ), false, false, null)
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @RequestMapping(path = "${endpoint.path}", method = RequestMethod.HEAD)
+    void headFoo(@RequestParam(name = "foo", required = false) String foo);
+"""
+    }
+
+    void "trace method" () {
+        def dataTypeName = new DataTypeName('java.lang.String', 'java.lang.String')
+
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.TRACE, responses: [
+                '200': [new EmptyResponse()]
+        ], parameters: [
+                new QueryParameter('foo', new MappedDataType (
+                        'String',
+                        'java.util',
+                        [],
+                        null,
+                        false,
+                        true
+                ), false, false, null)
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @RequestMapping(path = "${endpoint.path}", method = RequestMethod.TRACE)
+    void traceFoo(@RequestParam(name = "foo", required = false) String foo);
+"""
+    }
+
+    void "option method" () {
+        def dataTypeName = new DataTypeName('java.lang.String', 'java.lang.String')
+
+        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.OPTIONS, responses: [
+                '200': [new EmptyResponse()]
+        ], parameters: [
+                new QueryParameter('foo', new MappedDataType (
+                        'String',
+                        'java.util',
+                        [],
+                        null,
+                        false,
+                        true
+                ), false, false, null)
+        ])
+
+        when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        then:
+        target.toString () == """\
+    @RequestMapping(path = "${endpoint.path}", method = RequestMethod.OPTIONS)
+    void optionsFoo(@RequestParam(name = "foo", required = false) String foo);
+"""
+    }
+
 }
