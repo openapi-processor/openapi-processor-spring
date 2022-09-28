@@ -35,8 +35,6 @@ class ProcessorEndToEndSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    setTestHeader()
-
     val swagger = ALL_30.map {
         testSet(it.name, ParserType.SWAGGER, it.openapi)
     }

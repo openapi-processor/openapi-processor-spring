@@ -13,17 +13,19 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
 import io.openapiprocessor.core.writer.java.*
-import io.openapiprocessor.spring.writer.java.HeaderWriter
+import io.openapiprocessor.spring.Version
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.OffsetDateTime
 
 /**
  *  Entry point of openapi-processor-spring.
  */
 class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProcessor {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+    private var testMode = false
 
     override fun getName(): String {
         return "spring"
@@ -44,15 +46,17 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
             val cv = ApiConverter(options, framework)
             val api = cv.convert(openapi)
 
-            val headerWriter = HeaderWriter()
+            val generatedInfo = createGeneratedInfo(options)
+            val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val beanValidationFactory = BeanValidationFactory()
             val javaDocWriter = JavaDocWriter()
 
             val writer = ApiWriter(
                 options,
+                generatedWriter,
                 InterfaceWriter(
                     options,
-                    headerWriter,
+                    generatedWriter,
                     MethodWriter(
                         options,
                         MappingAnnotationWriter(),
@@ -66,12 +70,12 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                 ),
                 DataTypeWriter(
                     options,
-                    headerWriter,
+                    generatedWriter,
                     beanValidationFactory),
-                StringEnumWriter (headerWriter),
+                StringEnumWriter (generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
-                    headerWriter,
+                    generatedWriter,
                     javaDocWriter
                 )
             )
@@ -81,6 +85,30 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
             log.error("processing failed!", e)
             throw e
         }
+    }
+
+    private fun createGeneratedInfo(options: ApiOptions): GeneratedInfo {
+        var version = Version.version
+        var date: String? = OffsetDateTime.now().toString()
+
+        if (!options.generatedDate)
+            date = null
+
+        if (testMode) {
+            version = "test"
+            date = null
+        }
+
+        return GeneratedInfo(
+            "openapi-processor-spring",
+            version,
+            date,
+            "https://openapiprocessor.io"
+        )
+    }
+
+    fun enableTestMode () {
+        testMode = true
     }
 
     @Suppress("UNCHECKED_CAST")
