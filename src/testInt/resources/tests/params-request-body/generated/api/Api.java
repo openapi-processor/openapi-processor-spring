@@ -5,10 +5,7 @@ import generated.support.Generated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Generated(
-        value = "openapi-processor-spring",
-        version = "test",
-        url = "https://openapiprocessor.io")
+@Generated(value = "openapi-processor-spring", version = "test")
 public interface Api {
 
     @PostMapping(

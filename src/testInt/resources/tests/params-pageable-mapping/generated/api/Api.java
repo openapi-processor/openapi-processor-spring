@@ -6,10 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Generated(
-        value = "openapi-processor-spring",
-        version = "test",
-        url = "https://openapiprocessor.io")
+@Generated(value = "openapi-processor-spring", version = "test")
 public interface Api {
 
     @GetMapping(

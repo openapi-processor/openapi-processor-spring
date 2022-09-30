@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@Generated(
-        value = "openapi-processor-spring",
-        version = "test",
-        url = "https://openapiprocessor.io")
+@Generated(value = "openapi-processor-spring", version = "test")
 public interface EndpointApi {
 
     @GetMapping(path = "/endpoint")

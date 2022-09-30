@@ -3,10 +3,7 @@ package generated.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import generated.support.Generated;
 
-@Generated(
-        value = "openapi-processor-spring",
-        version = "test",
-        url = "https://openapiprocessor.io")
+@Generated(value = "openapi-processor-spring", version = "test")
 public class Props {
 
     @JsonProperty("prop1")

@@ -102,8 +102,8 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
         return GeneratedInfo(
             "openapi-processor-spring",
             version,
-            date,
-            "https://openapiprocessor.io"
+            date
+            //"https://openapiprocessor.io"
         )
     }
 
