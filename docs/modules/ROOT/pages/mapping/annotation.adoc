@@ -108,7 +108,7 @@ and a `mapping.yaml` with annotation type mappings:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v2.1 # <1>
 
 options:
   package-name: io.openapiprocessor.openapi
@@ -118,12 +118,12 @@ options:
 
 map:
   types:
-    - type: Bar @ io.openapiprocessor.samples.validations.Sum(24) # <1>
+    - type: Bar @ io.openapiprocessor.samples.validations.Sum(24) # <2>
 
   parameters:
-    - type: Foo @ io.openapiprocessor.samples.validations.Sum(value = 42) # <2>
+    - type: Foo @ io.openapiprocessor.samples.validations.Sum(value = 42) # <3>
 
-      # this formats do work too <3>
+      # this formats do work too <4>
       # - type: Foo @ annotation.Bar
       # - type: Foo @ annotation.Bar()
       # - type: Foo @ annotation.Bar("bar")
@@ -132,9 +132,10 @@ map:
 
 The `Sum` annotation in the example is a custom bean validation but the feature itself is not limited to bean validation.
 
-<1> the `Bar` mapping is using a global type annotation mapping, so the annotation is added to the generated `Bar` class.
-<2> the `Foo` mapping adds the annotation to the parameter of the endpoint methods that use `Foo`.
-<3> this is a list of examples that shows annotation parameters. It is nearly java code.
+<1> use `v2.1` as the mapping version to avoid validation warnings in the mapping file.
+<2> the `Bar` mapping is using a global type annotation mapping, so the annotation is added to the generated `Bar` class.
+<3> the `Foo` mapping adds the annotation to the parameter of the endpoint methods that use `Foo`.
+<4> this is a list of examples that shows annotation parameters. It is nearly java code.
 
 Here are the generated interfaces, first the `FooApi`:
 
