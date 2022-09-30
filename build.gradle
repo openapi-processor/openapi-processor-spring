@@ -4,10 +4,10 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id "org.sonarqube" version "3.3"
-    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
-    id "com.github.ben-manes.versions" version "0.42.0"
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.sonar)
+    alias(libs.plugins.nexus)
+    alias(libs.plugins.versions)
 }
 
 group projectGroupId
@@ -24,11 +24,11 @@ repositories {
 testing {
     suites {
         test {
-            useJUnitJupiter('5.8.2')
+            useJUnitJupiter(libs.versions.junit.get())
         }
 
         testInt(JvmTestSuite) {
-            useJUnitJupiter('5.8.2')
+            useJUnitJupiter(libs.versions.junit.get())
             testType = TestSuiteType.INTEGRATION_TEST
 
             dependencies {
@@ -73,7 +73,7 @@ compileKotlin.dependsOn "generateVersion"
 
 compileTestGroovy {
     dependsOn 'compileKotlin'
-    classpath += files(compileKotlin.destinationDir)
+    classpath += files(compileKotlin.destinationDirectory)
 }
 
 kotlin {
