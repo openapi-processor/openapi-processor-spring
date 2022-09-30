@@ -34,8 +34,6 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    setTestHeader()
-
     // the swagger parser does not work with a custom FileSystem
 
     val openapi4j = ALL_30.map {

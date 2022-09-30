@@ -34,8 +34,6 @@ class ProcessorPendingSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    setTestHeader()
-
     return listOf(
         testSet("params-request-body-multipart-mapping", INTERNAL, API_30),
         testSet("params-request-body-multipart-mapping", INTERNAL, API_31)
