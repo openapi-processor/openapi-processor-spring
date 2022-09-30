@@ -5,21 +5,21 @@ It is possible to add additional annotations to a `source type`. Currently, this
 
 * global _annotation type mapping_:
 +
-it adds an annotation to the model class generated for the `source type`.
+it adds an annotation to the *model class* generated for the `source type`.
 
 * global & endpoint parameter _annotation type mapping_:
 +
-it adds an annotation to a parameter of the `source type`. Since the request body is passed as parameter the mapping will work for it too.
+it adds an annotation to a *parameter* of the `source type`  (this includes request body parameters).
 
-It is defined like below, and it should be added to the `map/types` or `map/parameters` section in the mapping.yaml.
+The global annotation mapping should be added to the `map/types` or `map/parameters` section in the mapping.yaml.
 
-It is also available as an endpoint (http method) mapping to restrict the mapping to a specific endpoint. This will go to the `map/paths/<endpoint path>/parameters` section in the mapping.yaml.
+The endpoint (http method) mapping restricts the mapping to a specific endpoint. This will go to the `map/paths/<endpoint path>/parameters` section in the mapping.yaml.
 
 The annotation type mapping is similar to other mappings and is defined like this:
 
 [source,yaml]
 ----
-- type: {source type} @ {annotation type}
+type: {source type} @ {annotation type}
 ----
 
 * **type** is required.
@@ -135,7 +135,7 @@ The `Sum` annotation in the example is a custom bean validation but the feature 
 <1> use `v2.1` as the mapping version to avoid validation warnings in the mapping file.
 <2> the `Bar` mapping is using a global type annotation mapping, so the annotation is added to the generated `Bar` class.
 <3> the `Foo` mapping adds the annotation to the parameter of the endpoint methods that use `Foo`.
-<4> this is a list of examples that shows annotation parameters. It is nearly java code.
+<4> this is a list of examples that shows annotation parameters.
 
 Here are the generated interfaces, first the `FooApi`:
 
@@ -170,34 +170,6 @@ public interface FooApi {
 <1> here is the additional annotation.
 
 and the `BarApi` and the `Bar` class:
-
-[source,java]
-----
-package io.openapiprocessor.openapi.api;
-
-import io.openapiprocessor.openapi.model.Bar;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-public interface BarApi {
-
-    /**
-     * annotation mapping example.
-     *
-     * <p>a simple endpoint where an annotation mapping is used on the request body
-     *
-     * @return echo of the source parameter
-     */
-    @PostMapping(
-            path = "/bar",
-            consumes = {"application/json"},
-            produces = {"application/json"})
-    Bar postBar(@RequestBody @Valid @NotNull Bar body); // <1>
-
-}
-----
 
 [source,java]
 ----
