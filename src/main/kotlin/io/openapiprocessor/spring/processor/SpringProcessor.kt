@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-spring
  * PDX-License-Identifier: Apache-2.0
  */
 
