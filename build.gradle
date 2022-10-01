@@ -139,7 +139,7 @@ tasks.withType(Test) {
 }
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = libs.versions.jacoco.get()
 }
 
 jacocoTestReport {
