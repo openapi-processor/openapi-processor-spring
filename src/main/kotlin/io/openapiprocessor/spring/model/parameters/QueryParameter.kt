@@ -44,7 +44,7 @@ class QueryParameter(
             // Mapped should NOT be annotated if it was object schema
             // Mapped should be annotated if it was a simple schema
             if (dataType is MappedDataType) {
-                return dataType.simpleDataType
+                return (dataType as MappedDataType).simpleDataType
             }
 
             return true
