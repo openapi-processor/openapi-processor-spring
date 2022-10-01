@@ -15,6 +15,7 @@ options:
   model-name-suffix: Resource
   one-of-interface: true
   bean-validation: true
+  generated-date: true
   format-code: false
   javadoc: true
 
@@ -44,6 +45,8 @@ annotations. Default is `false`. See link:{bean-validation}[Bean Validation Spec
 * `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `true`.
 
 * `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
+
+* `generated-date` (**optional**, `true` or `false`). enable or disable the generated date on the `@Genearted` annotation. Default is `true`.
 
 [#_model_name_suffix]
 === model name suffix:
