@@ -9,7 +9,7 @@ jacoco = "0.8.7"
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
 openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2022.4"
-openapi-processor-core = "io.openapiprocessor:openapi-processor-core:2022.6-SNAPSHOT"
+openapi-processor-core = "io.openapiprocessor:openapi-processor-core:2022.6"
 
 jackson-bom = "com.fasterxml.jackson:jackson-bom:2.13.4"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
