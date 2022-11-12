@@ -7,6 +7,8 @@ package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.core.framework.FrameworkAnnotation
 import io.openapiprocessor.core.framework.FrameworkAnnotations
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.CookieParameter
@@ -15,8 +17,6 @@ import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.PathParameter
 import io.openapiprocessor.spring.model.parameters.MultipartParameter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * provides Spring annotation details.

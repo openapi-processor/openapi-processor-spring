@@ -3,15 +3,13 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-@file:Suppress("DEPRECATION")
-
 package io.openapiprocessor.spring.processor
 
-import io.openapiprocessor.api.OpenApiProcessor
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.writer.WriterFactory
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
@@ -21,17 +19,13 @@ import org.slf4j.LoggerFactory
 import java.time.OffsetDateTime
 
 /**
- *  Entry point of openapi-processor-spring.
+ *  openapi-processor-spring.
  */
-class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProcessor {
+class SpringProcessor(private val writerFactory: WriterFactory) {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
     private var testMode = false
 
-    override fun getName(): String {
-        return "spring"
-    }
-
-    override fun run(processorOptions: MutableMap<String, *>) {
+    fun run(processorOptions: MutableMap<String, *>) {
         try {
             val parser = Parser()
             val openapi = parser.parse(processorOptions)
@@ -77,7 +71,9 @@ class SpringProcessor: OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProce
                     options,
                     generatedWriter,
                     javaDocWriter
-                )
+                ),
+                GoogleFormatter(),
+                writerFactory
             )
 
             writer.write (api)
