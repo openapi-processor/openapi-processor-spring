@@ -9,6 +9,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.writer.ProcessingException
 import io.openapiprocessor.core.writer.WriterFactory
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
@@ -77,9 +78,9 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
             )
 
             writer.write (api)
-        } catch (e: Exception) {
-            log.error("processing failed!", e)
-            throw e
+        } catch (ex: Exception) {
+            log.error("processing failed!", ex)
+            throw ProcessingException(ex)
         }
     }
 

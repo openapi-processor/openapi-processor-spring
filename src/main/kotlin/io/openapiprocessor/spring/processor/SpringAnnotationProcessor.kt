@@ -7,14 +7,13 @@ package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.annotations.SpringApi
 import io.openapiprocessor.annotations.SpringApis
-import io.openapiprocessor.core.logging.LoggerFactory
-import io.openapiprocessor.core.logging.MessagerLoggerFactory
 import io.openapiprocessor.core.writer.*
 import java.nio.file.Paths
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
+import javax.tools.Diagnostic
 import kotlin.io.path.notExists
 
 /**
@@ -23,7 +22,6 @@ import kotlin.io.path.notExists
 class SpringAnnotationProcessor: AbstractProcessor() {
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        LoggerFactory.factory = MessagerLoggerFactory(processingEnv.messager)
         val writerFactory = FilerWriterFactory(processingEnv.filer)
 
         try {
@@ -39,8 +37,8 @@ class SpringAnnotationProcessor: AbstractProcessor() {
                     SpringProcessor(writerFactory).run(processorOptions)
                 }
             }
-        } catch (ex: Exception) {
-            throw ProcessingException(ex)
+        } catch (ex: ProcessingException) {
+           error(ex.message)
         }
         finally {
         }
@@ -85,4 +83,8 @@ class SpringAnnotationProcessor: AbstractProcessor() {
 
     private val projectRoot: String
         get() = processingEnv.options[PROJECT_ROOT] ?: throw MissingOptionException(PROJECT_ROOT)
+
+    private fun error(message: String) {
+        processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, message)
+    }
 }

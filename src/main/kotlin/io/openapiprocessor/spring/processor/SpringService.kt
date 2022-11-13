@@ -8,10 +8,7 @@
 package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.api.OpenApiProcessor
-import io.openapiprocessor.core.logging.LoggerFactory
-import io.openapiprocessor.core.logging.Slf4jLoggerFactory
 import io.openapiprocessor.core.writer.DefaultWriterFactory
-import io.openapiprocessor.core.writer.ProcessingException
 
 /**
  *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader].
@@ -24,8 +21,6 @@ class SpringService(private val testMode: Boolean = false)
     }
 
     override fun run(processorOptions: MutableMap<String, *>) {
-        LoggerFactory.factory = Slf4jLoggerFactory()
-
         try {
             val processor = SpringProcessor(DefaultWriterFactory())
             if (testMode) {
@@ -34,7 +29,7 @@ class SpringService(private val testMode: Boolean = false)
             processor.run(processorOptions)
 
         } catch (ex: Exception) {
-            throw ProcessingException(ex)
+            throw ex
         }
     }
 }
