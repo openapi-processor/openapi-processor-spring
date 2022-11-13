@@ -11,6 +11,7 @@ import io.openapiprocessor.core.writer.*
 import java.nio.file.Paths
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
+import javax.annotation.processing.SupportedOptions
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
@@ -19,6 +20,7 @@ import kotlin.io.path.notExists
 /**
  *  Entry point of openapi-processor-spring annotation processor.
  */
+@SupportedOptions("io.openapiprocessor.project.root")
 class SpringAnnotationProcessor: AbstractProcessor() {
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
