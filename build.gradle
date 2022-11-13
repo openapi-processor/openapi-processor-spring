@@ -94,8 +94,8 @@ tasks.named('sourcesJar') {
 
 dependencies {
     compileOnly (libs.openapi.processor.api)
-    implementation (libs.openapi.processor.annotations)
     implementation (libs.openapi.processor.core)
+    implementation (libs.openapi.processor.annotations)
     implementation (libs.slf4j)
 
     testImplementation (libs.openapi.processor.api)
