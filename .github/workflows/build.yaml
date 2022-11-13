@@ -40,6 +40,7 @@ jobs:
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
+        distribution: 'temurin'
         java-version: 11
 
     - name: gradle check
@@ -77,6 +78,7 @@ jobs:
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
+        distribution: 'temurin'
         java-version: 11
 
     - name: publish snapshot
@@ -129,6 +131,7 @@ jobs:
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
+        distribution: 'temurin'
         java-version: 11
 
     - name: sonarqube
