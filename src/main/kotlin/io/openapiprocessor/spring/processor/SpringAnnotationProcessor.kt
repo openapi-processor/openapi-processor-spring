@@ -30,12 +30,16 @@ class SpringAnnotationProcessor: AbstractProcessor() {
             roundEnv.getElementsAnnotatedWith(SpringApi::class.java).forEach { el ->
                 val annotation = el.getAnnotation(SpringApi::class.java)
                 val processorOptions = initProcessorOptions(annotation)
+
+                note("processing OpenAPI %s", annotation.apiPath)
                 SpringProcessor(writerFactory).run(processorOptions)
             }
 
             roundEnv.getElementsAnnotatedWith(SpringApis::class.java).forEach { el ->
                 for (annotation in el.getAnnotation(SpringApis::class.java).value) {
                     val processorOptions = initProcessorOptions(annotation)
+
+                    note("processing OpenAPI %s", annotation.apiPath)
                     SpringProcessor(writerFactory).run(processorOptions)
                 }
             }
@@ -85,6 +89,10 @@ class SpringAnnotationProcessor: AbstractProcessor() {
 
     private val projectRoot: String
         get() = processingEnv.options[PROJECT_ROOT] ?: throw MissingOptionException(PROJECT_ROOT)
+
+    private fun note(message: String, vararg args: Any?) {
+        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, String.format(message, args))
+    }
 
     private fun error(message: String) {
         processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, message)
