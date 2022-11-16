@@ -91,7 +91,7 @@ class SpringAnnotationProcessor: AbstractProcessor() {
         get() = processingEnv.options[PROJECT_ROOT] ?: throw MissingOptionException(PROJECT_ROOT)
 
     private fun note(message: String, vararg args: Any?) {
-        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, String.format(message, args))
+        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, String.format(message, *args))
     }
 
     private fun error(message: String) {
