@@ -6,7 +6,7 @@
 package io.openapiprocessor.spring
 
 import io.openapiprocessor.core.parser.ParserType
-import io.openapiprocessor.spring.processor.SpringProcessor
+import io.openapiprocessor.spring.processor.SpringService
 import io.openapiprocessor.test.TestSet
 
 
@@ -22,8 +22,7 @@ fun testSet(
     inputs: String = "inputs.yaml",
     generated: String = "generated.yaml"): TestSet {
 
-    val processor = SpringProcessor()
-    processor.enableTestMode()
+    val processor = SpringService(true)
 
     val testSet = TestSet()
     testSet.name = name
