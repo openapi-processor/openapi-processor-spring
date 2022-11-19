@@ -12,6 +12,7 @@ plugins {
 
 group projectGroupId
 version projectVersion
+println("version: $version")
 
 repositories {
     mavenLocal()
