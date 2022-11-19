@@ -9,7 +9,6 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.Parser
-import io.openapiprocessor.core.writer.ProcessingException
 import io.openapiprocessor.core.writer.WriterFactory
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
