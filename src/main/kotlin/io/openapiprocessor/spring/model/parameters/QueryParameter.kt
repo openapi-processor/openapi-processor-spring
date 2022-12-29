@@ -5,10 +5,8 @@
 
 package io.openapiprocessor.spring.model.parameters
 
-import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
-import io.openapiprocessor.core.model.datatypes.MappedDataType
-import io.openapiprocessor.core.model.datatypes.ObjectDataType
 
 val Maps = listOf(
     Map::class.java.name,
@@ -43,8 +41,8 @@ class QueryParameter(
 
             // Mapped should NOT be annotated if it was object schema
             // Mapped should be annotated if it was a simple schema
-            if (dataType is MappedDataType) {
-                return (dataType as MappedDataType).simpleDataType
+            if (isMappedObject) {
+                return false
             }
 
             return true
@@ -76,5 +74,15 @@ class QueryParameter(
 
             val type = dataType.getImports().first()
             return Maps.contains(type)
+        }
+
+    private val isMappedObject: Boolean
+        get() {
+            if (dataType !is MappedSourceDataType) {
+                return false
+            }
+
+            val mapped = dataType as MappedSourceDataType
+            return mapped.sourceDataType is ObjectDataType
         }
 }
