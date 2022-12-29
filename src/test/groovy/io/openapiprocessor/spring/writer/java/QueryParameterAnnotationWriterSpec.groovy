@@ -53,7 +53,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
     void "write simple (optional with default) query parameter" () {
         def param = new QueryParameter('foo',
             new StringDataType(
-                new DataTypeConstraints(defaultValue: 'bar'), false, null),
+                'string',
+                new DataTypeConstraints(defaultValue: 'bar'),
+                false, null),
             false, false, null)
 
         when:

@@ -50,7 +50,9 @@ class HeaderParameterAnnotationWriterSpec extends Specification {
 
     void "write simple (optional with default) header parameter" () {
         def param = new HeaderParameter('foo',
-            new StringDataType(createConstraints ('bar'), false, null),
+            new StringDataType('string',
+                createConstraints ('bar'),
+                false, null),
             false, false, null)
 
         when:

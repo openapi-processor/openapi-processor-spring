@@ -37,7 +37,9 @@ class ParameterAnnotationWriterSpec extends Specification {
     @Unroll
     void "writes simple (optional) query parameter with quoted string default value" () {
         def param = clazz.newInstance('foo',
-            new StringDataType(createConstraints ('bar'), false, null),
+            new StringDataType(
+                'string',
+                createConstraints ('bar'), false, null),
             false, false, null)
 
         when:
@@ -56,7 +58,9 @@ class ParameterAnnotationWriterSpec extends Specification {
 
     void "writes simple (optional) query parameter with quoted number default value" () {
         def param = clazz.newInstance ('foo',
-            new LongDataType (createConstraints (5), false, null),
+            new LongDataType (
+                'integer:int64',
+                createConstraints (5), false, null),
             false, false, null)
 
         when:

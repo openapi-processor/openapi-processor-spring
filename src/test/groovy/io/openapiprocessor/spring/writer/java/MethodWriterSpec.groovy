@@ -68,7 +68,7 @@ class MethodWriterSpec extends Specification {
                 [dataTypeName, dataTypeName],
                 null,
                 false,
-                false
+                null
             ), false, false, null)
         ])
 
@@ -94,7 +94,7 @@ class MethodWriterSpec extends Specification {
                         [],
                         null,
                         false,
-                        true
+                        null
                 ), false, false, null)
         ])
 
@@ -120,7 +120,7 @@ class MethodWriterSpec extends Specification {
                         [],
                         null,
                         false,
-                        true
+                        null
                 ), false, false, null)
         ])
 
@@ -146,7 +146,7 @@ class MethodWriterSpec extends Specification {
                         [],
                         null,
                         false,
-                        true
+                        null
                 ), false, false, null)
         ])
 

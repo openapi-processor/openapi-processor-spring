@@ -50,7 +50,10 @@ class PathParameterAnnotationWriterSpec extends Specification {
 
     void "write simple (optional with default) path parameter" () {
         def param = new PathParameter('foo',
-            new StringDataType(createConstraints ('bar'), false, null),
+            new StringDataType(
+                'string',
+                createConstraints ('bar'),
+                false, null),
             false, false, null)
 
         when:
