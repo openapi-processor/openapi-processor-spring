@@ -62,7 +62,7 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
                     beanValidationFactory,
                     DefaultImportFilter()
                 ),
-                DataTypeWriter(
+                DataTypeWriterPojo(
                     options,
                     generatedWriter,
                     beanValidationFactory),
