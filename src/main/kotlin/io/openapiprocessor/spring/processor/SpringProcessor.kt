@@ -42,7 +42,7 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
 
             val generatedInfo = createGeneratedInfo(options)
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
-            val beanValidationFactory = BeanValidationFactory()
+            val beanValidations = BeanValidationFactory(getValidationFormat(options))
             val javaDocWriter = JavaDocWriter()
 
             val writer = ApiWriter(
@@ -55,17 +55,17 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
                         options,
                         MappingAnnotationWriter(),
                         ParameterAnnotationWriter(annotations),
-                        beanValidationFactory,
+                        beanValidations,
                         javaDocWriter
                     ),
                     annotations,
-                    beanValidationFactory,
+                    beanValidations,
                     DefaultImportFilter()
                 ),
                 DataTypeWriterPojo(
                     options,
                     generatedWriter,
-                    beanValidationFactory),
+                    beanValidations),
                 StringEnumWriter (generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
@@ -114,4 +114,11 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
         return options
     }
 
+    private fun getValidationFormat(options: ApiOptions): BeanValidationFormat {
+        val format = options.beanValidationFormat
+        return if (format != null)
+            BeanValidationFormat.valueOf(format.uppercase())
+        else
+            BeanValidationFormat.JAVAX
+    }
 }
