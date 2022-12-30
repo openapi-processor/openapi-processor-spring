@@ -1,33 +1,30 @@
 = type mapping structure
 include::partial$links.adoc[]
 
-The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration])
-and configured under the `map` key. The `map` key contains multiple sections to define the different
-kinds of type mappings.
+The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
 
 All sections are optional.
 
-== type mapping structure (v2)
+== type mapping structure
 
 //[.badge .badge-since]+since 1.0.0.M15+
 
-This is the preferred format for the mapping. It is simpler than the previous format and uses fewer
-keywords.
-
 [IMPORTANT]
 ====
-To use the new format the mapping file needs the following key on the top-level. Best place is the
-first line of the `mapping.yaml` file.
+The mapping file needs the following key on the top-level. Best place is the first line of the `mapping.yaml` file.
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v3
 ----
 ====
 
+The version increases from time to time when openapi-processor requires a new or changed configuration. In case the version changes it is mentioned in the release notes.
 
-To map a source type to a destination type it is using an `=>` arrow as *mapping operator* instead
-of individual keywords:
+
+=== basic mapping
+
+To map a source type to a destination type it is using an `=>` arrow as *mapping operator* instead of individual keywords:
 
 [source,yaml]
 ----
@@ -35,6 +32,8 @@ of individual keywords:
 some-key: {source type} => {target type}
 
 ----
+
+=== full structure
 
 The full structure of the mapping looks like this (a real mapping file will usually use just a few of the possible keys):
 
@@ -56,7 +55,11 @@ map:
 
   # list of global mappings
   types:
+    # replace source type with the given target type
     - type: {source type}  =>  {target type}
+
+    # add an extra annotation to the source type
+    - type: {source type}  @  {target type}
 
   # list of global parameter mappings
   parameters:
@@ -94,7 +97,11 @@ map:
 
       # list of path specific mappings
       types:
+        # replace source type with the given target type
         - from: {source type}  =>  {target type}
+
+        # add an extra annotation to the source type
+        - type: {source type}  @  {target type}
 
       # list of path specific parameter mappings
       parameters:
@@ -124,8 +131,4 @@ The structure below `paths` is similar to an OpenAPI yaml file to make it easier
 
 == json schema
 
-Some IDEs support json schemas to provide editing support (auto completion & validation) for text based files. To support this openapi-processor has a link:{json-schema}[json schema] for the v2 mapping format.
-
-== type mapping structure (v1)
-
-This format of the mapping ist still available but should not be used anymore.
+Some IDEs support json schemas to provide editing support (auto-completion & validation) for text based files. To support this, openapi-processor provides json schemas for the mapping formats at link:{json-schema-site}[`https://openapiprocessor.io/schemas/mapping/mapping-v{version}.json`].

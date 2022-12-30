@@ -8,13 +8,13 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v3
 
 options:
   package-name: io.openapiprocessor.sample
   model-name-suffix: Resource
   one-of-interface: true
-  bean-validation: true
+  bean-validation: jakarta
   generated-date: true
   format-code: false
   javadoc: true
@@ -23,12 +23,11 @@ map:
    # java type mappings
 ----
 
-The only required option is `package-name`.All other options or the type mappings are optional.
+The only required option is `package-name`. All other options or the type mappings are optional.
 
 == options:
 
-* `package-name`: (**required**) the root package name of the generated interfaces & models.The
-package folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
+* `package-name`: (**required**) the root package name of the generated interfaces & models.The  package folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
 +
 Interfaces and models will be generated into the `api` and `model` subpackages of `package-name`.
 +
@@ -37,8 +36,14 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 * `model-suffix-name` (**optional**, default is empty). See xref:_model_name_suffix[below].
 
-* `bean-validation` (**optional**, `true` or `false`) enables generation of bean validation
-annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
+* `bean-validation` (**optional**, `true` or `false`, `javax`, `jakarta`) enables generation of bean validation annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
++
+With the [.badge .badge-since]+2023.1+ releases this key allows two new values to handle the package name change from bean validation v2 to v3 (`javax` => `jakarta`).
+
+** `false`: disables bean validation annotations
+** `true`: enables bean validation annotations v2, with `javax` package name
+** `javax`: enables bean validation annotations v2, with `javax` package name
+** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
 
 * `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
 
@@ -139,9 +144,6 @@ public class BarResource { // <4>
 <2> the suffix configuration
 <3> the class name of the `Foo` schema got the configured `Resource` suffix
 <4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
-
-
-
 
 
 == map:
