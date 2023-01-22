@@ -18,6 +18,7 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.DataTypeName
+import io.openapiprocessor.core.model.datatypes.GenericDataType
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
@@ -66,6 +67,10 @@ class MethodWriterSpec extends Specification {
                 'Map',
                 'java.util',
                 [dataTypeName, dataTypeName],
+                [
+                    new GenericDataType(new DataTypeName("String", "String"), "java.util", []),
+                    new GenericDataType(new DataTypeName("String", "String"), "java.util", [])
+                ],
                 null,
                 false,
                 null
@@ -91,6 +96,7 @@ class MethodWriterSpec extends Specification {
                 new QueryParameter('foo', new MappedDataType (
                         'String',
                         'java.util',
+                        [],
                         [],
                         null,
                         false,
@@ -118,6 +124,7 @@ class MethodWriterSpec extends Specification {
                         'String',
                         'java.util',
                         [],
+                        [],
                         null,
                         false,
                         null
@@ -143,6 +150,7 @@ class MethodWriterSpec extends Specification {
                 new QueryParameter('foo', new MappedDataType (
                         'String',
                         'java.util',
+                        [],
                         [],
                         null,
                         false,
