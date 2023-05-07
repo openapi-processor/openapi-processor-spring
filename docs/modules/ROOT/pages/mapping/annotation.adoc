@@ -176,6 +176,9 @@ map:
       # - type: Foo @ annotation.Bar
       # - type: Foo @ annotation.Bar()
       # - type: Foo @ annotation.Bar("bar")
+      # - type: Foo @ annotation.Bar(2)
+      # - type: Foo @ annotation.Bar(true)
+      # - type: Foo @ annotation.Bar(package.Foobar.class)
       # - type: Foo @ annotation.Bar(value = "bar", foo = 2)
 ----
 
@@ -184,7 +187,10 @@ The `Sum` annotation in the example is a custom bean validation but the feature 
 <1> use `v2.1` (or later) as the mapping version to avoid validation warnings in the mapping file.
 <2> the `Bar` mapping is using a global type annotation mapping, so the annotation is added to the generated `Bar` class.
 <3> the `Foo` mapping adds the annotation to the parameter of the endpoint methods that use `Foo`.
-<4> this is a list of examples that shows annotation parameters.
+<4> this is a list of examples that shows a number of different annotation parameter possibilities.
++
+[.badge .badge-since]+NEW+ in this version is the possibility to use a *class* as annotation parameter.
+
 
 Here are the generated interfaces, first the `FooApi`:
 
