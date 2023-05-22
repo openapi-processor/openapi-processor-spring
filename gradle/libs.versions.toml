@@ -27,7 +27,7 @@ kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
 mockk = "io.mockk:mockk:1.13.5"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.12"
-spock = "org.spockframework:spock-core:2.2-groovy-4.0"
+spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.5"
