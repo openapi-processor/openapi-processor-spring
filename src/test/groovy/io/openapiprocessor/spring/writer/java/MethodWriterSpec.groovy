@@ -58,18 +58,15 @@ class MethodWriterSpec extends Specification {
     }
 
     void "writes map from single query parameter" () {
-        def dataTypeName = new DataTypeName('java.lang.String', 'java.lang.String')
-
         def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204': [new EmptyResponse()]
         ], parameters: [
             new QueryParameter('foo', new MappedDataType (
                 'Map',
                 'java.util',
-                [dataTypeName, dataTypeName],
                 [
-                    new GenericDataType(new DataTypeName("String", "String"), "java.util", []),
-                    new GenericDataType(new DataTypeName("String", "String"), "java.util", [])
+                    new GenericDataType(new DataTypeName("String", "String"), "java.lang", []),
+                    new GenericDataType(new DataTypeName("String", "String"), "java.lang", [])
                 ],
                 null,
                 false,
@@ -97,7 +94,6 @@ class MethodWriterSpec extends Specification {
                         'String',
                         'java.util',
                         [],
-                        [],
                         null,
                         false,
                         null
@@ -124,7 +120,6 @@ class MethodWriterSpec extends Specification {
                         'String',
                         'java.util',
                         [],
-                        [],
                         null,
                         false,
                         null
@@ -150,7 +145,6 @@ class MethodWriterSpec extends Specification {
                 new QueryParameter('foo', new MappedDataType (
                         'String',
                         'java.util',
-                        [],
                         [],
                         null,
                         false,
