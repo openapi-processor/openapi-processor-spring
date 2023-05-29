@@ -99,11 +99,9 @@ Another example:
 
 == mapping with generic types
 
-Type mapping allows to use a target type that has generic parameters. The generic types are given
-by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
+Type mapping allows to use a target type that has generic parameters. The generic types are given by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
 
-For example if a `StringPage` schema in the OpenAPI corresponds to
-`org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
+For example if a `StringPage` schema in the OpenAPI corresponds to `org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
 
 [source,yaml]
 ----
@@ -112,18 +110,11 @@ For example if a `StringPage` schema in the OpenAPI corresponds to
     - java.lang.String
 ----
 
-The processor will replace any use of `StringPage` with the **{target type}** type and add the generic
-types (in the given order) to the **{target type}** type.
+The processor will replace any use of `StringPage` with the **{target type}** type and add the generic types (in the given order) to the **{target type}** type.
 
-In case of the example above the processor will create `Page<String>` instead of `StringPage` with an
-additional `import` for the generic type (.. ignoring imports on `java.lang`).
+In case of the example above the processor will create `Page<String>` instead of `StringPage` with an additional `import` for the generic type (.. ignoring imports on `java.lang`).
 
-[IMPORTANT]
-The processor does support only one level of generics. It is not possible to provide generic
-parameters to generic parameters.
-
-To get a more compact description it is possible to write a shorter mapping by inlining the generic
-types:
+To get a more compact description it is possible to write a shorter mapping by inlining the generic types:
 
 [source,yaml]
 ----
@@ -131,3 +122,40 @@ types:
 ----
 
 This will generate the same code as the longer mapping version above.
+
+=== nested generic types
+[.badge .badge-since]+since 2023.1+
+
+It is possible to create type mappings with nested generics types. Here are a few examples:
+
+[source,yaml]
+----
+openapi-processor-mapping: v3
+
+options:
+  package-name: generated
+
+map:
+  types:
+    - type: Foo => java.util.Map<java.lang.String, java.util.List<java.lang.String>>
+
+  paths:
+    /foo:
+      responses:
+        - content: application/json => java.util.Map<java.lang.String, java.lang.String>
+
+    /foo2:
+      responses:
+        - content: application/json => java.util.Map<java.lang.String, java.util.List<java.lang.String>>
+----
+
+This is useful to map an OpenAPI dictionary description using `additionalProperties` to a proper java map type:
+
+[source,yaml]
+----
+# a schema the defines a dictionary with string keys and string values
+Map:
+    type: object
+    additionalProperties:
+      type: string
+----
