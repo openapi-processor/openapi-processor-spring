@@ -124,7 +124,7 @@ To get a more compact description it is possible to write a shorter mapping by i
 This will generate the same code as the longer mapping version above.
 
 === nested generic types
-[.badge .badge-since]+since 2023.1+
+[.badge .badge-since]+since 2023.2+
 
 It is possible to create type mappings with nested generics types. Here are a few examples:
 
