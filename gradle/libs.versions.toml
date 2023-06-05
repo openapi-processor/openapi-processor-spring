@@ -16,7 +16,7 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
-checker = "org.checkerframework:checker:3.34.0"
+checker = "org.checkerframework:checker:3.35.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
 slf4j = "org.slf4j:slf4j-api:2.0.7"
 logback = "ch.qos.logback:logback-classic:1.4.7"
