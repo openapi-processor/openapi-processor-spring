@@ -41,4 +41,4 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
 versions = { id = "com.github.ben-manes.versions", version = "0.46.0" }
-sonar = { id = "org.sonarqube", version = "4.1.0.3113" }
+sonar = { id = "org.sonarqube", version = "4.2.0.3129" }
