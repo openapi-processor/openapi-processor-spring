@@ -1,5 +1,5 @@
 [![][badge-ci]][workflow-ci]
-[![][sonar-coverage]][sonar]
+[![][sonar-tecdebt]][sonar]
 [![][badge-central]][oap-central]
 
 ![openapi-processor-spring logo](images/openapi-processor-spring@1280x200.png)
@@ -25,6 +25,7 @@ to use snapshot versions add `https://oss.sonatype.org/content/repositories/snap
 [oap-license]: https://github.com/openapi-processor/openapi-processor-spring/blob/master/LICENSE
 [workflow-ci]: https://github.com/openapi-processor/openapi-processor-spring/actions?query=workflow%3Abuild
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-spring&metric=coverage
+[sonar-tecdebt]: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-spring&metric=sqale_index
 [sonar]: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-spring
 [oap-docs]: https://docs.openapiprocessor.io
 [openapi]: https://www.openapis.org/
