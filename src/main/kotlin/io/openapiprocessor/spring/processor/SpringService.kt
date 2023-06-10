@@ -7,14 +7,25 @@
 
 package io.openapiprocessor.spring.processor
 
-import io.openapiprocessor.api.OpenApiProcessor
+import io.openapiprocessor.api.v2.Version
+import io.openapiprocessor.core.version.GitHubVersionException
+import io.openapiprocessor.core.version.GitHubVersionProvider
 import io.openapiprocessor.core.writer.DefaultWriterFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader].
  */
-class SpringService(private val testMode: Boolean = false)
-    : OpenApiProcessor, io.openapiprocessor.api.v1.OpenApiProcessor {
+class SpringService(
+    private val provider: GitHubVersionProvider = GitHubVersionProvider("openapi-processor-spring"),
+    private val testMode: Boolean = false):
+    io.openapiprocessor.api.v2.OpenApiProcessor,
+    io.openapiprocessor.api.v2.OpenApiProcessorVersion,
+    io.openapiprocessor.api.v1.OpenApiProcessor,
+    io.openapiprocessor.api.OpenApiProcessor
+{
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getName(): String {
         return "spring"
@@ -30,6 +41,31 @@ class SpringService(private val testMode: Boolean = false)
 
         } catch (ex: Exception) {
             throw ex
+        }
+    }
+
+    override fun getVersion(): String {
+        return io.openapiprocessor.spring.Version.version
+    }
+
+    override fun getLatestVersion(): Version {
+        return provider.getVersion()
+    }
+
+    override fun hasNewerVersion(): Boolean {
+        try {
+            val version = version
+            val latest = latestVersion
+
+            if (latest.name > version) {
+                log.info("openapi-processor-gradle version ${latest.name} is available! I'm version ${version}.")
+                return true
+            }
+
+            return false
+        } catch (ex: GitHubVersionException) {
+            // just ignore, do not complain
+            return false
         }
     }
 }
