@@ -27,7 +27,7 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getAnnotation(httpMethod: HttpMethod): FrameworkAnnotation {
-        return MAPPING_ANNOTATIONS[httpMethod]!!
+        return MAPPING_ANNOTATIONS.getValue(httpMethod)
     }
 
     override fun getAnnotation(parameter: Parameter): FrameworkAnnotation {
