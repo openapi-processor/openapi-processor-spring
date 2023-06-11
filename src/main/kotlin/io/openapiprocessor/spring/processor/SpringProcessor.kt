@@ -62,10 +62,20 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
                     beanValidations,
                     DefaultImportFilter()
                 ),
-                DataTypeWriterPojo(
-                    options,
-                    generatedWriter,
-                    beanValidations),
+                when (options.modelType) {
+                    "record" -> DataTypeWriterRecord(
+                        options,
+                        generatedWriter,
+                        beanValidations,
+                        javaDocWriter
+                    )
+                    else -> DataTypeWriterPojo(
+                        options,
+                        generatedWriter,
+                        beanValidations,
+                        javaDocWriter
+                    )
+                },
                 StringEnumWriter (generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
