@@ -22,7 +22,7 @@ fun testSet(
     inputs: String = "inputs.yaml",
     generated: String = "generated.yaml"): TestSet {
 
-    val processor = SpringService(true)
+    val processor = SpringService(testMode = true)
 
     val testSet = TestSet()
     testSet.name = name
@@ -30,6 +30,6 @@ fun testSet(
     testSet.parser = parser.name
     testSet.openapi = openapi
     testSet.inputs = inputs
-    testSet.generated = generated
+    testSet.outputs = generated
     return testSet
 }
