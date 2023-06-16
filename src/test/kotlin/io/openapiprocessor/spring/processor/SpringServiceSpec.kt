@@ -19,7 +19,7 @@ import java.time.Instant
 class SpringServiceSpec : StringSpec({
 
     "get version" {
-        val service = SpringService()
+        val service = SpringServiceV2()
         service.version.shouldBe(Version.version)
     }
 
@@ -27,7 +27,7 @@ class SpringServiceSpec : StringSpec({
         val provider = mockk<GitHubVersionProvider>()
         every { provider.getVersion() } returns GitHubVersion("1", Instant.now(), "any")
 
-        val service = SpringService(provider)
+        val service = SpringServiceV2(provider)
 
         service.latestVersion.name shouldBe "1"
     }
@@ -36,7 +36,7 @@ class SpringServiceSpec : StringSpec({
         val provider = mockk<GitHubVersionProvider>()
         every { provider.getVersion() } returns GitHubVersion("3000", Instant.now(), "any")
 
-        val service = SpringService(provider)
+        val service = SpringServiceV2(provider)
         service.hasNewerVersion().shouldBeTrue()
     }
 
@@ -44,7 +44,7 @@ class SpringServiceSpec : StringSpec({
         val provider = mockk<GitHubVersionProvider>()
         every { provider.getVersion() } returns GitHubVersion(Version.version, Instant.now(), "any")
 
-        val service = SpringService(provider)
+        val service = SpringServiceV2(provider)
         service.hasNewerVersion().shouldBeFalse()
     }
 
