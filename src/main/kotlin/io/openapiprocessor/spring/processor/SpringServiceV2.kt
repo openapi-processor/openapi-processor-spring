@@ -15,7 +15,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader].
+ *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader]. by the v2 interface
+ *  [io.openapiprocessor.api.v1.OpenApiProcessor].
+ *
+ *  the v2 interfaces *must* be implemented by its own lass and not by [SpringService] to be downward
+ *  compatible with gradle/maven plugin versions that do not know the v2 interfaces.
  */
 class SpringServiceV2(
     private val provider: GitHubVersionProvider = GitHubVersionProvider("openapi-processor-spring"),
