@@ -46,14 +46,14 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
     }
 
     private fun getAnnotation(key: String): FrameworkAnnotation {
-        return PARAMETER_ANNOTATIONS[key]!!
+        return PARAMETER_ANNOTATIONS.getValue(key)
     }
 
     private fun getMultipartAnnotation(contentType: String?): FrameworkAnnotation {
         return if (contentType != null) {
-            PARAMETER_ANNOTATIONS["multipart-part"]!!
+            PARAMETER_ANNOTATIONS.getValue("multipart-part")
         } else {
-            PARAMETER_ANNOTATIONS["multipart-param"]!!
+            PARAMETER_ANNOTATIONS.getValue("multipart-param")
         }
     }
 
