@@ -60,7 +60,7 @@ class SpringServiceV2(
             val latest = latestVersion
 
             if (latest.name > version) {
-                log.info("openapi-processor-gradle version ${latest.name} is available! I'm version ${version}.")
+                log.info("openapi-processor-spring version ${latest.name} is available! I'm version ${version}.")
                 return true
             }
 
