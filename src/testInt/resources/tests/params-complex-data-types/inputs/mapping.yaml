@@ -1,7 +1,8 @@
-openapi-processor-mapping: v2
+openapi-processor-mapping: v4
 
 options:
   package-name: generated
+  format-code: false
 
 map:
 

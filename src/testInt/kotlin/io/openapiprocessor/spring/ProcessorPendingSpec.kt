@@ -9,9 +9,9 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType.INTERNAL
-import io.openapiprocessor.test.FileSupport
+import io.openapiprocessor.test.*
+import io.openapiprocessor.test.API_30
 import io.openapiprocessor.test.TestSet
-import io.openapiprocessor.test.TestSetRunner
 
 /**
  * helper to run selected integration tests.
@@ -19,7 +19,7 @@ import io.openapiprocessor.test.TestSetRunner
 class ProcessorPendingSpec: StringSpec({
 
     for (testSet in sources()) {
-        "native - $testSet".config(enabled = false) {
+        "native - $testSet".config(enabled = true) {
             val folder = tempdir()
 
             val support = FileSupport(
@@ -35,7 +35,8 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("params-request-body-multipart-mapping", INTERNAL, API_30),
-        testSet("params-request-body-multipart-mapping", INTERNAL, API_31)
+        testSet("endpoint-http-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("params-request-body-multipart-mapping", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("params-request-body-multipart-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs")
     )
 }

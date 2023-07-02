@@ -9,27 +9,24 @@ import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.spring.processor.SpringServiceV2
 import io.openapiprocessor.test.TestSet
 
-
-const val API_30 = "openapi30.yaml"
-const val API_31 = "openapi31.yaml"
-
-
 @Suppress("SameParameterValue")
 fun testSet(
     name: String,
     parser: ParserType,
     openapi: String = "openapi.yaml",
+    model: String = "default",
     inputs: String = "inputs.yaml",
-    generated: String = "generated.yaml"): TestSet {
-
-    val processor = SpringServiceV2(testMode = true)
-
+    outputs: String = "generated.yaml",
+    expected: String = "generated"
+): TestSet {
     val testSet = TestSet()
     testSet.name = name
-    testSet.processor = processor
+    testSet.processor = SpringServiceV2(testMode = true)
     testSet.parser = parser.name
+    testSet.modelType = model
     testSet.openapi = openapi
     testSet.inputs = inputs
-    testSet.outputs = generated
+    testSet.outputs = outputs
+    testSet.expected = expected
     return testSet
 }

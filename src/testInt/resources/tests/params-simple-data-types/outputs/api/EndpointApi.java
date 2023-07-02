@@ -11,7 +11,6 @@ public interface EndpointApi {
     void getEndpoint(@RequestParam(name = "foo") String foo);
 
     @GetMapping(path = "/endpoint-optional")
-    void getEndpointOptional(
-            @RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
+    void getEndpointOptional(@RequestParam(name = "foo", required = false, defaultValue = "bar") String foo);
 
 }

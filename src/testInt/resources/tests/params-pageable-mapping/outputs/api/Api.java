@@ -9,14 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Generated(value = "openapi-processor-spring", version = "test")
 public interface Api {
 
-    @GetMapping(
-            path = "/page",
-            produces = {"application/json"})
+    @GetMapping(path = "/page", produces = {"application/json"})
     ResponseEntity<Page<String>> getPage(Pageable pageable);
 
-    @GetMapping(
-            path = "/page-inline",
-            produces = {"application/json"})
+    @GetMapping(path = "/page-inline", produces = {"application/json"})
     ResponseEntity<Page<String>> getPageInline(Pageable pageable);
 
 }
