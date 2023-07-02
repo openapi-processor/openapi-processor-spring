@@ -2,6 +2,7 @@
 kotlin = "1.8.22"
 build-jdk = "11"
 target-jdk = "11"
+test-jdk = "17"
 
 junit = "5.9.3"
 jacoco = "0.8.7"
