@@ -8,15 +8,16 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v3
+openapi-processor-mapping: v4
 
 options:
   package-name: io.openapiprocessor.sample
   model-name-suffix: Resource
+  model-type: record
   one-of-interface: true
   bean-validation: jakarta
   generated-date: true
-  format-code: false
+  format-code: true
   javadoc: true
 
 map:
@@ -36,6 +37,8 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 * `model-suffix-name` (**optional**, default is empty). See xref:_model_name_suffix[below].
 
+* `model-type` (*optional**, `default` or `record`, default is `default`). Generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
+
 * `bean-validation` (**optional**, `true` or `false`, `javax`, `jakarta`) enables generation of bean validation annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
 +
 With the [.badge .badge-since]+2023.1+ releases this key allows two new values to handle the package name change from bean validation v2 to v3 (`javax` => `jakarta`).
@@ -45,9 +48,9 @@ With the [.badge .badge-since]+2023.1+ releases this key allows two new values t
 ** `javax`: enables bean validation annotations v2, with `javax` package name
 ** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
 
-* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.This is still experimental.
+* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.
 
-* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `true`.
+* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `false`.
 
 * `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
@@ -145,6 +148,65 @@ public class BarResource { // <4>
 <3> the class name of the `Foo` schema got the configured `Resource` suffix
 <4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
 
+[#_model_type]
+=== model type:
+
+(*optional**, `default` or `record`, default is `default`)
+
+openapi-processor is now capable of generating java `record`s instead of pojos for schemas. This is a global setting in the `mapping.yaml`. It can either have the value `default` (which is default) to generate pojos or `record` to generate records.
+
+*mapping.yaml*
+[source,yaml]
+----
+openapi-processor-mapping: v4
+
+options:
+  model-type: record
+----
+
+With `model-type: record` the processor will generate `record` s like this:
+
+*Java `record`*
+[source,java]
+----
+package generated.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public record Foo(
+    @JsonProperty("bar")
+    String bar
+) {}
+----
+
+and without `model-type` or `model-type: default` it will create a simple pojo:
+
+*Java `pojo`*
+[source,java]
+----
+package generated.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public class Foo {
+
+    @JsonProperty("bar")
+    private String bar;
+
+    public String getBar() {
+        return bar;
+    }
+
+    public void setBar(String bar) {
+        this.bar = bar;
+    }
+
+}
+----
 
 == map:
 
