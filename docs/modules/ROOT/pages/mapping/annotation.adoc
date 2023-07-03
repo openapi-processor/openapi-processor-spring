@@ -24,11 +24,57 @@ type: {source type} @ {annotation type}
 
 * **type** is required.
 
-** **{source type}** is the type name used in the OpenAPI description and names the type that should receive the additional annotation. This can be a **{type}:{format}** combination like `string:uuid`.
+** **{source type}** is the type name used in the OpenAPI description and names the type that should receive the additional annotation.This can be a **+{type}:{format}+** combination like `string:uuid`.
 
 ** **{annotation type}** is the fully qualified class name of the java annotation type. It may have parameters (see example below).
 
-The link:{oap-samples}[samples project] has a small example using annotation mappings similar to the one described below.
+Here is a list of examples using different parameters:
+
+[source,yaml]
+----
+ - type: Foo @ annotation.Bar
+ - type: Foo @ annotation.Bar()
+ - type: Foo @ annotation.Bar("bar")
+ - type: Foo @ annotation.Bar(2)
+ - type: Foo @ annotation.Bar(true)
+ - type: Foo @ annotation.Bar(package.Foobar.class) # <1>
+ - type: Foo @ annotation.Bar(value = "bar", foo = 2)
+----
+
+<1> [.badge .badge-since]+since 2023.2+ use a *class* as annotation parameter.
+
+*`object` source type*
+
+[.badge .badge-since]+since 2023.3+
+
+it is also possible to add an annotation to **all** generated schema/model classes using a single annotation mapping:
+
+[source,yaml]
+----
+ - type: object @ annotation
+----
+
+The `object` string represents **all** generated object classes (i.e. schema/model classes) and will add the given annotation **only** at the class level.
+
+For example, a mapping like this:
+
+[source,yaml]
+----
+map:
+  types:
+    - type: object @ lombok.Builder
+----
+
+[source,java]
+----
+@Builder
+@Generated(...)
+public class Foo {
+   ...
+}
+----
+
+The link:{oap-samples}[samples project] has a small example using annotation mappings.
 
 == combining annotation mapping and type mapping
 
@@ -171,15 +217,6 @@ map:
 
   parameters:
     - type: Foo @ io.openapiprocessor.samples.validations.Sum(value = 42) # <3>
-
-      # this formats do work too <4>
-      # - type: Foo @ annotation.Bar
-      # - type: Foo @ annotation.Bar()
-      # - type: Foo @ annotation.Bar("bar")
-      # - type: Foo @ annotation.Bar(2)
-      # - type: Foo @ annotation.Bar(true)
-      # - type: Foo @ annotation.Bar(package.Foobar.class)
-      # - type: Foo @ annotation.Bar(value = "bar", foo = 2)
 ----
 
 The `Sum` annotation in the example is a custom bean validation but the feature itself is not limited to bean validation.
@@ -187,10 +224,6 @@ The `Sum` annotation in the example is a custom bean validation but the feature 
 <1> use `v2.1` (or later) as the mapping version to avoid validation warnings in the mapping file.
 <2> the `Bar` mapping is using a global type annotation mapping, so the annotation is added to the generated `Bar` class.
 <3> the `Foo` mapping adds the annotation to the parameter of the endpoint methods that use `Foo`.
-<4> this is a list of examples that shows a number of different annotation parameter possibilities.
-+
-[.badge .badge-since]+NEW+ in this version is the possibility to use a *class* as annotation parameter.
-
 
 Here are the generated interfaces, first the `FooApi`:
 
