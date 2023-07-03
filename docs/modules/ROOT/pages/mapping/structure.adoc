@@ -131,4 +131,4 @@ The structure below `paths` is similar to an OpenAPI yaml file to make it easier
 
 == json schema
 
-Some IDEs support json schemas to provide editing support (auto-completion & validation) for text based files. To support this, openapi-processor provides json schemas for the mapping formats at link:{json-schema-site}[`https://openapiprocessor.io/schemas/mapping/mapping-v{version}.json`].
+Some IDEs support json schemas to provide editing support (auto-completion & validation) for text based files.To support this, openapi-processor provides json schemas for the mapping formats at link:{json-schema-site}[`https://openapiprocessor.io/schemas/mapping/mapping-v+{version}+.json`].
