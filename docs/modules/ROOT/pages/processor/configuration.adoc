@@ -37,7 +37,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 * `model-suffix-name` (**optional**, default is empty). See xref:_model_name_suffix[below].
 
-* `model-type` (*optional**, `default` or `record`, default is `default`). Generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
+* [.badge .badge-since]+2023.3+ `model-type` (*optional**, `default` or `record`, default is `default`). Generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
 
 * `bean-validation` (**optional**, `true` or `false`, `javax`, `jakarta`) enables generation of bean validation annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
 +
