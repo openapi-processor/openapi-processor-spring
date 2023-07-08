@@ -24,8 +24,4 @@
 ** xref:mapping/null.adoc[Null Mapping]
 ** xref:mapping/package-name.adoc[package-name Mapping]
 * xref:gradle.adoc[Gradle Integration]
-* xref:howto/index.adoc[HowTo]
-** OpenAPI
-*** xref:howto/file_upload.adoc[File Upload]
-*** xref:howto/file_download.adoc[File Download]
 * xref:links.adoc[Links]
