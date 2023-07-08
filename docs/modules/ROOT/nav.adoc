@@ -25,8 +25,6 @@
 ** xref:mapping/package-name.adoc[package-name Mapping]
 * xref:gradle.adoc[Gradle Integration]
 * xref:howto/index.adoc[HowTo]
-** Mapping
-*** xref:howto/pageable-page-mapping.adoc[Pageable & Page Mapping]
 ** OpenAPI
 *** xref:howto/file_upload.adoc[File Upload]
 *** xref:howto/file_download.adoc[File Download]
