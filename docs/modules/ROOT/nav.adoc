@@ -26,7 +26,6 @@
 * xref:gradle.adoc[Gradle Integration]
 * xref:howto/index.adoc[HowTo]
 ** Mapping
-//*** xref:howto/global-array-mapping.adoc[Global Array Mapping]
 *** xref:howto/pageable-page-mapping.adoc[Pageable & Page Mapping]
 ** OpenAPI
 *** xref:howto/file_upload.adoc[File Upload]
