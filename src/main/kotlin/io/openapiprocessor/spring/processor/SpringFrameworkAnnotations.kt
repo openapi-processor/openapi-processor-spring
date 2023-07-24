@@ -7,7 +7,7 @@ package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.core.framework.FrameworkAnnotation
 import io.openapiprocessor.core.framework.FrameworkAnnotations
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter

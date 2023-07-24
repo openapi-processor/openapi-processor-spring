@@ -8,7 +8,7 @@ package io.openapiprocessor.spring.processor
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
-import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.WriterFactory
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
@@ -27,7 +27,7 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
 
     fun run(processorOptions: MutableMap<String, *>) {
         try {
-            val parser = Parser()
+            val parser = OpenApiParser()
             val openapi = parser.parse(processorOptions)
             if (processorOptions["showWarnings"] != null) {
                 openapi.printWarnings()

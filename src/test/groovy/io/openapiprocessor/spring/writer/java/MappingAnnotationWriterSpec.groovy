@@ -18,7 +18,7 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.datatypes.StringDataType

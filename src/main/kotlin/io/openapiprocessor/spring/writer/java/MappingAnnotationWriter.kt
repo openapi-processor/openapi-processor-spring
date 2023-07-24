@@ -7,7 +7,7 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.io.Writer
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
