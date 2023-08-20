@@ -31,7 +31,9 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version: |
+          17
+          11
 
     - name: set up gradle
       uses: gradle/gradle-build-action@v2.7.1
@@ -63,7 +65,9 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version: |
+          17
+          11
 
     - name: set up gradle
       uses: gradle/gradle-build-action@v2.7.1
