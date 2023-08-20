@@ -70,6 +70,11 @@ java {
     withSourcesJar ()
 }
 
+kotlin {
+    jvmToolchain(libs.versions.build.jdk.get().toInt())
+}
+
+
 compileKotlin.dependsOn "generateVersion"
 
 compileTestGroovy {
@@ -77,16 +82,9 @@ compileTestGroovy {
     classpath += files(compileKotlin.destinationDirectory)
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
-}
 
 tasks.named('compileKotlin') {
     dependsOn 'generateVersion'
-
-    kotlinOptions.jvmTarget = "1.8"
 }
 
 tasks.named('sourcesJar') {
