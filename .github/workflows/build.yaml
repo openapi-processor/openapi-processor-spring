@@ -27,26 +27,18 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 11
 
-    - name: gradle check
+    - name: set up gradle
+      uses: gradle/gradle-build-action@v2.7.1
+
+    - name: run tests
       run: |
         ./gradlew check
-        ./gradlew --stop
 
     - name: archive test results
       uses: actions/upload-artifact@v3
@@ -67,21 +59,14 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 11
+
+    - name: set up gradle
+      uses: gradle/gradle-build-action@v2.7.1
 
     - name: publish snapshot
       env:
@@ -92,7 +77,6 @@ jobs:
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
         ./gradlew publishToSonatype
-        ./gradlew --stop
 
     - name: archive test results
       uses: actions/upload-artifact@v3
@@ -101,9 +85,9 @@ jobs:
         name: publish results
         path: build
 
-  sonarqube:
+  sonar:
     needs: [publish]
-    name: sonarqube
+    name: sonar
 
     runs-on: ubuntu-latest
 
@@ -113,17 +97,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
-    - name: cache SonarCloud
+    - name: cache sonar
       uses: actions/cache@v3
       with:
         path: |
@@ -136,19 +110,23 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version: |
+          11
+          17
 
-    - name: sonarqube
+    - name: set up gradle
+      uses: gradle/gradle-build-action@v2.7.1
+
+    - name: run sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        ./gradlew test sonarqube
-        ./gradlew --stop
+        ./gradlew check sonar
 
-    - name: sonarqube results
+    - name: archive sonar results
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: sonarqube results
+        name: sonar results
         path: build
