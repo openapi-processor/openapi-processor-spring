@@ -27,8 +27,8 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
                 testSet.inputs, testSet.outputs)
 
             TestSetRunner(testSet, support)
-            .runOnCustomFileSystem(Jimfs.newFileSystem (Configuration.unix ()))
-            .shouldBeTrue()
+                .runOnCustomFileSystem(Jimfs.newFileSystem(Configuration.unix()))
+                .shouldBeTrue()
         }
     }
 
