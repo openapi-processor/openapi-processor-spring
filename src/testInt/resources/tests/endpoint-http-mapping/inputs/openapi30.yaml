@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: test enpoint http method mapping
+  title: test endpoint http method mapping
   version: 1.0.0
 
 paths:
