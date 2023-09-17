@@ -13,13 +13,9 @@ import java.io.Writer
 
 /**
  * spring parameter annotation writer
- *
- * @author Martin Hauner
  */
-class ParameterAnnotationWriter(
-    private val annotations: FrameworkAnnotations
-
-): CoreParameterAnnotationWriter {
+class ParameterAnnotationWriter(private val annotations: FrameworkAnnotations)
+    : CoreParameterAnnotationWriter {
 
     override fun write(target: Writer, parameter: Parameter) {
         if (parameter is RequestBody) {

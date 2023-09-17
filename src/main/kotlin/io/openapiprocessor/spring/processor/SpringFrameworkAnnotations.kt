@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory
 
 /**
  * provides Spring annotation details.
- *
- * @author Martin Hauner
  */
 class SpringFrameworkAnnotations: FrameworkAnnotations {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
