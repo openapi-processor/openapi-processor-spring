@@ -22,11 +22,12 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 
 class MappingAnnotationWriterSpec extends Specification {
 
-    def writer = new MappingAnnotationWriter()
+    def writer = new MappingAnnotationWriter(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "writes http method specific mapping annotation" () {

@@ -53,7 +53,7 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
                     generatedWriter,
                     MethodWriter(
                         options,
-                        MappingAnnotationWriter(),
+                        MappingAnnotationWriter(annotations),
                         ParameterAnnotationWriter(annotations),
                         beanValidations,
                         javaDocWriter

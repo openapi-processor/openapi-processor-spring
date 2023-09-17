@@ -7,22 +7,23 @@ package io.openapiprocessor.spring.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import java.io.Writer
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 
 /**
  * spring mapping annotation writer
  */
-class MappingAnnotationWriter: CoreMappingAnnotationWriter {
+class MappingAnnotationWriter(private val annotations: SpringFrameworkAnnotations): CoreMappingAnnotationWriter {
 
     override fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
         target.write(createAnnotation(endpoint, endpointResponse))
     }
 
     private fun createAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
-        var mapping = getMappingAnnotation(endpoint)
+        val annotation = annotations.getAnnotation(endpoint.method)
+
+        var mapping = annotation.annotationName
         mapping += "("
         mapping += "path = " + quote(endpoint.path)
 
@@ -30,9 +31,9 @@ class MappingAnnotationWriter: CoreMappingAnnotationWriter {
         if (consumes.isNotEmpty()) {
             mapping += ", "
             mapping += "consumes = {"
-            mapping +=  consumes.map {
+            mapping += consumes.joinToString(", ") {
                 quote(it)
-            }.joinToString(", ")
+            }
             mapping += '}'
         }
 
@@ -41,34 +42,23 @@ class MappingAnnotationWriter: CoreMappingAnnotationWriter {
             mapping += ", "
             mapping += "produces = {"
 
-            mapping += contentTypes.map {
-                quote (it)
-            }.joinToString (", ")
+            mapping += contentTypes.joinToString(", ") {
+                quote(it)
+            }
 
             mapping += "}"
         }
 
-        val method = endpoint.method.method
-        if (method in arrayOf("head","trace","options")) {
+        annotation.parameters.forEach {
             mapping += ", "
-            mapping += "method = RequestMethod.${method.uppercase()}"
+            mapping += "${it.key} = ${it.value.value}"
         }
 
         mapping += ")"
         return mapping
     }
 
-    private fun getMappingAnnotation(endpoint: Endpoint): String {
-        return when (endpoint.method) {
-            HttpMethod.HEAD, HttpMethod.OPTIONS, HttpMethod.TRACE -> "@RequestMapping"
-            else -> {
-                "@${endpoint.method.method.capitalizeFirstChar()}Mapping"
-            }
-        }
-    }
-
     private fun quote(content: String): String {
         return '"' + content + '"'
     }
-
 }
