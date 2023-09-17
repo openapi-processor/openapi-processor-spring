@@ -6,6 +6,13 @@ info:
 paths:
   /endpoint:
 
+    delete:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
     get:
       tags:
         - endpoint
@@ -13,7 +20,21 @@ paths:
         '204':
           description: empty
 
-    put:
+    head:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
+    options:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
+    patch:
       tags:
         - endpoint
       responses:
@@ -27,7 +48,14 @@ paths:
         '204':
           description: empty
 
-    patch:
+    put:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
+    trace:
       tags:
         - endpoint
       responses:

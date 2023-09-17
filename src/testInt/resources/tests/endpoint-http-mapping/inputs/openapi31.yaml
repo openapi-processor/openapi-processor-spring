@@ -1,10 +1,18 @@
 openapi: 3.1.0
 info:
-  title: test enpoint http method mapping
+  title: test endpoint http method mapping
   version: 1.0.0
 
 paths:
   /endpoint:
+
+
+    delete:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
 
     get:
       tags:
@@ -13,7 +21,21 @@ paths:
         '204':
           description: empty
 
-    put:
+    head:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
+    options:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
+    patch:
       tags:
         - endpoint
       responses:
@@ -27,9 +49,17 @@ paths:
         '204':
           description: empty
 
-    patch:
+    put:
       tags:
         - endpoint
       responses:
         '204':
           description: empty
+
+    trace:
+      tags:
+        - endpoint
+      responses:
+        '204':
+          description: empty
+
