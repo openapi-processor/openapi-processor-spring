@@ -14,7 +14,7 @@ openapi-processor-parser-api = "io.openapiprocessor:openapi-processor-core-parse
 openapi-processor-parser-swagger = "io.openapiprocessor:openapi-processor-core-parser-swagger:2023.4"
 openapi-processor-parser-openapi4j = "io.openapiprocessor:openapi-processor-core-parser-openapi4j:2023.4"
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.15.2"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.15.3"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
