@@ -16,7 +16,6 @@ class EnumConverterFactoryWriter(val options: ApiOptions) {
             
             import org.springframework.core.convert.converter.Converter;
             import org.springframework.core.convert.converter.ConverterFactory;
-            import org.springframework.stereotype.Component;
 
             import java.util.EnumSet;
             import java.util.function.Supplier;
