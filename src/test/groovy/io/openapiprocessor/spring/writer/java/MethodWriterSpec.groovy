@@ -37,7 +37,7 @@ class MethodWriterSpec extends Specification {
         apiOptions,
         new MappingAnnotationWriter(new SpringFrameworkAnnotations()),
         new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
-        new BeanValidationFactory (),
+        new BeanValidationFactory (apiOptions),
         new JavaDocWriter())
     def target = new StringWriter ()
 

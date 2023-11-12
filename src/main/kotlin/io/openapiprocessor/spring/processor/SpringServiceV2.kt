@@ -10,7 +10,6 @@ package io.openapiprocessor.spring.processor
 import io.openapiprocessor.api.v2.Version
 import io.openapiprocessor.core.version.GitHubVersionException
 import io.openapiprocessor.core.version.GitHubVersionProvider
-import io.openapiprocessor.core.writer.DefaultWriterFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -35,7 +34,7 @@ class SpringServiceV2(
 
     override fun run(processorOptions: MutableMap<String, *>) {
         try {
-            val processor = SpringProcessor(DefaultWriterFactory())
+            val processor = SpringProcessor()
             if (testMode) {
                 processor.enableTestMode()
             }

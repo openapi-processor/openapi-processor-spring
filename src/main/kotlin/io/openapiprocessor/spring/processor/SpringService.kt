@@ -23,7 +23,7 @@ class SpringService(private val testMode: Boolean = false):
 
     override fun run(processorOptions: MutableMap<String, *>) {
         try {
-            val processor = SpringProcessor(DefaultWriterFactory())
+            val processor = SpringProcessor()
             if (testMode) {
                 processor.enableTestMode()
             }

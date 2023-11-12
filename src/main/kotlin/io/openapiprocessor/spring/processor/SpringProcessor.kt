@@ -9,9 +9,9 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.OpenApiParser
-import io.openapiprocessor.core.writer.WriterFactory
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
+import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import org.slf4j.Logger
@@ -21,7 +21,7 @@ import java.time.OffsetDateTime
 /**
  *  openapi-processor-spring.
  */
-class SpringProcessor(private val writerFactory: WriterFactory) {
+class SpringProcessor {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
     private var testMode = false
 
@@ -40,6 +40,7 @@ class SpringProcessor(private val writerFactory: WriterFactory) {
             val cv = ApiConverter(options, framework)
             val api = cv.convert(openapi)
 
+            val writerFactory = SpringWriterFactory(options)
             val generatedInfo = createGeneratedInfo(options)
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val beanValidations = BeanValidationFactory(getValidationFormat(options))
