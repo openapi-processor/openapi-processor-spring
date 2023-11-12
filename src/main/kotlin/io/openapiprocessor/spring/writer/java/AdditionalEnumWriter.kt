@@ -18,9 +18,19 @@ class AdditionalEnumWriter {
             return
         }
 
+        val piWriter = createPackageInfoWriter(options, factory)
+        writePackageInfo(options, piWriter, formatter)
+        piWriter.close()
+
         val writer = createFactoryWriter(options, factory)
         writeEnumConverterFactory(options, writer, formatter)
         writer.close()
+    }
+
+    private fun writePackageInfo(options: ApiOptions, writer: Writer, formatter: SourceFormatter) {
+        val raw = StringWriter()
+        PackageInfoWriter(options).writePackageInfo(raw)
+        writer.write(formatter.format(raw.toString()))
     }
 
     private fun writeEnumConverterFactory(options: ApiOptions, writer: Writer, formatter: SourceFormatter) {
@@ -35,4 +45,9 @@ class AdditionalEnumWriter {
             "StringToEnumConverterFactory")
     }
 
+    private fun createPackageInfoWriter(options: ApiOptions, writerFactory: WriterFactory): Writer {
+        return writerFactory.createWriter(
+            "${options.packageName}.spring",
+            "package-info")
+    }
 }

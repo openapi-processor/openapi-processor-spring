@@ -1,4 +1,5 @@
 items:
   - outputs/api/EnumApi.java
   - outputs/<model>/Foo.java
+  - outputs/spring/package-info.java
   - outputs/spring/StringToEnumConverterFactory.java
