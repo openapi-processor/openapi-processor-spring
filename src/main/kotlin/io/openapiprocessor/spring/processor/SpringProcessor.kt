@@ -85,6 +85,7 @@ class SpringProcessor {
                     generatedWriter,
                     javaDocWriter
                 ),
+                listOf(AdditionalEnumWriter()::write),
                 GoogleFormatter(),
                 writerFactory
             )
