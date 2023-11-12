@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  title: test enum parameters
+  version: 1.0.0
+
+paths:
+
+  /endpoint:
+    get:
+      tags:
+        - enum
+      parameters:
+        - name: foo
+          description: enum parameter
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Foo'
+      responses:
+        '204':
+          description: empty
+
+components:
+  schemas:
+
+    Foo:
+      type: string
+      enum:
+        - foo
+        - foo-2
+        - foo-foo

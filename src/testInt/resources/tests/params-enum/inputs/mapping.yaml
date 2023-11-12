@@ -1,0 +1,6 @@
+openapi-processor-mapping: v5
+
+options:
+  package-name: generated
+  format-code: false
+  enum-type: framework
