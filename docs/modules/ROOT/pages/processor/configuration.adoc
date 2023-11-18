@@ -8,12 +8,13 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v4
+openapi-processor-mapping: v5
 
 options:
   package-name: io.openapiprocessor.sample
   model-name-suffix: Resource
   model-type: record
+  enum-type: string
   one-of-interface: true
   bean-validation: jakarta
   generated-date: true
@@ -207,6 +208,30 @@ public class Foo {
 
 }
 ----
+
+[#_enum_type]
+=== enum type:
+
+(*optional**, `default`, `string` or `framework`, default is `default`)
+
+*mapping.yaml*
+[source,yaml]
+----
+openapi-processor-mapping: v5
+
+options:
+  enum-type: string
+----
+
+There are 3 ways to handle OpenAPI enum definitions, `default`, `string` and `framework`.
+
+*`default`* generates a typical java enum class.
+
+The other two can be used if `default` does not work. This is described in more detail under xref:processor/enums.adoc[enums].
+
+*`string`* does not generate an enum and simply uses `java.lang.String`. In case bean validation is enabled it will generate a custom bean validation annotation that checks if the incoming values is one of the `enum` values given in the OpenAPI description.
+
+*`framework`* does generate a slightly different enum classes than `default` and a Spring `ConverterFactory` that can deserialize incoming values to proper enum values.
 
 == map:
 

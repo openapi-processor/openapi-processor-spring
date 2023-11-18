@@ -1,0 +1,170 @@
+= Enums
+include::partial$links.adoc[]
+
+[#_default]
+== default
+
+By default, openapi-processor creates a java `Enum` from an OpenAPI schema that's using the `enum` keyword.Something like this:
+
+[source,yaml,title=OpenAPI enum]
+----
+components:
+  schemas:
+    Type:
+      type: string
+      enum:
+        - one
+        - two
+----
+
+[source,java,title=generated Java enum]
+----
+package io.openapiprocessor.openapi2.model;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.openapiprocessor.openapi2.support.Generated;
+
+@Generated(value = "openapi-processor-spring", version = "latest")
+public enum Type {
+    ONE("one"),
+    TWO("two");
+
+    private final String value;
+
+    Type(String value) {
+        this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
+    @JsonCreator
+    public static Type fromValue(String value) {
+        for (Type val : Type.values()) {
+            if (val.value.equals(value)) {
+                return val;
+            }
+        }
+        throw new IllegalArgumentException(value);
+    }
+}
+----
+
+This works without issues if used as part of a request payload.
+
+Unfortunately it may cause an error, like the following if the enum is used as a query parameter:
+
+====
+Failed to convert value of type `'java.lang.String'` to required type `'io.openapiprocessor.openapi.model.Type'`; Failed to convert from type [`java.lang.String`] to type [`@org.springframework.web.bind.annotation.RequestParam io.openapiprocessor.openapi.model.Type`] for value [`one`]
+====
+
+The reason is, that Spring uses `org.springframework.core.convert.converter.Converter` implementations to deserialize parameters and the default enum deserialization expects the incoming string value to exactly match an enum value.
+
+That is, to successfully convert to the enum value `ONE` the incoming value string has to be `ONE`. It will not accept the lowercase `one`.
+
+The converter doesn't use jackson, so it won't use the `@JsonCreator` method to convert from the incoming lowercase value to the corresponding enum value.
+
+To handle this issue we can either use the `enum-type` <<_enum_type_string>> or <<_enum_type_framework>>.
+
+[#_enum_type_string]
+== string
+
+Do not create a Java enum classes for OpenAPI enums and simply use `java.lang.String`.
+
+[source,yaml,title=mapping.yaml]
+----
+openapi-processor-mapping: v5
+
+options:
+  enum-type: string
+----
+
+This is an alternative to generating enum classes. It will pass the enum value string as given in the api request to avoid the issue described in the <<_default>> section.
+
+[source,java,title=api interface]
+----
+public interface FooApi {
+
+    @PostMapping(path = "/foo", produces = {"application/json"})
+    Foo postFoo(@RequestParam(name = "enum", required = false) String aEnum);
+
+}
+----
+
+In this simple form it doesn't provide any help to make sure that the incoming values is a valid value as described in the OpenAPI.
+
+By enabling bean-validation the processor will generate and use a custom validation annotation to check that the incoming string is an allowed value.
+
+[source,yaml,title=mapping.yaml]
+----
+openapi-processor-mapping: v5
+
+options:
+  bean-validation: jakarta
+  enum-type: string
+----
+
+[source,java,title=api interface with validation]
+----
+public interface FooApi {
+
+    @PostMapping(path = "/foo", produces = {"application/json"})
+    Foo postFoo(@RequestParam(name = "enum", required = false) @Values(values = {"one", "two"}) String aEnum);
+
+}
+----
+
+[NOTE]
+====
+make sure you annotate the controller with `@Validated` to run the `@Values` check.
+
+[source,java,title=api interface with validation]
+----
+@Validated
+@RestController
+public class ApiController implements FooApi {
+    // ...
+}
+----
+====
+
+[#_enum_type_framework]
+== framework
+
+This is another alternative to the <<_default>> enum classes to avoid the issue described above.
+
+It creates Java enum classes and a Spring `ConverterFactory` with the name `+{package-name}+.spring.StringToEnumConverterFactory` that does create enum converters for all generated enums.The enum converters convert incoming strings to their enum by comparing with the OpenAPI enum values.
+
+[source,yaml,title=mapping.yaml]
+----
+openapi-processor-mapping: v5
+
+options:
+  enum-type: framework
+----
+
+To enable the converter factory use a `WebMvcConfigurer` (or `WebFluxConfigurer`) like the code below:
+
+[source,java,title=enable enum converter factory]
+----
+package io.openapiprocessor.samples;
+
+import io.openapiprocessor.openapi.spring.StringToEnumConverterFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverterFactory(new StringToEnumConverterFactory());
+    }
+}
+
+----
