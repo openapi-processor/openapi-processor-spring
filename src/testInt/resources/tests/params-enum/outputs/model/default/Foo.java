@@ -3,9 +3,10 @@ package generated.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import generated.support.Generated;
+import java.util.function.Supplier;
 
 @Generated(value = "openapi-processor-spring", version = "test")
-public enum Foo {
+public enum Foo implements Supplier<String> {
     FOO("foo"),
     FOO_2("foo-2"),
     FOO_FOO("foo-foo");
@@ -17,7 +18,7 @@ public enum Foo {
     }
 
     @JsonValue
-    public String getValue() {
+    public String get() {
         return this.value;
     }
 
