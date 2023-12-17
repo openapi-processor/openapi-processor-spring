@@ -43,7 +43,7 @@ jobs:
         ./gradlew check
 
     - name: archive test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test results
@@ -83,7 +83,7 @@ jobs:
         ./gradlew publishToSonatype
 
     - name: archive test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: publish results
@@ -129,7 +129,7 @@ jobs:
         ./gradlew check sonar
 
     - name: archive sonar results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: sonar results
