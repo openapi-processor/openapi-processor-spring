@@ -1,0 +1,80 @@
+= Extension mapping
+include::partial$links.adoc[]
+
+[.badge .badge-since]+since 2024.1+
+
+This is part of annotation mapping. See xref:mapping/annotation.adoc[Annotation mapping] that shows more details about the annotation mapping format.
+
+Apart from the annotation mapping by an OpenAPI type, openapi-processor can use `x-` tension properties in the OpenAPI to add additional annotations to a schema property.
+
+Here is a simple schema that has `x-`tensions on the `bar` property.
+
+```yaml
+openapi: 3.1.0
+# ...
+components:
+  schemas:
+    Foo:
+      type: object
+      properties:
+        bar:
+          type: string
+          x-foo: single
+          x-bar:
+            - listA
+            - listB
+```
+
+In general openapi-processor will ignore the `x-` tension properties unless we map the `x-` tensions/values to annotations like this:
+
+```yaml
+openapi-processor-mapping: v6
+options:
+  # ...
+
+map:
+  extensions:
+    x-foo: single @ io.oap.FooA(value = "any")   # <1>
+    x-bar:
+      - listA @ io.oap.FooB # <2>
+      - listB @ io.oap.FooC
+```
+
+NOTE: openapi-processor will only recognize *strings* values of an extension. It will ignore any other type.
+
+The mapping allows two variations:
+
+<1> in case the `x-` tension property has only a single value we can directly map that value to an annotation.
+<2> in case the `x-` tension property has a list of values we can map each value to a different annotation.
+
+
+With this mapping the generated Dto class will have the additional annotations on the property.
+
+```java
+package generated.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import generated.support.Generated;
+import io.oap.FooA;
+import io.oap.FooB;
+import io.oap.FooC;
+
+@Generated(value = "openapi-processor-core")
+public class Foo {
+
+    @FooA(value = "any")
+    @FooB
+    @FooC
+    @JsonProperty("bar")
+    private String bar;
+
+    public String getBar() {
+        return bar;
+    }
+
+    public void setBar(String bar) {
+        this.bar = bar;
+    }
+
+}
+```
