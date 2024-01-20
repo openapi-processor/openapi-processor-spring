@@ -102,7 +102,7 @@ jobs:
         fetch-depth: 0
 
     - name: cache sonar
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.sonar/cache
