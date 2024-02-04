@@ -1,3 +1,9 @@
-out
-build
+.idea/
+*.iml
+
 .gradle
+build/
+
+buildSrc/build/
+buildSrc/.gradle/
+

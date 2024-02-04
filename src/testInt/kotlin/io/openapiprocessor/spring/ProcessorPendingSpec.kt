@@ -35,8 +35,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("params-enum", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("params-request-body-multipart-mapping", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("params-request-body-multipart-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs")
+        testSet("reactive-response-types", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("reactive-response-types", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
     )
 }
