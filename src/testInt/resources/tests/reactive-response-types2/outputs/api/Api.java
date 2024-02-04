@@ -12,9 +12,9 @@ import reactor.core.publisher.Mono;
 public interface Api {
 
     @GetMapping(path = "/prop/{id}", produces = {"application/json"})
-    Mono<ResponseEntity<Mono<Props>>> getPropId(@PathVariable(name = "id") Integer id);
+    ResponseEntity<Mono<Props>> getPropId(@PathVariable(name = "id") Integer id);
 
     @GetMapping(path = "/props", produces = {"application/json"})
-    Mono<ResponseEntity<Flux<Props>>> getProps();
+    ResponseEntity<Flux<Props>> getProps();
 
 }

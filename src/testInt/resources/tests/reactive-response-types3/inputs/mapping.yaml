@@ -1,0 +1,9 @@
+openapi-processor-mapping: v6
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  single: reactor.core.publisher.Mono
+  multi: reactor.core.publisher.Flux

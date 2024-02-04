@@ -19,7 +19,9 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("params-request-body"),
     test30_D_("params-request-body-multipart-mapping"),
     test30_D_("params-simple-data-types"),
-    test30_D_("reactive-response-types")
+    test30_D_("reactive-response-types"),
+    test30_D_("reactive-response-types2"),
+    test30_D_("reactive-response-types3")
 )
 
 val ALL_31: List<TestParams> = listOf(
@@ -32,5 +34,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("params-request-body"),
     test31_DR("params-request-body-multipart-mapping"),
     test31_D_("params-simple-data-types"),
-    test30_D_("reactive-response-types")
+    test31_D_("reactive-response-types"),
+    test31_D_("reactive-response-types2"),
+    test31_D_("reactive-response-types3")
 )
