@@ -4,6 +4,3 @@
 .gradle
 build/
 
-buildSrc/build/
-buildSrc/.gradle/
-
