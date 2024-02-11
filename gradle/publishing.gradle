@@ -61,11 +61,9 @@ publishing {
     }
 }
 
-//tasks.withType(Sign) {
-//    onlyIf { project.isReleaseVersion }
-//}
-
 signing {
+    setRequired({ gradle.taskGraph.hasTask("${project.path}:publishToSonatype") })
+
     useInMemoryPgpKeys(signKey, signPwd)
 
     signing {
