@@ -37,7 +37,8 @@ class SpringProcessor {
             val annotations = SpringFrameworkAnnotations()
 
             val options = convertOptions(processorOptions)
-            val cv = ApiConverter(options, framework)
+            val identifier = JavaIdentifier(IdentifierOptions(options.identifierWordBreakFromDigitToLetter))
+            val cv = ApiConverter(options, identifier, framework)
             val api = cv.convert(openapi)
 
             val writerFactory = SpringWriterFactory(options)
@@ -45,7 +46,8 @@ class SpringProcessor {
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val validationWriter = ValidationWriter(options)
             val beanValidations = BeanValidationFactory(options)
-            val javaDocWriter = JavaDocWriter()
+            val javaDocWriter = JavaDocWriter(identifier)
+            val formatter = GoogleFormatter()
 
             val writer = ApiWriter(
                 options,
@@ -56,6 +58,7 @@ class SpringProcessor {
                     generatedWriter,
                     MethodWriter(
                         options,
+                        identifier,
                         MappingAnnotationWriter(annotations),
                         ParameterAnnotationWriter(annotations),
                         beanValidations,
@@ -68,18 +71,20 @@ class SpringProcessor {
                 when (options.modelType) {
                     "record" -> DataTypeWriterRecord(
                         options,
+                        identifier,
                         generatedWriter,
                         beanValidations,
                         javaDocWriter
                     )
                     else -> DataTypeWriterPojo(
                         options,
+                        identifier,
                         generatedWriter,
                         beanValidations,
                         javaDocWriter
                     )
                 },
-                StringEnumWriter (options, generatedWriter),
+                StringEnumWriter (options, identifier, generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
                     generatedWriter,
