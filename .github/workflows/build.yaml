@@ -75,7 +75,7 @@ jobs:
     - name: publish snapshot
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SIGN_KEY: ${{ secrets.SIGN_KEY }}
+        SIGN_KEY: ${{ secrets.SIGN_KEY_ORG }}
         SIGN_PWD: ${{ secrets.SIGN_PWD }}
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
