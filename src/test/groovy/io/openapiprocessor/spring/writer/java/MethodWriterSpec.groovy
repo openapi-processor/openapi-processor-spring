@@ -21,6 +21,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.GenericDataType
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.writer.java.JavaDocWriter
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
@@ -33,12 +34,15 @@ import spock.lang.Specification
 
 class MethodWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
+    def identifier = new JavaIdentifier()
+
     def writer = new MethodWriter (
         apiOptions,
+        identifier,
         new MappingAnnotationWriter(new SpringFrameworkAnnotations()),
         new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
         new BeanValidationFactory (apiOptions),
-        new JavaDocWriter())
+        new JavaDocWriter(identifier))
     def target = new StringWriter ()
 
     @Deprecated

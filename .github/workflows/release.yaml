@@ -24,13 +24,13 @@ jobs:
             17
 
       - name: set up gradle
-        uses: gradle/gradle-build-action@v2.11.1
+        uses: gradle/gradle-build-action@v3.0.0
 
       - name: publish release
         env:
           PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
           PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
+          SIGN_KEY: ${{ secrets.SIGN_KEY_ORG }}
           SIGN_PWD: ${{ secrets.SIGN_PWD }}
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
