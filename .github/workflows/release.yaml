@@ -24,7 +24,7 @@ jobs:
             17
 
       - name: set up gradle
-        uses: gradle/gradle-build-action@v3.0.0
+        uses: gradle/gradle-build-action@v3.1.0
 
       - name: publish release
         env:
