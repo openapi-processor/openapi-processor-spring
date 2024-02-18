@@ -1,6 +1,6 @@
-= (global) Single & Multi mapping
+:responseentity: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
 
-NOTE: this is experimental
+= (global) Single & Multi mapping
 
 == single & multi wrapper
 
@@ -38,6 +38,10 @@ map:
 
 The processor will now wrap all non-array like response types with the given `single` mapping.
 
+== endpoint specific mapping
+
+it is also possible to configure `single` & `multi` on the xref:mapping/endpoint.adoc[endpoint level].
+
 
 == single & multi with result mapping
 
@@ -57,3 +61,51 @@ and `multi`
 ----
 ResponseEntity<Flux<String>>
 ----
+
+Unfortunately if you need the reactive result to modify the http response, something like this:
+
+[source, java]
+----
+// does not work
+public ResponseEntity<Mono<Result>> someEndpoint() {
+    return someBean.getResult()
+           .map(r -> ResponseEntity
+                   .ok()
+                   .eTag(r.eTag())
+                   .body(Mono.just(r)));
+}
+----
+
+it will not work because the result type of the statement is `Mono<ResponseEntity<Mono<Result>>>` and not the expected `ResponseEntity<Mono<Result>>`.
+
+This can be fixed by modifying the response type to
+
+[source, yaml]
+----
+openapi-processor-mapping: v6
+
+options:
+  # ...
+
+map:
+  # wrap the ResponseEntity with Mono
+  result: reactor.core.publisher.Mono<org.springframework.http.ResponseEntity>
+
+  single: reactor.core.publisher.Mono
+  multi: reactor.core.publisher.Flux
+----
+
+which will now generate the endpoint signature as
+
+[source, java]
+----
+public Mono<ResponseEntity<Mono<Result>>> someEndpoint() {
+   // ...
+}
+----
+
+and the above code will now work.
+
+It is recommended to configure this on the endpoint level if you just need this for a few endpoints.
+
+See also Spring link:{spring-responseentity}[`ResponseEntity`] documentation.
