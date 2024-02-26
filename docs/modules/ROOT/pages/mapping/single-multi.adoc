@@ -108,4 +108,4 @@ and the above code will now work.
 
 It is recommended to configure this on the endpoint level if you just need this for a few endpoints.
 
-See also Spring link:{spring-responseentity}[`ResponseEntity`] documentation.
+See also Spring link:{responseentity}[`ResponseEntity`] documentation.
