@@ -136,7 +136,7 @@ public class ApiController implements FooApi {
 
 This is another alternative to the <<_default>> enum classes to avoid the issue described above.
 
-It creates Java enum classes and a Spring `ConverterFactory` with the name `+{package-name}+.spring.StringToEnumConverterFactory` that does create enum converters for all generated enums.The enum converters convert incoming strings to their enum by comparing with the OpenAPI enum values.
+It creates Java enum classes and a Spring `ConverterFactory` with the name `\{package-name}.spring.StringToEnumConverterFactory` that does create enum converters for all generated enums.The enum converters convert incoming strings to their enum by comparing with the OpenAPI enum values.
 
 [source,yaml,title=mapping.yaml]
 ----
