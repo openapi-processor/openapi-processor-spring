@@ -1,10 +1,10 @@
 = package-name mapping
 
-The type mapping (v2 only) configuration allows to reference the target `package-name` in generic parameters using the `+{package-name}+` expression. This makes it possible to adjust the `package-name` without touching the mapping, and it does reduce duplication.
+The type mapping (v2 and up) configuration allows to reference the target `package-name` in generic parameters using the `+{package-name}+` expression. This makes it possible to adjust the `package-name` without touching the mapping, and it does reduce duplication.
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v6
 options:
   package-name: io.openapiprocessor.generated
 
