@@ -7,7 +7,7 @@ This is part of annotation mapping. See xref:mapping/annotation.adoc[Annotation 
 
 Apart from the annotation mapping by an OpenAPI type, openapi-processor can use `x-` tension properties in the OpenAPI to add additional annotations to a schema property.
 
-Here is a simple schema that has `x-`tensions on the `bar` property.
+Here is a simple schema that has `x-` tensions on the `bar` property.
 
 ```yaml
 openapi: 3.1.0
