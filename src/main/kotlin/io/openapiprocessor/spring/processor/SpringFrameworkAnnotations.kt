@@ -57,6 +57,7 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
     }
 }
 
+@Suppress("kotlin:S1192") // define constants instead of duplicating strings
 private val MAPPING_ANNOTATIONS = hashMapOf(
     HttpMethod.DELETE  to Annotation(getMappingAnnotationName(HttpMethod.DELETE.method)),
     HttpMethod.GET     to Annotation(getMappingAnnotationName(HttpMethod.GET.method)),
