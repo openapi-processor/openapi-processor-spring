@@ -14,7 +14,7 @@ link:{oaps-license}[image:{badge-license}[]]
 link:{oap-central}[image:{badge-central}[]]
 
 
-*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & model java code generator
+*openapi-processor-spring* is an link:{openapi}[OpenAPI] interface & dto java code generator
 for link:{springboot}[Spring Boot].
 
 It supports an approach where you explicitly define and document your Service API (using OpenAPI)
@@ -28,10 +28,7 @@ and keep the overview.
 * it is easy to document in plain text. You can use markdown in the OpenAPI `description`
 properties.
 
-The processor generates java interfaces based on the endpoint description of the API and simple POJO
-classes for parameter or response objects defined in the API. The processor adds all the required
-spring & jackson annotations to the interface and all that is left to *you* is the implementation
-of the generated interfaces in any way you like.
+The processor generates java interfaces based on the endpoint description of the API and simple POJO  classes or records for parameter or response schemas defined in the API. The processor adds all the required  spring & jackson annotations to the interface and all that is left to *you* is the implementation of the generated interfaces in any way you like.
 
 The interfaces will help to keep the implementation in sync with the API. If anything relevant
 changes  in the API the interface changes and the compiler will warn that the interface is not
@@ -48,23 +45,15 @@ out some samples, or your own yaml and view the code that the processor generate
 
 == Features
 
-- generates **only java interfaces and java model classes** (get/set POJOs) for all defined endpoints
-and schemas to allow full control of the endpoint implementation. It does not generate any other
-file. See xref:processor/index.adoc[processor].
+- generates **only java interfaces and java dto classes** (get/set POJOs or records) for all defined endpoints and schemas to allow full control of the endpoint implementation. It does not generate any other file. See xref:processor/index.adoc[processor].
 
-- **powerful type mappings with generic support** (one level) to map schemas defined in the openapi.yaml
-to existing java types.
+- **powerful type mappings with generic support** to map schemas defined in the openapi.yaml to existing java types.
 +
-For example to map the openapi `array` type to a different java collections or to map paging
-parameters and results to th Spring types like `Page<>` & `Pageable`.
+For example to map the openapi `array` type to a different java collections or to map paging parameters and results to th Spring types like `Page<>` & `Pageable`.
 +
 mappings can be defined globally, for a specific response, parameter or endpoint and or http method (of an endpoint). See xref:mapping/index.adoc[type mapping].
 
-- Annotation based **WebFlux support**. Actually there is *no* explicit WebFlux support, but the mapping
-allows defining a *single*, and a *multi* wrapper class. *single* wraps non-array like result types
-(e.g. `Mono<>`). *multi* replaces array like result types or parameters with the given multi mapping.
-For example, it will replace `List<String>` with `Flux<String>` if the multi mapping contains the
-fully qualified `Flux` type. +
+- Annotation based **WebFlux support**. Actually there is *no* explicit WebFlux support, but the mapping allows defining a *single*, and a *multi* wrapper class. *single* wraps non-array like result types(e.g. `Mono<>`). *multi* replaces array like result types or parameters with the given multi mapping. For example, it will replace `List<String>` with `Flux<String>` if the multi mapping contains the fully qualified `Flux` type. +
 //[.badge .badge-since]+since 1.0.0.M13+
 
 - generates **human-readable code**.
