@@ -36,7 +36,7 @@ jobs:
           11
 
     - name: set up gradle
-      uses: gradle/gradle-build-action@v3.1.0
+      uses: gradle/gradle-build-action@v3.2.1
 
     - name: run tests
       run: |
@@ -70,7 +70,7 @@ jobs:
           11
 
     - name: set up gradle
-      uses: gradle/gradle-build-action@v3.1.0
+      uses: gradle/gradle-build-action@v3.2.1
 
     - name: publish snapshot
       env:
@@ -119,7 +119,7 @@ jobs:
           17
 
     - name: set up gradle
-      uses: gradle/gradle-build-action@v3.1.0
+      uses: gradle/gradle-build-action@v3.2.1
 
     - name: run sonar
       env:
