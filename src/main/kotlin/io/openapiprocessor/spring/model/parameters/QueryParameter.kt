@@ -78,11 +78,11 @@ class QueryParameter(
 
     private val isMappedObject: Boolean
         get() {
-            if (dataType !is MappedSourceDataType) {
+            if (dataType !is SourceDataType) {
                 return false
             }
 
-            val mapped = dataType as MappedSourceDataType
+            val mapped = dataType as SourceDataType
             return mapped.sourceDataType is ObjectDataType
         }
 }
