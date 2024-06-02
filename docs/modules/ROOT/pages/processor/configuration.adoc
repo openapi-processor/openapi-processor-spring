@@ -36,9 +36,9 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 ** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
 ** and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-* `model-suffix-name` (**optional**, default is empty). See xref:_model_name_suffix[below].
+* `model-suffix-name` (**optional**, default is empty) see xref:_model_name_suffix[below].
 
-* [.badge .badge-since]+2023.3+ `model-type` (*optional**, `default` or `record`, default is `default`). Generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
+* `model-type` (*optional**, `default` or `record`, default is `default`) generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
 
 * `bean-validation` (**optional**, `true` or `false`, `javax`, `jakarta`) enables generation of bean validation annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
 +
@@ -49,9 +49,9 @@ With the [.badge .badge-since]+2023.1+ releases this key allows two new values t
 ** `javax`: enables bean validation annotations v2, with `javax` package name
 ** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
 
-* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.Default is `false`.
+* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos. Default is `false`.
 
-* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter: Default is `false`.
+* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter. Default is `false`.
 
 * `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
@@ -227,9 +227,9 @@ There are 3 ways to handle OpenAPI enum definitions, `default`, `string` and `fr
 
 *`default`* generates a typical java enum class.
 
-The other two can be used if `default` does not work. This is described in more detail under xref:processor/enums.adoc[enums].
+The other two can be used if `default` does not work.This is described in more detail under xref:processor/enums.adoc[enums].
 
-*`string`* does not generate an enum and simply uses `java.lang.String`. In case bean validation is enabled it will generate a custom bean validation annotation that checks if the incoming values is one of the `enum` values given in the OpenAPI description.
+*`string`* does not generate an enum and simply uses `java.lang.String`.In case bean validation is enabled it will generate a custom bean validation annotation that checks if the incoming values is one of the `enum` values given in the OpenAPI description.
 
 *`framework`* does generate a slightly different enum classes than `default` and a Spring `ConverterFactory` that can deserialize incoming values to proper enum values.
 
