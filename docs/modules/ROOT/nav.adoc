@@ -11,6 +11,7 @@
 ** xref:processor/one-of-interface.adoc[oneOf]
 ** xref:processor/deprecated.adoc[Deprecated]
 ** xref:processor/identifier.adoc[Identifier]
+** xref:processor/bean-validation.adoc[Bean Validation]
 * xref:mapping/index.adoc[Type Mapping]
 ** xref:mapping/structure.adoc[Type Mapping Structure]
 ** xref:mapping/basic.adoc[Default Type Mapping]
