@@ -22,6 +22,28 @@ first letter on the next word. The special characters are:
 * `_` (underscore). The underscore is possible in java identifiers but usually not used apart from
 enums.
 
+* a change from letter to number. (see table below).
+
+given an identifier from the OpenAPI description, the processor would generate the following names for different kinds of identifiers:
+
+|===
+|                   |  OpenAPI       | camel case    | variable  | class      | enum
+
+| since 2024.2
+| foo2Bar
+| foo2**B**ar
+| foo2**B**ar
+| Foo2**B**ar
+| FOO2_BAR
+
+| before 2024.2
+| foo2Bar
+| foo2bar
+| foo2bar
+| Foo2bar
+| FOO2BAR
+|===
+
 == model
 
 For properties of model classes, the properties will be annotated with `@JsonProperty` to provide
