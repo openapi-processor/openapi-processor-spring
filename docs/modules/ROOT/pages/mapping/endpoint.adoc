@@ -86,7 +86,7 @@ Here are a few examples of possible http endpoint mappings:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v7
 
 map:
 

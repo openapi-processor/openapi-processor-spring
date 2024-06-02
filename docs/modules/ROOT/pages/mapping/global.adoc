@@ -130,7 +130,7 @@ It is possible to create type mappings with nested generics types. Here are a fe
 
 [source,yaml]
 ----
-openapi-processor-mapping: v3
+openapi-processor-mapping: v7
 
 options:
   package-name: generated

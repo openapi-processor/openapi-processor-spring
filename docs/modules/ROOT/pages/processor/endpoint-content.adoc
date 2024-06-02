@@ -109,7 +109,7 @@ The default is `success`, i.e. the processor will automatically generate the cod
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v7
 
 options:
   package-name: ...

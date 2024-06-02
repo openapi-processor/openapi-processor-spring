@@ -82,7 +82,7 @@ This can be fixed by modifying the `result` mapping to
 
 [source, yaml]
 ----
-openapi-processor-mapping: v6
+openapi-processor-mapping: v7
 
 options:
   # ...

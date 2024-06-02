@@ -4,7 +4,7 @@ The type mapping (v2 and up) configuration allows to reference the target `packa
 
 [source,yaml]
 ----
-openapi-processor-mapping: v6
+openapi-processor-mapping: v7
 options:
   package-name: io.openapiprocessor.generated
 

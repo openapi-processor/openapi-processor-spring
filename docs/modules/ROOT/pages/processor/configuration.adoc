@@ -8,7 +8,7 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v5
+openapi-processor-mapping: v7
 
 options:
   package-name: io.openapiprocessor.sample
@@ -109,7 +109,7 @@ components:
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v7
 
 options:
   package-name: io.openapiprocessor.sample
@@ -159,7 +159,7 @@ openapi-processor is now capable of generating java `record`s instead of pojos f
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v4
+openapi-processor-mapping: v7
 
 options:
   model-type: record
@@ -217,7 +217,7 @@ public class Foo {
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v5
+openapi-processor-mapping: v7
 
 options:
   enum-type: string
