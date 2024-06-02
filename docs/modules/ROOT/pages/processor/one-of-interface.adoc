@@ -19,7 +19,7 @@ Generation of marker interfaces is enabled by setting the `one-of-interface` opt
 
 [source,yaml]
 ----
-openapi-processor-mapping: v2
+openapi-processor-mapping: v7
 
 options:
   one-of-interface: true
