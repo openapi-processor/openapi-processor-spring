@@ -20,6 +20,11 @@ options:
   generated-date: true
   format-code: true
   javadoc: true
+  clear-target-dir: false
+
+compatibility:
+  bean-validation-valid-on-reactive: false
+  identifier-word-break-from-digit-to-letter: false
 
 map:
    # java type mappings
@@ -55,7 +60,9 @@ With the [.badge .badge-since]+2023.1+ releases this key allows two new values t
 
 * `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
-* `generated-date` (**optional**, `true` or `false`). enable or disable the generated date on the `@Genearted` annotation. Default is `true`.
+* `generated-date` (**optional**, `true` or `false`) enable or disable the generated date on the `@Generated` annotation. Default is `true`.
+
+* `clear-target-dir` (**optional**, `true` or `false`) enable or disable clearing of the `targetDir` when the processor is writing the generated files. Default is `true`.
 
 [#_model_name_suffix]
 === model name suffix:
@@ -232,6 +239,15 @@ The other two can be used if `default` does not work.This is described in more d
 *`string`* does not generate an enum and simply uses `java.lang.String`.In case bean validation is enabled it will generate a custom bean validation annotation that checks if the incoming values is one of the `enum` values given in the OpenAPI description.
 
 *`framework`* does generate a slightly different enum classes than `default` and a Spring `ConverterFactory` that can deserialize incoming values to proper enum values.
+
+[#_compatibility]
+== compatibility:
+
+This section contains keys to disable breaking changes.
+
+* `identifier-word-break-from-digit-to-letter` (**optional**, `true` or `false`, default is `true`) to keep the pre-2024.2 behaviour.See xref:processor/identifier.adoc[Identifiers].
+
+* `bean-validation-valid-on-reactive` (**optional**, `true` or `false`, default is `true`). to keep the pre-2024.2 behaviour.See xref:processor/bean-validation.adoc[Bean Validation].
 
 == map:
 
