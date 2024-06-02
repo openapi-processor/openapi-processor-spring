@@ -2,8 +2,8 @@
 // external openapi-processor links
 //
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-:badge-ci: https://github.com/openapi-processor/openapi-processor-spring/workflows/ci/badge.svg
-:oaps-ci: https://github.com/openapi-processor/openapi-processor-spring/actions?query=workflow%3Aci
+:badge-ci: https://github.com/openapi-processor/openapi-processor-spring/workflows/build/badge.svg
+:oaps-ci: https://github.com/openapi-processor/openapi-processor-spring/actions?query=workflow%3Abuild
 :oaps-issues: https://github.com/openapi-processor/openapi-processor-spring/issues
 :oaps-inttests: https://github.com/openapi-processor/openapi-processor-spring/tree/master/src/testInt/resources/tests
 :oaps-license: https://github.com/openapi-processor/openapi-processor-spring/blob/master/LICENSE
