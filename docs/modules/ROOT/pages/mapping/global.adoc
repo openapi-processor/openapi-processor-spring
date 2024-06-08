@@ -1,10 +1,25 @@
 = Global mappings
 
-Global type mapping will replace **any** usage of an OpenAPI type in the api description to the
-given java type.
+Global type mapping will replace **any** usage of an OpenAPI type in the api description to the given java type.
 
-It is defined like below, and it should be added to the `map/types` section in the `mapping.yaml`
-which is a list of global type mappings.
+It is defined like below, and it should be added to the `map/types` section in the `mapping.yaml` which is a list of global type mappings:
+
+[source,yaml]
+----
+openapi-processor-mapping: v7
+
+options:
+  package-name: io.openapiprocessor.sample
+  # ..
+
+map:
+  types:
+    - type: {source type} => {target type}
+      generics:
+        - {a generic type}
+        - {another generic type}
+----
+
 
 A single global mapping can have the following properties:
 
@@ -18,12 +33,9 @@ A single global mapping can have the following properties:
 
 * **type** is required.
 
-** **{source type}** is the type name used in the OpenAPI description and names the type that should
-be  replaced by **{target type}**. **{target type}** is the fully qualified class name of the java
-type that should be used instead of **{source type}**.
+** **{source type}** is the type name used in the OpenAPI description and names the type that should be  replaced by **{target type}**. **{target type}** is the fully qualified class name of the java type that should be used instead of **{source type}**.
 
-* **generics** is optional. It defines the list of types that should be used as generic type
-parameters to the java type given by **{target type}**.
+* **generics** is optional. It defines the list of types that should be used as generic type parameters to the java type given by **{target type}** (generics can be given _inline_, see xref:_mapping_with_generic_types[]).
 
 
 == simple mapping
@@ -86,7 +98,7 @@ to the **{source type}** property value separated by a ':' like this:
 ----
 
 This maps the `string` type with a `date-time` format from the default `java.time.OffsetDateTime` to
-`java.time.ZonedDateTime`. The mapping does not affect `string` without a format or `string` with
+`java.time.ZonedDateTime`.The mapping does not affect `string` without a format or `string` with
 other formats.
 
 Another example:
@@ -97,9 +109,10 @@ Another example:
 ----
 
 
+[#_mapping_with_generic_types]
 == mapping with generic types
 
-Type mapping allows to use a target type that has generic parameters. The generic types are given by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
+Type mapping allows to use a target type that has generic parameters.The generic types are given by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
 
 For example if a `StringPage` schema in the OpenAPI corresponds to `org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
 
