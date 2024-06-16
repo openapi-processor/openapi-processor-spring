@@ -14,7 +14,7 @@ the  api does not provide a `schema` name.
 ----
 openapi: 3.0.2
 info:
-  title: model exmaple
+  title: model example
   version: 1.0.0
 
 paths:
