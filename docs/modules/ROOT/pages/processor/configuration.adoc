@@ -8,7 +8,7 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   package-name: io.openapiprocessor.sample
@@ -21,6 +21,7 @@ options:
   format-code: true
   javadoc: true
   clear-target-dir: false
+  json-property-annotation: always
 
 compatibility:
   bean-validation-valid-on-reactive: false
@@ -63,6 +64,12 @@ With the [.badge .badge-since]+2023.1+ releases this key allows two new values t
 * `generated-date` (**optional**, `true` or `false`) enable or disable the generated date on the `@Generated` annotation. Default is `true`.
 
 * `clear-target-dir` (**optional**, `true` or `false`) enable or disable clearing of the `targetDir` when the processor is writing the generated files. Default is `true`.
+
+* `json-property-annotation` (**optional**, `always`, `auto`, `never`) control generation of `@JsonProperty` annotation. Default is `always`.
++
+** `always`: adds `@JsonProperty` to all schema property
+** `auto`: adds `@JsonProperty` only if it is required because the property name is no valid java identifier or the property is defined as `readOnly`/`writeOnly` in the OpenAPI description
+** `never`: never adds `@JsonProperty` to a schema property. NOTE: this may produce invalid code if the property name is not a valid java identifier.
 
 [#_model_name_suffix]
 === model name suffix:
