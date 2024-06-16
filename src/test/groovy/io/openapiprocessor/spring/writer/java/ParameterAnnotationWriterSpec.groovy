@@ -82,7 +82,7 @@ class ParameterAnnotationWriterSpec extends Specification {
             'body', 'application/json',
             new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
                 ['foo': new StringDataType ()], null, false, null),
-            true, false)
+            true, false, null)
 
         when:
         writer.write (target, body)
@@ -96,7 +96,7 @@ class ParameterAnnotationWriterSpec extends Specification {
             'body', 'application/json',
             new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
                 ['foo': new StringDataType ()], null, false, null),
-            false, false)
+            false, false, null)
 
         when:
         writer.write (target, body)

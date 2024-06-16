@@ -44,7 +44,7 @@ class SpringProcessor {
             val writerFactory = SpringWriterFactory(options)
             val generatedInfo = createGeneratedInfo(options)
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
-            val validationWriter = ValidationWriter(options)
+            val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidations = BeanValidationFactory(options)
             val javaDocWriter = JavaDocWriter(identifier)
             val formatter = GoogleFormatter()
