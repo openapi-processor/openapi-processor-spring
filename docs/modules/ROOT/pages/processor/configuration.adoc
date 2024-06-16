@@ -17,6 +17,7 @@ options:
   enum-type: string
   one-of-interface: true
   bean-validation: jakarta
+  generated: true
   generated-date: true
   format-code: true
   javadoc: true
@@ -60,6 +61,8 @@ With the [.badge .badge-since]+2023.1+ releases this key allows two new values t
 * `format-code` (**optional**, `true` or `false`) enable or disable the code formatter. Default is `false`.
 
 * `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
+
+* `generated-annotation` (**optional**, `true` or `false`) enable or disable the `@Generated` annotation. Default is `true`.
 
 * `generated-date` (**optional**, `true` or `false`) enable or disable the generated date on the `@Generated` annotation. Default is `true`.
 
