@@ -126,7 +126,7 @@ components:
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   package-name: io.openapiprocessor.sample
@@ -176,7 +176,7 @@ openapi-processor is now capable of generating java `record`s instead of pojos f
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   model-type: record
@@ -234,7 +234,7 @@ public class Foo {
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   enum-type: string

@@ -76,7 +76,7 @@ Do not create a Java enum classes for OpenAPI enums and simply use `java.lang.St
 
 [source,yaml,title=mapping.yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   enum-type: string
@@ -100,7 +100,7 @@ By enabling bean-validation the processor will generate and use a custom validat
 
 [source,yaml,title=mapping.yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   bean-validation: jakarta
@@ -140,7 +140,7 @@ It creates Java enum classes and a Spring `ConverterFactory` with the name `\{pa
 
 [source,yaml,title=mapping.yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   enum-type: framework

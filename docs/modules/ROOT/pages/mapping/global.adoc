@@ -6,7 +6,7 @@ It is defined like below, and it should be added to the `map/types` section in t
 
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   package-name: io.openapiprocessor.sample
@@ -143,7 +143,7 @@ It is possible to create type mappings with nested generics types. Here are a fe
 
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 
 options:
   package-name: generated

@@ -15,7 +15,7 @@ The mapping file needs the following key on the top-level. Best place is the fir
 
 [source,yaml]
 ----
-openapi-processor-mapping: v7
+openapi-processor-mapping: v8
 ----
 ====
 
