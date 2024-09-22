@@ -17,16 +17,20 @@ import org.slf4j.LoggerFactory
  *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader]. by the v2 interface
  *  [io.openapiprocessor.api.v1.OpenApiProcessor].
  *
- *  the v2 interfaces *must* be implemented by its own lass and not by [SpringService] to be downward
+ *  the v2 interfaces *must* be implemented by its own class and not by [SpringService] to be downward
  *  compatible with gradle/maven plugin versions that do not know the v2 interfaces.
  */
 class SpringServiceV2(
     private val provider: GitHubVersionProvider = GitHubVersionProvider("openapi-processor-spring"),
     private val testMode: Boolean = false):
     io.openapiprocessor.api.v2.OpenApiProcessor,
-    io.openapiprocessor.api.v2.OpenApiProcessorVersion
+    io.openapiprocessor.api.v2.OpenApiProcessorVersion,
+    io.openapiprocessor.api.v2.OpenApiProcessorTest
 {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    private var sourceRoot: String? = null
+    private var resourceRoot: String? = null
 
     override fun getName(): String {
         return "spring"
@@ -40,6 +44,8 @@ class SpringServiceV2(
             }
             processor.run(processorOptions)
 
+            sourceRoot = processor.getSourceRoot()
+            resourceRoot = processor.getResourceRoot()
         } catch (ex: Exception) {
             throw ex
         }
@@ -68,5 +74,13 @@ class SpringServiceV2(
             // just ignore, do not complain
             return false
         }
+    }
+
+    override fun getSourceRoot(): String? {
+        return sourceRoot
+    }
+
+    override fun getResourceRoot(): String? {
+        return resourceRoot
     }
 }
