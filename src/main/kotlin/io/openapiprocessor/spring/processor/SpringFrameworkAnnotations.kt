@@ -6,7 +6,6 @@
 package io.openapiprocessor.spring.processor
 
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
-import io.openapiprocessor.core.framework.AnnotationType
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.RequestBody
@@ -45,13 +44,6 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
         }
     }
 
-    override fun getAnnotation(type: AnnotationType): Annotation {
-        return when (type) {
-            AnnotationType.INTERFACE_PATH_PREFIX -> REQUEST_MAPPING_ANNOTATION
-            else -> throw NotImplementedError()
-        }
-    }
-
     private fun getAnnotation(key: String): Annotation {
         return PARAMETER_ANNOTATIONS.getValue(key)
     }
@@ -64,8 +56,6 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
         }
     }
 }
-
-private val REQUEST_MAPPING_ANNOTATION = Annotation(getAnnotationName("RequestMapping"))
 
 private val MAPPING_ANNOTATIONS = hashMapOf(
     HttpMethod.DELETE  to Annotation(getMappingAnnotationName(HttpMethod.DELETE.method)),
