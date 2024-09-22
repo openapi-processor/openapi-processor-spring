@@ -21,14 +21,14 @@ class ProcessorPendingSpec: StringSpec({
     for (testSet in sources()) {
         "native - $testSet".config(enabled = true) {
             val folder = tempdir()
+            val reader = ResourceReader(ProcessorPendingSpec::class.java)
 
-            val support = FileSupport(
-                ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.outputs)
+            val testFiles = TestFilesNative(folder, reader)
+            val test = Test(testSet, testFiles)
 
-            TestSetRunner(testSet, support)
-            .runOnNativeFileSystem(folder)
-            .shouldBeTrue()
+            TestSetRunner(test, testSet)
+                .runOnNativeFileSystem()
+                .shouldBeTrue()
         }
     }
 })

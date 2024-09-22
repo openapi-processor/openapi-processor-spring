@@ -9,10 +9,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType
-import io.openapiprocessor.test.FileSupport
-import io.openapiprocessor.test.ModelTypes
+import io.openapiprocessor.test.*
 import io.openapiprocessor.test.TestSet
-import io.openapiprocessor.test.TestSetRunner
 
 /**
  * run end to end integration test.
@@ -22,14 +20,14 @@ class ProcessorEndToEndSpec: StringSpec({
     for (testSet in sources()) {
         "native - $testSet".config(enabled = true) {
             val folder = tempdir()
+            val reader = ResourceReader(ProcessorEndToEndSpec::class.java)
 
-            val support = FileSupport(
-                ProcessorEndToEndSpec::class.java,
-                testSet.inputs, testSet.outputs)
+            val testFiles = TestFilesNative(folder, reader)
+            val test = Test(testSet, testFiles)
 
-            TestSetRunner(testSet, support)
-            .runOnNativeFileSystem(folder)
-            .shouldBeTrue()
+            TestSetRunner(test, testSet)
+                .runOnNativeFileSystem()
+                .shouldBeTrue()
         }
     }
 })
