@@ -1,4 +1,5 @@
 = Configuration
+:toc:
 include::partial$links.adoc[]
 
 The processor reads the configuration from the (mandatory) `mapping.yaml` file.It does contain
@@ -8,7 +9,7 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: v9
 
 options:
   package-name: io.openapiprocessor.sample
@@ -23,7 +24,11 @@ options:
   javadoc: true
   clear-target-dir: false
   json-property-annotation: always
-
+  target-dir:
+    layout: standard
+  base-path:
+    server-url: 0
+    properties-name: api.properties
 compatibility:
   bean-validation-valid-on-reactive: false
   identifier-word-break-from-digit-to-letter: false
@@ -36,46 +41,28 @@ The only required option is `package-name`. All other options or the type mappin
 
 == options:
 
-* `package-name`: (**required**) the root package name of the generated interfaces & models.The  package folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
-+
+
+=== package-name
+
+**required** (string)
+
+the root (java) package name of the generated interfaces & models.The  package folder tree will be created inside the `targetDir` (see xref:gradle.adoc[using gradle]).
+
 Interfaces and models will be generated into the `api` and `model` subpackages of `package-name`.
-+
-** so the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
-** and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-* `model-suffix-name` (**optional**, default is empty) see xref:_model_name_suffix[below].
+* the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
+* and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-* `model-type` (*optional**, `default` or `record`, default is `default`) generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. See xref:_model_type[below].
+==== example
+[source,yaml]
+----
+openapi-processor-mapping: v9
 
-* `bean-validation` (**optional**, `true` or `false`, `javax`, `jakarta`) enables generation of bean validation annotations. Default is `false`. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
-+
-With the [.badge .badge-since]+2023.1+ releases this key allows two new values to handle the package name change from bean validation v2 to v3 (`javax` => `jakarta`).
+options:
+  package-name: io.openapiprocessor.sample
+----
 
-** `false`: disables bean validation annotations
-** `true`: enables bean validation annotations v2, with `javax` package name
-** `javax`: enables bean validation annotations v2, with `javax` package name
-** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
-
-* `javadoc` (**optional**, `true` or `false`) enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos. Default is `false`.
-
-* `format-code` (**optional**, `true` or `false`) enable or disable the code formatter. Default is `false`.
-
-* `one-of-interface` (**optional**, `true` or `false`) enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
-
-* `generated-annotation` (**optional**, `true` or `false`) enable or disable the `@Generated` annotation. Default is `true`.
-
-* `generated-date` (**optional**, `true` or `false`) enable or disable the generated date on the `@Generated` annotation. Default is `true`.
-
-* `clear-target-dir` (**optional**, `true` or `false`) enable or disable clearing of the `targetDir` when the processor is writing the generated files. Default is `true`.
-
-* `json-property-annotation` (**optional**, `always`, `auto`, `never`) control generation of `@JsonProperty` annotation. Default is `always`.
-+
-** `always`: adds `@JsonProperty` to all schema property
-** `auto`: adds `@JsonProperty` only if it is required because the property name is no valid java identifier or the property is defined as `readOnly`/`writeOnly` in the OpenAPI description
-** `never`: never adds `@JsonProperty` to a schema property. NOTE: this may produce invalid code if the property name is not a valid java identifier.
-
-[#_model_name_suffix]
-=== model name suffix:
+=== model-name-suffix
 
 **optional** (string, default is empty (i.e. it is disabled))
 
@@ -91,7 +78,7 @@ Usually you will separate the classes by putting them in different packages. Thi
 
 If a schema name from the OpenAPI description already ends with the `model-name-suffix`, the processor will **not** append the suffix. This allows to migrate an existing api with a suffix in the API to `model-name-suffix` step by step.
 
-==== Example:
+==== example
 
 *OpenAPI*
 [source,yaml]
@@ -166,17 +153,19 @@ public class BarResource { // <4>
 <3> the class name of the `Foo` schema got the configured `Resource` suffix
 <4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
 
-[#_model_type]
-=== model type:
 
-(*optional**, `default` or `record`, default is `default`)
+=== model-type
 
-openapi-processor is now capable of generating java `record`s instead of pojos for schemas. This is a global setting in the `mapping.yaml`. It can either have the value `default` (which is default) to generate pojos or `record` to generate records.
+*optional** (string, `default` or `record`, default is `default`)
+
+generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. This is a global setting in the `mapping.yaml`. It can either have the value `default` (which is default) to generate pojos or `record` to generate records.
+
+==== example
 
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: v9
 
 options:
   model-type: record
@@ -226,19 +215,72 @@ public class Foo {
 }
 ----
 
-[#_enum_type]
-=== enum type:
 
-(*optional**, `default`, `string` or `framework`, default is `default`)
+=== bean-validation
 
-*mapping.yaml*
-[source,yaml]
-----
-openapi-processor-mapping: v8
+**optional** (boolean or string, `true` or `false`, `javax`, `jakarta`, default is `false`)
 
-options:
-  enum-type: string
-----
+enables generation of bean validation annotations. See link:{bean-validation}[Bean Validation Specification, window="_blank"].
+
+to handle the package name change from bean validation v2 to v3 (`javax` => `jakarta`) it accepts the package name as an enabling value:
+
+** `false`: disables bean validation annotations
+** `true`: enables bean validation annotations v2, with `javax` package name
+** `javax`: enables bean validation annotations v2, with `javax` package name
+** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
+
+=== javadoc
+
+**optional** (boolean, `true` or `false`, default is `false`)
+
+enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.
+
+=== format-code
+
+**optional**  (boolean, `true` or `false`, default is `false`)
+
+enable or disable the code formatter. See also xref:oap:jdk.adoc[JDK 16+].
+
+=== one-of-interface
+
+**optional** (boolean, `true` or `false`, default is `false`)
+
+enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
+
+=== generated-annotation
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+enable or disable the `@Generated` annotation.
+
+=== generated-date
+
+**optional** (boolean, `true` or `false`, default is ´true`)
+
+enable or disable the generated date on the `@Generated` annotation.
+
+[#_clear_target_dir]
+=== clear-target-dir
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+enable or disable clearing of the `targetDir` when the processor is writing the generated files.
+
+See also xref:_target_dirclear[target-dir:clear].
+
+=== json-property-annotation
+
+**optional** (string, `always`, `auto`, `never`, default is `always`)
+
+control generation of the `@JsonProperty` annotation:
+
+* `always`: adds `@JsonProperty` to all schema property
+* `auto`: adds `@JsonProperty` only if it is required because the property name is no valid java identifier or the property is defined as `readOnly`/`writeOnly` in the OpenAPI description
+* `never`: never adds `@JsonProperty` to a schema property. NOTE: this may produce invalid code if the property name is not a valid java identifier.
+
+=== enum type
+
+*optional** (string, `default`, `string` or `framework`, default is `default`)
 
 There are 3 ways to handle OpenAPI enum definitions, `default`, `string` and `framework`.
 
@@ -250,14 +292,94 @@ The other two can be used if `default` does not work.This is described in more d
 
 *`framework`* does generate a slightly different enum classes than `default` and a Spring `ConverterFactory` that can deserialize incoming values to proper enum values.
 
-[#_compatibility]
+==== example
+
+*mapping.yaml*
+[source,yaml]
+----
+openapi-processor-mapping: v9
+
+options:
+  enum-type: string
+----
+
+=== base-path
+
+parent key to group base path related options.
+
+[#_base_pathserver_url]
+=== base-path:server-url
+
+**optional** (boolean or number, `false`, `true`=0, 1, 2, ..., default is `false`)
+
+enables generation of a resource file with the configured OpenAPI `server/url`.
+
+[NOTE]
+To have a destination directory for generating the resource file, setting this will *automatically* enable the xref:_target_dirlayout[`standard`] target dir layout.
+
+See xref:_basepath_propertiesname[]
+
+[#_basepath_propertiesname]
+=== base-path:properties-name
+
+**optional** (string, default is `api.properties`)
+
+name of the properties resource file that will contain the `base-path` configuration.
+
+See xref:_base_pathserver_url[]
+
+=== target-dir
+
+parent key to group `targetDir` related options.
+
+[#_target_dirclear]
+=== target-dir:clear
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+**overrides** `clear-target-dir`
+
+enable or disable clearing of the `targetDir` when the processor is writing the generated files (See also xref:_clear_target_dir[]).
+
+=== target-dir:layout
+
+**optional** (string, `classic` or `standard`, default is `classic`)
+
+this controls if the `targetDir` is the source root folder or if there is another directory level.
+
+* `classic`, `targetDir` is the source root, i.e. the package structure begins in `targetDir`.
++
+ targetDir
+ \--- io
+      \--- openapiprocessor
+           +--- api
+           \--- model
+
+* `standard`, `targetDir` is the parent of source root and resource root, i.e. the package structure begins in the `java` subdirectory and the `java`director has a `resources` sibling directory.
++
+ targetDir
+ +--- java
+ |      \--- io
+ |           \--- openapiprocessor
+ |                +--- api
+ |                \--- model
+ \--- resources
+
 == compatibility:
 
 This section contains keys to disable breaking changes.
 
-* `identifier-word-break-from-digit-to-letter` (**optional**, `true` or `false`, default is `true`) to keep the pre-2024.2 behaviour.See xref:processor/identifier.adoc[Identifiers].
+=== identifier-word-break-from-digit-to-letter
 
-* `bean-validation-valid-on-reactive` (**optional**, `true` or `false`, default is `true`). to keep the pre-2024.2 behaviour.See xref:processor/bean-validation.adoc[Bean Validation].
+**optional** (boolean, `true` or `false`, default is `true`)
+
+keep the pre-2024.2 behaviour. See xref:processor/identifier.adoc[Identifiers].
+
+=== bean-validation-valid-on-reactive
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+keep the pre-2024.2 behaviour. See xref:processor/bean-validation.adoc[Bean Validation].
 
 == map:
 
