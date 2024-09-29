@@ -1,0 +1,163 @@
+= Server Url
+include::partial$links.adoc[]
+
+== base path
+
+OpenAPI offers a `servers` section to describe the server urls available to access the api.
+
+openapi-processor has (simple) support to generate a resource property file with the path of a server url. The processor will resolve all variables with their default value and extracts the urls path.
+
+Given an OpenAPI description with a servers key:
+
+[source,yaml]
+----
+openapi: 3.1.0
+info:
+  title: server url example
+  version: 1.0.0
+
+servers:
+  - url: "{schema}://{host}:{port}/{path}/v{version}"
+    variables:
+      schema:
+        default: https
+        enum:
+          - https
+          - http
+      host:
+        default: openapiprocessor.io
+      port:
+        default: "443"
+      path:
+        default: api
+      version:
+        default: "1"
+
+# ...
+----
+
+and a mapping
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+options:
+  server-url: true
+----
+
+it will generate a simple resource properties file with a single property `openapi.base.path`:
+
+[source,properties]
+----
+# api.properties
+openapi.base.path = /api/v1
+----
+
+If there are multiple servers its index can be used to select it:
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+options:
+  server-url: 0   # same as true
+#  server-url: 1
+#  server-url: 2
+----
+
+== using the generated properties file
+
+The properties file is used to configure Spring Boots `server.servlet.context-path`:
+
+[source,properties]
+----
+# application.properties
+
+#spring.config.import = api.properties
+server.servlet.context-path=${openapi.base.path}
+----
+
+While it is possible to import the generated properties file it is probably better to simply use the generated properties as an additional profile.
+
+== name of the properties file
+
+The default name of the generate properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[server-url:properties-name] option.
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+
+options:
+  server-url:
+    properties-name: base-path.properties
+----
+
+== destination directory
+
+By default, the processor will generate the java package structure directly below the `targetDir`. To creates the resource file it needs a second (`resources`) directory as target directory.
+
+This is handled by a new xref:processor/configuration.adoc#_target_dirlayout[option] to set the layout of the `targetDir`. Setting it to `standard`
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+
+options:
+  target-dir:
+    layout: standard
+----
+
+will create the following directory layout:
+
+ targetDir
+ +--- java
+ |      \--- io
+ |           \--- openapiprocessor
+ |                +--- api
+ |                \--- model
+ \--- resources
+
+and write the properties file to the `resources` directory.
+
+[NOTE]
+To have a destination directory for generating the resource file, setting `server-url` to a truthy value will *automatically* enable the xref:processor/configuration.adoc#_target_dirlayout[`standard`] target dir layout. It is still recommended to set it explicitly for documentation.
+
+== build configuration
+
+Consequence of the new layout is that for compilation it is necessary to update configure of the sources and resources directories in the build configuration.
+
+For example with gradle the `sourceSets` configuration would change to something like this:
+
+[source,kotlin]
+----
+sourceSets {
+    main {
+        java {
+            // add generated files
+            srcDir(layout.buildDirectory.dir("openapi/java"))
+        }
+        resources {
+            // add generated resources
+            srcDir(layout.buildDirectory.dir("openapi/resources"))
+        }
+    }
+}
+----
+
+== options summary
+
+Here is a short snippet of a `mapping.yaml` as a summary of the options used to configure the base path property file generation.
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+
+options:
+  # ... other options
+
+  target-dir:
+    layout: standard
+
+  base-path:
+    server-url: 0
+    properties-name: base-path.properties
+----

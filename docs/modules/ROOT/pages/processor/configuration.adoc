@@ -54,6 +54,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 * and the final package name of the generated models will be `"$\{package-name\}.model"`
 
 ==== example
+
 [source,yaml]
 ----
 openapi-processor-mapping: v9
@@ -305,7 +306,7 @@ options:
 
 === base-path
 
-parent key to group base path related options.
+parent key to group base path related options. See xref:processor/server-url.adoc[].
 
 [#_base_pathserver_url]
 === base-path:server-url
@@ -341,6 +342,7 @@ parent key to group `targetDir` related options.
 
 enable or disable clearing of the `targetDir` when the processor is writing the generated files (See also xref:_clear_target_dir[]).
 
+[#_target_dirlayout]
 === target-dir:layout
 
 **optional** (string, `classic` or `standard`, default is `classic`)
@@ -364,6 +366,17 @@ this controls if the `targetDir` is the source root folder or if there is anothe
  |                +--- api
  |                \--- model
  \--- resources
+
+==== example
+
+[source,yaml]
+----
+openapi-processor-mapping: v9
+
+options:
+  target-dir:
+    layout: standard
+----
 
 == compatibility:
 
