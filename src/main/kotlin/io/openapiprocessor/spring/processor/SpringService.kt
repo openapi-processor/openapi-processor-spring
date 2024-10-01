@@ -7,8 +7,6 @@
 
 package io.openapiprocessor.spring.processor
 
-import io.openapiprocessor.core.writer.DefaultWriterFactory
-
 /**
  *  Entry point of openapi-processor-spring loaded via [java.util.ServiceLoader] by the v1 interface
  *  [io.openapiprocessor.api.v1.OpenApiProcessor].
