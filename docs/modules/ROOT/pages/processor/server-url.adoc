@@ -17,22 +17,10 @@ info:
   version: 1.0.0
 
 servers:
-  - url: "{schema}://{host}:{port}/{path}/v{version}"
+  - url: "https://openapiprocessor.io/{path}"
     variables:
-      schema:
-        default: https
-        enum:
-          - https
-          - http
-      host:
-        default: openapiprocessor.io
-      port:
-        default: "443"
       path:
         default: api
-      version:
-        default: "1"
-
 # ...
 ----
 
@@ -50,7 +38,7 @@ it will generate a simple resource properties file with a single property `opena
 [source,properties]
 ----
 # api.properties
-openapi.base.path = /api/v1
+openapi.base.path = /api
 ----
 
 If there are multiple servers its index can be used to select it:
