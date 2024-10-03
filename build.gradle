@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.sonar)
     alias(libs.plugins.nexus)
-//    alias(libs.plugins.versions)
+    alias(libs.plugins.versions)
 }
 
 group projectGroupId
@@ -92,7 +92,7 @@ tasks.named('sourcesJar') {
 }
 
 dependencies {
-    compileOnly (libs.openapi.processor.api)
+    implementation (libs.openapi.processor.api)
     implementation (libs.openapi.processor.core)
     implementation (libs.openapi.processor.parser.api)
     implementation (libs.openapi.processor.parser.swagger)
