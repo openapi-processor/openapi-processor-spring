@@ -44,8 +44,8 @@ class SpringServiceV2(
             }
             processor.run(processorOptions)
 
-            sourceRoot = processor.getSourceRoot()
-            resourceRoot = processor.getResourceRoot()
+            sourceRoot = processor.sourceRoot
+            resourceRoot = processor.resourceRoot
         } catch (ex: Exception) {
             throw ex
         }
