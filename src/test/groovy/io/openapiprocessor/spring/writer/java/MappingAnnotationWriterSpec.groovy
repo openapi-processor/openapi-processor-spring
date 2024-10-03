@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.spring.writer.java
 
+import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.parser.HttpMethod
@@ -165,7 +166,7 @@ class MappingAnnotationWriterSpec extends Specification {
             properties.method as HttpMethod ?: HttpMethod.GET,
             properties.operationId as String ?: null,
             properties.deprecated as boolean ?: false,
-            properties.description as String ?: null
+                new Documentation(null, properties.description as String),
         )
         ep.parameters = properties.parameters ?: []
         ep.responses = properties.responses ?: [:]
