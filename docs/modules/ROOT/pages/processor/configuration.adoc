@@ -240,7 +240,7 @@ enables generation of JavaDoc comments from the OpenAPI `description` s on the A
 
 **optional**  (boolean, `true` or `false`, default is `false`)
 
-enable or disable the code formatter. See also xref:oap:jdk.adoc[JDK 16+].
+enable or disable the code formatter. See also xref:oap::jdk.adoc[JDK 16+].
 
 === one-of-interface
 
