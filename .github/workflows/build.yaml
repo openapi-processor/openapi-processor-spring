@@ -80,7 +80,7 @@ jobs:
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
-        ./gradlew publishToSonatype
+        ./gradlew publishToSonatype --stacktrace
 
     - name: archive test results
       uses: actions/upload-artifact@v4
