@@ -161,17 +161,16 @@ class MappingAnnotationWriterSpec extends Specification {
 
     @Deprecated
     private Endpoint createEndpoint (Map properties) {
-        def ep = new Endpoint(
+        return new Endpoint(
             properties.path as String ?: '',
             properties.method as HttpMethod ?: HttpMethod.GET,
+            properties.parameters ?: [],
+            properties.requestBodies ?: [],
+            properties.responses ?: [:],
             properties.operationId as String ?: null,
             properties.deprecated as boolean ?: false,
-                new Documentation(null, properties.description as String),
+            new Documentation(null, properties.description as String),
         )
-        ep.parameters = properties.parameters ?: []
-        ep.responses = properties.responses ?: [:]
-        ep.requestBodies = properties.requestBodies ?: []
-        ep.initEndpointResponses ()
     }
 
 }

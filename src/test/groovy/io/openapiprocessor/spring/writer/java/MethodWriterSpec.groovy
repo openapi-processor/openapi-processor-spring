@@ -50,15 +50,12 @@ class MethodWriterSpec extends Specification {
         def ep = new Endpoint(
             properties.path as String ?: '',
             properties.method as HttpMethod ?: HttpMethod.GET,
+            properties.parameters ?: [],
+            properties.requestBodies ?: [],
+            properties.responses ?: [:],
             properties.operationId as String ?: null,
             properties.deprecated as boolean ?: false,
-            new Documentation(null, properties.description as String ?: null)
-
-        )
-        ep.parameters = properties.parameters ?: []
-        ep.responses = properties.responses ?: [:]
-        ep.requestBodies = properties.requestBodies ?: []
-        ep.initEndpointResponses ()
+            new Documentation(null, properties.description as String ?: null))
     }
 
     void "writes map from single query parameter" () {
