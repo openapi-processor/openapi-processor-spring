@@ -14,6 +14,7 @@ import io.openapiprocessor.spring.Version
 import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
+import io.openapiprocessor.test.api.OpenApiProcessorTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.OffsetDateTime
@@ -21,7 +22,7 @@ import java.time.OffsetDateTime
 /**
  *  openapi-processor-spring.
  */
-class SpringProcessor : io.openapiprocessor.api.v2.OpenApiProcessorTest {
+class SpringProcessor : OpenApiProcessorTest {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
     private var testMode = false
 

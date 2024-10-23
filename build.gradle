@@ -94,14 +94,16 @@ tasks.named('sourcesJar') {
 dependencies {
     implementation (libs.openapi.processor.api)
     implementation (libs.openapi.processor.core)
+    implementation (libs.openapi.processor.test.api)
     implementation (libs.openapi.processor.parser.api)
     implementation (libs.openapi.processor.parser.swagger)
     implementation (libs.openapi.processor.parser.openapi4j)
     implementation (libs.slf4j)
 
     testImplementation (libs.openapi.processor.api)
-    testImplementation (libs.openapi.processor.test)
     testImplementation (libs.openapi.processor.core)
+    testImplementation (libs.openapi.processor.test.api)
+    testImplementation (libs.openapi.processor.test.base)
     testImplementation (libs.openapi.processor.parser.api)
     testImplementation (libs.openapi.processor.parser.swagger)
     testImplementation (libs.openapi.processor.parser.openapi4j)
@@ -117,8 +119,9 @@ dependencies {
     testImplementation (libs.jimfs)
 
     testIntImplementation (libs.openapi.processor.api)
-    testIntImplementation (libs.openapi.processor.test)
     testIntImplementation (libs.openapi.processor.core)
+    testIntImplementation (libs.openapi.processor.test.api)
+    testIntImplementation (libs.openapi.processor.test.base)
     testIntImplementation (libs.openapi.processor.parser.api)
     testIntImplementation (libs.openapi.processor.parser.swagger)
     testIntImplementation (libs.openapi.processor.parser.openapi4j)

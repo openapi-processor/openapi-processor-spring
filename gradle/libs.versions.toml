@@ -11,7 +11,8 @@ jacoco = "0.8.7"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
-openapi-processor-test = { module = "io.openapiprocessor:openapi-processor-test", version.ref = "base" }
+openapi-processor-test-base = { module = "io.openapiprocessor:openapi-processor-test", version.ref = "base" }
+openapi-processor-test-api = { module = "io.openapiprocessor:openapi-processor-test-api", version.ref = "base" }
 openapi-processor-core = { module = "io.openapiprocessor:openapi-processor-core", version.ref = "base" }
 openapi-processor-parser-api = { module = "io.openapiprocessor:openapi-processor-core-parser-api", version.ref = "base" }
 openapi-processor-parser-swagger = { module = "io.openapiprocessor:openapi-processor-core-parser-swagger", version.ref = "base" }
