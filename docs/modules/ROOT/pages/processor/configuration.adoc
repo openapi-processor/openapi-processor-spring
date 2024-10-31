@@ -383,13 +383,13 @@ options:
 
 == logging:
 
-This section contains keys to log the mapping lookup. It may be useful to locate mappings that should be used, but are not.
+This section contains keys for logging mapping lookups. It may be useful to locate mappings that should be used, but are not.
 
 === mapping:
 
 **optional** (boolean, `true` or `false`, default is `false`)
 
-enables logging of the mapping lookup.
+enables mapping lookups logging.
 
 === mapping-target:
 
@@ -398,22 +398,6 @@ enables logging of the mapping lookup.
 with this option it is possible to control the logging target.
 
 If set to `logger` the mapping lookup gets logged at `info` level to link:https://www.slf4j.org/[slf4j]. If set to `stdout` the mapping lookup gets written directly to `stdout` without slf4j.
-
-==== maven
-
-apart from enabling logging of the mapping lookups in the `mapping.yaml` it is necessary to enable the mapping logger with `io.openapiprocessor.core.converter.mapping` to see any output.
-
-For example by running `maven` with:
-
-----
-./mvnw -Dorg.slf4j.simpleLogger.log.io.openapiprocessor.core.converter.mapping=info compile -f pom.xml
-----
-
-==== gradle
-
-apart from enabling logging of the mapping lookups in the `mapping.yaml` it is necessary to set `mapping-target` to `stdout`.
-
-gradle can only globally enable log levels which is very noisy. The best option to log the mapping lookups is simply write them to stdout.
 
 == compatibility:
 

@@ -1,0 +1,153 @@
+= log mapping lookup
+
+It is possible to let a processor log all the mapping lookups. It *may* be useful to understand why a mapping does not work.
+
+If a mapping doesn't work the first step is to check if the processor is applying it or if it ignores it. The mapping logging will report which mappings were selected for an OpenAPI type.
+
+If the processor doesn't select the mapping there may be something wrong with the mapping. Maybe a typo.
+
+In case the processor uses the mapping, but it still doesn't behave as expected it may be a bug.
+
+To control the logging there are two new xref:processor/configuration.adoc#_logging[logging options].
+
+[source,yaml]
+----
+openapi-processor-mapping: v10
+options:
+  package-name: io.openapiprocessor.generated
+
+map:
+ # ...
+
+logging:
+  mapping: true # <1>
+  mapping-target: stdout #<2>
+----
+
+<1> apart from enabling logging of the mapping lookups in the `mapping.yaml` you may want to set the `mapping-target`.
+
+<2> If set to `logger` the mapping lookup gets logged at `info` level to link:https://www.slf4j.org/[slf4j]. If set to `stdout` the mapping lookup gets written directly to `stdout` without slf4j.
+
+Enabling the logging will produce many blocks similar to:
+
+----
+looking for any type mapping of name: 'foo2' path: GET '/fooA' type: 'array' A
+  +  global
+    -  parameters (type)
+      -  name: foo2 => java.util.List<java.lang.String>
+      -  name: bar => io.openapiprocessor.Bar1
+      -  name: param @ io.openapiprocessor.ParamAnnotation
+      -  type: Bar @ io.openapiprocessor.ParamAnnotation
+    +  parameters (name)
+      +  name: foo2 => java.util.List<java.lang.String>
+      -  name: bar => io.openapiprocessor.Bar1
+      -  name: param @ io.openapiprocessor.ParamAnnotation
+      -  type: Bar @ io.openapiprocessor.ParamAnnotation
+----
+
+It always starts with a `looking for ..` followed by what it is looking for and the OpenAPI name or type to find, related to which path and its type. Then it lists all mappings checked with their location in the mapping file.
+
+In this case it looks for *any* mapping of `foo2`. *any* means that it is looking for any mapping, by testing all mappings by priority. More specific mappings have a higher priority and win.
+
+It did not find a mapping by its type (`array` in this case), but it found a name mapping for `foo2`, indicated by the `+` sign. The mappings that do not match get marked with a `-` sign.
+
+Here is a snippet from the OpenAPI yaml that is processed here. We have an endpoint `fooA` with a query parameter `foo2` of type `array`.
+
+[source,yaml]
+----
+  /fooA:
+    get:
+      summary: foo A summary.
+      description: foo A endpoint
+      tags: [foo]
+      parameters:
+        - in: query
+          name: foo1
+          # ...
+        - in: query
+          name: foo2
+          description: parameter foo2
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: bar
+          # ...
+      responses:
+        '200':
+          # ...
+----
+
+The example is a small part of the link:https://github.com/openapi-processor/openapi-processor-base/tree/main/openapi-processor-core/src/testInt/resources/tests/map-many[`map many`] integration test.
+
+
+== maven
+
+Maven can handle both mapping targets. If the `mapping-target` is set to `logger` it is necessary to enable the mapping logger `io.openapiprocessor.core.converter.mapping` to see any output.
+
+For example by running `maven` with:
+
+----
+./mvnw compile -Dorg.slf4j.simpleLogger.log.io.openapiprocessor.core.converter.mapping=info
+----
+
+If the `mapping-target` is `stdout` the processor output will be written without the usual log level prefix.
+
+
+=== summary
+
+to enable logging with maven use:
+
+[source,yaml]
+----
+openapi-processor-mapping: v10
+options:
+  package-name: ...
+
+map:
+ # ...
+
+logging:
+  mapping: true
+  mapping-target: stdout
+----
+
+to get the simple output, or
+
+[source,yaml]
+----
+openapi-processor-mapping: v10
+options:
+  package-name: ...
+
+map:
+ # ...
+
+logging:
+  mapping: true
+----
+
+to get the log level based output. Remember to enable the logger in this case as described above.
+
+== gradle
+
+Gradle requires the `mapping-target` to be `stdout`. Gradle can only globally enable log levels which is very noisy. The best option to log the mapping lookups is simply to write them to `stdout`.
+
+=== summary
+
+to enable logging with gradle use:
+
+[source,yaml]
+----
+openapi-processor-mapping: v10
+options:
+  package-name: ...
+
+map:
+ # ...
+
+logging:
+  mapping: true
+  mapping-target: stdout
+----

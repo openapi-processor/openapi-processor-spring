@@ -27,5 +27,6 @@
 ** xref:mapping/extension.adoc[Extension Mapping]
 ** xref:mapping/null.adoc[Null Mapping]
 ** xref:mapping/package-name.adoc[package-name Mapping]
+** xref:mapping/logging.adoc[log Mapping lookup]
 * xref:gradle.adoc[Gradle Integration]
 * xref:links.adoc[Links]
