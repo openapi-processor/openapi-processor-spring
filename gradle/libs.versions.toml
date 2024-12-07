@@ -18,7 +18,7 @@ openapi-processor-parser-api = { module = "io.openapiprocessor:openapi-processor
 openapi-processor-parser-swagger = { module = "io.openapiprocessor:openapi-processor-core-parser-swagger", version.ref = "base" }
 openapi-processor-parser-openapi4j = { module ="io.openapiprocessor:openapi-processor-core-parser-openapi4j", version.ref = "base" }
 
-checker = "org.checkerframework:checker:3.48.2"
+checker = "org.checkerframework:checker:3.48.3"
 jimfs = "com.google.jimfs:jimfs:1.3.0"
 slf4j = "org.slf4j:slf4j-api:2.0.16"
 logback = "ch.qos.logback:logback-classic:1.5.12"
