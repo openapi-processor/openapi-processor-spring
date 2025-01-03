@@ -3,7 +3,7 @@ kotlin = "2.1.0"
 build-jdk = "11"
 test-jdk = "17"
 
-api = "2024.1"
+api = "2024.2"
 base = "2024.7-SNAPSHOT"
 
 junit = "5.9.3"
