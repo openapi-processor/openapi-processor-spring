@@ -39,5 +39,5 @@ plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 sonar = { id = "org.sonarqube", version =  "6.0.1.5171" }
