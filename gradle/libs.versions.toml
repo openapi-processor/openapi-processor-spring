@@ -26,7 +26,7 @@ logback = "ch.qos.logback:logback-classic:1.5.15"
 kotest-bom = "io.kotest:kotest-bom:5.9.1"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
-mockk = "io.mockk:mockk:1.13.14"
+mockk = "io.mockk:mockk:1.13.16"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.24"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
