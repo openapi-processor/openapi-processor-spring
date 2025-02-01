@@ -21,7 +21,7 @@ openapi-processor-parser-openapi4j = { module ="io.openapiprocessor:openapi-proc
 checker = "org.checkerframework:checker:3.48.4"
 jimfs = "com.google.jimfs:jimfs:1.3.0"
 slf4j = "org.slf4j:slf4j-api:2.0.16"
-logback = "ch.qos.logback:logback-classic:1.5.15"
+logback = "ch.qos.logback:logback-classic:1.5.16"
 
 kotest-bom = "io.kotest:kotest-bom:5.9.1"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
