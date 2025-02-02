@@ -1,0 +1,181 @@
+= (global) Schema mappings
+
+[.badge .badge-since]+since 2025.1+
+
+Schema mappings add a new (global) mapping level. They apply only to (object, i.e. dto) schema properties.
+
+That means the mappings is only used when the source type is used as a property type in a generated dto class.
+
+[NOTE]
+====
+This is (currently) only supported on the global level and only for xref::mapping/annotation.adoc[].
+====
+
+Schema mappings try to solve the case where a type should be annotated, but *only* if is used in a generated dto object. Especially it should *not* annotate parameters.
+
+The example will make this more clear.
+
+== Example
+
+In the example OpenAPI below is a year value (<1>) that is used on the response schema and as query parameter.
+
+[source,yaml]
+----
+openapi: 3.1.0
+info:
+  title: schema mapping
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      parameters:
+        - name: year
+          description: year parameter
+          in: query
+          required: true
+          schema:
+            type: integer # <1>
+            format: year
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        year:
+          type: integer # <1>
+          format: year
+----
+
+Using a typical mapping the processor will use `java.time.Year` instead of a simple `Integer` type in the generated code.
+
+[source,yaml]
+----
+openapi-processor-mapping: v11
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: integer:year => java.time.Year
+----
+
+Spring (with Jackson) may not serialize the type in the expected format by default. In case of `java.time.Year` it will be `String` and not a number.
+
+To change serialization Jackson provides the `JsonFormat` annotation:
+
+ @JsonFormat(JsonFormat.Shape.NUMBER_INT)
+
+would change serialization of `java.time.Year` to a number.
+
+
+Adding the annotation mapping for this at the global type level
+
+[source,yaml]
+----
+openapi-processor-mapping: v11
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: integer:year => java.time.Year
+    - type: integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER_INT)
+----
+
+would add the annotation, but not only in the dto, as wanted
+
+[source,java]
+----
+package generated.model;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import generated.support.Generated;
+import java.time.Year;
+
+@Generated(value = "openapi-processor-core", version = "latest")
+public class Foo {
+
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+    @JsonProperty("year")
+    private Year year;
+
+    // ...
+}
+----
+
+but also at the method parameter of the generated interface:
+
+[source,java]
+----
+ package generated.api;
+
+ import com.fasterxml.jackson.annotation.JsonFormat;
+ import generated.model.Foo;
+ import generated.support.Generated;
+ import java.time.Year;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.RequestParam;
+
+ @Generated(value = "openapi-processor-core", version = "test")
+ public interface Api {
+
+     @GetMapping(path = "/foo", produces = {"application/json"})
+     Foo getFoo(@RequestParam(name = "year", required = false) @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT) Year year);
+
+ }
+----
+
+That is not wanted. To avoid it, the annotation mapping should be added to the new `schemas` mapping level:
+
+[source,yaml]
+----
+openapi-processor-mapping: v11
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: integer:year => java.time.Year
+
+  schemas:
+    - type: integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER_INT)
+----
+
+This tell the processor to add it only to the generated dto class and not to the interface.
+
+[source,java]
+----
+ package generated.api;
+
+ import generated.model.Foo;
+ import generated.support.Generated;
+ import java.time.Year;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.RequestParam;
+
+ @Generated(value = "openapi-processor-core", version = "test")
+ public interface Api {
+
+     @GetMapping(path = "/foo", produces = {"application/json"})
+     Foo getFoo(@RequestParam(name = "year", required = false) Year year);
+
+ }
+----

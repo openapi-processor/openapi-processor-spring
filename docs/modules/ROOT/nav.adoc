@@ -17,6 +17,7 @@
 ** xref:mapping/structure.adoc[Type Mapping Structure]
 ** xref:mapping/basic.adoc[Default Type Mapping]
 ** xref:mapping/global.adoc[Global Type Mapping]
+** xref:mapping/schema.adoc[Global Schema Mapping]
 ** xref:mapping/parameter.adoc[Global Parameter Mapping]
 ** xref:mapping/response.adoc[Global Response Mapping]
 ** xref:mapping/result.adoc[Global Result Mapping]

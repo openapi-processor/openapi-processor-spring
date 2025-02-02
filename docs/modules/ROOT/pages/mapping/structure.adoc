@@ -15,7 +15,7 @@ The mapping file needs the following key on the top-level. Best place is the fir
 
 [source,yaml]
 ----
-openapi-processor-mapping: v10
+openapi-processor-mapping: v11
 ----
 ====
 
@@ -59,6 +59,11 @@ map:
     - type: {source type}  =>  {target type}
 
     # add an extra annotation to the source type
+    - type: {source type}  @  {target type}
+
+  # list of global schema mappings
+  schemas:
+    # add an extra annotation to the source type, but only object properties
     - type: {source type}  @  {target type}
 
   # list of global parameter mappings
