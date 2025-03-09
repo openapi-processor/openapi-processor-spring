@@ -28,7 +28,7 @@ components:
 In general openapi-processor will ignore the `x-` tension properties unless we map the `x-` tensions/values to annotations like this:
 
 ```yaml
-openapi-processor-mapping: v8
+openapi-processor-mapping: v11
 options:
   # ...
 
