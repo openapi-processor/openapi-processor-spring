@@ -9,7 +9,7 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: v11
 
 options:
   package-name: io.openapiprocessor.sample
@@ -60,7 +60,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 [source,yaml]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: v11
 
 options:
   package-name: io.openapiprocessor.sample
@@ -117,7 +117,7 @@ components:
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: v11
 
 options:
   package-name: io.openapiprocessor.sample
@@ -160,7 +160,7 @@ public class BarResource { // <4>
 
 === model-type
 
-*optional** (string, `default` or `record`, default is `default`)
+**optional** (string, `default` or `record`, default is `default`)
 
 generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. This is a global setting in the `mapping.yaml`. It can either have the value `default` (which is default) to generate pojos or `record` to generate records.
 
@@ -169,7 +169,7 @@ generate pojos (class with get/set property methods) or records model classes fr
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: v11
 
 options:
   model-type: record
@@ -219,6 +219,56 @@ public class Foo {
 }
 ----
 
+=== model-accessors ([.badge .badge-since]+new with 2025.1+)
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+enables or disables generation of accessor methods, i.e. getter and setter. The properties are still private. This is only useful in combination with an object annotation mapping that adds the accessors. For example `lombok.Getter` & `lombok.Setter`.
+
+[NOTE]
+This is only used with `model-type: default`. It is ignored with `model-type: record`.
+
+==== example
+
+Here is a small example that uses object annotation mapping to add the lombok getter and setter annotations to the generated class.
+
+[source,yaml]
+----
+openapi-processor-mapping: v11
+
+options:
+  package-name: generated
+  model-type: default           # i.e. pojo
+  model-accessors: false        # only used if model-type is default
+
+map:
+  types:
+    - type: object @ lombok.Getter
+    - type: object @ lombok.Setter
+----
+
+The generated schema class is then looks like this, with annotations and without accessor methods.
+
+[source,java]
+----
+package io.openapiprocessor.openapi.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.openapiprocessor.openapi.support.Generated;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Generated(value = "openapi-processor-spring")
+public class Foo {
+
+    @JsonProperty("id")
+    private UUID id;
+
+}
+----
 
 === bean-validation
 
@@ -239,11 +289,25 @@ to handle the package name change from bean validation v2 to v3 (`javax` => `jak
 
 enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.
 
-=== format-code
+=== format-code ([.badge .badge-since]+updated with 2025.1+)
 
-**optional**  (boolean, `true` or `false`, default is `false`)
+// [.badge .badge-since]+changed with 2025.1+
 
-enable or disable the code formatter. See also xref:oap::jdk.adoc[JDK 16+].
+**optional**  (boolean, `true` or `false`, `google`, `eclipse` default is `false`)
+
+enable or disable the code formatter.
+
+[source,yaml,opts=novalidate]
+----
+# mapping.yaml
+options:
+  format-code: false      # disable code formatter
+  format-code: true       # use default google code formatter
+  format-code: google     # use google code formatter, i.e. the same as "true"
+  format-code: eclipse    # use eclipse code formatter
+----
+
+In case of `google` (or `true`) see also xref:oap::jdk.adoc[JDK 16+].
 
 === one-of-interface
 
@@ -301,7 +365,7 @@ The other two can be used if `default` does not work.This is described in more d
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: v11
 
 options:
   enum-type: string
@@ -374,7 +438,7 @@ this controls if the `targetDir` is the source root folder or if there is anothe
 
 [source,yaml]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: v11
 
 options:
   target-dir:
