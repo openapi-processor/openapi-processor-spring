@@ -33,7 +33,7 @@ spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.5"
-plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
+plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.52.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
