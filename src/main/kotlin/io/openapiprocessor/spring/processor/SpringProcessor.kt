@@ -9,6 +9,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.OpenApiParser
+import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Version
 import io.openapiprocessor.spring.writer.java.*
@@ -51,7 +52,7 @@ class SpringProcessor : OpenApiProcessorTest {
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidations = BeanValidationFactory(options)
             val javaDocWriter = JavaDocWriter(identifier)
-            val formatter = GoogleFormatter()
+            val formatter = getFormatter(options)
 
             val writer = ApiWriter(
                 options,
@@ -149,5 +150,9 @@ class SpringProcessor : OpenApiProcessorTest {
 
     override fun getResourceRoot(): String? {
         return resourceRoot
+    }
+
+    private fun getFormatter(apiOptions: ApiOptions): SourceFormatter {
+        return SourceFormatterFactory().getFormatter(apiOptions)
     }
 }
