@@ -10,15 +10,15 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-group projectGroupId
-version projectVersion
+group = projectGroupId
+version = projectVersion
 println("version: $version")
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
+        url = "https://oss.sonatype.org/content/repositories/snapshots"
     }
 }
 
