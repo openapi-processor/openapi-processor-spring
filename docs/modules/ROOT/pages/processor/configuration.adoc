@@ -9,7 +9,7 @@ A mapping yaml looks like this:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: io.openapiprocessor.sample
@@ -60,7 +60,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: io.openapiprocessor.sample
@@ -117,7 +117,7 @@ components:
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: io.openapiprocessor.sample
@@ -169,7 +169,7 @@ generate pojos (class with get/set property methods) or records model classes fr
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   model-type: record
@@ -234,7 +234,7 @@ Here is a small example that uses object annotation mapping to add the lombok ge
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: generated
@@ -315,6 +315,14 @@ In case of `google` (or `true`) see also xref:oap::jdk.adoc[JDK 16+].
 
 enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
+=== response-interface ([.badge .badge-since]+new with 2025.2+)
+
+**optional** (boolean, `true` or `false`, default is `false`)
+
+enables generation of a marker interface for multiple success (i.e. 2xx) responses with the same content type.
+
+See xref:processor/endpoint-content.adoc[Endpoint content types] for an example.
+
 === generated-annotation
 
 **optional** (boolean, `true` or `false`, default is `true`)
@@ -365,7 +373,7 @@ The other two can be used if `default` does not work.This is described in more d
 *mapping.yaml*
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   enum-type: string

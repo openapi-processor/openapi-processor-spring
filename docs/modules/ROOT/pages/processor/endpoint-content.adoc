@@ -1,15 +1,12 @@
 = Endpoint content types
 
-A simple path of the OpenAPI description will usually produce a single endpoint method in the target
-interface as described in the introduction.
+A simple path of the OpenAPI description will usually produce a single endpoint method in the target interface as described in the introduction.
 
-OpenAPI allows us to define more complex apis that behave differently based on the request header.
-For example the following api definition can return its response in different formats.As json or as
-plain text:
+OpenAPI allows us to define more complex apis that behave differently based on the request header. For example the following api definition can return its response in different formats. As json or as plain text:
 
 [source,yaml]
 ----
-openapi: 3.0.2
+openapi: 3.1.0
 info:
   title: multiple response content types
   version: 1.0.0
@@ -50,11 +47,9 @@ components:
           type: string
 ----
 
-A client request uses the request `Accept` header to tell the api which result content types it can
-handle.
+A client request uses the request `Accept` header to tell the api which result content types it can handle.
 
-Using a single endpoint method it has to decide which response to create.This leads to some boring
-`if/else` code.To avoid this the processor creates one endpoint method for each possible response.
+Using a single endpoint method it has to decide which response to create.This leads to some boring `if/else` code. To avoid this the processor creates one endpoint method for each possible response.
 
 == multiple content types
 
@@ -82,11 +77,9 @@ public interface Api {
 }
 ----
 
-The apis normal response (status '200') can return the result as json or as plain text which leads
-to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
+The apis normal response (status '200') can return the result as json or as plain text which leads to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
 
-One method when json gets requested and one when plain text gets requested.Spring will take care of
-selecting the correct endpoint.
+One method when json gets requested and one when plain text gets requested. Spring will take care of selecting the correct endpoint.
 
 [#result_style]
 == multiple content types & default content type
@@ -103,13 +96,13 @@ With version *2021.5* it is possible to generate the endpoints with the success 
 
 Since it is common practice to handle errors by throwing exceptions (e.g. in combination with the Spring `@ResponseStatus` annotation) the endpoint methods don't need to handle different return types, and it is possible to simply use the type of the success response.
 
-To switch between previous and new behavior there is a new mapping configuration to control the style of the return type named `result-style`.It has two possible values: `success` or `all`.This is currently a global mapping switch.
+To switch between previous and new behavior there is a new mapping configuration to control the style of the return type named `result-style`. It has two possible values: `success` or `all`. This is available on all mapping levels (([.badge .badge-since]+new with 2025.2+)).
 
-The default is `success`, i.e. the processor will automatically generate the code using the new behavior.In case the previous behavior is required set the `result-style` to `all`.
+The default is `success`, i.e. the processor will automatically generate the code using the new behavior. In case the previous behavior is required, set the `result-style` to `all`.
 
 [source,yaml]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: v12
 
 options:
   package-name: ...
@@ -121,7 +114,7 @@ map:
 
 **new behavior, since 2021.5**
 
-Example of the new code, using `result-style: success`.This is the default if `result-style` is not set.
+Example of the new code, using `result-style: success`. This is the default if `result-style` is not set.
 
 [source,java]
 ----
@@ -171,6 +164,160 @@ public interface Api {
 }
 ----
 
+== multiple responses with same content type
+
+[.badge .badge-since]+new with 2025.2+
+
+There is a case that was not properly handled before: if an endpoint of the OpenAPI description has multiple success responses with the same content type (e.g. `application/json`) but different response payloads.
+
+The processor did honor only one response status using the _last_ success response.
+
+Here is an example OpenAPI:
+
+[source, yaml]
+----
+openapi: 3.1.0
+info:
+  title: test multiple success responses
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      description: endpoint with multiple success responses
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+        '202':
+          description: another success
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Bar'
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        foo:
+          type: string
+
+    Bar:
+      type: object
+      properties:
+        bar:
+          type: string
+----
+
+The two result payloads `Foo` and `Bar` are handled by two possible ways now.
+
+Either by using `Object` as return type or by generating a marker interface that's implemented by both payload and using it as the result type.
+
+=== using `Object` as the result type
+
+This is the default. To return either `Foo` or `Bar` from the endpoint method it uses `Object` as the return type.
+
+[source,java]
+----
+package generated.api;
+
+import annotation.Mapping;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public interface Api {
+
+    @Mapping("/foo")
+    Object getFooApplicationJson();
+
+}
+
+----
+
+=== using a marker interface as result type
+
+An `Object` return type is obviously not very descriptive. It is impossible to know from the interface which results are possible.
+
+To improve on that situation the processor can generate a marker interface that is more descriptive and helps with navigation in the IDE.
+
+Generation of the marker interface is enabled by adding the `response-interface` option:
+
+[source,yaml]
+----
+openapi-processor-mapping: v12
+
+options:
+  package-name: ...
+  # ...
+  response-interface: true
+----
+
+The generated interface will now look like this:
+
+[source,java]
+----
+package generated.api;
+
+import annotation.Mapping;
+import generated.model.Foo;
+import generated.model.GetFooBarAApplicationJsonResponse;
+import generated.model.GetFooBarBApplicationJsonResponse;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public interface Api {
+
+    @Mapping("/foo")
+    GetFooApplicationJsonResponse getFooApplicationJson(); // <1>
+
+}
+
+----
+
+<1> instead of returning `Object` it does return the marker interface type `GetFooApplicationJsonResponse`.
+
+The marker interface is an empty interface and its name is derived from http method, path and content type to create a unique name.
+
+[source,java]
+----
+package generated.model;
+
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public interface GetFooApplicationJsonResponse {
+}
+----
+
+The response payload classes `Foo` and `Bar` will both implement this interface:
+
+[source, java]
+----
+package generated.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public class Foo implements GetFooApplicationJsonResponse {
+
+    @JsonProperty("foo")
+    private String foo;
+
+    // ...
+}
+
+----
+
+If the response type (`Foo` in this case) is used on multiple endpoints with multiple success response status it will implement multiple marker interfaces.
+
+In case one of the success responses is a primitive result (like `String`) the processor will fall back to using `Object` because it can't hide the primitive type behind a marker interface.
 
 == multiple content types, default content type & result wrapper
 
@@ -206,5 +353,4 @@ public interface Api {
 }
 ----
 
-The response wraps the type by a `ResponseEntity` and to handle the multiple response types the
-generic parameter is the *unknown* type.
+The response wraps the type by a `ResponseEntity` and to handle the multiple response types the generic parameter is the *unknown* type.
