@@ -6,7 +6,7 @@ It is defined like below, and it should be added to the `map/types` section in t
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: io.openapiprocessor.sample
@@ -15,6 +15,7 @@ options:
 map:
   types:
     - type: {source type} => {target type}
+      # optional
       generics:
         - {a generic type}
         - {another generic type}
@@ -26,6 +27,7 @@ A single global mapping can have the following properties:
 [source,yaml]
 ----
 - type: {source type} => {target type}
+  # optional
   generics:
     - {a generic type}
     - {another generic type}
@@ -143,7 +145,7 @@ It is possible to create type mappings with nested generics types. Here are a fe
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: generated

@@ -121,7 +121,52 @@ map:
         - add: request => javax.servlet.http.HttpServletRequest
 ----
 
-This will add a parameter `request` to the endpoint method.
+Given the mapping configuration above and the following endpoint description:
+
+[source,yaml]
+----
+openapi: 3.1.0
+info:
+  title: test additional endpoint parameter
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      parameters:
+        - name: foo
+          description: query, required
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor will generate the endpoint method with an additional parameter `request`:
+
+[source,java]
+----
+package generated.api;
+
+import annotation.Mapping;
+import annotation.Parameter;
+import generated.support.Generated;
+import javax.servlet.http.HttpServletRequest;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public interface Api {
+
+    @Mapping("/foo")
+    void getFoo(
+            @Parameter String foo,
+            @Parameter HttpServletRequest request);
+
+}
+----
+footnote:annotations[note that the annotation used here are just simplified _test_ annotations, the real code will have the proper framework annotations]
 
 == unnecessary parameter
 
@@ -183,5 +228,5 @@ public interface Api {
     void getFoo();
 
 }
-
 ----
+footnote:annotations[]

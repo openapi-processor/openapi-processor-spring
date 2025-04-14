@@ -32,7 +32,7 @@ By adding a `null` mapping for the `/foo` endpoint (this does work only on the e
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 map:
   paths:

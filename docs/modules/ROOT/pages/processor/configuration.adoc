@@ -446,7 +446,7 @@ this controls if the `targetDir` is the source root folder or if there is anothe
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   target-dir:

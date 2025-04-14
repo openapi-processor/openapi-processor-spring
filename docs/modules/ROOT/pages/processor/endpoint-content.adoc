@@ -64,14 +64,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface Api {
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"application/json"})
+    @GetMapping( path = "/foo", produces = {"application/json"})
     Foo getFooApplicationJson();
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"text/plain"})
+    @GetMapping( path = "/foo", produces = {"text/plain"})
     String getFooTextPlain();
 
 }
@@ -125,14 +121,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface Api {
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"application/json", "application/xml"})
+    @GetMapping( path = "/foo", produces = {"application/json", "application/xml"})
     Foo getFooApplicationJson();
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"text/plain", "application/xml"})
+    @GetMapping( path = "/foo", produces = {"text/plain", "application/xml"})
     String getFooTextPlain();
 
 }
@@ -151,14 +143,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface Api {
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"application/json", "application/xml"})
+    @GetMapping( path = "/foo", produces = {"application/json", "application/xml"})
     Object getFooApplicationJson();
 
-    @GetMapping(
-            path = "/foo",
-            produces = {"text/plain", "application/xml"})
+    @GetMapping( path = "/foo", produces = {"text/plain", "application/xml"})
     Object getFooTextPlain();
 
 }
@@ -233,7 +221,7 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
 
-    @Mapping("/foo")
+    @GetMapping("/foo")
     Object getFooApplicationJson();
 
 }

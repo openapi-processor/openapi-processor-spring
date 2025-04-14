@@ -7,7 +7,7 @@ The position of the `@Valid` annotation on reactive types has changed in 2024.2.
 
 [source,java]
 ----
-    @Mapping("/foo-flux")
+    @PostMapping(path = "/foo-flux")
     void postFooFlux(@Parameter Flux<@Valid Bar> body);
 ----
 
@@ -15,7 +15,7 @@ Unfortunately validation did not happen. Spring needs the `@Valid` annotation on
 
 [source,java]
 ----
-    @Mapping("/foo-flux")
+    @PostMapping(path = "/foo-flux")
     void postFooFlux(@Parameter @Valid Flux<Bar> body);
 ----
 

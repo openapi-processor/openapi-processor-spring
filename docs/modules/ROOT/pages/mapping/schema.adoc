@@ -61,7 +61,7 @@ Using a typical mapping the processor will use `java.time.Year` instead of a sim
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: generated
@@ -85,7 +85,7 @@ Adding the annotation mapping for this at the global type level
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: generated
@@ -145,7 +145,7 @@ That is not wanted. To avoid it, the annotation mapping should be added to the n
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
   package-name: generated

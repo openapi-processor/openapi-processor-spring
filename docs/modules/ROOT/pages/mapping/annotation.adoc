@@ -102,7 +102,7 @@ Assume the following mapping:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11
+openapi-processor-mapping: v12
 
 options:
 
@@ -219,7 +219,7 @@ and a `mapping.yaml` with annotation type mappings:
 
 [source,yaml]
 ----
-openapi-processor-mapping: v11 # <1>
+openapi-processor-mapping: v12 # <1>
 
 options:
   package-name: io.openapiprocessor.openapi
