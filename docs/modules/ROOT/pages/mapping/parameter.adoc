@@ -122,3 +122,66 @@ map:
 ----
 
 This will add a parameter `request` to the endpoint method.
+
+== unnecessary parameter
+
+It may also be useful to remove a parameter, maybe it is handled by a request filter and is not needed by the endpoint method.
+
+Again, even if it is possible to add it at the global level, it is best used at the endpoint level.
+
+[source,yaml]
+----
+openapi-processor-mapping: v12
+
+options:
+  package-name: generated
+
+map:
+  paths:
+    /foo:
+      parameters:
+        - drop: foo
+----
+
+Given the configuration above and the following endpoint description:
+
+[source,yaml]
+----
+openapi: 3.1.0
+info:
+  title: test unnecessary endpoint parameter
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      parameters:
+        - name: foo
+          description: query, required
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: empty
+----
+
+the processor will generate the endpoint method without the `foo` parameter.
+
+[source,java]
+----
+package generated.api;
+
+import annotation.Mapping;
+import generated.support.Generated;
+
+@Generated(value = "openapi-processor-core", version = "test")
+public interface Api {
+
+    @Mapping("/foo")
+    void getFoo();
+
+}
+
+----
