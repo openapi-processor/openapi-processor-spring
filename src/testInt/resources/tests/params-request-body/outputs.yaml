@@ -1,3 +1,4 @@
+prefix: generated
 items:
   - outputs/api/Api.java
-  - outputs/<model>/Book.java
+  - outputs/model/<model>/Book.java

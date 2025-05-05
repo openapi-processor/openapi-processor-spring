@@ -1,2 +1,3 @@
+prefix: generated
 items:
   - outputs/api/EndpointApi.java

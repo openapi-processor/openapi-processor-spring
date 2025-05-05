@@ -13,7 +13,7 @@ import io.openapiprocessor.test.*
 import io.openapiprocessor.test.TestSet
 
 /**
- * run end to end integration test.
+ * run end-to-end integration test.
  */
 class ProcessorEndToEndSpec: StringSpec({
 
@@ -26,7 +26,7 @@ class ProcessorEndToEndSpec: StringSpec({
             val test = Test(testSet, testFiles)
 
             TestSetRunner(test, testSet)
-                .runOnNativeFileSystem()
+                .run()
                 .shouldBeTrue()
         }
     }
