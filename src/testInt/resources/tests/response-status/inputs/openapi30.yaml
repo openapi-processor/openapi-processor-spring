@@ -1,0 +1,12 @@
+openapi: 3.0.2
+info:
+  title: response status
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      responses:
+        '204':
+          description: empty

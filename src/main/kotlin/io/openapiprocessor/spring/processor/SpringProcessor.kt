@@ -15,6 +15,7 @@ import io.openapiprocessor.spring.Version
 import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
+import io.openapiprocessor.spring.writer.java.StatusAnnotationWriter
 import io.openapiprocessor.test.api.OpenApiProcessorTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -64,6 +65,7 @@ class SpringProcessor : OpenApiProcessorTest {
                     MethodWriter(
                         options,
                         identifier,
+                        StatusAnnotationWriter(annotations),
                         MappingAnnotationWriter(annotations),
                         ParameterAnnotationWriter(annotations),
                         beanValidations,

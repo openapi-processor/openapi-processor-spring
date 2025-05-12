@@ -1,0 +1,9 @@
+openapi-processor-mapping: v13
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  result-style: success
+  result-status: true

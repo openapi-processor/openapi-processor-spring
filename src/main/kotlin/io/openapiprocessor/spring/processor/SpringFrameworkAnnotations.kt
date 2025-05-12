@@ -8,6 +8,7 @@ package io.openapiprocessor.spring.processor
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Annotation
+import io.openapiprocessor.core.model.EndpointResponseStatus
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter
@@ -42,6 +43,10 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
                 UNKNOWN_ANNOTATION
             }
         }
+    }
+
+    override fun getAnnotation(status: EndpointResponseStatus): Annotation {
+        return RESPONSE_STATUS_ANNOTATION
     }
 
     private fun getAnnotation(key: String): Annotation {
@@ -89,6 +94,12 @@ private val PARAMETER_ANNOTATIONS = hashMapOf(
     "multipart-part"  to Annotation (getAnnotationName("RequestPart")),
     "body"            to Annotation (getAnnotationName("RequestBody"))
 )
+
+private val RESPONSE_STATUS_ANNOTATION = Annotation (
+    getAnnotationName("ResponseStatus"),
+    linkedMapOf("code" to SimpleParameterValue(
+        "HttpStatus", "org.springframework.http.HttpStatus"
+    )))
 
 private val UNKNOWN_ANNOTATION = Annotation("Unknown")
 
