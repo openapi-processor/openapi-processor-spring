@@ -37,12 +37,12 @@ class MappingAnnotationWriter(private val annotations: SpringFrameworkAnnotation
             mapping += '}'
         }
 
-        val contentTypes = endpointResponse.contentTypes
-        if (contentTypes.isNotEmpty()) {
+        val produces = endpointResponse.contentTypes
+        if (produces.isNotEmpty()) {
             mapping += ", "
             mapping += "produces = {"
 
-            mapping += contentTypes.joinToString(", ") {
+            mapping += produces.joinToString(", ") {
                 quote(it)
             }
 
