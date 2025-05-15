@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Generated(value = "openapi-processor-spring", version = "test")
 public interface Api {
 
-    @ResponseStatus(HttpStatus.valueOf(204))
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping(path = "/foo")
     void getFoo();
 

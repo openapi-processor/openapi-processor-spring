@@ -24,12 +24,10 @@ class StatusAnnotationWriter(private val annotations: FrameworkAnnotations): Cor
 
     private fun createStatusAnnotation(status: EndpointResponseStatus): String {
         val data = annotations.getAnnotation(status)
-        val statusCode = status.statusCode.toInt()
+        val status = data.parameters["code"]
 
         var annotation = data.annotationName
-        annotation += "("
-        annotation += "HttpStatus.valueOf($statusCode)"
-        annotation += ")"
+        annotation += "(${status!!.value})"
         return annotation
     }
 }

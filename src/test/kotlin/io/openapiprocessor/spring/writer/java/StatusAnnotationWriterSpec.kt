@@ -32,6 +32,6 @@ class StatusAnnotationWriterSpec: StringSpec({
 
         writer.write(target, ep, ep.endpointResponses.first())
 
-        target.toString() shouldBeEqual """@ResponseStatus(HttpStatus.valueOf(204))"""
+        target.toString() shouldBeEqual """@ResponseStatus(HttpStatus.NO_CONTENT)"""
     }
 })
