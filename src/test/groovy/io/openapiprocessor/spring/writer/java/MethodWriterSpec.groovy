@@ -81,6 +81,7 @@ class MethodWriterSpec extends Specification {
 
         then:
         target.toString () == """\
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping(path = "${endpoint.path}")
     void getFoo(@RequestParam Map<String, String> foo);
 """
