@@ -6,9 +6,6 @@
 package io.openapiprocessor.spring
 
 import io.openapiprocessor.test.*
-import io.openapiprocessor.test.test30_D_
-
-data class TestSet(val name: String, val openapi: String)
 
 val ALL_30: List<TestParams> = listOf(
     test30_D_("endpoint-http-mapping"),
