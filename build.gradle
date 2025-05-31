@@ -30,7 +30,6 @@ testing {
 
         testInt(JvmTestSuite) {
             useJUnitJupiter(libs.versions.junit.get())
-            testType = TestSuiteType.INTEGRATION_TEST
 
             dependencies {
                 implementation(project())
