@@ -43,7 +43,7 @@ testing {
             }
 
             targets {
-                all {
+                configureEach {
                     testTask.configure {
                         shouldRunAfter(test)
                     }
@@ -135,6 +135,8 @@ dependencies {
     testIntImplementation (libs.mockk)
     testIntImplementation (libs.logback)
     testIntImplementation (libs.jimfs)
+    testIntImplementation (libs.spring.web)
+    testIntImplementation (libs.spring.data)
 }
 
 //tasks.named("dependencyUpdates").configure {
