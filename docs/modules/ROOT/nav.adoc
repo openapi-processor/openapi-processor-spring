@@ -21,6 +21,7 @@
 ** xref:mapping/parameter.adoc[Global Parameter Mapping]
 ** xref:mapping/response.adoc[Global Response Mapping]
 ** xref:mapping/result.adoc[Global Result Mapping]
+** xref:mapping/result-status.adoc[Global Result Status Mapping]
 ** xref:mapping/result-style.adoc[Global Result Style]
 ** xref:mapping/single-multi.adoc[Global Single & Multi Mapping]
 ** xref:mapping/endpoint.adoc[Endpoint Mapping]

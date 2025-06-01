@@ -1,0 +1,50 @@
+include::partial$links.adoc[]
+include::partial$vars.adoc[]
+
+= Result Status
+
+[.badge .badge-since]+since 2025.3+
+
+The `result-status` configuration controls if the processor adds a `@ResponseStatus` annotation. If enabled (default) it will automatically add a `@ResponseStatus` annotation if the OpenAPI endpoint has a success result code not equal to 200 OK. I.e, 2xx != 200.
+
+The default response status of Spring Boot is 200, so the processor will not add an unnecessary annotation for 200.
+
+[NOTE]
+====
+This will conflict with manually added `@ResponseStatus` annotations.
+
+To keep the old behavior, i.e., no automatically added `@ResponseStatus` annotations, set `result-status: false` on the global mapping level.
+====
+
+It is configured by adding it to the mapping section of the configuration file. It is available on all levels, i.e., global, endpoint and endpoint method.
+
+[source,yaml]
+----
+openapi-processor-mapping: {var-mapping-version}
+
+options:
+    # ...
+
+map:
+  # result-status: true is the default
+  # setting it to false on the global level disables it
+  result-status: false
+
+  paths:
+    # enable it for a specific endpoint
+    /foo:
+      result-status: true
+
+      # ... or for a specific method of an endpoint
+      #get:
+      #  result-status: true
+----
+
+* **result-status** (optional).
+
+** `true`: add a `@ResponseStatus` annotation if the response status of a response is a success code not equal to 200.
+
+** `false` (default before 2025.3): do not generate any `@ResponseStatus` annotation.
+
+** `result-status` is available at the endpoint & http method level.
+
