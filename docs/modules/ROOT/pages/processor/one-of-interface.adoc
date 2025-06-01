@@ -10,7 +10,7 @@ This is the default behavior of the processor.
 
 The problem with `Object` is that it doesn't provide any information at all. You have to know (from the OpenAPI) what that `Object` could be.
 
-To improve usability the processor is able to generate marker interfaces to provide a bit more information than `Object`.
+To improve usability, the processor is able to generate marker interfaces to provide a bit more information than `Object`.
 
 [#_marker_interfaces]
 == marker interfaces

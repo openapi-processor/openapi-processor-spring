@@ -2,9 +2,7 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-The global mapping variations are also available as explicit endpoint mappings. Instead of adding
-the mapping in the global sections `map/types`, `map/parameters` and `map/responses` they can
-be placed in the `map/paths` section as properties to an endpoint given by its path.
+The global mapping variations are also available as explicit endpoint mappings. Instead of adding the mapping in the global sections `map/types`, `map/parameters` and `map/responses` they can be placed in the `map/paths` section as properties to an endpoint given by its path.
 
 [source,yaml]
 ----
@@ -16,20 +14,20 @@ map:
     # a path
     /foo:
 
-      # path specific result wrapper
+      # path-specific result wrapper
       result: {target type}
 
-      # path specific single wrapper
+      # path-specific single wrapper
       single: {target type}
 
-      # path specific multi wrapper
+      # path-specific multi wrapper
       multi: {target type}
 
-      # list of path specific mappings
+      # list of path-specific mappings
       types:
         - from: {source type}  =>  {target type}
 
-      # list of path specific parameter mappings, mapped by parameter name
+      # list of path-specific parameter mappings, mapped by parameter name
       parameters:
         - name: {parameter name}  =>  {target type}
 
@@ -39,7 +37,7 @@ map:
         # add an extra annotation to parameters of type source type
         - type: {source type}  @  {annotation type}
 
-      # list of path specific content mappings, mapped by content type
+      # list of path-specific content mappings, mapped by content type
       responses:
         - content: {content type}  =>  {target type}
 
@@ -48,30 +46,30 @@ map:
       # excluding an endpoint
       exclude: true
 
-      # path specific result wrapper
+      # path-specific result wrapper
       result: {target type}
 
-      # path specific single wrapper
+      # path-specific single wrapper
       single: {target type}
 
-      # path specific multi wrapper
+      # path-specific multi wrapper
       multi: {target type}
 
-      # list of path specific mappings
+      # list of path-specific mappings
       types:
         - from: {source type}  =>  {target type}
 
-      # list of path specific parameter mappings, mapped by parameter name
+      # list of path-specific parameter mappings, mapped by parameter name
       parameters:
         - name: {parameter name}  =>  {target type}
 
-        # add a (usually technical) parameter that is not described in the OpenAPI
+        # add a (usually technical) parameter not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
 
         # add an extra annotation to parameters of type source type
         - type: {source type}  @  {annotation type}
 
-      # list of path specific content mappings, mapped by content type
+      # list of path-specific content mappings, mapped by content type
       responses:
         - content: {content type}  =>  {target type}
 ----
@@ -81,7 +79,7 @@ have any effect on other endpoints.
 
 == Endpoint mappings by http method
 
-It is possible to add mappings that apply only to a specific http method. Motivation for this is limiting the mapping only to the place where it is needed. Http method mappings have priority over other mappings. In general, the most specific mapping is used.
+It is possible to add mappings that apply only to a specific http method. The motivation for this is limiting the mapping only to the place where it is necessary. Http method mappings have priority over other mappings. In general, the most specific mapping is used.
 
 Here are a few examples of possible http endpoint mappings:
 

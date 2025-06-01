@@ -1,10 +1,8 @@
 = (global) Response mappings
 
-Global response mapping will replace the result type of the endpoint in the api description based on
- its **content type** to the given java type.
+Global response mapping will replace the result type of the endpoint in the api description based on its **content type** to the given java type.
 
-It is defined like below, and it should be added to the `map/responses` section in the mapping.yaml
-which is a list of global response mappings.
+It is defined like below, and it should be added to the `map/responses` section in the mapping.yaml which is a list of global response mappings.
 
 A single global response mapping can have the following properties:
 
@@ -18,22 +16,17 @@ A single global response mapping can have the following properties:
 
 * **content** is required.
 
-** **{content type}** is the name of the content type of the endpoint response that should be replaced
-  by **{target type}**.
+** **{content type}** is the content type of the endpoint response that should be replaced by **{target type}**.
 
-** **{target type}** is the fully qualified class name of the java type that should be used for all
-endpoint content types **{content type}**.
+** **{target type}** is the fully qualified class name of the java type that should be used for all endpoint content types **{content type}**.
 
-* **generics** defines the list of types that should be used as generic type parameters to the
-java type given by **{target type}**.
+* **generics** defines the list of types that should be used as generic type parameters to the java type given by **{target type}**.
 
 [CAUTION]
 ====
-Since the processor will simply match the content type string take care that all responses of this
-content type should really use the same type!
+Since the processor will simply match the content type string, take care that all responses of this content type should really use the same type!
 
-This is probably only useful for a vendor content types. Globally mapping the content type for
-example of `application/json` does not look like a good idea.
+This is probably only useful for vendor content types. Globally mapping the content type for example of `application/json` does not look like a good idea.
 ====
 
 == Example
@@ -49,8 +42,7 @@ map:
     - content: application/vnd.something => io.openapiprocessor.Something
 ----
 
-and an openapi.yaml with multiple endpoints returning their result as content type
-`application/vnd.something`
+and an openapi.yaml with multiple endpoints returning their result as content type `application/vnd.something`
 
 [source,yaml,subs="attributes"]
 ----
@@ -81,6 +73,4 @@ paths:
                 type: string
 ----
 
-the processor will use `io.openapiprocessor.Something` as java type for **all** responses with
-the content type `application/vnd.something`.
-
+the processor will use `io.openapiprocessor.Something` as the java type for **all** responses with the content type `application/vnd.something`.

@@ -43,7 +43,7 @@ map:
       - listB @ io.oap.FooC
 ----
 
-NOTE: openapi-processor will only recognize *strings* values of an extension. It will ignore any other type.
+NOTE: openapi-processor will only recognize *string* values of an extension. It will ignore any other type.
 
 The mapping allows two variations:
 

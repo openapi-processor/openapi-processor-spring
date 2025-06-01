@@ -57,7 +57,7 @@ public enum Type {
 
 This works without issues if used as part of a request payload.
 
-Unfortunately it may cause an error, like the following if the enum is used as a query parameter:
+Unfortunately, it may cause an error, like the following if the enum is used as a query parameter:
 
 ====
 Failed to convert value of type `'java.lang.String'` to required type `'io.openapiprocessor.openapi.model.Type'`; Failed to convert from type [`java.lang.String`] to type [`@org.springframework.web.bind.annotation.RequestParam io.openapiprocessor.openapi.model.Type`] for value [`one`]
@@ -74,7 +74,7 @@ To handle this issue we can either use the `enum-type` <<_enum_type_string>> or 
 [#_enum_type_string]
 == string
 
-Do not create a Java enum classes for OpenAPI enums and simply use `java.lang.String`.
+Do not create Java enum classes for OpenAPI enums and simply use `java.lang.String`.
 
 [source,yaml,title=mapping.yaml,subs="attributes"]
 ----
@@ -98,7 +98,7 @@ public interface FooApi {
 
 In this simple form it doesn't provide any help to make sure that the incoming values is a valid value as described in the OpenAPI.
 
-By enabling bean-validation the processor will generate and use a custom validation annotation to check that the incoming string is an allowed value.
+By enabling bean-validation, the processor will generate and use a custom validation annotation to check that the incoming string is an allowed value.
 
 [source,yaml,title=mapping.yaml,subs="attributes"]
 ----

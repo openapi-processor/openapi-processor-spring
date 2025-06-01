@@ -1,15 +1,15 @@
 = log mapping lookup
 include::partial$vars.adoc[]
 
-It is possible to let a processor log all the mapping lookups. It *may* be useful to understand why a mapping does not work.
+It is possible to let a processor log all the mapping lookups. It *may* be useful to understand why mapping does not work.
 
-If a mapping doesn't work the first step is to check if the processor is applying it or if it ignores it. The mapping logging will report which mappings were selected for an OpenAPI type.
+If a mapping doesn't work, the first step is to check if the processor is applying it or if it ignores it. The mapping logging will report which mappings were selected for an OpenAPI type.
 
-If the processor doesn't select the mapping there may be something wrong with the mapping. Maybe a typo.
+If the processor doesn't select the mapping, there may be something wrong with the mapping. Maybe a typo.
 
-In case the processor uses the mapping, but it still doesn't behave as expected it may be a bug.
+In case the processor uses the mapping, but it still doesn't behave as expected, it may be a bug.
 
-To control the logging there are two new xref:processor/configuration.adoc#_logging[logging options].
+To control the logging, there are two new xref:processor/configuration.adoc#_logging[logging options].
 
 [source,yaml,subs="attributes"]
 ----
@@ -87,7 +87,7 @@ The example is a small part of the link:https://github.com/openapi-processor/ope
 
 Maven can handle both mapping targets. If the `mapping-target` is set to `logger` it is necessary to enable the mapping logger `io.openapiprocessor.core.converter.mapping` to see any output.
 
-For example by running `maven` with:
+For example, by running `maven` with:
 
 ----
 ./mvnw compile -Dorg.slf4j.simpleLogger.log.io.openapiprocessor.core.converter.mapping=info
@@ -129,11 +129,11 @@ logging:
   mapping: true
 ----
 
-to get the log level based output. Remember to enable the logger in this case as described above.
+to get the log-level-based output. Remember to enable the logger in this case as described above.
 
 == gradle
 
-Gradle requires the `mapping-target` to be `stdout`. Gradle can only globally enable log levels which is very noisy. The best option to log the mapping lookups is simply to write them to `stdout`.
+Gradle requires the `mapping-target` to be `stdout`. Gradle can only globally enable log levels, which is deafening. The best option to log the mapping lookups is simply to write them to `stdout`.
 
 === summary
 

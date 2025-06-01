@@ -3,10 +3,9 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-The processor reads the configuration from the (mandatory) `mapping.yaml` file.It does contain
-some general options and the xref:mapping/index.adoc[mapping] type information.
+The processor reads the configuration from the (mandatory) `mapping.yaml` file. It does contain some general options and the xref:mapping/index.adoc[mapping] type information.
 
-A mapping yaml looks like this:
+A mapping YAML looks like this:
 
 [source,yaml,subs="attributes"]
 ----
@@ -69,19 +68,19 @@ options:
 
 === model-name-suffix
 
-**optional** (string, default is empty (i.e. it is disabled))
+**optional** (string, default is empty (i.e., it is disabled))
 
-The `model-name-suffix` option sets a suffix that is automatically appended to all generated model and enum classes.
+The `model-name-suffix` option sets the suffix automatically appended to all generated model and enum classes.
 
 The suffix helps to
 
 * avoid duplicate class names in generated code and normal code
-* makes it easier to recognize which role or in which context a class is used. Is it a data transfer class or is it a domain class?
-* keeps the suffix "_noise_" out of the OpenAPI description
+* make it easier to recognize which role or in which context a class is used. Is it a data transfer class or is it a domain class?
+* keep the suffix "_noise_" out of the OpenAPI description
 
-Usually you will separate the classes by putting them in different packages. This helps to distinguish the classes, but when both are used in the same code, i.e. when converting one format to the other, it is a lot easier to distinguish them by their class name instead of their package name.
+Usually you will separate the classes by putting them in different packages. This helps to distinguish the classes, but when both are used in the same code, i.e., when converting one format to the other, it is a lot easier to distinguish them by their class name instead of their package name.
 
-If a schema name from the OpenAPI description already ends with the `model-name-suffix`, the processor will **not** append the suffix. This allows to migrate an existing api with a suffix in the API to `model-name-suffix` step by step.
+If a schema name from the OpenAPI description already ends with the `model-name-suffix`, the processor will **not** append the suffix. This allows migrating an existing api with a suffix in the API to `model-name-suffix` step by step.
 
 ==== example
 
@@ -122,8 +121,10 @@ openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
-  model-name-suffix: Resource # <2>
+  model-name-suffix: Resource # <1>
 ----
+
+<1> the suffix configuration
 
 *Java*
 [source,java]
@@ -132,12 +133,12 @@ options:
 public interface Api {
 
     @Mapping("/foo")
-    FooResource getFoo(); // <3>
+    FooResource getFoo(); // <1>
 
 }
 
 // pojos
-public class FooResource { // <3>
+public class FooResource { // <1>
 
     // ...
 
@@ -147,16 +148,14 @@ public class FooResource { // <3>
     // ...
 }
 
-public class BarResource { // <4>
+public class BarResource { // <2>
 
     // ...
 }
 ----
 
-<1> a schema name without suffix
-<2> the suffix configuration
-<3> the class name of the `Foo` schema got the configured `Resource` suffix
-<4> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
+<1> the class name of the `Foo` schema got the configured `Resource` suffix
+<2> the class name of the `BarResource` is identical to the original schema name. Since the existing suffix is equal to `model-name-suffix` it is ignored. Otherwise, This prevents funny class names like `BarResourceResource`.
 
 
 === model-type
@@ -224,7 +223,7 @@ public class Foo {
 
 **optional** (boolean, `true` or `false`, default is `true`)
 
-enables or disables generation of accessor methods, i.e. getter and setter. The properties are still private. This is only useful in combination with an object annotation mapping that adds the accessors. For example `lombok.Getter` & `lombok.Setter`.
+enables or disables generation of accessor methods, i.e., getter and setter. The properties are still private. This is only useful in combination with an object annotation mapping that adds the accessors. For example `lombok.Getter` & `lombok.Setter`.
 
 [NOTE]
 This is only used with `model-type: default`. It is ignored with `model-type: record`.
@@ -359,7 +358,7 @@ control generation of the `@JsonProperty` annotation:
 
 *optional** (string, `default`, `string` or `framework`, default is `default`)
 
-There are 3 ways to handle OpenAPI enum definitions, `default`, `string` and `framework`.
+There are three ways to handle OpenAPI enum definitions, `default`, `string` and `framework`.
 
 *`default`* generates a typical java enum class.
 
@@ -382,7 +381,7 @@ options:
 
 === base-path
 
-parent key to group base path related options. See xref:processor/server-url.adoc[].
+parent key to group base path-related options. See xref:processor/server-url.adoc[].
 
 [#_base_pathserver_url]
 === base-path:server-url
@@ -401,7 +400,7 @@ See xref:_basepath_propertiesname[]
 
 **optional** (string, default is `api.properties`)
 
-name of the properties resource file that will contain the `base-path` configuration.
+name of the property resource file that will contain the `base-path` configuration.
 
 See xref:_base_pathserver_url[]
 
@@ -456,7 +455,7 @@ options:
 
 == logging:
 
-This section contains keys for logging mapping lookups. It may be useful to locate mappings that should be used, but are not.
+This section contains keys for logging mapping lookups. It may be useful to locate mappings that should be used but are not.
 
 === mapping:
 
@@ -480,18 +479,16 @@ This section contains keys to disable breaking changes.
 
 **optional** (boolean, `true` or `false`, default is `true`)
 
-keep the pre-2024.2 behaviour. See xref:processor/identifier.adoc[Identifiers].
+keep the pre-2024.2 behavior. See xref:processor/identifier.adoc[Identifiers].
 
 === bean-validation-valid-on-reactive
 
 **optional** (boolean, `true` or `false`, default is `true`)
 
-keep the pre-2024.2 behaviour. See xref:processor/bean-validation.adoc[Bean Validation].
+keep the pre-2024.2 behavior. See xref:processor/bean-validation.adoc[Bean Validation].
 
 == map:
 
-Using type mapping we can tell the processor to map types (schemas) from an `openapi.yaml`
-description to a specific existing java type instead of generating a model class from the source
-OpenAPI type.
+Using type mapping, we can tell the processor to map types (schemas) from an `openapi.yaml` description to a specific existing java type instead of generating a model class from the source OpenAPI type.
 
 This is one of the core features and has his own description in xref:mapping/index.adoc[mapping].

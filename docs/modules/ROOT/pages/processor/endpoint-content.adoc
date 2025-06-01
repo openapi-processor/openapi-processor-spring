@@ -51,7 +51,7 @@ components:
 
 A client request uses the request `Accept` header to tell the api which result content types it can handle.
 
-Using a single endpoint method it has to decide which response to create.This leads to some boring `if/else` code. To avoid this the processor creates one endpoint method for each possible response.
+Using a single endpoint method, it has to decide which response to create. This leads to some boring `if/else` code. To avoid this, the processor creates one endpoint method for each possible response.
 
 == multiple content types
 
@@ -75,14 +75,14 @@ public interface Api {
 }
 ----
 
-The apis normal response (status '200') can return the result as json or as plain text which leads to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
+Apis normal response (status '200') can return the result as json or as plain text which leads to two methods for the same endpoint but with a different `produces` list in the mapping annotation.
 
-One method when json gets requested and one when plain text gets requested. Spring will take care of selecting the correct endpoint.
+One method when JSON gets requested and one when plain text gets requested. Spring will take care of selecting the correct endpoint.
 
 [#result_style]
 == multiple content types & default content type
 
-In the (contrived) example our api does also define another content type for all other result status codes (usually the errors): xml.
+In the (contrived) example our api does also define another content type for all other result status codes, (usually the errors): XML.
 
 If an endpoint returns multiple types, a success response (typically 200 ok) and at least one error response, the processor has to pick a return type for the endpoint methods.
 
@@ -94,9 +94,9 @@ With version *2021.5* it is possible to generate the endpoints with the success 
 
 Since it is common practice to handle errors by throwing exceptions (e.g. in combination with the Spring `@ResponseStatus` annotation) the endpoint methods don't need to handle different return types, and it is possible to simply use the type of the success response.
 
-To switch between previous and new behavior there is a new mapping configuration to control the style of the return type named `result-style`. It has two possible values: `success` or `all`. This is available on all mapping levels (([.badge .badge-since]+new with 2025.2+)).
+To switch between previous and new behavior, there is a new mapping configuration to control the style of the return type named `result-style`. It has two possible values: `success` or `all`. This is available on all mapping levels (([.badge .badge-since]+new with 2025.2+)).
 
-The default is `success`, i.e. the processor will automatically generate the code using the new behavior. In case the previous behavior is required, set the `result-style` to `all`.
+The default is `success`, i.e., the processor will automatically generate the code using the new behavior. In case the previous behavior is required, set the `result-style` to `all`.
 
 [source,yaml,subs="attributes"]
 ----
@@ -154,7 +154,7 @@ public interface Api {
 }
 ----
 
-== multiple responses with same content type
+== multiple responses with the same content type
 
 [.badge .badge-since]+new with 2025.2+
 
@@ -230,11 +230,11 @@ public interface Api {
 
 ----
 
-=== using a marker interface as result type
+=== using a marker interface as a result type
 
-An `Object` return type is obviously not very descriptive. It is impossible to know from the interface which results are possible.
+An `Object` return type is not very descriptive. It is impossible to know from the interface which results are possible.
 
-To improve on that situation the processor can generate a marker interface that is more descriptive and helps with navigation in the IDE.
+To improve on that situation, the processor can generate a marker interface that is more descriptive and helps with navigation in the IDE.
 
 Generation of the marker interface is enabled by adding the `response-interface` option:
 
@@ -272,7 +272,7 @@ public interface Api {
 
 <1> instead of returning `Object` it does return the marker interface type `GetFooApplicationJsonResponse`.
 
-The marker interface is an empty interface and its name is derived from http method, path and content type to create a unique name.
+The marker interface is an empty interface, and its name is derived from http method, path and content type to create a unique name.
 
 [source,java]
 ----

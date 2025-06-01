@@ -139,13 +139,9 @@ void getEndpoint(@CookieValue(name = "foo") String foo);
 
 == additional parameters
 
-Sometimes it may be useful to have an additional endpoint parameter that is required for the
-implementation, but it should not be part of the OpenAPI description. Think of an `HttpServletRequest`
-or  a custom Spring `HandlerMethodArgumentResolver`.
+Sometimes it may be useful to have an additional endpoint parameter that is required for the implementation, but it should not be part of the OpenAPI description. Think of an `HttpServletRequest` or  a custom Spring `HandlerMethodArgumentResolver`.
 
-Such an additional parameter can be described in the mappings as an endpoint parameter. Assuming
-there is an endpoint `/foo` defined in the OpenAPI interfaces it is possible to add extra parameters
-by using an `add <parameter name>` `as <java type>` entry.
+Such an additional parameter can be described in the mappings as an endpoint parameter. Assuming there is an endpoint `/foo` defined in the OpenAPI interfaces it is possible to add extra parameters by using an `add <parameter name>` `as <java type>` entry.
 
 [source, yaml]
 ----
@@ -164,4 +160,3 @@ will add the *additional* parameter to the generated interface method.
 @GetMapping(path = "/foo")
 ResponseEntity<?> getFoo(@RequestParam(name = "bar") String bar, HttpServletRequest request);
 ----
-

@@ -11,7 +11,7 @@ The position of the `@Valid` annotation on reactive types has changed in 2024.2.
     void postFooFlux(@Parameter Flux<@Valid Bar> body);
 ----
 
-Unfortunately validation did not happen. Spring needs the `@Valid` annotation on the reactive wrapper to trigger the validation. Therefore `@Valid` is placed by default on the reactive wrapper:
+Unfortunately, validation did not happen. Spring needs the `@Valid` annotation on the reactive wrapper to trigger the validation. Therefore `@Valid` is placed by default on the reactive wrapper:
 
 [source,java]
 ----
@@ -19,4 +19,4 @@ Unfortunately validation did not happen. Spring needs the `@Valid` annotation on
     void postFooFlux(@Parameter @Valid Flux<Bar> body);
 ----
 
-To keep the old behaviour see xref:processor/configuration.adoc#_compatibility[compatibility].
+To keep the old behavior see xref:processor/configuration.adoc#_compatibility[compatibility].

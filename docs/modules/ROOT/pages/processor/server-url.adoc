@@ -42,7 +42,7 @@ it will generate a simple resource properties file with a single property `opena
 openapi.base.path = /api
 ----
 
-If there are multiple servers its index can be used to select it:
+If there are multiple servers, its index can be used to select it:
 
 [source,yaml,subs="attributes"]
 ----
@@ -65,11 +65,11 @@ The properties file is used to configure Spring Boots `server.servlet.context-pa
 server.servlet.context-path=${openapi.base.path}
 ----
 
-While it is possible to import the generated properties file it is probably better to simply use the generated properties as an additional profile.
+While it is possible to import the generated properties file, it is probably better to simply use the generated properties as an additional profile.
 
 == name of the properties file
 
-The default name of the generate properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[server-url:properties-name] option.
+The default name of the generated properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[server-url:properties-name] option.
 
 [source,yaml,subs="attributes"]
 ----
@@ -82,7 +82,7 @@ options:
 
 == destination directory
 
-By default, the processor will generate the java package structure directly below the `targetDir`. To creates the resource file it needs a second (`resources`) directory as target directory.
+By default, the processor will generate the java package structure directly below the `targetDir`. To create the resource file, it needs a second (`resources`) directory as target directory.
 
 This is handled by a new xref:processor/configuration.adoc#_target_dirlayout[option] to set the layout of the `targetDir`. Setting it to `standard`
 
@@ -112,9 +112,9 @@ To have a destination directory for generating the resource file, setting `serve
 
 == build configuration
 
-Consequence of the new layout is that for compilation it is necessary to update configure of the sources and resources directories in the build configuration.
+The consequence of the new layout is that for compilation it is necessary to update the configuration of the sources and resources directories in the build configuration.
 
-For example with gradle the `sourceSets` configuration would change to something like this:
+For example, with gradle the `sourceSets` configuration would change to something like this:
 
 [source,kotlin]
 ----

@@ -5,11 +5,14 @@ The `result-style` configuration controls how the processor handles the return t
 
 [source,yaml]
 ----
+# mapping.yaml header
+# ...
+
 map:
   #result-style: success  # use the success result type, this is the default
   result-style: all # use an Object return type
 
-  # result-style is available at endpoint & http method level.
+  # result-style is available at the endpoint & http method level.
   /foo:
     #result-style: success
 
@@ -19,7 +22,7 @@ map:
 
 * **result-style** (optional).
 
-** `success` ([.badge .badge-since]+default since 2021.5+): generates endpoint methods with the success response type even if it has error responses. This assumes that errors are reported by exceptions.
+** `success` ([.badge .badge-since]+default since 2021.5+): generates endpoint methods with the success response type even if it has error responses. This assumes that the errors are reported by exceptions.
 
 ** `all` (default before 2021.5): generates endpoint methods with an `Object` return type if it has error responses.
 

@@ -1,9 +1,7 @@
 = Basic (primitive) mappings
 include::partial$links.adoc[]
 
-The OpenAPI specification defines a couple of basic link:{openapi-spec-types}[data types]. The
-basic data types are built-in into the processor. That means it will map the basic types
-automatically to a corresponding java type. There is no explicit type mapping required.
+The OpenAPI specification defines a couple of basic link:{openapi-spec-types}[data types]. The basic data types are built-in into the processor. That means it will map the basic types automatically to a corresponding java type. There is no explicit type mapping required.
 
 The types with no default mapping can be mapped to a java type using the mapping configuration.
 

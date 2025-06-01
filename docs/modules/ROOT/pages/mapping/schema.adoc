@@ -3,16 +3,16 @@ include::partial$vars.adoc[]
 
 [.badge .badge-since]+since 2025.1+
 
-Schema mappings add a new (global) mapping level. They apply only to (object, i.e. dto) schema properties.
+Schema mappings add a new (global) mapping level. They apply only to (object, i.e., dto) schema properties.
 
-That means the mappings is only used when the source type is used as a property type in a generated dto class.
+That means the mappings are only used when the source type is used as a property type in a generated dto class.
 
 [NOTE]
 ====
 This is (currently) only supported on the global level and only for xref::mapping/annotation.adoc[].
 ====
 
-Schema mappings try to solve the case where a type should be annotated, but *only* if is used in a generated dto object. Especially it should *not* annotate parameters.
+Schema mappings try to solve the case where a type should be annotated, but *only* if it is used in a generated dto object. Especially it should *not* annotate parameters.
 
 The example will make this more clear.
 
@@ -75,7 +75,7 @@ map:
 
 Spring (with Jackson) may not serialize the type in the expected format by default. In case of `java.time.Year` it will be `String` and not a number.
 
-To change serialization Jackson provides the `JsonFormat` annotation:
+To change serialization, Jackson provides the `JsonFormat` annotation:
 
  @JsonFormat(JsonFormat.Shape.NUMBER_INT)
 
@@ -160,7 +160,7 @@ map:
     - type: integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER_INT)
 ----
 
-This tell the processor to add it only to the generated dto class and not to the interface.
+This tells the processor to add it only to the generated dto class and not to the interface.
 
 [source,java]
 ----

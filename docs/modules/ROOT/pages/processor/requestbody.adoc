@@ -62,8 +62,7 @@ and a `Book` pojo.
 
 == multipart/form-data
 
-For file uploads, where the `content` of the `requestBody` is `multipart/form-data`, the resulting
-code looks a bit different and requires a specific type mapping.
+For file uploads, where the `content` of the `requestBody` is `multipart/form-data`, the resulting code looks a bit different and requires a specific type mapping.
 
 The file upload in OpenAPI is described like this:
 
@@ -87,8 +86,7 @@ The file upload in OpenAPI is described like this:
 
 The `schema` must be of type `object` defining a property for each part in the multipart body.
 
-Instead of generating a `@RequestBody` parameter for the `object` schema the processor creates
-a parameter for each property of the object annotated with `@RequestParam`:
+Instead of generating a `@RequestBody` parameter for the `object` schema the processor creates a parameter for each property of the object annotated with `@RequestParam`:
 
 [source,java]
 ----
@@ -107,11 +105,9 @@ public interface Api {
 }
 ----
 
-Note that the `file` property (type `string` format `binary`) is mapped to Springs `MultipartFile`
-type.
+Note that the `file` property (type `string` format `binary`) is mapped to Springs `MultipartFile` type.
 
-The processor does not have a default mapping for the `binary` format so to get the code above we
-have to configure it in the type mapping yaml:
+The processor does not have a default mapping for the `binary` format so to get the code above, we have to configure it in the type mapping YAML:
 
 [source,yaml]
 ----

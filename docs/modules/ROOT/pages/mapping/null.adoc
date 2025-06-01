@@ -29,7 +29,7 @@ components:
 
 Normally the processor would generate a simple pojo with a `String` property.
 
-By adding a `null` mapping for the `/foo` endpoint (this does work only on the endpoint level, a global null mapping gets ignored):
+By adding a `null` mapping for the `/foo` endpoint (this does work only on the endpoint level. A global null mapping gets ignored):
 
 [source,yaml,subs="attributes"]
 ----
@@ -42,7 +42,7 @@ map:
       # with initialization:
       # null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
 
-    # or even better limiting it to the patch http method
+    # or even better, limiting it to the patch http method
     /bar:
       patch:
         null: org.openapitools.jackson.nullable.JsonNullable

@@ -2,7 +2,7 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
+The type mapping is part of the mapping YAML (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
 
 All sections are optional.
 
@@ -20,12 +20,12 @@ openapi-processor-mapping: {var-mapping-version}
 ----
 ====
 
-The version increases from time to time when openapi-processor requires a new or changed configuration. In case the version changes it is mentioned in the release notes.
+The version increases from time to time when openapi-processor requires a new or changed configuration. In case the version changes, it is mentioned in the release notes.
 
 
 === basic mapping
 
-To map a source type to a destination type it is using an `=>` arrow as *mapping operator* instead of individual keywords:
+To map a source type to a destination type, it is using an `=>` arrow as a *mapping operator* instead of individual keywords:
 
 [source,yaml]
 ----
@@ -34,6 +34,8 @@ some-key: {source type} => {target type}
 
 ----
 
+*source type* is usually a name (or type) from the OpenAPI description and *target type* is usually a java type.
+
 === full structure
 
 The full structure of the mapping looks like this (a real mapping file will usually use just a few of the possible keys):
@@ -41,22 +43,26 @@ The full structure of the mapping looks like this (a real mapping file will usua
 [source,yaml]
 ----
 map:
+  # global mappings, applies to all paths/endpoints
 
-  # result wrapper
+  # result wrapper, e.g. org.springframework.http.ResponseEntity
   result: {target type}
 
-  #result-style:
+  # result-style:
   result-style: {success|all}
 
-  # single wrapper
+  # result status annotation (default true)
+  result-status: {true|false}
+
+  # single wrapper, e.g. reactor.core.publisher.Mono
   single: {target type}
 
-  # multi wrapper
+  # multi wrapper, e.g. reactor.core.publisher.Flux
   multi: {target type}
 
   # list of global mappings
   types:
-    # replace source type with the given target type
+    # replace a source type with the given target type
     - type: {source type}  =>  {target type}
 
     # add an extra annotation to the source type
@@ -64,77 +70,83 @@ map:
 
   # list of global schema mappings
   schemas:
-    # add an extra annotation to the source type, but only object properties
+    # add an extra annotation to the source type, but only on object properties
     - type: {source type}  @  {target type}
 
   # list of global parameter mappings
   parameters:
     - name: {parameter name}  =>  {target type}
 
-    # add a (usually technical) parameter that is not described in the OpenAPI
+    # add a (usually technical) parameter not described in the OpenAPI
     - add: {parameter name}  =>  {target type}
 
-    # add an extra annotation to parameters of type source type
+    # add an extra annotation to parameters of the source type
     - type: {source type}  @  {annotation type}
 
   # list of global content mappings, mapped by content type
   responses:
     - content: {content type}  =>  {target type}
 
-  # path mappings, only valid for the given path
+  # path-, endpoint-, method-specific mappings
   paths:
 
-    # the path
+    # a path
     /foo:
       # exclude endpoint
       exclude: {true|false}
 
-      # path specific result wrapper
+      # path-specific result wrapper
       result: {target type}
 
-      # path specific single wrapper
+      # result-style:
+      result-style: {success|all}
+
+      # result status annotation (default true)
+      result-status: {true|false}
+
+      # path-specific single wrapper
       single: {target type}
 
-      # path specific multi wrapper
+      # path-specific multi wrapper
       multi: {target type}
 
       # nullable mapping with optional initial value
       null: {target type} (= {initializer})
 
-      # list of path specific mappings
+      # list of path-specific mappings
       types:
-        # replace source type with the given target type
+        # replace the source type with the given target type
         - from: {source type}  =>  {target type}
 
         # add an extra annotation to the source type
         - type: {source type}  @  {target type}
 
-      # list of path specific parameter mappings
+      # list of path-specific parameter mappings
       parameters:
         - name: {parameter name}  =>  {target type}
 
-        # add a (usually technical) parameter that is not described in the OpenAPI
+        # add a (usually technical) parameter not described in the OpenAPI
         - add: {parameter name}  =>  {target type}
 
-        # add an extra annotation to parameters of type source type
+        # add an extra annotation to parameters of source type
         - type: {source type}  @  {annotation type}
 
-      # list of path specific content mappings, mapped by content type
+      # list of path-specific content mappings, mapped by content type
       responses:
         - content: {content type}  =>  {target type}
 
-      # limit mapping to specific http method (all methods are allowed)
+      # limit mapping to a specific http method (all methods are allowed)
       get:
-         # .... allows any of the above keys below the endpoint path (except http methods)
+         # ... allows any of the above keys below the endpoint path (except http methods)
 
       patch:
-         # ....
+         # ...
 
 
 ----
 
-The structure below `paths` is similar to an OpenAPI yaml file to make it easier to locate a specific mapping.
+The structure below `paths` is similar to an OpenAPI YAML file to make it easier to locate a specific mapping.
 
 == json schema
 
-Some IDEs support json schemas to provide editing support (auto-completion & validation) for text based files.To support this, openapi-processor provides json schemas for the mapping formats at link:{json-schema-site}[`https://openapiprocessor.io/schemas/mapping/mapping-v++{version}++.json`].
+Some IDEs support JSON schemas to provide editing support, (auto-completion and validation) for text-based files. To support this, openapi-processor provides JSON schemas for the mapping formats at link:{json-schema-site}[`https://openapiprocessor.io/schemas/mapping/mapping-v++{version}++.json`].

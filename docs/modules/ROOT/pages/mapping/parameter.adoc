@@ -9,8 +9,7 @@ A global parameter mapping will replace any usage of an OpenAPI type in the api 
 
 [CAUTION]
 ====
-Since the processor will simply match the parameter by its name, take care that all parameters of
-that name should really use the same type!
+Since the processor will simply match the parameter by its name, take care that all parameters of that name should really use the same type!
 ====
 
 It is defined like below, and it should be added to the `map/parameters` section in the mapping.yaml which is a list of global parameter mappings.
@@ -27,14 +26,11 @@ A single global parameter mapping can have the following properties:
 
 * **name** is required.
 
-** **{parameter name}** is the name of an endpoint parameter used in the OpenAPI description that
-should be  replaced by **{target type}**.
+** **{parameter name}** is the name of an endpoint parameter used in the OpenAPI description that should be  replaced by **{target type}**.
 
-** **{target type}** is the fully qualified class name of the java type that should be used for all
-endpoint content types **{parameter name}**.
+** **{target type}** is the fully qualified class name of the java type that should be used for all endpoint content types **{parameter name}**.
 
-* **generics** defines the list of types that should be used as generic type parameters to the
-java type given by **{target type}**.
+* **generics** defines the list of types that should be used as generic type parameters to the java type given by **{target type}**.
 
 
 == Example
@@ -97,14 +93,13 @@ paths:
                     type: string
 ----
 
-the processor will use `java.time.ZonedDateTime` as java type for **all** parameters named "date" in
-**all** endpoints that have a "date" parameter.
+the processor will use `java.time.ZonedDateTime` as the java type for **all** parameters named "date" in **all** endpoints that have a "date" parameter.
 
-In the example both endpoints would use `java.time.ZonedDateTime` as java type for the "date" parameter.
+In the example both endpoints would use `java.time.ZonedDateTime` as the java type for the "date" parameter.
 
 == additional parameter
 
-It is possible to add additional parameters that is not described in the OpenAPI. For example `HttpServletRequest` which may be needed to get something from the request that is not described in the api.
+It is possible to add additional parameters that are not described in the OpenAPI. For example `HttpServletRequest` which may be needed to get something from the request that is not described in the api.
 
 While it is possible to add it at the global level, it is best used at the endpoint level.
 

@@ -5,11 +5,9 @@ include::partial$vars.adoc[]
 
 == a quick example
 
-The processor will only generate java interfaces describing the endpoints and the required model
-(POJOs) classes from an link:{openapi}[OpenAPI] yaml document.
+The processor will only generate java interfaces describing the endpoints and the required model(POJOs) classes from an link:{openapi}[OpenAPI] YAML document.
 
-Let's take a look at a very simple example. The following OpenAPI yaml describes a single endpoint.
-A call to the `/ping` endpoint will simply respond with a plain text string result.
+Let's take a look at a basic example. The following OpenAPI YAML describes a single endpoint. A call to the `/ping` endpoint will simply respond with a plain text string result.
 
 [source,yaml,subs="attributes"]
 ----
@@ -51,7 +49,7 @@ public interface PingApi {
 }
 ----
 
-It is now up to you to implement the interface, e.g. like this:
+It is now up to you to implement the interface e.g., like this:
 
 [source,java]
 ----
@@ -74,5 +72,4 @@ public class PingController implements PingApi {
 
 That's it.
 
-Of course the processor is capable of handling more interesting endpoint descriptions. The other
-sections provide some more detail about what is generated from which input.
+Of course, the processor is capable of handling more interesting endpoint descriptions. The other sections provide some more detail about what is generated from which input.

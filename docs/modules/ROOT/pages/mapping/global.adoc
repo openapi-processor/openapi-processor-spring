@@ -72,37 +72,27 @@ It is also possible to use a predefined OpenAPI type in the `from` type of the t
 
 This tells the processor to us a `java.util.List` instead of the OpenAPI type `array`.
 
-The **generics** parameter is unnecessary in this special case. The processor knows `java.util.List`
-and will automatically use the `items` property of the `array` as the generic type.
+The **generics** parameter is unnecessary in this special case. The processor knows `java.util.List` and will automatically use the `items` property of the `array` as the generic type.
 
 [CAUTION]
 ====
-* OpenAPIs `object` type has no special handling if given as the **{source type}** type. The processor
-assumes  that it is just a schema name, and it will only match if there is a schema with the name
-"object".
-* global type mappings do work on OpenAPI inline schemas using the automatically generated name.
-This is not recommended as a small change to the api description could change the inline name and
-break the mapping.
+* OpenAPIs `object` type has no special handling if given as the **{source type}** type. The processor assumes  that it is just a schema name, and it will only match if there is a schema with the name"object".
+* Global type mappings do work on OpenAPI inline schemas using the automatically generated name. This is not recommended as a small change to the api description could change the inline name and break the mapping.
 ====
 
 
 == mapping with format
 
-The basic types in OpenAPI can have a `format` modifier. For example the `string` type has two
-modifiers `date` and `date-time` to provide more detail of the type. In this case the kind of date
-that is represented as a `string`.
+The basic types in OpenAPI can have a `format` modifier. For example the `string` type has two modifiers `date` and `date-time` to provide more detail of the type. In this case the kind of date that is represented as a `string`.
 
-It is possible to create a global mapping that only matches a specific `format` by adding the format
-to the **{source type}** property value separated by a ':' like this:
+It is possible to create a global mapping that only matches a specific `format` by adding the format to the **{source type}** property value separated by a ':' like this:
 
 [source,yaml]
 ----
-- type: string:date-time => java.time.ZonedDateTime
+- type: string:date-time => java.time.Instant
 ----
 
-This maps the `string` type with a `date-time` format from the default `java.time.OffsetDateTime` to
-`java.time.ZonedDateTime`.The mapping does not affect `string` without a format or `string` with
-other formats.
+This maps the `string` type with a `date-time` format from the default `java.time.OffsetDateTime` to `java.time.Instant`.The mapping does not affect `string` without a format or `string` with other formats.
 
 Another example:
 
@@ -115,9 +105,9 @@ Another example:
 [#_mapping_with_generic_types]
 == mapping with generic types
 
-Type mapping allows to use a target type that has generic parameters.The generic types are given by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
+Type mapping allows using a target type that has generic parameters.The generic types are given by the **generics** property of the mapping. **generics** is a list and can contain multiple types.
 
-For example if a `StringPage` schema in the OpenAPI corresponds to `org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
+For example, if a `StringPage` schema in the OpenAPI corresponds to `org.springframework.data.domain.Page<java.lang.String>`, it can be mapped to the Spring type by:
 
 [source,yaml]
 ----
@@ -130,7 +120,7 @@ The processor will replace any use of `StringPage` with the **{target type}** ty
 
 In case of the example above the processor will create `Page<String>` instead of `StringPage` with an additional `import` for the generic type (.. ignoring imports on `java.lang`).
 
-To get a more compact description it is possible to write a shorter mapping by inlining the generic types:
+To get a more compact description, it is possible to write a shorter mapping by inlining the generic types:
 
 [source,yaml]
 ----
@@ -169,7 +159,7 @@ This is useful to map an OpenAPI dictionary description using `additionalPropert
 
 [source,yaml]
 ----
-# a schema the defines a dictionary with string keys and string values
+# a schema that defines a dictionary with string keys and string values
 Map:
     type: object
     additionalProperties:

@@ -7,13 +7,12 @@ include::partial$vars.adoc[]
 
 //[.badge .badge-since]+since 1.0.0.M13+
 
-When using WebFlux we like to wrap certain parameters & results types in reactive types like
-`Mono<>` or `Flux<>`.
+When using WebFlux we like to wrap certain parameters & results types in reactive types like `Mono<>` or `Flux<>`.
 
-To achieve this the processor knows two special mappings:
+To achieve this, the processor knows two special mappings:
 
-* `single`: to wrap non-array like types (i.e. not a collection)
-* `multi`: to wrap array like types (i.e. a collection)
+* `single`: to wrap a non-array like type (i.e., not a collection)
+* `multi`: to wrap an array like type (i.e., a collection)
 
 
 === multi
@@ -39,15 +38,14 @@ map:
 
 The processor will now wrap all non-array like response types with the given `single` mapping.
 
-== endpoint specific mapping
+== endpoint-specific mapping
 
 it is also possible to configure `single` & `multi` on the xref:mapping/endpoint.adoc[endpoint level].
 
 
 == single & multi with result mapping
 
-It is possible to use `single` & `multi` mappings together with the `result` mapping, i.e.
-`ResponseEntity`.
+It is possible to use `single` & `multi` mappings together with the `result` mapping, i.e. `ResponseEntity`.
 
 `result` will wrap `single`
 
@@ -63,7 +61,7 @@ and `multi`
 ResponseEntity<Flux<String>>
 ----
 
-Unfortunately if you need the reactive result to modify the http response, something like this:
+Unfortunately, if you need the reactive result to modify the http response, something like this:
 
 [source, java]
 ----
@@ -77,7 +75,7 @@ public ResponseEntity<Mono<Result>> someEndpoint() {
 }
 ----
 
-it will not work because the result type of the statement is `Mono<ResponseEntity<Mono<Result>>>` and not the expected `ResponseEntity<Mono<Result>>`.
+it will not work because the result type of the statement is `Mono<ResponseEntity<Mono<Result>>>` and not the expected `ResponseEntity<Mono<Result>>`. This can be fixed by modifying the `result` mapping to
 
 [source, yaml,,subs="attributes"]
 ----
