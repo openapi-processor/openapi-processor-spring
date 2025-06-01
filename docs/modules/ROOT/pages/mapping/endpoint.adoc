@@ -1,5 +1,6 @@
 = Endpoint mappings
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
 The global mapping variations are also available as explicit endpoint mappings. Instead of adding
 the mapping in the global sections `map/types`, `map/parameters` and `map/responses` they can
@@ -84,9 +85,9 @@ It is possible to add mappings that apply only to a specific http method. Motiva
 
 Here are a few examples of possible http endpoint mappings:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 map:
 

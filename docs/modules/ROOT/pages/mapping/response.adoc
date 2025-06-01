@@ -52,9 +52,9 @@ map:
 and an openapi.yaml with multiple endpoints returning their result as content type
 `application/vnd.something`
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: global response content type mapping example
   version: 1.0.0

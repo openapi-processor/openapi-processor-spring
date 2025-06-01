@@ -1,5 +1,7 @@
-= Enums
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
+
+= Enums
 
 [#_default]
 == default
@@ -74,9 +76,9 @@ To handle this issue we can either use the `enum-type` <<_enum_type_string>> or 
 
 Do not create a Java enum classes for OpenAPI enums and simply use `java.lang.String`.
 
-[source,yaml,title=mapping.yaml]
+[source,yaml,title=mapping.yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   enum-type: string
@@ -98,9 +100,9 @@ In this simple form it doesn't provide any help to make sure that the incoming v
 
 By enabling bean-validation the processor will generate and use a custom validation annotation to check that the incoming string is an allowed value.
 
-[source,yaml,title=mapping.yaml]
+[source,yaml,title=mapping.yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   bean-validation: jakarta
@@ -138,9 +140,9 @@ This is another alternative to the <<_default>> enum classes to avoid the issue 
 
 It creates Java enum classes and a Spring `ConverterFactory` with the name `\{package-name}.spring.StringToEnumConverterFactory` that does create enum converters for all generated enums.The enum converters convert incoming strings to their enum by comparing with the OpenAPI enum values.
 
-[source,yaml,title=mapping.yaml]
+[source,yaml,title=mapping.yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   enum-type: framework

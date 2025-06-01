@@ -1,5 +1,6 @@
 = type mapping structure
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
 The type mapping is part of the mapping yaml (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
 
@@ -13,9 +14,9 @@ All sections are optional.
 ====
 The mapping file needs the following key on the top-level. Best place is the first line of the `mapping.yaml` file.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 ----
 ====
 

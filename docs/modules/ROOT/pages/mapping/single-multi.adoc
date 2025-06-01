@@ -1,4 +1,5 @@
 :responseentity: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
+include::partial$vars.adoc[]
 
 = (global) Single & Multi mapping
 
@@ -78,11 +79,9 @@ public ResponseEntity<Mono<Result>> someEndpoint() {
 
 it will not work because the result type of the statement is `Mono<ResponseEntity<Mono<Result>>>` and not the expected `ResponseEntity<Mono<Result>>`.
 
-This can be fixed by modifying the `result` mapping to
-
-[source, yaml]
+[source, yaml,,subs="attributes"]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   # ...

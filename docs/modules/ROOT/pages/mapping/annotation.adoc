@@ -1,5 +1,6 @@
 = Annotation mapping
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
 It is possible to add additional annotations to a `source type`. Currently, this is available as
 
@@ -100,9 +101,9 @@ Previously an annotation mapping was lost if the type was mapped at the same tim
 
 Assume the following mapping:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
 
@@ -146,9 +147,9 @@ public class FooBar {
 
 Given the following OpenAPI description, that describe two (echo like) endpoints that receive an object via post and return the same object. In the mapping file we add a custom bean validation annotation. It checks the sum of both properties in `Foo` and `Bar`.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.1.0
+openapi: {var-openapi-version}
 info:
   title: openapi-processor-spring sample api
   version: 1.0.0
@@ -217,9 +218,9 @@ components:
 
 and a `mapping.yaml` with annotation type mappings:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12 # <1>
+openapi-processor-mapping: {var-mapping-version} # <1>
 
 options:
   package-name: io.openapiprocessor.openapi

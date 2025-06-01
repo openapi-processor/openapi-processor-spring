@@ -1,4 +1,5 @@
 = log mapping lookup
+include::partial$vars.adoc[]
 
 It is possible to let a processor log all the mapping lookups. It *may* be useful to understand why a mapping does not work.
 
@@ -10,9 +11,9 @@ In case the processor uses the mapping, but it still doesn't behave as expected 
 
 To control the logging there are two new xref:processor/configuration.adoc#_logging[logging options].
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 options:
   package-name: io.openapiprocessor.generated
 
@@ -99,9 +100,9 @@ If the `mapping-target` is `stdout` the processor output will be written without
 
 to enable logging with maven use:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 options:
   package-name: ...
 
@@ -115,9 +116,9 @@ logging:
 
 to get the simple output, or
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 options:
   package-name: ...
 
@@ -138,9 +139,9 @@ Gradle requires the `mapping-target` to be `stdout`. Gradle can only globally en
 
 to enable logging with gradle use:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 options:
   package-name: ...
 

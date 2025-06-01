@@ -1,5 +1,6 @@
+include::partial$vars.adoc[]
+
 = Server Url
-include::partial$links.adoc[]
 
 == base path
 
@@ -9,9 +10,9 @@ openapi-processor has (simple) support to generate a resource property file with
 
 Given an OpenAPI description with a servers key:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.1.0
+openapi: {var-openapi-version}
 info:
   title: server url example
   version: 1.0.0
@@ -26,9 +27,9 @@ servers:
 
 and a mapping
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: {var-mapping-version}
 options:
   server-url: true
 ----
@@ -43,9 +44,9 @@ openapi.base.path = /api
 
 If there are multiple servers its index can be used to select it:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: {var-mapping-version}
 options:
   server-url: 0   # same as true
 #  server-url: 1
@@ -70,9 +71,9 @@ While it is possible to import the generated properties file it is probably bett
 
 The default name of the generate properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[server-url:properties-name] option.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   server-url:
@@ -85,9 +86,9 @@ By default, the processor will generate the java package structure directly belo
 
 This is handled by a new xref:processor/configuration.adoc#_target_dirlayout[option] to set the layout of the `targetDir`. Setting it to `standard`
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   target-dir:
@@ -135,9 +136,9 @@ sourceSets {
 
 Here is a short snippet of a `mapping.yaml` as a summary of the options used to configure the base path property file generation.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v9
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   # ... other options

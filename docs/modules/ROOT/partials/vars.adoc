@@ -1,0 +1,2 @@
+:var-mapping-version: v13
+:var-openapi-version: 3.1.0

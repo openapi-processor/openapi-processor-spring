@@ -1,10 +1,12 @@
+include::partial$vars.adoc[]
+
 = Endpoint interface grouping
 
 The processor groups endpoints based on their _first_ tag. Using the `/ping` example again its first (and only) tag is **ping**:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: openapi-processor-spring sample api
   version: 1.0.0

@@ -1,15 +1,16 @@
 = Configuration
 :toc:
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
 The processor reads the configuration from the (mandatory) `mapping.yaml` file.It does contain
 some general options and the xref:mapping/index.adoc[mapping] type information.
 
 A mapping yaml looks like this:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
@@ -58,9 +59,9 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 ==== example
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
@@ -115,9 +116,9 @@ components:
 ----
 
 *mapping.yaml*
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
@@ -167,9 +168,9 @@ generate pojos (class with get/set property methods) or records model classes fr
 ==== example
 
 *mapping.yaml*
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   model-type: record
@@ -232,9 +233,9 @@ This is only used with `model-type: default`. It is ignored with `model-type: re
 
 Here is a small example that uses object annotation mapping to add the lombok getter and setter annotations to the generated class.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: generated
@@ -371,9 +372,9 @@ The other two can be used if `default` does not work.This is described in more d
 ==== example
 
 *mapping.yaml*
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   enum-type: string
@@ -444,9 +445,9 @@ this controls if the `targetDir` is the source root folder or if there is anothe
 
 ==== example
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   target-dir:

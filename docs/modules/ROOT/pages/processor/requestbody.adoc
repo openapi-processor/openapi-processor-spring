@@ -1,10 +1,12 @@
+include::partial$vars.adoc[]
+
 = Request Body
 
 This OpenAPI describes an endpoint with `requestBody`:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: request body
   version: 1.0.0
@@ -149,9 +151,9 @@ the parsing step extracts the `encoding/contentType` of a multipart content. Thi
 
 the Spring processor uses this to select between `@RequestPart` and `@RequestParam` annotation. If an `encoding/contentType` is available it will use `@RequestPart`, if no `encoding/contentType` is available it will use `@RequestParam`.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: params-request-body-multipart
   version: 1.0.0

@@ -1,12 +1,13 @@
 = Global mappings
+include::partial$vars.adoc[]
 
 Global type mapping will replace **any** usage of an OpenAPI type in the api description to the given java type.
 
 It is defined like below, and it should be added to the `map/types` section in the `mapping.yaml` which is a list of global type mappings:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
@@ -143,9 +144,9 @@ This will generate the same code as the longer mapping version above.
 
 It is possible to create type mappings with nested generics types. Here are a few examples:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: generated

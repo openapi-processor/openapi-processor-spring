@@ -1,6 +1,7 @@
-= the processor
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
+= the processor
 
 == a quick example
 
@@ -10,9 +11,9 @@ The processor will only generate java interfaces describing the endpoints and th
 Let's take a look at a very simple example. The following OpenAPI yaml describes a single endpoint.
 A call to the `/ping` endpoint will simply respond with a plain text string result.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
     title: openapi-processor-spring sample
     version: 1.0.0

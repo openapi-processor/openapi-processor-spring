@@ -1,3 +1,5 @@
+include::partial$vars.adoc[]
+
 = oneOf
 
 Generating model classes from an `oneOf` has the challenge to handle a number of usually unrelated objects with different properties.
@@ -17,9 +19,9 @@ To improve usability the processor is able to generate marker interfaces to prov
 
 Generation of marker interfaces is enabled by setting the `one-of-interface` option to `true` (See xref:processor/configuration.adoc[configuration]). For backward compatibility it is `false` by default.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v8
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   one-of-interface: true
@@ -29,9 +31,9 @@ The processor will now create a marker interface for a `oneOf` of  `object` s th
 
 Here is an example. The response is an object `Foo` with a `foo` property that can have the type `Foo` or `Bar`.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.3
+openapi: {var-openapi-version}
 info:
   title: oneOf marker interface
   version: 1.0.0

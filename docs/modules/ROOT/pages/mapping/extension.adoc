@@ -1,5 +1,6 @@
 = Extension mapping
 include::partial$links.adoc[]
+include::partial$vars.adoc[]
 
 [.badge .badge-since]+since 2024.1+
 
@@ -9,8 +10,9 @@ Apart from the annotation mapping by an OpenAPI type, openapi-processor can use 
 
 Here is a simple schema that has `x-` tensions on the `bar` property.
 
-```yaml
-openapi: 3.1.0
+[source,yaml,subs="attributes"]
+----
+openapi: {var-openapi-version}
 # ...
 components:
   schemas:
@@ -23,12 +25,13 @@ components:
           x-bar:
             - listA
             - listB
-```
+----
 
 In general openapi-processor will ignore the `x-` tension properties unless we map the `x-` tensions/values to annotations like this:
 
-```yaml
-openapi-processor-mapping: v12
+[source,yaml,subs="attributes"]
+----
+openapi-processor-mapping: {var-mapping-version}
 options:
   # ...
 
@@ -38,7 +41,7 @@ map:
     x-bar:
       - listA @ io.oap.FooB # <2>
       - listB @ io.oap.FooC
-```
+----
 
 NOTE: openapi-processor will only recognize *strings* values of an extension. It will ignore any other type.
 
@@ -50,7 +53,8 @@ The mapping allows two variations:
 
 With this mapping the generated Dto class will have the additional annotations on the property.
 
-```java
+[source,java]
+----
 package generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -77,4 +81,4 @@ public class Foo {
     }
 
 }
-```
+----

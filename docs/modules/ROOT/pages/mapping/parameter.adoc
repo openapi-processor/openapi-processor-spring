@@ -1,4 +1,5 @@
 = (global) Parameter mappings
+include::partial$vars.adoc[]
 
 Parameter mappings, as the name suggests, apply to the parameters of an endpoint method.
 
@@ -51,9 +52,9 @@ map:
 
 and an openapi.yaml with multiple endpoints having a parameter named "date"
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: global parameter type mapping example
   version: 1.0.0
@@ -107,9 +108,9 @@ It is possible to add additional parameters that is not described in the OpenAPI
 
 While it is possible to add it at the global level, it is best used at the endpoint level.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: generated
@@ -123,9 +124,9 @@ map:
 
 Given the mapping configuration above and the following endpoint description:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.1.0
+openapi: {var-openapi-version}
 info:
   title: test additional endpoint parameter
   version: 1.0.0
@@ -174,9 +175,9 @@ It may also be useful to remove a parameter, maybe it is handled by a request fi
 
 Again, even if it is possible to add it at the global level, it is best used at the endpoint level.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi-processor-mapping: v12
+openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: generated
@@ -190,9 +191,9 @@ map:
 
 Given the configuration above and the following endpoint description:
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.1.0
+openapi: {var-openapi-version}
 info:
   title: test unnecessary endpoint parameter
   version: 1.0.0

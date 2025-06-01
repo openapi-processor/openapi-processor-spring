@@ -1,3 +1,5 @@
+include::partial$vars.adoc[]
+
 = Models
 
 The processor will create simple POJOs classes for the `object` schemas used in the OpenAPI
@@ -10,9 +12,9 @@ the  api does not provide a `schema` name.
 
 - the second one `/book` references a **named schema**.
 
-[source,yaml]
+[source,yaml,subs="attributes"]
 ----
-openapi: 3.0.2
+openapi: {var-openapi-version}
 info:
   title: model example
   version: 1.0.0
