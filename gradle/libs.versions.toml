@@ -9,7 +9,7 @@ base = "2025.3-SNAPSHOT"
 junit = "5.9.3"
 jacoco = "0.8.7"
 
-spring-web = "5.3.39"
+spring-web = "6.2.7"
 spring-data = "2.7.18"
 
 # although testInt builds with jdk 17 it is complaing that the dependecies need jdk 17
