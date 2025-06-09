@@ -1,3 +1,5 @@
+include::partial$vars.adoc[]
+
 //
 // external openapi-processor links
 //
