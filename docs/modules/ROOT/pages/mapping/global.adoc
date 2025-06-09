@@ -5,7 +5,7 @@ Global type mapping will replace **any** usage of an OpenAPI type in the api des
 
 It is defined like below, and it should be added to the `map/types` section in the `mapping.yaml` which is a list of global type mappings:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -134,7 +134,7 @@ This will generate the same code as the longer mapping version above.
 
 It is possible to create type mappings with nested generics types. Here are a few examples:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

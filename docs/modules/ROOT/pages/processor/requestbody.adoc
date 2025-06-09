@@ -4,7 +4,7 @@ include::partial$vars.adoc[]
 
 This OpenAPI describes an endpoint with `requestBody`:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -147,7 +147,7 @@ the parsing step extracts the `encoding/contentType` of a multipart content. Thi
 
 the Spring processor uses this to select between `@RequestPart` and `@RequestParam` annotation. If an `encoding/contentType` is available it will use `@RequestPart`, if no `encoding/contentType` is available it will use `@RequestParam`.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

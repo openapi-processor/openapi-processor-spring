@@ -1,8 +1,10 @@
+include::partial$vars.adoc[]
+
 = package-name mapping
 
 The type mapping (v2 and up) configuration allows to reference the target `package-name` in generic parameters using the `+{package-name}+` expression. This makes it possible to adjust the `package-name` without touching the mapping, and it does reduce duplication.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
@@ -10,5 +12,5 @@ options:
 
 map:
   types:
-    - type: FooPage => org.springframework.data.domain.Page<{package-name}.model.Foo>
+    - type: FooPage => org.springframework.data.domain.Page<\{package-name}.model.Foo>
 ----

@@ -20,7 +20,7 @@ The example will make this more clear.
 
 In the example OpenAPI below is a year value (<1>) that is used on the response schema and as query parameter.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -60,7 +60,7 @@ components:
 
 Using a typical mapping the processor will use `java.time.Year` instead of a simple `Integer` type in the generated code.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -84,7 +84,7 @@ would change serialization of `java.time.Year` to a number.
 
 Adding the annotation mapping for this at the global type level
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -144,7 +144,7 @@ but also at the method parameter of the generated interface:
 
 That is not wanted. To avoid it, the annotation mapping should be added to the new `schemas` mapping level:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

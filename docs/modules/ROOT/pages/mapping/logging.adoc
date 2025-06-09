@@ -11,7 +11,7 @@ In case the processor uses the mapping, but it still doesn't behave as expected,
 
 To control the logging, there are two new xref:processor/configuration.adoc#_logging[logging options].
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
@@ -100,7 +100,7 @@ If the `mapping-target` is `stdout` the processor output will be written without
 
 to enable logging with maven use:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
@@ -116,7 +116,7 @@ logging:
 
 to get the simple output, or
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
@@ -139,7 +139,7 @@ Gradle requires the `mapping-target` to be `stdout`. Gradle can only globally en
 
 to enable logging with gradle use:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:

@@ -83,7 +83,7 @@ It is possible to add mappings that apply only to a specific http method. The mo
 
 Here are a few examples of possible http endpoint mappings:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

@@ -30,7 +30,7 @@ See the example below.
 
 The first step is to enable the feature in the `mapping.yaml`:
 
-[source,yaml,subs="attributes",title="mapping.yaml"]
+[source,yaml,subs=attributes+,title="mapping.yaml"]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -51,7 +51,7 @@ The second step is to split the OpenAPI definition into multiple files and place
 
 The `openapi.yaml` is placed into the usual place, in this example in the source folder `src/api`.
 
-[source,yaml,subs="attributes",title="openapi.yaml"]
+[source,yaml,subs=attributes+,title="openapi.yaml"]
 ----
 openapi: {var-openapi-version}
 info:
@@ -59,7 +59,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: "https://openapiprocessor.io/{path}"
+  - url: "https://openapiprocessor.io/\{path}"
     variables:
       path:
         default: api
@@ -85,7 +85,7 @@ sample
 
 The `foo` path item in `openapi.yaml` $ref'erences the endpoint definition in `foo.yaml`.
 
-[source,yaml,subs="attributes",title="foo.yaml"]
+[source,yaml,subs=attributes+,title="foo.yaml"]
 ----
 post:
   tags:
@@ -111,7 +111,7 @@ The controller implementation and services for this endpoint will go into the sa
 
 `foo.yaml` also $ref'erences a `resources.yaml` file placed in the same package that defines the `Foo` payload schema:
 
-[source,yaml,subs="attributes",title="resources.yaml"]
+[source,yaml,subs=attributes+,title="resources.yaml"]
 ----
 FooBody:
   content:

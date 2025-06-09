@@ -31,7 +31,7 @@ Normally the processor would generate a simple pojo with a `String` property.
 
 By adding a `null` mapping for the `/foo` endpoint (this does work only on the endpoint level. A global null mapping gets ignored):
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

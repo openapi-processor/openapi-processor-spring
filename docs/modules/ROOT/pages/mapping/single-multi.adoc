@@ -77,7 +77,7 @@ public ResponseEntity<Mono<Result>> someEndpoint() {
 
 it will not work because the result type of the statement is `Mono<ResponseEntity<Mono<Result>>>` and not the expected `ResponseEntity<Mono<Result>>`. This can be fixed by modifying the `result` mapping to
 
-[source, yaml,,subs="attributes"]
+[source, yaml,,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

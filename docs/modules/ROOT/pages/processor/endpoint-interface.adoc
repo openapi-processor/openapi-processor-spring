@@ -4,7 +4,7 @@ include::partial$vars.adoc[]
 
 The processor groups endpoints based on their _first_ tag. Using the `/ping` example again its first (and only) tag is **ping**:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

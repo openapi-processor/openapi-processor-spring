@@ -7,7 +7,7 @@ The processor reads the configuration from the (mandatory) `mapping.yaml` file. 
 
 A mapping YAML looks like this:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -59,7 +59,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 
 ==== example
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -141,7 +141,7 @@ components:
 ----
 
 *mapping.yaml*
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -193,7 +193,7 @@ generate pojos (class with get/set property methods) or records model classes fr
 ==== example
 
 *mapping.yaml*
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -258,7 +258,7 @@ This is only used with `model-type: default`. It is ignored with `model-type: re
 
 Here is a small example that uses object annotation mapping to add the lombok getter and setter annotations to the generated class.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -397,7 +397,7 @@ The other two can be used if `default` does not work.This is described in more d
 ==== example
 
 *mapping.yaml*
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -470,7 +470,7 @@ this controls if the `targetDir` is the source root folder or if there is anothe
 
 ==== example
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

@@ -19,7 +19,7 @@ To improve usability, the processor is able to generate marker interfaces to pro
 
 Generation of marker interfaces is enabled by setting the `one-of-interface` option to `true` (See xref:processor/configuration.adoc[configuration]). For backward compatibility it is `false` by default.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -31,7 +31,7 @@ The processor will now create a marker interface for a `oneOf` of  `object` s th
 
 Here is an example. The response is an object `Foo` with a `foo` property that can have the type `Foo` or `Bar`.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

@@ -6,7 +6,7 @@ A simple path of the OpenAPI description will usually produce a single endpoint 
 
 OpenAPI allows us to define more complex apis that behave differently based on the request header. For example the following api definition can return its response in different formats. As json or as plain text:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -98,7 +98,7 @@ To switch between previous and new behavior, there is a new mapping configuratio
 
 The default is `success`, i.e., the processor will automatically generate the code using the new behavior. In case the previous behavior is required, set the `result-style` to `all`.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -164,7 +164,7 @@ The processor did honor only one response status using the _last_ success respon
 
 Here is an example OpenAPI:
 
-[source, yaml,subs="attributes"]
+[source, yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -238,7 +238,7 @@ To improve on that situation, the processor can generate a marker interface that
 
 Generation of the marker interface is enabled by adding the `response-interface` option:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

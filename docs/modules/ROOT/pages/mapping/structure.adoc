@@ -14,7 +14,7 @@ All sections are optional.
 ====
 The mapping file needs the following key on the top-level. Best place is the first line of the `mapping.yaml` file.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 ----

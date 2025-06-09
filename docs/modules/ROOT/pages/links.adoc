@@ -1,5 +1,6 @@
-= Links
 include::partial$links.adoc[]
+
+= Links
 
 == OpenAPI
 

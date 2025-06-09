@@ -1,14 +1,15 @@
-= Gradle Plugin
 include::partial$links.adoc[]
 
-The xref:gradle::index.adoc[openapi-processor-gradle] gradle plugin can run any of the **openapi-processor**'s.
+= Gradle Plugin
 
-To use it in a Gradle project, the Gradle file of the project requires a few additional instructions. The following sections describe how to activate & configure **openapi-processor-spring** in a `build.gradle` file.
+The xref:gradle::index.adoc[openapi-processor-gradle] Gradle plugin can run any of the **openapi-processor**'s.
+
+To use it in a Gradle project, the Gradle file of the project requires a few additional instructions. The following sections describe how to activate and configure **openapi-processor-spring** in a `build.gradle` file.
 
 
 == adding the plugin
 
-To activate the plugin add it to (like any other gradle plugin) the `plugins` configuration:
+To activate the plugin, add it to (like any other Gradle plugin) the `plugins` configuration:
 
 [source,groovy]
 ----
@@ -21,7 +22,7 @@ plugins {
 
 == configuring processor-spring
 
-The plugin will add an `openapiProcessor` configuration block that is used to configure the processors. Configuration for a specific processor belongs inside it with the processor name as configuration block name.
+The plugin will add an `openapiProcessor` configuration block used to configure the processors. Configuration for a specific processor belongs inside it with the processor name as configuration block name.
 
 [source,groovy]
 ----

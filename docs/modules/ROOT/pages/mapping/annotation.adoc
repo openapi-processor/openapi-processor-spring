@@ -101,7 +101,7 @@ Previously an annotation mapping was lost if the type was mapped at the same tim
 
 Assume the following mapping:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs="attributes+"]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -147,7 +147,7 @@ public class FooBar {
 
 Given the following OpenAPI description, that describe two (echo like) endpoints that receive an object via post and return the same object. In the mapping file we add a custom bean validation annotation. It checks the sum of both properties in `Foo` and `Bar`.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -218,7 +218,7 @@ components:
 
 and a `mapping.yaml` with annotation type mappings:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version} # <1>
 

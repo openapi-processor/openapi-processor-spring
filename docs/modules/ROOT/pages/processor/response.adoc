@@ -2,7 +2,7 @@ include::partial$links.adoc[]
 
 = Responses
 
-All generated endpoints return their java result type by default. This may be to simple for some endpoint implementations.
+All generated endpoints return their java result type by default. This may be too simple for some endpoint implementations.
 
 There are two mappings available to customize the result type:
 

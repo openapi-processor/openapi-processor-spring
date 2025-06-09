@@ -76,7 +76,7 @@ To handle this issue we can either use the `enum-type` <<_enum_type_string>> or 
 
 Do not create Java enum classes for OpenAPI enums and simply use `java.lang.String`.
 
-[source,yaml,title=mapping.yaml,subs="attributes"]
+[source,yaml,title=mapping.yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -100,7 +100,7 @@ In this simple form it doesn't provide any help to make sure that the incoming v
 
 By enabling bean-validation, the processor will generate and use a custom validation annotation to check that the incoming string is an allowed value.
 
-[source,yaml,title=mapping.yaml,subs="attributes"]
+[source,yaml,title=mapping.yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -140,7 +140,7 @@ This is another alternative to the <<_default>> enum classes to avoid the issue 
 
 It creates Java enum classes and a Spring `ConverterFactory` with the name `\{package-name}.spring.StringToEnumConverterFactory` that does create enum converters for all generated enums.The enum converters convert incoming strings to their enum by comparing with the OpenAPI enum values.
 
-[source,yaml,title=mapping.yaml,subs="attributes"]
+[source,yaml,title=mapping.yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 

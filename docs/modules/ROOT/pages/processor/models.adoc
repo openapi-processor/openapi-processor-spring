@@ -10,7 +10,7 @@ The following api describes two endpoints:
 
 - the second one `/book` references a **named schema**.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

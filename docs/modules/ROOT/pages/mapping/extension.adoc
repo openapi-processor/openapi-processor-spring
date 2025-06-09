@@ -10,7 +10,7 @@ Apart from the annotation mapping by an OpenAPI type, openapi-processor can use 
 
 Here is a simple schema that has `x-` tensions on the `bar` property.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 # ...
@@ -29,7 +29,7 @@ components:
 
 In general openapi-processor will ignore the `x-` tension properties unless we map the `x-` tensions/values to annotations like this:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:

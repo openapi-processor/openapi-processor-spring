@@ -9,7 +9,7 @@ The processor will only generate java interfaces describing the endpoints and th
 
 Let's take a look at a basic example. The following OpenAPI YAML describes a single endpoint. A call to the `/ping` endpoint will simply respond with a plain text string result.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

@@ -48,7 +48,7 @@ map:
 
 and an openapi.yaml with multiple endpoints having a parameter named "date"
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -103,7 +103,7 @@ It is possible to add additional parameters that are not described in the OpenAP
 
 While it is possible to add it at the global level, it is best used at the endpoint level.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -119,7 +119,7 @@ map:
 
 Given the mapping configuration above and the following endpoint description:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
@@ -170,7 +170,7 @@ It may also be useful to remove a parameter, maybe it is handled by a request fi
 
 Again, even if it is possible to add it at the global level, it is best used at the endpoint level.
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -186,7 +186,7 @@ map:
 
 Given the configuration above and the following endpoint description:
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:

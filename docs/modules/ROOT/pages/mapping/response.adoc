@@ -1,3 +1,5 @@
+include::partial$vars.adoc[]
+
 = (global) Response mappings
 
 Global response mapping will replace the result type of the endpoint in the api description based on its **content type** to the given java type.
@@ -44,7 +46,7 @@ map:
 
 and an openapi.yaml with multiple endpoints returning their result as content type `application/vnd.something`
 
-[source,yaml,subs="attributes"]
+[source,yaml,subs=attributes+]
 ----
 openapi: {var-openapi-version}
 info:
