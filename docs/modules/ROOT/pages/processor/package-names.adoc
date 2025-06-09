@@ -1,0 +1,220 @@
+include::partial$links.adoc[]
+include::partial$vars.adoc[]
+
+= package-names
+
+[WARNING]
+====
+This is still a bit experimental and may not behave nicely if the expected configuration requirements are not met.
+
+It also works *only* with the `INTERNAL` OpenAPI parser, which is the default OpenAPI parser.
+====
+
+== package-names-from-path
+
+The `package-name-from-path` option enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
+
+Enabling this has a few requirements:
+
+- `package-name` must match a specific *parent* package name of the target package in the production code.
++
+The *parent* package should be shorter than the *target* package, and the *target* package should start with the *parent* package.
++
+See the example below.
+
+- to create an interface or resource with a specific package, its OpenAPI description has to be in the *target* package and must be reachable from the root OpenAPI description.
+
+- it is only supported with the `INTERNAL` OpenAPI parser (it is the default parser). It will not work with the `SWAGGER` OpenAPI parser.
+
+=== mapping.yaml
+
+The first step is to enable the feature in the `mapping.yaml`:
+
+[source,yaml,subs="attributes",title="mapping.yaml"]
+----
+openapi-processor-mapping: {var-mapping-version}
+
+options:
+  # this must be a parent package of the target packages
+  package-name: io.openapiprocessor.samples  # <2>
+
+  # this enables package generation from the endpoint $ref file location
+  package-name-from-path: true # <1>
+----
+
+<1> this enables the package-name feature. Default is `false`.
+<2> the `package-name`, this *must* be a *parent* package name of the project's *target* packages.
+
+=== OpenAPI and $refs
+
+The second step is to split the OpenAPI definition into multiple files and place them into the desired packages.
+
+The `openapi.yaml` is placed into the usual place, in this example in the source folder `src/api`.
+
+[source,yaml,subs="attributes",title="openapi.yaml"]
+----
+openapi: {var-openapi-version}
+info:
+  title: openapi-processor-spring sample api
+  version: 1.0.0
+
+servers:
+  - url: "https://openapiprocessor.io/{path}"
+    variables:
+      path:
+        default: api
+
+paths:
+  /foo:
+    $ref: '../main/kotlin/io/openapiprocessor/samples/foo/foo.yaml' # <1>
+----
+
+
+The project directories so far look like this, where `sample` is the root folder of the project.
+
+[title="directory structure, api"]
+----
+sample
+\---- src
+      \---- api
+            +---- mapping.yaml
+            \---- openapi.yaml
+----
+
+=== foo endpoint $ref
+
+The `foo` path item in `openapi.yaml` $ref'erences the endpoint definition in `foo.yaml`.
+
+[source,yaml,subs="attributes",title="foo.yaml"]
+----
+post:
+  tags:
+    - foo
+  summary: echo a Foo.
+  description: simple sample endpoint
+  requestBody:
+    $ref: 'resources.yaml#/FooBody'
+  responses:
+    '200':
+      description: foo
+      content:
+        application/json:
+          schema:
+            $ref: 'resources.yaml#/Foo'
+----
+
+`foo.yaml` is placed into the main source folder of the project into the *target* package the generated interface should have.
+
+In this case the *target* package of `FooApi.java` will be `io.openapiprocessor.samples.foo`
+
+The controller implementation and services for this endpoint will go into the same package.
+
+`foo.yaml` also $ref'erences a `resources.yaml` file placed in the same package that defines the `Foo` payload schema:
+
+[source,yaml,subs="attributes",title="resources.yaml"]
+----
+FooBody:
+  content:
+    application/json:
+      schema:
+        $ref: '#/Foo'
+
+Foo:
+  type: object
+  description: Foo object description
+  properties:
+    foo:
+      type: string
+      maxLength: 10
+      description: foo property description
+    id:
+      type: string
+      format: uuid
+      description: id property description
+----
+
+The final directory structure then looks like this:
+
+[title="directory structure, api and sources"]
+----
+sample
+\---- src
+      +---- api
+      |     +---- mapping.yaml
+      |     \---- openapi.yaml
+      \---- main
+            +---- kotlin
+            |     \---- io
+            |           \---- openapiprocessor
+            |                 \---- samples
+            |                       +---- foo
+            |                       |     +---- FooController.kt
+            |                       |     +---- foo.yaml
+            |                       |     \---- resources.yaml
+            |                       +---- bar
+            |                       |      \---- ...
+            |                       \ Application.kt
+            \---- resources
+                  \---- application.properties
+----
+
+=== parent package name
+
+Having an idea now how the files are organized, it is possible to explain which package is the *parent* package.
+
+From the file tree above:
+
+The package name of the `foo` endpoint files is `io.openapiprocessor.samples.foo` and the nearest *parent* package is `io.openapiprocessor.samples`. This is then the `package-name` option value.
+
+It is possible to use `io.openapiprocessor` or even `io` as the *parent* package.
+
+Important is that the *parent* package is shorter than the *target* package and that the *target* package starts with the *parent* package.
+
+=== directory structure after processing
+
+Assuming a Gradle build, the directory structure after processing is:
+
+----
+sample
++---- build
+|     \---- openapi
+|            +--- java
+|            |    \---- io
+|            |          \---- openapiprocessor
+|            |                \---- samples
+|            |                      +---- foo
+|            |                      |     +---- Foo.java
+|            |                      |     \---- FooApi.java
+|            |                      \---- bar
+|            |                            \---- ...
+|            \---- resources
+|                  \---- api.properties
+\---- src
+      +---- api
+      |     +---- mapping.yaml
+      |     \---- openapi.yaml
+      \---- main
+            +---- kotlin
+            |     +---- io
+            |     |     \---- openapiprocessor
+            |     |           \---- samples
+            |     |                 +---- foo
+            |     |                 |     +---- FooController.kt
+            |     |                 |     +---- foo.yaml
+            |     |                 |     \---- resources.yaml
+            |     |                 \---- bar
+            |     |                       \---- ...
+            \---- resources
+                  \---- application.properties
+----
+
+
+=== sample code
+
+A full working example with multiple endpoints is available in the link:{oap-sample-packages}[samples] repository.
+
+
+
+
+
+

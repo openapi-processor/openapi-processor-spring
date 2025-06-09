@@ -13,6 +13,7 @@ openapi-processor-mapping: {var-mapping-version}
 
 options:
   package-name: io.openapiprocessor.sample
+  package-name-from-path: true
   model-name-suffix: Resource
   model-type: record
   enum-type: string
@@ -65,6 +66,31 @@ openapi-processor-mapping: {var-mapping-version}
 options:
   package-name: io.openapiprocessor.sample
 ----
+
+=== package-name-from-path (new with 2025.3)
+
+**optional** (boolean, `true` or `false`, default is `false`)
+
+`package-name-from-path` enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
+
+Enabling this has a few requirements:
+
+- `package-name` must match a specific *parent* package name of the *target* package in the production code:
++
+The *parent* package is shorter than the *target* package, and the *target* package starts with the *parent* package.
++
+This is hard to explain in a few words. See the link below for an example.
+
+- to create an interface or resource in a specific package, its OpenAPI description has to be in the target package and must be reachable from the root OpenAPI description.
+
+- it only works with the `INTERNAL` OpenAPI parser (it is the default parser). It will not work with the `SWAGGER` OpenAPI parser.
+
+See xref:processor/package-names.adoc[package-names] for a description with an example. It explains which package is the *parent* package and how to place OpenAPI parts into packages.
+
+[WARNING]
+====
+This is still a bit experimental and may not behave nicely if the expected configuration requirements are not met.
+====
 
 === model-name-suffix
 

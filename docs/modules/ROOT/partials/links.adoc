@@ -17,6 +17,7 @@
 :oapc-inttests: https://github.com/openapi-processor/openapi-processor-core/tree/master/src/testInt/resources/tests
 :json-schema: https://github.com/openapi-processor/openapi-processor-core/blob/master/src/main/resources/mapping/v2/mapping.yaml.json
 :json-schema-site: https://openapiprocessor.io/schemas/mapping/mapping-{var-mapping-version}.json
+:oap-sample-packages: https://github.com/openapi-processor/openapi-processor-samples/tree/master/samples/spring-mvc-boot-4-packages-kt
 
 //
 // other external links
