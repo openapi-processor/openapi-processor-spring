@@ -101,7 +101,7 @@ Previously an annotation mapping was lost if the type was mapped at the same tim
 
 Assume the following mapping:
 
-[source,yaml,subs="attributes+"]
+[source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
