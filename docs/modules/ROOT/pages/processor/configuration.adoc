@@ -12,7 +12,10 @@ A mapping YAML looks like this:
 openapi-processor-mapping: {var-mapping-version}
 
 options:
-  package-name: io.openapiprocessor.sample
+  package-name: io.openapiprocessor.openapi
+  package-names:
+    base: io.openapiprocessor.openapi # same as option.package-name
+    location: io.openapiprocessor
   package-name-from-path: true
   model-name-suffix: Resource
   model-type: record
@@ -41,7 +44,7 @@ map:
    # java type mappings
 ----
 
-The only required option is `package-name`. All other options or the type mappings are optional.
+The only required option is `package-name` or alternativly `package-names.base`. All other options or the type mappings are optional.
 
 == options:
 
@@ -67,30 +70,40 @@ options:
   package-name: io.openapiprocessor.sample
 ----
 
-=== package-name-from-path (new with 2025.3)
+=== package-names (new with 2025.3)
 
-**optional** (boolean, `true` or `false`, default is `false`)
+parent key to group package-name related options.
+// See xref:processor/server-url.adoc[].
 
-`package-name-from-path` enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
+[#_package_names_base]
+=== package-names:base
 
-Enabling this has a few requirements:
+**required/optional** (string)
 
-- `package-name` must match a specific *parent* package name of the *target* package in the production code:
-+
-The *parent* package is shorter than the *target* package, and the *target* package starts with the *parent* package.
-+
-This is hard to explain in a few words. See the link below for an example.
+the root (java) package name of the generated interfaces & models. The package folder tree will be created inside the `targetDir`.
+
+This is the same as `package-name`. Only one of `package-name` or `package-names.base` is *required*.
+
+It takes precedence above `package-name` if both ar set.
+
+[#_package_names_location]
+=== package-names:location
+
+**optional** (string)
+
+`package-names.location` enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
+
+It is the *parent* package for location based package names.
+
+Only (OpenAPI) file locations below the parent package will be generated with a location based package name. Any other (OpenAPI) file location will use `package-names.base` (or `package-name`) as the package name.
+
+Enabling this has a few conditions:
 
 - to create an interface or resource in a specific package, its OpenAPI description has to be in the target package and must be reachable from the root OpenAPI description.
 
 - it only works with the `INTERNAL` OpenAPI parser (it is the default parser). It will not work with the `SWAGGER` OpenAPI parser.
 
-See xref:processor/package-names.adoc[package-names] for a description with an example. It explains which package is the *parent* package and how to place OpenAPI parts into packages.
-
-[WARNING]
-====
-This is still a bit experimental and may not behave nicely if the expected configuration requirements are not met.
-====
+See xref:processor/package-names.adoc[package-names] for a description with an example. It explains the *parent* package and how to place OpenAPI parts into packages.
 
 === model-name-suffix
 
