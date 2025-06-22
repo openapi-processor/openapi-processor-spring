@@ -1,30 +1,23 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-= package-names
+= package-names from location
 
-[WARNING]
-====
-This is still a bit experimental and may not behave nicely if the expected configuration requirements are not met.
+The *package-names from location* feature allows the processor to create package names based on the file location of $ref'erenced parts of the OpenAPI description.
 
-It also works *only* with the `INTERNAL` OpenAPI parser, which is the default OpenAPI parser.
-====
+This gets enabled by setting the `package-names:location` option.
 
-== package-names-from-path
+== package-names:location
 
-The `package-name-from-path` option enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
+`package-names:location` is the *parent* package for location based package names.
 
-Enabling this has a few requirements:
+Only (OpenAPI) file locations below the parent package will be generated with a location based package name. Any other (OpenAPI) file location will use `package-names.base` (or `package-name`) as the package name.
 
-- `package-name` must match a specific *parent* package name of the target package in the production code.
-+
-The *parent* package should be shorter than the *target* package, and the *target* package should start with the *parent* package.
-+
-See the example below.
+Enabling this has a few conditions:
 
-- to create an interface or resource with a specific package, its OpenAPI description has to be in the *target* package and must be reachable from the root OpenAPI description.
+- to create an interface or resource in a specific package, its OpenAPI description has to be in the target package and must be reachable from the root OpenAPI description.
 
-- it is only supported with the `INTERNAL` OpenAPI parser (it is the default parser). It will not work with the `SWAGGER` OpenAPI parser.
+- it only works with the `INTERNAL` OpenAPI parser (it is the default parser). It will not work with the `SWAGGER` OpenAPI parser.
 
 === mapping.yaml
 
@@ -36,14 +29,19 @@ openapi-processor-mapping: {var-mapping-version}
 
 options:
   # this must be a parent package of the target packages
-  package-name: io.openapiprocessor.samples  # <2>
+  #package-name: io.openapiprocessor.openapi  # <1>
 
-  # this enables package generation from the endpoint $ref file location
-  package-name-from-path: true # <1>
+  package-names:
+    base: io.openapiprocessor.openapi # <2>
+    # this enables package generation from the endpoint $ref file location
+    location:  io.openapiprocessor.samples # <3>
 ----
 
-<1> this enables the package-name feature. Default is `false`.
-<2> the `package-name`, this *must* be a *parent* package name of the project's *target* packages.
+<1> the shortcut for setting `package-names.base`. If location based packages should be used, setting `package-names.base` is preferred.
+
+<2> this is the base package for all generated code. This is identical to the current behaviour (i.e. `package-name`). Any file the is not below `package-names.location` will be generated with this as the base package.
+
+<3> `package-name.location` is the *parent* package name of the project's *target* packages. If the processor finds a file ref'erenced from the main OpenAPI in a subpackage of `package-name.location` the generated sources will be generated with that package.
 
 === OpenAPI and $refs
 
@@ -164,11 +162,9 @@ Having an idea now how the files are organized, it is possible to explain which 
 
 From the file tree above:
 
-The package name of the `foo` endpoint files is `io.openapiprocessor.samples.foo` and the nearest *parent* package is `io.openapiprocessor.samples`. This is then the `package-name` option value.
+The package name of the `foo` endpoint files is `io.openapiprocessor.samples.foo` and the nearest *parent* package is `io.openapiprocessor.samples`. This is then the `package-names.location` option value.
 
 It is possible to use `io.openapiprocessor` or even `io` as the *parent* package.
-
-Important is that the *parent* package is shorter than the *target* package and that the *target* package starts with the *parent* package.
 
 === directory structure after processing
 
