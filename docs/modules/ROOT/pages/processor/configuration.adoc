@@ -39,6 +39,7 @@ logging:
 compatibility:
   bean-validation-valid-on-reactive: false
   identifier-word-break-from-digit-to-letter: false
+  identifier-prefix-invalid-enum-start: false
 
 map:
    # java type mappings
@@ -525,6 +526,12 @@ keep the pre-2024.2 behavior. See xref:processor/identifier.adoc[Identifiers].
 **optional** (boolean, `true` or `false`, default is `true`)
 
 keep the pre-2024.2 behavior. See xref:processor/bean-validation.adoc[Bean Validation].
+
+=== identifier-prefix-invalid-enum-start
+
+**optional** (boolean, `true` or `false`, default is `true`)
+
+*Invalid characters* (e.g. numbers or underscore) at the start of enum values are prefixed with `"V"` (for value) to generate valid java identifiers. The old behaviour (pre-2025.4.1) was to strip the invalid start characters.
 
 == map:
 
