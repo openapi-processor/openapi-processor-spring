@@ -15,7 +15,7 @@ See [here][oap-docs].
 
 # snapshot repository
 
-to use snapshot versions add `https://oss.sonatype.org/content/repositories/snapshots` as maven repository to your build file.
+to use snapshot versions add `https://central.sonatype.com/repository/maven-snapshots` as maven repository to your build file.
 
 
 [oap-central]: https://search.maven.org/search?q=io.openapiprocessor
