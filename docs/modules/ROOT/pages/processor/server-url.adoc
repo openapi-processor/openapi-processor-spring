@@ -31,7 +31,8 @@ and a mapping
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
-  server-url: true
+  base-path:
+    server-url: true
 ----
 
 it will generate a simple resource properties file with a single property `openapi.base.path`:
@@ -48,9 +49,10 @@ If there are multiple servers, its index can be used to select it:
 ----
 openapi-processor-mapping: {var-mapping-version}
 options:
-  server-url: 0   # same as true
-#  server-url: 1
-#  server-url: 2
+  base-path:
+    server-url: 0   # same as true
+#   server-url: 1
+#   server-url: 2
 ----
 
 == using the generated properties file
@@ -69,14 +71,15 @@ While it is possible to import the generated properties file, it is probably bet
 
 == name of the properties file
 
-The default name of the generated properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[server-url:properties-name] option.
+The default name of the generated properties file is `api.properties`. it is configurable using the xref:processor/configuration.adoc#_basepath_propertiesname[options:base-path:server-url:properties-name] option.
 
 [source,yaml,subs=attributes+]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
 options:
-  server-url:
+  base-path:
+    server-url:
     properties-name: base-path.properties
 ----
 
