@@ -38,7 +38,7 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
 mockk = "io.mockk:mockk:1.14.5"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.27"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
