@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 build-jdk = "11"
 test-jdk = "17"
 
