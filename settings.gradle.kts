@@ -2,6 +2,18 @@ plugins {
     id("com.gradle.enterprise") version("3.14.1")
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots")
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+    }
+}
+
 gradleEnterprise {
     if (System.getenv("CI") != null) {
         buildScan {
@@ -12,6 +24,6 @@ gradleEnterprise {
     }
 }
 
-rootProject.name = 'openapi-processor-spring'
+rootProject.name = "openapi-processor-spring"
 
 //includeBuild '../openapi-processor-base'

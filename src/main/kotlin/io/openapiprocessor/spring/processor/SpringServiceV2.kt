@@ -53,7 +53,7 @@ class SpringServiceV2(
     }
 
     override fun getVersion(): String {
-        return io.openapiprocessor.spring.Version.version
+        return io.openapiprocessor.spring.Versions.version
     }
 
     override fun getLatestVersion(): Version {

@@ -11,7 +11,7 @@ import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
-import io.openapiprocessor.spring.Version
+import io.openapiprocessor.spring.Versions
 import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
@@ -110,7 +110,7 @@ class SpringProcessor : OpenApiProcessorTest {
     }
 
     private fun createGeneratedInfo(options: ApiOptions): GeneratedInfo {
-        var version = Version.version
+        var version = Versions.version
         var date: String? = OffsetDateTime.now().toString()
 
         if (!options.generatedDate)

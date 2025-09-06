@@ -13,14 +13,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.openapiprocessor.core.version.GitHubVersion
 import io.openapiprocessor.core.version.GitHubVersionProvider
-import io.openapiprocessor.spring.Version
+import io.openapiprocessor.spring.Versions
 import java.time.Instant
 
 class SpringServiceSpec : StringSpec({
 
     "get version" {
         val service = SpringServiceV2()
-        service.version.shouldBe(Version.version)
+        service.version.shouldBe(Versions.version)
     }
 
     "gets latest version" {
@@ -42,7 +42,7 @@ class SpringServiceSpec : StringSpec({
 
     "checks newer version not available" {
         val provider = mockk<GitHubVersionProvider>()
-        every { provider.getVersion() } returns GitHubVersion(Version.version, Instant.now(), "any")
+        every { provider.getVersion() } returns GitHubVersion(Versions.version, Instant.now(), "any")
 
         val service = SpringServiceV2(provider)
         service.hasNewerVersion().shouldBeFalse()

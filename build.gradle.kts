@@ -1,68 +1,49 @@
 plugins {
-    id 'jacoco'
-    id 'groovy'
-    id 'java-library'
-    id 'maven-publish'
-    id 'signing'
-    alias(libs.plugins.kotlin)
-    alias(libs.plugins.sonar)
-    alias(libs.plugins.nexus)
+    `java-library`
+    groovy
+    kotlin
+    jacoco
+    id("openapiprocessor.test")
+    id("openapiprocessor.testInt")
+    id("openapiprocessor.publish")
     alias(libs.plugins.versions)
+    //alias(libs.plugins.kotlin)
+    alias(libs.plugins.sonar)
+    id("jacoco-report-aggregation")
+    id("com.github.ben-manes.versions")
 }
 
-group = projectGroupId
-version = projectVersion
+group = "io.openapiprocessor"
+version = libs.versions.processor.get()
 println("version: $version")
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url = "https://central.sonatype.com/repository/maven-snapshots"
-    }
+versions {
+    packageName = "io.openapiprocessor.spring"
+    entries.putAll(mapOf(
+        "version" to libs.versions.processor.get()
+    ))
 }
 
-testing {
-    suites {
-        test {
-            useJUnitJupiter(libs.versions.junit.get())
-        }
 
-        testInt(JvmTestSuite) {
-            useJUnitJupiter(libs.versions.junit.get())
-
-            dependencies {
-                implementation(project())
-            }
-
-            sources {
-                java {
-                    srcDirs = ['src/testInt/kotlin']
-                }
-            }
-
-            targets {
-                configureEach {
-                    testTask.configure {
-                        shouldRunAfter(test)
-                    }
-                }
-            }
-        }
-    }
-}
-
-tasks.named('check') {
-    dependsOn(testing.suites.testInt)
-}
-
-sourceSets {
-  main {
-    java {
-        srcDirs "${buildDir}/version"
-    }
-  }
-}
+//testing {
+//            }
+//
+//            sources {
+//                java {
+//                    srcDirs = ['src/testInt/kotlin']
+//                }
+//            }
+//
+//            targets {
+//                configureEach {
+//                    testTask.configure {
+//                        shouldRunAfter(test)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 java {
     withJavadocJar ()
@@ -70,24 +51,17 @@ java {
 }
 
 kotlin {
-    jvmToolchain(libs.versions.build.jdk.get() as Integer)
+    jvmToolchain(libs.versions.build.jdk.get().toInt())
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
+    }
 }
 
-
-compileKotlin.dependsOn "generateVersion"
-
-compileTestGroovy {
-    dependsOn 'compileKotlin'
-    classpath += files(compileKotlin.destinationDirectory)
-}
-
-
-tasks.named('compileKotlin') {
-    dependsOn 'generateVersion'
-}
-
-tasks.named('sourcesJar') {
-    dependsOn 'generateVersion'
+tasks.compileTestGroovy {
+    classpath += sourceSets.main.get().compileClasspath
+    classpath += files(tasks.compileKotlin.get().destinationDirectory)
+    classpath += files(tasks.compileTestKotlin.get().destinationDirectory)
 }
 
 dependencies {
@@ -106,7 +80,7 @@ dependencies {
     testImplementation (libs.openapi.processor.parser.api)
     testImplementation (libs.openapi.processor.parser.swagger)
     testImplementation (libs.openapi.processor.parser.openapi4j)
-    testImplementation platform(libs.groovy.bom)
+    testImplementation (platform(libs.groovy.bom))
     testImplementation ("org.apache.groovy:groovy")
     testImplementation ("org.apache.groovy:groovy-nio")
     testImplementation (libs.spock)
@@ -124,7 +98,7 @@ dependencies {
     testIntImplementation (libs.openapi.processor.parser.api)
     testIntImplementation (libs.openapi.processor.parser.swagger)
     testIntImplementation (libs.openapi.processor.parser.openapi4j)
-    testIntImplementation platform(libs.groovy.bom)
+    testIntImplementation (platform(libs.groovy.bom))
     testIntImplementation ("org.apache.groovy:groovy")
     testIntImplementation ("org.apache.groovy:groovy-nio")
     testIntImplementation (libs.spock)
@@ -146,46 +120,56 @@ dependencies {
 //    }
 //}
 
-tasks.withType(Test).configureEach {
-    jvmArgs(
+tasks.withType<Test>().configureEach {
+    jvmArgs(listOf(
         "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
-    )
+    ))
 
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.test.jdk.get()))
     })
 
-    finalizedBy jacocoTestReport
+    finalizedBy(tasks.named("jacocoTestReport"))
 }
 
 jacoco {
     toolVersion = libs.versions.jacoco.get()
 }
 
-jacocoTestReport {
+tasks.jacocoTestReport {
+    executionData.from(tasks.named<Test>("test").map<File> {
+        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
+    })
+    executionData.from(tasks.named<Test>("testInt").map<File> {
+        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
+    })
+
     reports {
         xml.required = true
-        html.required = false
-        csv.required = false
+        html.required = true
     }
-
-    getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
 }
+
+//publishing {
+//    publications {
+//        named<MavenPublication>("openapiprocessor") {
+//            pom {
+//                description = "OpenAPI Processor Spring"
+//            }
+//        }
+//    }
+//}
 
 sonarqube {
   properties {
-    property "sonar.projectKey", "openapi-processor_openapi-processor-spring"
-    property "sonar.organization", "openapi-processor"
-    property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    property("sonar.projectKey", "openapi-processor_openapi-processor-base-spring")
+    property("sonar.organization", "openapi-processor")
+    property("sonar.host.url", "https://sonarcloud.io")
+    property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString())
   }
 }
-
-apply plugin: VersionPlugin
-apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
-apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"
