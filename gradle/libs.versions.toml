@@ -4,10 +4,10 @@ processor = "2025.4-SNAPSHOT"
 kotlin = "2.2.10"
 build-jdk = "11"
 test-jdk = "17"
-build-plugins = "2025.1-SNAPSHOT"
+build-plugins = "2025.2"
 
 api = "2024.2"
-base = "2025.5-SNAPSHOT"
+base = "2025.5"
 
 junit = "5.9.3"
 jacoco = "0.8.7"
