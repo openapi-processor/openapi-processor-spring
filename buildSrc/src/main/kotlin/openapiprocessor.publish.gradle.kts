@@ -5,8 +5,13 @@ import io.openapiprocessor.build.core.getPomProperties
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
-   id("io.openapiprocessor.build.plugin.publish-central")
+    `maven-publish`
+    signing
+   id("io.openapiprocessor.build.plugin.publish-base")
 }
+
+// central plugin setup must run in the context of the applying project
+plugins.apply("io.openapiprocessor.build.plugin.publish-central")
 
 // see buildSrc/build.gradle.kts
 val libs = the<LibrariesForLibs>()

@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.versions)
     //alias(libs.plugins.kotlin)
     alias(libs.plugins.sonar)
+    alias(libs.plugins.updates)
     id("jacoco-report-aggregation")
-    id("com.github.ben-manes.versions")
 }
 
 group = "io.openapiprocessor"
