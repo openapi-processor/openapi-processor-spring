@@ -43,7 +43,9 @@ class SpringProcessor : OpenApiProcessorTest {
             val annotations = SpringFrameworkAnnotations()
 
             val options = convertOptions(processorOptions)
-            val identifier = JavaIdentifier(IdentifierOptions(options.identifierWordBreakFromDigitToLetter))
+            val identifier = JavaIdentifier(IdentifierOptions(
+                options.identifierWordBreakFromDigitToLetter,
+                options.identifierPrefixInvalidEnumStart))
             val cv = ApiConverter(options, identifier, framework)
             val api = cv.convert(openapi)
 
