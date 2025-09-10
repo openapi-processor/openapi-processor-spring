@@ -40,7 +40,7 @@ jobs:
 
     - name: run tests
       run: |
-        ./gradlew check
+        ./gradlew javaToolchains check --warning-mode all --stacktrace
 
     - name: archive test results
       uses: actions/upload-artifact@v4
