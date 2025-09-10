@@ -13,7 +13,7 @@ junit = "5.9.3"
 jacoco = "0.8.7"
 
 spring-web = "5.3.39"
-spring-data = "2.7.18"
+spring-data = "3.5.3"
 
 # although testInt builds with jdk 17 it is complaing that the dependecies need jdk 17
 #spring-web = "6.2.7"
