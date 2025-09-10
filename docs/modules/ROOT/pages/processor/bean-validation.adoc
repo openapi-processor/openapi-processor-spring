@@ -1,6 +1,80 @@
 = Bean Validation
 include::partial$links.adoc[]
 
+== supported target classes
+
+=== avoiding compilation errors
+
+[.badge .badge-since]+since 2022.6+
+
+Each bean-validation annotations has a limited number of supported classes that can be annotated by it. For example, `jakarta.validation.constraints.DecimalMin` does only support number-like classes.
+
+If placed on another non-number class compilation will fail.
+
+This can happen if bean-validation is combined with type mapping. A simple example is number representing a year.
+
+An OpenAPI with an integer parameter and bean validation enabled would add `@DecimalMin` & `@DecimalMax` annotations to the parameter in the generated code.
+
+[source,yaml,subs=attributes+]
+----
+openapi: 3.1.0
+info:
+  title: drop bean validation annotation if mapped to unsupported type
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      parameters:
+        - in: query
+          name: year
+          schema:
+            type: integer
+            format: year
+            minimum: 1970
+            maximum: 2099
+----
+
+This is an issue if the parameter type is mapped to a different Java type. Since the value is representing a year it makes sense to map it `java.time.Year`.
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: v14
+
+options:
+  package-name: generated
+  bean-validation: jakarta
+
+map:
+  types:
+    - type: integer:year => java.time.Year
+----
+
+Adding `@DecimalMin` & `@DecimalMax` to the parameter breaks compilation because both annotations do not support `java.time.Year`.
+
+=== supported custom classes
+
+In case the target type is not recognized automatically (and the annotations are dropped), for example on a custom `java.lang.Number` implementation, it is possible to tell the processor that an annotation is valid on that type.
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: v14
+
+options:
+# ...
+
+map:
+# ...
+
+bean-validation:
+  jakarta.validation.constraints.DecimalMin:
+    - other.CustomInteger
+  jakarta.validation.constraints.DecimalMax:
+    - other.CustomInteger
+----
+
+See also xref:processor/configuration.adoc#_bean_validation-map[bean validation] configuration.
+
 == WebFlux
 
 The position of the `@Valid` annotation on reactive types has changed in 2024.2. Until then the `@Valid` was placed on the generic type of the reactive wrapper, like this:

@@ -40,7 +40,8 @@ compatibility:
   bean-validation-valid-on-reactive: false
   identifier-word-break-from-digit-to-letter: false
   identifier-prefix-invalid-enum-start: false
-
+bean-validation:
+   # bean-validation annotation to "custom" classes map
 map:
    # java type mappings
 ----
@@ -532,6 +533,26 @@ keep the pre-2024.2 behavior. See xref:processor/bean-validation.adoc[Bean Valid
 **optional** (boolean, `true` or `false`, default is `true`)
 
 *Invalid characters* (e.g. numbers or underscore) at the start of enum values are prefixed with `"V"` (for value) to generate valid java identifiers. The old behaviour (pre-2025.4.1) was to strip the invalid start characters.
+
+[#_bean_validation-map]
+== bean-validation: ([.badge .badge-since]+since 2022.6+)
+
+Opt-In for custom classes that are supported by specific bean-validation annotations.
+
+This is a simple map of bean-validation annotation to a list of additionally supported classes.
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: {var-mapping-version}
+
+bean-validation:
+  jakarta.validation.constraints.DecimalMin:
+    - my.custom.Integer
+  jakarta.validation.constraints.DecimalMax:
+    - my.custom.Integer
+----
+
+See xref:processor/bean-validation.adoc[Bean Validation] for an explanation when this may be needed.
 
 == map:
 
