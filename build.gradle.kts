@@ -3,13 +3,12 @@ plugins {
     groovy
     kotlin
     jacoco
+    alias(libs.plugins.versions)
+    alias(libs.plugins.sonar)
+    alias(libs.plugins.updates)
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
     id("openapiprocessor.publish")
-    alias(libs.plugins.versions)
-    //alias(libs.plugins.kotlin)
-    alias(libs.plugins.sonar)
-    alias(libs.plugins.updates)
     id("jacoco-report-aggregation")
 }
 
