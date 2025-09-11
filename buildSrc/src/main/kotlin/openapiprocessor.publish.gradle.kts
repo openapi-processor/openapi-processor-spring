@@ -16,23 +16,29 @@ plugins.apply("io.openapiprocessor.build.plugin.publish-central")
 // see buildSrc/build.gradle.kts
 val libs = the<LibrariesForLibs>()
 
-publishing {
-    publications {
-        create<MavenPublication>("openapiprocessor") {
-            from(components["java"])
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("openapiprocessor") {
+                from(components["java"])
 
-            pom {
-                pom.initFrom(getPomProperties(project))
+                pom {
+                    pom.initFrom(getPomProperties(project))
+                }
             }
+        }
+
+        repositories {
+            sonatype(project)
         }
     }
 
-    repositories {
-        sonatype(project)
+    signing {
+        initSignKey()
+        sign(publishing.publications["openapiprocessor"])
     }
 }
 
-signing {
-    initSignKey()
-    sign(publishing.publications["openapiprocessor"])
+publishProcessor {
+    deploymentName = "spring"
 }
