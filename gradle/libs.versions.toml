@@ -1,7 +1,7 @@
 [versions]
 processor = "2025.4-SNAPSHOT"
 
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 build-jdk = "11"
 test-jdk = "17"
 build-plugins = "2025.9"
