@@ -4,7 +4,7 @@ processor = "2025.4-SNAPSHOT"
 kotlin = "2.2.10"
 build-jdk = "11"
 test-jdk = "17"
-build-plugins = "2025.6"
+build-plugins = "2025.9"
 
 api = "2024.2"
 base = "2025.5.1"
