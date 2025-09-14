@@ -13,7 +13,7 @@ junit = "5.9.3"
 jacoco = "0.8.7"
 
 spring-web = "6.2.11"
-spring-data = "3.5.0"
+spring-data = "3.5.4"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
