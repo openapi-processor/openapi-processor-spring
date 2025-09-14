@@ -111,10 +111,6 @@ tasks.withType<Test>().configureEach {
         "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
     ))
 
-    javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
-    })
-
     finalizedBy(tasks.named("jacocoTestReport"))
 }
 
