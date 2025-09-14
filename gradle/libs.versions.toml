@@ -38,7 +38,7 @@ logback = "ch.qos.logback:logback-classic:1.5.18"
 
 kotest-bom = "io.kotest:kotest-bom:6.0.3"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
-kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
+kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.5"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
