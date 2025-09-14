@@ -2,8 +2,8 @@
 processor = "2025.4-SNAPSHOT"
 
 kotlin = "2.2.20"
-build-jdk = "11"
-test-jdk = "17"
+target-jdk = "11"
+build-jdk = "17"
 build-plugins = "2025.9"
 
 api = "2024.2"
@@ -12,12 +12,8 @@ base = "2025.5.1"
 junit = "5.9.3"
 jacoco = "0.8.7"
 
-spring-web = "5.3.39"
-spring-data = "2.7.18"
-
-# although testInt builds with jdk 17 it is complaing that the dependecies need jdk 17
-#spring-web = "6.2.7"
-#spring-data = "3.5.0"
+spring-web = "6.2.7"
+spring-data = "3.5.0"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }

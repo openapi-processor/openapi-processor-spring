@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     `java-library`
     groovy
@@ -23,27 +25,6 @@ versions {
     ))
 }
 
-
-//testing {
-//            }
-//
-//            sources {
-//                java {
-//                    srcDirs = ['src/testInt/kotlin']
-//                }
-//            }
-//
-//            targets {
-//                configureEach {
-//                    testTask.configure {
-//                        shouldRunAfter(test)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 java {
     withJavadocJar ()
     withSourcesJar ()
@@ -54,6 +35,7 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs.add("-Xannotation-default-target=param-property")
+        jvmTarget = JvmTarget.fromTarget(libs.versions.target.jdk.get())
     }
 }
 
@@ -130,7 +112,7 @@ tasks.withType<Test>().configureEach {
     ))
 
     javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.test.jdk.get()))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
     })
 
     finalizedBy(tasks.named("jacocoTestReport"))
@@ -153,16 +135,6 @@ tasks.jacocoTestReport {
         html.required = true
     }
 }
-
-//publishing {
-//    publications {
-//        named<MavenPublication>("openapiprocessor") {
-//            pom {
-//                description = "OpenAPI Processor Spring"
-//            }
-//        }
-//    }
-//}
 
 sonarqube {
   properties {
