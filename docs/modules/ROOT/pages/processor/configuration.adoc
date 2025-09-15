@@ -72,7 +72,7 @@ options:
   package-name: io.openapiprocessor.sample
 ----
 
-=== package-names (new with 2025.3)
+=== package-names ([.badge .badge-since]+new with 2025.3+)
 
 parent key to group package-name related options.
 // See xref:processor/server-url.adoc[].
