@@ -535,7 +535,7 @@ keep the pre-2024.2 behavior. See xref:processor/bean-validation.adoc[Bean Valid
 *Invalid characters* (e.g. numbers or underscore) at the start of enum values are prefixed with `"V"` (for value) to generate valid java identifiers. The old behaviour (pre-2025.4.1) was to strip the invalid start characters.
 
 [#_bean_validation-map]
-== bean-validation: ([.badge .badge-since]+since 2022.6+)
+== bean-validation: ([.badge .badge-since]+new with 2025.5+)
 
 Opt-In for custom classes that are supported by specific bean-validation annotations.
 
