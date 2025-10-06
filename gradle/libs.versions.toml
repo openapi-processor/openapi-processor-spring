@@ -37,7 +37,7 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.6"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
+groovy-bom = "org.apache.groovy:groovy-bom:5.0.1"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 # for buildSrc convention plugins
