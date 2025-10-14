@@ -12,6 +12,7 @@ plugins {
     id("openapiprocessor.testInt")
     id("openapiprocessor.publish")
     id("jacoco-report-aggregation")
+    id("openapiprocessor.newapi")
 }
 
 group = "io.openapiprocessor"
