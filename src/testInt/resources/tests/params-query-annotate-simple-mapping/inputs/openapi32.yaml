@@ -1,0 +1,18 @@
+openapi: 3.2.0
+info:
+  title: test simple data type mapping
+  version: 1.0.0
+paths:
+  /foo:
+    get:
+      parameters:
+        - name: id
+          description: mapped to java UUID
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: empty

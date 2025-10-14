@@ -1,0 +1,19 @@
+openapi: 3.2.0
+info:
+  title: test simple path parameters
+  version: 1.0.0
+paths:
+  /endpoint/{foo}:
+    get:
+      tags:
+        - endpoint
+      parameters:
+        - name: foo
+          description: "path, required, string"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: empty

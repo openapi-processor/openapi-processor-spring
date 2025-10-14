@@ -1,0 +1,40 @@
+openapi: 3.2.0
+info:
+  title: test complex parameters
+  version: 1.0.0
+paths:
+  /endpoint-object:
+    get:
+      description: |-
+        < should be mapped to a `Props` pojo
+        /endpoint-object?prop1=foo&prop2=bar
+      parameters:
+        - name: props
+          description: query parameter object
+          in: query
+          schema:
+            $ref: "#/components/schemas/Props"
+      responses:
+        "204":
+          description: empty
+  /endpoint-map:
+    get:
+      description: < should be mapped to a `Map` (from mapping)
+      parameters:
+        - name: props
+          description: query parameter object
+          in: query
+          schema:
+            $ref: "#/components/schemas/Props"
+      responses:
+        "204":
+          description: empty
+components:
+  schemas:
+    Props:
+      type: object
+      properties:
+        prop1:
+          type: string
+        prop2:
+          type: string
