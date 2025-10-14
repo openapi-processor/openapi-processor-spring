@@ -7,7 +7,7 @@ build-jdk = "17"
 build-plugins = "2025.9"
 
 api = "2024.2"
-base = "2025.5.1"
+base = "2025.6-SNAPSHOT"
 
 junit = "5.9.3"
 jacoco = "0.8.7"
