@@ -33,29 +33,30 @@ class ProcessorEndToEndSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    val swagger = ALL_30.map {
-        testSet(it.name, ParserType.SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi4j = ALL_30.map {
-        testSet(it.name, ParserType.OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi30 = ALL_30.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi31 = ALL_31.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi30r = ALL_30.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi31r = ALL_31.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
-    }
-
-    return swagger + openapi4j + openapi30 + openapi31 + openapi30r + openapi31r
+    return buildTestSets()
+//    val swagger = ALL_30.map {
+//        testSet(it.name, ParserType.SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val openapi4j = ALL_30.map {
+//        testSet(it.name, ParserType.OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val openapi30 = ALL_30.map {
+//        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val openapi31 = ALL_31.map {
+//        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val openapi30r = ALL_30.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
+//        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val openapi31r = ALL_31.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
+//        testSet(it.name, ParserType.INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    return swagger + openapi4j + openapi30 + openapi31 + openapi30r + openapi31r
 }

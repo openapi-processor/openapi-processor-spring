@@ -5,30 +5,70 @@
 
 package io.openapiprocessor.spring
 
+import io.openapiprocessor.spring.processor.SpringServiceV2
 import io.openapiprocessor.test.*
 
-val ALL_30: List<TestParams> = listOf(
-    test30_D_("endpoint-http-mapping"),
-    test30_DR("params-complex-data-types"),
-    test30_D_("params-enum"),
-    test30_D_("params-pageable-mapping"),
-    test30_D_("params-path-simple-data-types"),
-    test30_D_("params-query-annotate-simple-mapping"),
-    test30_DR("params-request-body"),
-    test30_D_("params-request-body-multipart-mapping"),
-    test30_D_("params-simple-data-types"),
-    test30_D_("response-status")
+val ALL_3x: List<TestParams2> = join(
+    emptyList(),
+    testX("endpoint-http-mapping"),
+    tests("params-complex-data-types"),
+    testX("params-enum"),
+    testX("params-pageable-mapping"),
+    testX("params-path-simple-data-types"),
+    testX("params-query-annotate-simple-mapping"),
+    tests("params-request-body"),
+    testX("params-request-body-multipart-mapping"),
+    testX("params-simple-data-types"),
+    testX("response-status")
 )
 
-val ALL_31: List<TestParams> = listOf(
-    test31_D_("endpoint-http-mapping"),
-    test31_DR("params-complex-data-types"),
-    test31_D_("params-enum"),
-    test31_D_("params-pageable-mapping"),
-    test31_D_("params-path-simple-data-types"),
-    test31_D_("params-query-annotate-simple-mapping"),
-    test31_DR("params-request-body"),
-    test31_DR("params-request-body-multipart-mapping"),
-    test31_D_("params-simple-data-types"),
-    test31_D_("response-status")
-)
+fun testSet(
+    name: String,
+    parser: String = "INTERNAL",
+    openapi: String = "openapi.yaml",
+    model: String = "default",
+    inputs: String = "inputs.yaml",
+    outputs: String = "outputs.yaml",
+    expected: String = "outputs"
+): TestSet {
+    val testSet = TestSet()
+    testSet.name = name
+    testSet.processor = SpringServiceV2(testMode = true)
+    testSet.parser = parser
+    testSet.modelType = model
+    testSet.openapi = openapi
+    testSet.inputs = inputs
+    testSet.outputs = outputs
+    testSet.expected = expected
+    return testSet
+}
+
+fun buildTestSets(): List<TestSet> {
+    return ALL_3x
+        .filter {
+            when (it.parser) {
+                "INTERNAL" -> {
+                    true
+                }
+                "SWAGGER" if it.openapi == "openapi30.yaml" -> {
+                    true
+                }
+                "OPENAPI4J" if it.openapi == "openapi30.yaml" -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        .map {
+            testSet(
+                it.name,
+                it.parser,
+                it.openapi,
+                model = it.modelType,
+                outputs = it.outputs,
+                expected = it.expected
+            )
+        }
+}

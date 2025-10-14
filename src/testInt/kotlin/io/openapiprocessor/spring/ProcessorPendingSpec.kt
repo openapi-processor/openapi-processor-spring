@@ -8,10 +8,7 @@ package io.openapiprocessor.spring
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.openapiprocessor.core.parser.ParserType.INTERNAL
 import io.openapiprocessor.test.*
-import io.openapiprocessor.test.API_30
-import io.openapiprocessor.test.TestSet
 
 /**
  * helper to run selected integration tests.
@@ -35,8 +32,6 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("params-enum", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("params-request-body-multipart-mapping", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("params-request-body-multipart-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs")
+        testSet("params-enum", "INTERNAL", API_30),
     )
 }
