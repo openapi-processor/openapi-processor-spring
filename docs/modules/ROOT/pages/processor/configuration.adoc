@@ -19,6 +19,7 @@ options:
   package-name-from-path: true
   model-name-suffix: Resource
   model-type: record
+  model-unreferenced: false
   enum-type: string
   one-of-interface: true
   bean-validation: jakarta
@@ -310,6 +311,14 @@ public class Foo {
 
 }
 ----
+
+=== model-unreferenced ([.badge .badge-since]+new with 2025.5+)
+
+**optional** (boolean, `true` or `false`, default is `false`)
+
+enables generation of unreferenced `component/schemas`. A schema is unreferenced if it is not used in any endpoint description.
+
+By default, openapi-processor will only generate DTOs for schemas that are referenced by an endpoint.
 
 === bean-validation
 

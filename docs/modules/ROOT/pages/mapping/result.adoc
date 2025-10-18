@@ -1,6 +1,8 @@
 = Result mapping
 include::partial$links.adoc[]
 
+== Standard
+
 A link:{spring-responseentity}[`ResponseEntity<>`] allows an endpoint implementation full control of the response.
 
 Here is a super simple example:
@@ -12,7 +14,7 @@ public ResponseEntity<String> getFoo() {
 }
 ----
 
-To enable a result wrapper set the `result` mapping in the mapping yaml to a fully qualified java type.
+To enable a result wrapper set the `result` mapping in the mapping YAML to a fully qualified java type.
 
 [source,yaml]
 ----
@@ -34,8 +36,29 @@ Depending on the number of defined response content types the parameter of the `
 |`ResponseEntity<?>`
 |===
 
-NOTE: prior to 1.0.0.M13 all results were auto-wrapped with `ResponseEntity<>`.
+== plain result type
 
+[.badge .badge-since]+since 2025.5+
+
+The **standard** `result` mapping requires a generic wrapper type, like `ResponseEntity<>`. To map a non-generic type as return type the `result` mapping accepts an *arrow mapping*:
+
+`plain => {target type}`
+
+which means, instead of the plain schema described in the OpenAPI response, use the `target type` as endpoint return type.
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: {var-mapping-version}
+
+options:
+  package-name: io.openapiprocessor.generated
+
+map:
+  paths:
+    /foo:
+       # new, mapping of plain replacement type
+       result: plain => org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
+----
 
 == Limit to Endpoint
 
