@@ -12,7 +12,7 @@ base = "2025.6"
 junit = "5.9.3"
 jacoco = "0.8.7"
 
-spring-web = "6.2.11"
+spring-web = "6.2.12"
 spring-data = "3.5.4"
 
 [libraries]
