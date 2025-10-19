@@ -7,7 +7,7 @@ A link:{spring-responseentity}[`ResponseEntity<>`] allows an endpoint implementa
 
 Here is a super simple example:
 
-[source,java]
+[source,java,title=Java code]
 ----
 public ResponseEntity<String> getFoo() {
     return ResponseEntity.ok("foo");
@@ -16,7 +16,7 @@ public ResponseEntity<String> getFoo() {
 
 To enable a result wrapper set the `result` mapping in the mapping YAML to a fully qualified java type.
 
-[source,yaml]
+[source,yaml,title=mapping]
 ----
 map:
   result: org.springframework.http.ResponseEntity
@@ -46,7 +46,7 @@ The **standard** `result` mapping requires a generic wrapper type, like `Respons
 
 which means, instead of the plain schema described in the OpenAPI response, use the `target type` as endpoint return type.
 
-[source,yaml,subs=attributes+]
+[source,yaml,subs=attributes+,title=mapping.yaml]
 ----
 openapi-processor-mapping: {var-mapping-version}
 
@@ -64,15 +64,35 @@ map:
 
 The `result` mapping works as endpoint-specific mapping too. That way it is possible to use the `ResponseEntity<>` only on single endpoints.
 
-
 So a mapping like this:
 
-[source,yaml]
+[source,yaml,title=mapping]
 ----
 map:
-
   /foo:
     result: org.springframework.http.ResponseEntity
 ----
 
 will only wrap the result of the endpoint `/foo`.
+
+
+In case of global type mapping
+
+[source,yaml,title=mapping.yaml fragment]
+----
+map:
+  result: org.springframework.http.ResponseEntity
+----
+
+that should not apply to a specific endpoint it is possible to _clear_ the global mapping by setting `result` to `plain`:
+
+[source,yaml,title=mapping]
+----
+map:
+  result: org.springframework.http.ResponseEntity
+
+  paths:
+    /foo:
+      # clear the top level "result" property, "plain" means no wrapper
+      result: plain
+----
