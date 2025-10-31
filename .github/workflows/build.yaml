@@ -42,7 +42,7 @@ jobs:
         ./gradlew javaToolchains check --warning-mode all --stacktrace
 
     - name: archive test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: test-results-${{ matrix.os }}
@@ -81,7 +81,7 @@ jobs:
         ./gradlew publishToMavenCentral --stacktrace
 
     - name: archive test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: publish results
@@ -126,7 +126,7 @@ jobs:
         ./gradlew check sonar
 
     - name: archive sonar results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: sonar results
