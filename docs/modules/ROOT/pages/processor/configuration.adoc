@@ -503,6 +503,47 @@ options:
     layout: standard
 ----
 
+== annotation-targets: ([.badge .badge-since]+new with 2025.6+)
+
+This section is used to configure the *allowed* targets of an annotation. This is like `java.lang.annotation.Target` which is used to define at which places an annotation can be used. On a type, field, method or property etc.
+
+The new section `annotation-targets` is a map from annotation name to set of allowed targets.
+
+The list of allowed targets is currently: `'type'`, `'field'`, `'method'` and `'parameter'`.
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: {var-mapping-version}
+options:
+  package-name: pkg
+
+map:
+  types:
+    - type: Foo @ lombok.Builder
+
+annotation-targets:
+  # possible entries 'type', 'field', 'method' & 'parameter'
+  lombok.Builder: ['type', 'method']
+----
+
+Internally, the processor has a default list of "known" annotations. It is not necessary to add those manually unless to overide it.
+
+The purpose of this configuration is to help the processor placing annotations. The processor may put an annotation at a place where it is not allowed. For example, it should not put `lombok.Builder` on method parameters or an annotation is not allowed on a mapped type.
+
+
+[NOTE]
+====
+Why doesn't openapi-processor directly check the allowed targets of `java.lang.annotation.Target` ?
+
+It can't check the allowed targets directly, because the annotations are usually not available on teh processors classpath. They are just strings from the mapping.
+====
+
+=== known annotations
+
+The default list is quite short at the moment but can grow:
+
+    * `lombok.Builder: ['type', 'method']`
+
 == logging:
 
 This section contains keys for logging mapping lookups. It may be useful to locate mappings that should be used but are not.
