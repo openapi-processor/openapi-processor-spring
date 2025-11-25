@@ -10,6 +10,6 @@ It can also be used to map the OpenAPI `array` type to a different java collecti
 
 Type mapping is very flexible. It is possible to define the mapping globally, globally for a specific response or parameter or limited to a specific endpoint or even http method for an endpoint.
 
-Type mapping also supports (nested) generic parameters to the target type. One level.
+Type mapping also supports (nested) generic parameters to the target type. Multiple levels.
 
 Type mapping works best with named schemas (i.e., schemas `$ref` erenced by their name).
