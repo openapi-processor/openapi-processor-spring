@@ -13,7 +13,7 @@ import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Versions
 import io.openapiprocessor.spring.writer.java.*
-import io.openapiprocessor.spring.writer.java.MappingAnnotationWriter
+import io.openapiprocessor.spring.writer.java.MappingAnnotationFactory
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
 import io.openapiprocessor.spring.writer.java.StatusAnnotationWriter
 import io.openapiprocessor.test.api.OpenApiProcessorTest
@@ -54,7 +54,7 @@ class SpringProcessor : OpenApiProcessorTest {
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidations = BeanValidationFactory(options)
-            val javaDocWriter = JavaDocWriter(identifier)
+            val javaDocWriter = JavaDocFactory(identifier)
             val formatter = getFormatter(options)
 
             val writer = ApiWriter(
@@ -68,7 +68,7 @@ class SpringProcessor : OpenApiProcessorTest {
                         options,
                         identifier,
                         StatusAnnotationWriter(annotations),
-                        MappingAnnotationWriter(annotations),
+                        MappingAnnotationFactory(annotations),
                         ParameterAnnotationWriter(annotations),
                         beanValidations,
                         javaDocWriter

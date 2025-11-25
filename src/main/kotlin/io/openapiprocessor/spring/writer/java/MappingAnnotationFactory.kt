@@ -8,16 +8,15 @@ package io.openapiprocessor.spring.writer.java
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
-import java.io.Writer
-import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
+import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMappingAnnotationFactory
 
 /**
- * spring mapping annotation writer
+ * spring mapping annotation factory
  */
-class MappingAnnotationWriter(private val annotations: SpringFrameworkAnnotations): CoreMappingAnnotationWriter {
+class MappingAnnotationFactory(private val annotations: SpringFrameworkAnnotations): CoreMappingAnnotationFactory {
 
-    override fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
-        target.write(createAnnotation(endpoint, endpointResponse))
+    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
+        return listOf(createAnnotation(endpoint, endpointResponse))
     }
 
     private fun createAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): String {

@@ -20,7 +20,7 @@ import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.GenericDataType
 import io.openapiprocessor.core.model.datatypes.MappedDataType
-import io.openapiprocessor.core.writer.java.JavaDocWriter
+import io.openapiprocessor.core.writer.java.JavaDocFactory
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
@@ -40,10 +40,10 @@ class MethodWriterSpec extends Specification {
         apiOptions,
         identifier,
         new StatusAnnotationWriter(new SpringFrameworkAnnotations()),
-        new MappingAnnotationWriter(new SpringFrameworkAnnotations()),
+        new MappingAnnotationFactory(new SpringFrameworkAnnotations()),
         new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
         new BeanValidationFactory (apiOptions),
-        new JavaDocWriter(identifier))
+        new JavaDocFactory(identifier))
     def target = new StringWriter ()
 
     @Deprecated

@@ -15,21 +15,20 @@ import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 
-class MappingAnnotationWriterSpec extends Specification {
+class MappingAnnotationFactorySpec extends Specification {
 
-    def writer = new MappingAnnotationWriter(new SpringFrameworkAnnotations())
-    def target = new StringWriter()
+    def factory = new MappingAnnotationFactory(new SpringFrameworkAnnotations())
 
     void "writes http method specific mapping annotation" () {
-        def endpoint = createEndpoint (path: path, method: httpMethod, responses: [
+        def endpoint = endpoint (path: path, method: httpMethod, responses: [
             '204' : [new EmptyResponse ()]
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString () == expected
+        annotations.first() == expected
 
         where:
         httpMethod         | path         | expected
@@ -44,17 +43,17 @@ class MappingAnnotationWriterSpec extends Specification {
     }
 
     void "writes 'consumes' parameter with body content type" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204' : [new EmptyResponse()]
         ], requestBodies: [
             new RequestBody('body', contentType, new StringDataType (), false, false, null)
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString () == expected
+        annotations.first() == expected
 
         where:
         contentType         | expected
@@ -63,15 +62,15 @@ class MappingAnnotationWriterSpec extends Specification {
     }
 
     void "writes 'produces' parameter with response content type" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [new Response (contentType, new StringDataType (), null)]
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString () == expected
+        annotations.first() == expected
 
         where:
         contentType         | expected
@@ -80,7 +79,7 @@ class MappingAnnotationWriterSpec extends Specification {
     }
 
     void "writes 'consumes' & 'produces' parameters" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
                 new Response (responseContentType, new StringDataType (), null)
             ]
@@ -90,10 +89,10 @@ class MappingAnnotationWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString () == expected
+        annotations.first() == expected
 
         where:
         requestContentType | responseContentType | expected
@@ -101,7 +100,7 @@ class MappingAnnotationWriterSpec extends Specification {
     }
 
     void "writes mapping annotation with multiple result content types" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
                 new Response ('application/json', new StringDataType (), null)
             ],
@@ -111,14 +110,14 @@ class MappingAnnotationWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString () == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
+        annotations.first() == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
     }
 
     void "writes unique 'consumes' parameter" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '204' : [new EmptyResponse ()]
         ], requestBodies: [
             new RequestBody('body', 'foo/in', new StringDataType (), false, false,
@@ -130,14 +129,14 @@ class MappingAnnotationWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString ().contains ('consumes = {"foo/in"}')
+        annotations.first ().contains ('consumes = {"foo/in"}')
     }
 
     void "writes unique 'produces' parameters" () {
-        def endpoint = createEndpoint (path: '/foo', method: HttpMethod.GET, responses: [
+        def endpoint = endpoint (path: '/foo', method: HttpMethod.GET, responses: [
             '200' : [
                 new Response ('foo/out', new StringDataType (), null)
             ],
@@ -153,14 +152,13 @@ class MappingAnnotationWriterSpec extends Specification {
         ])
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        target.toString ().contains ('produces = {"foo/out"}')
+        annotations.first ().contains ('produces = {"foo/out"}')
     }
 
-    @Deprecated
-    private Endpoint createEndpoint (Map properties) {
+    private Endpoint endpoint(Map properties) {
         return new Endpoint(
             properties.path as String ?: '',
             properties.method as HttpMethod ?: HttpMethod.GET,
@@ -172,5 +170,4 @@ class MappingAnnotationWriterSpec extends Specification {
             new Documentation(null, properties.description as String),
         )
     }
-
 }
