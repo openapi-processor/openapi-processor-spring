@@ -15,7 +15,7 @@ testing {
         val test by getting(JvmTestSuite::class)
 
         val testInt by registering(JvmTestSuite::class) {
-            useJUnitJupiter(libs.versions.junit.get())
+            useJUnitJupiter()
 
             dependencies {
                 implementation(project())

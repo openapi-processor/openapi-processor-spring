@@ -14,7 +14,7 @@ val libs = the<LibrariesForLibs>()
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter(libs.versions.junit.get())
+            useJUnitJupiter()
         }
     }
 }
