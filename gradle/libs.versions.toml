@@ -31,7 +31,7 @@ jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin"
 spring-web = { module ="org.springframework:spring-web", version.ref = "spring-web" }
 spring-data = { module ="org.springframework.data:spring-data-commons", version.ref = "spring-data" }
 
-checker = "org.checkerframework:checker:3.52.0"
+checker = "org.checkerframework:checker:3.52.1"
 jimfs = "com.google.jimfs:jimfs:1.3.1"
 slf4j = "org.slf4j:slf4j-api:2.0.17"
 logback = "ch.qos.logback:logback-classic:1.5.21"
