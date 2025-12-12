@@ -42,7 +42,7 @@ kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.6"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
-spock = "org.spockframework:spock-core:2.4-M6-groovy-4.0"
+spock = "org.spockframework:spock-core:2.5-groovy-5.0-SNAPSHOT"
 
 # for buildSrc convention plugins
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
