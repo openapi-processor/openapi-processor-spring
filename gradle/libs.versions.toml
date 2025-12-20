@@ -9,7 +9,6 @@ build-plugins = "2025.12"
 api = "2024.2"
 base = "2025.7-SNAPSHOT"
 
-#junit = "5.9.3"
 jacoco = "0.8.7"
 
 spring-web = "7.0.2"
