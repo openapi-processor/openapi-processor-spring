@@ -12,8 +12,8 @@ base = "2025.7-SNAPSHOT"
 #junit = "5.9.3"
 jacoco = "0.8.7"
 
-spring-web = "6.2.12"
-spring-data = "3.5.5"
+spring-web = "7.0.2"
+spring-data = "4.0.1"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
