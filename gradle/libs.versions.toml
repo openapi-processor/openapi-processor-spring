@@ -4,7 +4,7 @@ processor = "2025.6-SNAPSHOT"
 kotlin = "2.2.21"
 target-jdk = "11"
 build-jdk = "17"
-build-plugins = "2025.9"
+build-plugins = "2025.12"
 
 api = "2024.2"
 base = "2025.7-SNAPSHOT"
@@ -34,15 +34,15 @@ spring-data = { module ="org.springframework.data:spring-data-commons", version.
 checker = "org.checkerframework:checker:3.52.1"
 jimfs = "com.google.jimfs:jimfs:1.3.1"
 slf4j = "org.slf4j:slf4j-api:2.0.17"
-logback = "ch.qos.logback:logback-classic:1.5.21"
+logback = "ch.qos.logback:logback-classic:1.5.22"
 
-kotest-bom = "io.kotest:kotest-bom:6.0.5"
+kotest-bom = "io.kotest:kotest-bom:6.0.7"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
-mockk = "io.mockk:mockk:1.14.6"
+mockk = "io.mockk:mockk:1.14.7"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
-spock = "org.spockframework:spock-core:2.4-M6-groovy-4.0"
+groovy-bom = "org.apache.groovy:groovy-bom:5.0.3"
+spock = "org.spockframework:spock-core:2.4-groovy-5.0"
 
 # for buildSrc convention plugins
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
@@ -58,6 +58,6 @@ plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.53.0"
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
 updates = { id = "com.github.ben-manes.versions", version = "0.53.0" }
-sonar = { id = "org.sonarqube", version =  "7.2.0.6526" }
+sonar = { id = "org.sonarqube", version =  "7.2.2.6593" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
 publish = { id = "io.openapiprocessor.build.plugin.publish" }
