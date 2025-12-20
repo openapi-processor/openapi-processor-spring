@@ -47,7 +47,7 @@ map:
    # java type mappings
 ----
 
-The only required option is `package-name` or alternativly `package-names.base`. All other options or the type mappings are optional.
+The only required option is `package-name` or alternatively `package-names.base`. All other options or the type mappings are optional.
 
 == options:
 
