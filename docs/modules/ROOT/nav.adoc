@@ -1,4 +1,5 @@
 * xref:index.adoc[Introduction]
+* xref:build.adoc[Build Integration]
 * xref:processor/index.adoc[The Processor]
 ** xref:processor/configuration.adoc[Configuration]
 ** xref:processor/endpoint-interface.adoc[Endpoint Grouping]
@@ -30,5 +31,4 @@
 ** xref:mapping/null.adoc[Null Mapping]
 ** xref:mapping/package-name.adoc[package-name Mapping]
 ** xref:mapping/logging.adoc[log Mapping lookup]
-* xref:gradle.adoc[Gradle Integration]
 * xref:links.adoc[Links]

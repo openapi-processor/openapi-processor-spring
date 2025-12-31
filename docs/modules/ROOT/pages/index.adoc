@@ -84,34 +84,12 @@ artifact name is:
 
 == Feedback
 
-In case some feature is missing, or the generated code is not 100% what you would expect, create an link:{oaps-issues}[issue]. Preferably with a test case. Providing a test case will help significantly. :-)
+In case some feature is missing, or the generated code is not 100% what you would expect, create an link:{oaps-issues}[issue].
 
-A _perfect_ test case is a single folder with two subfolders containing the source files and the expected output files:
+Preferably with a test case. Providing a test case will help significantly. :-)
 
- my-test-case
- +--- inputs.yaml
- |--- inputs
- |    +--- mapping.yaml
- |    \--- openapi.yaml
- +--- generated.yaml
- \--- generated
-      +--- api
-      |    \--- Api.java
-      \--- model
-           \--- Foo.java
+A test case contains the source files (mapping & OpenAPI) and the expected output files (generated interfaces, classes etc.).
 
-`inputs.yaml` and `generated.yaml` use the same simple format:
-
- items:
-    - inputs/openapi.yaml
-    - inputs/mapping.yaml
-
-or
-
- items:
-    - generated/api/Api.java
-    - generated/model/Foo.java
-
+See link:https://github.com/openapi-processor/openapi-processor-base/tree/main/openapi-processor-core/src/testInt/resources/tests/template[template].
 
 The link:{oapc-inttests}[core project], and the link:{oaps-inttests}[spring processor] have a number of existing integration tests that can be used as examples.
-

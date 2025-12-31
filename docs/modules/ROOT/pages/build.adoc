@@ -1,0 +1,6 @@
+include::partial$links.adoc[]
+:page-aliases: gradle.adoc
+
+= Build Plugins
+
+openapi-processor provides a xref:gradle::index.adoc[Gradle plugin] and a xref:maven::index.adoc[Maven plugin] to add openapi-processor to Gradle or Maven builds.
