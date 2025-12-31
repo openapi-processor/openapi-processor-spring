@@ -2,11 +2,12 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-It is possible to add additional annotations to a `source type`. Currently, this is available as
+It is possible to add additional annotations to the generated `target type`. Currently, this is available as
 
 * global _annotation type mapping_:
 +
-it adds an annotation to the *model class* generated for the `source type`.
+it adds an annotation to the *model class* generated for the `source type`. +
+ +
 
 * global & endpoint parameter _annotation mapping_:
 +
@@ -27,7 +28,7 @@ type: {source type} @ {annotation type}
 
 ** **{source type}** is the type name used in the OpenAPI description and names the type that should receive the additional annotation. This can be a **+{type}:{format}+** combination like `string:uuid`.
 
-** **{annotation type}** is the fully qualified class name of the java annotation type.It may have parameters (see example below).
+** **{annotation type}** is the fully qualified class name of the java annotation type. It may have parameters (see example below).
 
 or with parameter name:
 
@@ -42,7 +43,7 @@ name: {parameter name} @ {annotation type}
 
 ** **{parameter name}** is the name of the parameter in the generated interface that should receive the additional annotation.
 
-** **{annotation type}** is the fully qualified class name of the java annotation type.It may have parameters (see example below).
+** **{annotation type}** is the fully qualified class name of the java annotation type. It may have parameters (see example below).
 
 
 Here is a list of examples using different parameters:
@@ -145,7 +146,7 @@ public class FooBar {
 
 == mapping example
 
-Given the following OpenAPI description, that describe two (echo like) endpoints that receive an object via post and return the same object. In the mapping file we add a custom bean validation annotation. It checks the sum of both properties in `Foo` and `Bar`.
+Given the following OpenAPI description, that describes two echo-(like) endpoints that receive an object via post and return the same object. In the mapping file we add a custom bean validation annotation. It checks the sum of both properties in `Foo` and `Bar`.
 
 [source,yaml,subs=attributes+]
 ----
