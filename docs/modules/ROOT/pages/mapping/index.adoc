@@ -2,14 +2,29 @@
 
 Type mapping is an important feature of the processor and helps it to create the expected code.
 
-Using type mapping, we can tell the processor to map types (schemas) from an openapi.yaml description to a specific existing java type instead of generating a model class from the source OpenAPI type.
+Using type mapping, we can tell the processor to map a type (or schema) from an openapi.yaml description to a specific existing java type instead of generating a model class from the source OpenAPI type.
 
-This can be a type created by us or a type from a framework. For example, to map paging parameters and result to the Spring types `Page<>` & `Pageable`.
+This can be a type created by ourselves or a type from a framework. For example, to map paging parameters and result to the Spring types `Page<>` & `Pageable`.
 
 It can also be used to map the OpenAPI `array` type to a different java collection type if the default does not fulfill our needs.
 
 Type mapping is very flexible. It is possible to define the mapping globally, globally for a specific response or parameter or limited to a specific endpoint or even http method for an endpoint.
 
-Type mapping also supports (nested) generic parameters to the target type. Multiple levels.
+Type mapping also supports (nested) generic parameters of the target type. Multiple levels.
 
+[NOTE]
+====
 Type mapping works best with named schemas (i.e., schemas `$ref` erenced by their name).
+====
+
+openapi-processor offers two other kinds of type mappings that _modify_ the generated target type instead of _mapping_ to an existing type.
+
+== annotation type mapping
+
+annotation mapping adds a given annotation to the generated target type.
+
+== interface type mapping
+
+interface mapping adds the given interface to the `implements` list of the generated target type.
+
+Since the processor can't provide implementations for the interface methods, the interface should be a marker interface or overlap with the generated target type.

@@ -2,7 +2,7 @@
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
-The type mapping is part of the mapping YAML (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mappings.
+The type mapping is part of the mapping YAML (see xref:processor/configuration.adoc[Configuration]) and configured under the `map` key. The `map` key contains multiple sections to define the different kinds of type mapping.
 
 All sections are optional.
 
@@ -12,7 +12,7 @@ All sections are optional.
 
 [IMPORTANT]
 ====
-The mapping file needs the following key on the top-level. Best place is the first line of the `mapping.yaml` file.
+The mapping file needs the following key on the top-level. The best place is the first line of the `mapping.yaml` file.
 
 [source,yaml,subs=attributes+]
 ----
@@ -23,9 +23,9 @@ openapi-processor-mapping: {var-mapping-version}
 The version increases from time to time when openapi-processor requires a new or changed configuration. In case the version changes, it is mentioned in the release notes.
 
 
-=== basic mapping
+=== basic type mapping
 
-To map a source type to a destination type, it is using an `=>` arrow as a *mapping operator* instead of individual keywords:
+To *map* a source type to a destination type, use the *mapping operator*: `=>`
 
 [source,yaml]
 ----
@@ -34,7 +34,63 @@ some-key: {source type} => {target type}
 
 ----
 
-*source type* is usually a name (or type) from the OpenAPI description and *target type* is usually a java type.
+Usually, *source type* is a name (or type) from the OpenAPI description, and *target type* is a java type.
+
+[.badge .badge-since]+since 2026.1+
+
+Alternatively, if the operator is too cryptic, it is possible to use the *map* keyword instead of the operator.
+
+[source,yaml]
+----
+
+some-key: {source type} map {target type}
+
+----
+
+
+=== basic annotation mapping
+
+To *annotate* the generated target type, use the *annotation operator*: `@`
+
+[source,yaml]
+----
+
+some-key: {source type} @ {target type}
+
+----
+
+[.badge .badge-since]+since 2026.1+
+
+Alternatively, if the operator is too cryptic, it is possible to use the *annotate* keyword instead of the operator.
+
+[source,yaml]
+----
+
+some-key: {source type} annotate {target type}
+
+----
+
+=== basic interface mapping
+
+[.badge .badge-since]+since 2026.1+
+
+To let the generated target type *implement* an interface, use the *interface operator*: `=+`
+
+[source,yaml]
+----
+
+some-key: {source type} =+ {target type}
+
+----
+
+Alternatively, if the operator is too cryptic, it is possible to use the *implement* keyword instead of the operator.
+
+[source,yaml]
+----
+
+some-key: {source type} implement {target type}
+
+----
 
 === full structure
 
@@ -68,6 +124,9 @@ map:
     # add an extra annotation to the source type
     - type: {source type}  @  {target type}
 
+    # add an extra (marker) interface to the source type
+    - type: {source type}  =+  {target type}
+
   # list of global schema mappings
   schemas:
     # add an extra annotation to the source type, but only on object properties
@@ -82,6 +141,9 @@ map:
 
     # add an extra annotation to parameters of the source type
     - type: {source type}  @  {annotation type}
+
+    # add an extra (marker) interface to the source type
+    - type: {source type}  =+  {target type}
 
   # list of global content mappings, mapped by content type
   responses:
@@ -121,6 +183,9 @@ map:
         # add an extra annotation to the source type
         - type: {source type}  @  {target type}
 
+        # add an extra (marker) interface to the source type
+        - type: {source type}  =+  {target type}
+
       # list of path-specific parameter mappings
       parameters:
         - name: {parameter name}  =>  {target type}
@@ -130,6 +195,9 @@ map:
 
         # add an extra annotation to parameters of source type
         - type: {source type}  @  {annotation type}
+
+        # add an extra (marker) interface to the source type
+        - type: {source type}  =+  {target type}
 
       # list of path-specific content mappings, mapped by content type
       responses:

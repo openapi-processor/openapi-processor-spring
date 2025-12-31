@@ -1,0 +1,158 @@
+= Interface mapping
+include::partial$links.adoc[]
+include::partial$vars.adoc[]
+
+[.badge .badge-since]+since 2026.1+
+
+It is possible to let the generated `target type` implement an interface. Currently, this is available as
+
+* global _interface type mapping_:
++
+it adds a given interface to the `implements` list of the *model class* generated for the `source type`. +
+ +
+
+* global & endpoint parameter _interface mapping_:
++
+it adds an interface to a *parameter* of the `source type` (this includes request body parameters).
+
+The global interface mapping should be added to the `map/types` or `map/parameters` section in the mapping.yaml.
+
+The endpoint (http method) mapping restricts the mapping to a specific endpoint. This will go to the `map/paths/<endpoint path>/parameters` section in the mapping.yaml.
+
+The interface mapping is similar to other mappings and is defined like this:
+
+[source,yaml]
+----
+type: {source type} =+ {interface type}
+----
+
+or alternatively
+
+[source,yaml]
+----
+type: {source type} implement {interface type}
+----
+
+
+* **type** is required.
+
+** **{source type}** is the type name used in the OpenAPI description and also the name of the generated target type. The target type has to be a Java type that accepts an `implements` clause.
+
+** **{interface type}** is the fully qualified class name of the java interface type. It may have parameters (see the examples below).
+
+Here are a few examples:
+
+[source,yaml]
+----
+ - type: Foo =+ java.io.Serializable
+ - type: Foo implement java.io.Serializable
+ - type: Foo implement some.Interface<java.lang.String>
+----
+
+*`object` source type*
+
+it is also possible to add an interface to **all** generated schema/model classes using a single interface mapping:
+
+[source,yaml]
+----
+ - type: object =+ {interface type}
+----
+
+The `object` string represents **all** generated object classes (i.e., schema/model classes) and will add the given interface to all of them.
+
+For example, a mapping like this:
+
+[source,yaml]
+----
+map:
+  types:
+    - type: object =+ java.io.Serializable
+----
+
+[source,java]
+----
+import java.io.Serializable;
+
+@Generated(...)
+public class Foo implements Serializable {
+   ...
+}
+----
+
+The link:{oap-samples}[samples project] has a small example using annotation mappings.
+
+== combining interface mapping and type mapping
+
+Type mapping replaces the generated class with an *existing* Java type. It is not possible to add an interface to an existing class.
+
+== mapping example
+
+The following OpenAPI description describes a simple endpoint which returns a Foo schema. In the mapping file we add an interface mapping for `java.io.Serializable`. This will generate a `Foo` record (or class) that implements the interface.
+
+[source,yaml,subs=attributes+]
+----
+openapi: {var-openapi-version}
+info:
+  title: interface mapping
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        foo:
+          type: string
+----
+
+and a `mapping.yaml` with annotation type mappings:
+
+[source,yaml,subs=attributes+]
+----
+openapi-processor-mapping: {var-mapping-version} # <1>
+
+options:
+  package-name: io.openapiprocessor.openapi
+  model-type: record  # generate record instead of pojo
+
+map:
+  types:
+    - type: Foo =+ java.io.Serializable # <1>
+----
+
+<1> the interface mapping
+
+Here is the generated `Foo` record:
+
+[source,java]
+----
+package io.openapiprocessor.samples.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.openapiprocessor.samples.FooAnnotation;
+import io.openapiprocessor.samples.support.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.UUID;
+
+@Generated(value = "openapi-processor-spring")
+public record Foo(@JsonProperty("foo") String foo)
+implements Serializable { // <1>
+}
+----
+
+<1> it implements the given interface
