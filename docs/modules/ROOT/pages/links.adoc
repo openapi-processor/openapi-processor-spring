@@ -9,10 +9,4 @@ include::partial$links.adoc[]
 * link:{openapi-tools}[OpenAPI tools, window="_blank"] List of OpenAPI tools.
 * link:{openapi-generator}[OpenAPI generator, window="_blank"] Generate clients, servers and  documentation from OpenAPI 2.0/3.x documents.
 * link:{swagger-parser}:[Swagger OpenAPI parser, window="_blank"] Java parser for OpenAPI specs.
-* link:{openapi4j}[openapi4j OpenAPI parser, window="_blank"] Alternative Java parser for OpenAPI specs.
-
-== Articles
-
-* link:https://dev.to/hauner/openapi-processor-spring-368k[openapi-processor-spring] an intro to openapi-processor-spring.
-* link:https://dev.to/hauner/openapi-processor-spring-type-mapping-4ecj[openapi-processor-spring type mapping] an intro to openapi-processor-spring type mapping.
-* link:https://dev.to/hauner/configuring-openapi-processor-maven-39pf[openapi-processor-maven] an intro to the maven plugin.
+* link:{openapi4j}[openapi4j OpenAPI parser, window="_blank"] Alternative (deprecated) Java parser for OpenAPI specs.
