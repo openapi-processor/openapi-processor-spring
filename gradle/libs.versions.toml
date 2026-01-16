@@ -12,7 +12,7 @@ base = "2026.1"
 jacoco = "0.8.7"
 
 spring-web = "7.0.2"
-spring-data = "4.0.1"
+spring-data = "4.0.2"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
