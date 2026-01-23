@@ -23,7 +23,7 @@ openapi-processor-parser-api = { module = "io.openapiprocessor:openapi-processor
 openapi-processor-parser-swagger = { module = "io.openapiprocessor:openapi-processor-core-parser-swagger", version.ref = "base" }
 openapi-processor-parser-openapi4j = { module ="io.openapiprocessor:openapi-processor-core-parser-openapi4j", version.ref = "base" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.20.1"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.21.0"
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
