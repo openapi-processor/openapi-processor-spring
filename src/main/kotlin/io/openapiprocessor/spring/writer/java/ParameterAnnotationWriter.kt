@@ -12,7 +12,7 @@ import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CorePar
 import java.io.Writer
 
 /**
- * spring parameter annotation writer
+ * Spring parameter annotation writer
  */
 class ParameterAnnotationWriter(private val annotations: FrameworkAnnotations)
     : CoreParameterAnnotationWriter {

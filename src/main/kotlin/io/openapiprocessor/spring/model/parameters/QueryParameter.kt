@@ -34,12 +34,12 @@ class QueryParameter(
                 return true
             }
 
-            // Pojo's should NOT be annotated
+            // POJOs should NOT be annotated
             if (dataType is ObjectDataType) {
                 return false
             }
 
-            // Mapped should NOT be annotated if it was object schema
+            // Mapped should NOT be annotated if it was an object schema
             // Mapped should be annotated if it was a simple schema
             if (isMappedObject) {
                 return false
@@ -58,7 +58,7 @@ class QueryParameter(
                 return false
             }
 
-            // Pojo should not have parameters
+            // POJO should not have parameters
             if (dataType is ObjectDataType) {
                 return false
             }
