@@ -9,7 +9,8 @@ build-plugins = "2026.1"
 api = "2024.2"
 base = "2026.1"
 
-jacoco = "0.8.7"
+jacoco = "0.8.14"
+jacocolog = "4.0.1"
 
 spring-web = "7.0.3"
 spring-data = "4.0.2"
@@ -48,14 +49,14 @@ plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "bu
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 #plugin-checker = { module = "org.checkerframework:checkerframework-gradle-plugin", version.ref = "checker" }
 #plugin-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "updates" }
-
+plugin-jacocolog = { module = "org.barfuin.gradle.jacocolog:org.barfuin.gradle.jacocolog.gradle.plugin", version.ref = "jacocolog" }
 #plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.5"
 plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.53.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
+jacoco = { id = "org.barfuin.gradle.jacocolog", version.ref = "jacocolog" }
 updates = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 sonar = { id = "org.sonarqube", version =  "7.2.2.6593" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }

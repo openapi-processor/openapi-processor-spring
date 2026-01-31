@@ -11,7 +11,7 @@ plugins {
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
     id("openapiprocessor.publish")
-    id("jacoco-report-aggregation")
+    id("openapiprocessor.coverage")
     id("openapiprocessor.newapi")
 }
 
