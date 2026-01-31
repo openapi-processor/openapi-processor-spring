@@ -118,7 +118,7 @@ map:
         - type: string:binary => org.springframework.web.multipart.MultipartFile
 ----
 
-To upload multiple files we can define the body `object` with an `array` property:
+To upload multiple files, we can define the body `object` with an `array` property:
 
 [source,yaml]
 ----
@@ -183,3 +183,36 @@ paths:
         '204':
           description: empty
 ----
+
+=== x-www-form-urlencoded
+
+[.badge .badge-since]+since 2026.2+
+
+the processor does *destructure* an `application/x-www-form-urlencoded` request body. I.e., each of the defined request body properties is passed as a single parameter to the endpoint.
+
+It _destructures_ the request body by default to make it behave like the multipart request described in the previous section.
+
+To receive the request body as a single object parameter, add  a `body-style` mapping. `body-style` supports all the usual mapping level, global, endpoint and endpoint method.
+
+[source,yaml,subs=attributes+]
+----
+map:
+  # global
+  body-style: object
+  #body-style: destructure # default
+
+  paths:
+    /foo:
+      # endpoint
+      body-style: object
+
+      # endpoint method
+#      post:
+#        body-style: object
+
+----
+
+[NOTE]
+Currently, the `body-style` mapping is only supported on `application/x-www-form-urlencoded`
+
+

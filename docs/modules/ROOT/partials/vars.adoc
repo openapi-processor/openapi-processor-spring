@@ -1,2 +1,2 @@
-:var-mapping-version: v16
+:var-mapping-version: v17
 :var-openapi-version: 3.1.0

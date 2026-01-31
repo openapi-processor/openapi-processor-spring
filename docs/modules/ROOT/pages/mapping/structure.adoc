@@ -101,6 +101,9 @@ The full structure of the mapping looks like this (a real mapping file will usua
 map:
   # global mappings, applies to all paths/endpoints
 
+  # x-www-form-urlencoded as object ord destructured parameters
+  body-style: {object|destructure}
+
   # result wrapper, e.g. org.springframework.http.ResponseEntity
   result: {target type}
 
