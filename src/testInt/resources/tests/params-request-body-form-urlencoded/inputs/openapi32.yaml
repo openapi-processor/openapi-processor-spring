@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: x-form-www-urlencoded
+  version: 1.0.0
+
+paths:
+  /foo/params:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                foo:
+                  type: string
+                bar:
+                  type: string
+      responses:
+        '204':
+          description: empty
+
+  /foo/object:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Foo'
+      responses:
+        '204':
+          description: empty
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        foo:
+          type: string
+        bar:
+          type: string

@@ -1,0 +1,10 @@
+openapi-processor-mapping: v17
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  paths:
+    /foo/object:
+      body-style: object
