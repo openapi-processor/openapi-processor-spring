@@ -4,7 +4,6 @@ plugins {
     `java-library`
     groovy
     kotlin
-    jacoco
     alias(libs.plugins.versions)
     alias(libs.plugins.sonar)
     alias(libs.plugins.updates)
