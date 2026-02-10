@@ -192,10 +192,15 @@ the processor does *destructure* an `application/x-www-form-urlencoded` request 
 
 It _destructures_ the request body by default to make it behave like the multipart request described in the previous section.
 
-To receive the request body as a single object parameter, add  a `body-style` mapping. `body-style` supports all the usual mapping level, global, endpoint and endpoint method.
+To receive the request body as a single object parameter, add  a `body-style` mapping. `body-style` supports all the usual mapping levels: global, endpoint and endpoint method.
 
 [source,yaml,subs=attributes+]
 ----
+openapi-processor-mapping: {var-mapping-version}
+
+options:
+  package-name: io.openapiprocessor.openapi
+
 map:
   # global
   body-style: object
@@ -213,6 +218,6 @@ map:
 ----
 
 [NOTE]
-Currently, the `body-style` mapping is only supported on `application/x-www-form-urlencoded`
+Currently, the `body-style` mapping is only supported on `application/x-www-form-urlencoded`.
 
 
