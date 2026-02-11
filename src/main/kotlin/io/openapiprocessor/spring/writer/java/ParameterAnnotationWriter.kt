@@ -26,6 +26,10 @@ class ParameterAnnotationWriter(private val annotations: FrameworkAnnotations)
     }
 
     private fun createRequestBodyAnnotation(requestBody: RequestBody): String {
+        if (! requestBody.withAnnotation) {
+            return ""
+        }
+
         var annotation = getAnnotationName(requestBody)
 
         // required is default, so add required only if the parameter is not required
