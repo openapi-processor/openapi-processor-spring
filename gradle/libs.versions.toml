@@ -7,13 +7,13 @@ build-jdk = "17"
 build-plugins = "2026.1"
 
 api = "2024.2"
-base = "2026.2-SNAPSHOT"
+base = "2026.2"
 
 jacoco = "0.8.14"
 jacocolog = "4.0.1"
 
 spring-web = "7.0.4"
-spring-data = "4.0.2"
+spring-data = "4.0.3"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
