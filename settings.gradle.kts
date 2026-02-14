@@ -26,4 +26,4 @@ gradleEnterprise {
 
 rootProject.name = "openapi-processor-spring"
 
-//includeBuild '../openapi-processor-base'
+//includeBuild("../openapi-processor-base")
