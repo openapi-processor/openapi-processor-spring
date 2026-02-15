@@ -31,7 +31,7 @@ class SpringProcessor : OpenApiProcessorTest {
     private var sourceRoot: String? = null
     private var resourceRoot: String? = null
 
-    fun run(processorOptions: MutableMap<String, *>) {
+    fun run(processorOptions: Map<String, *>) {
         try {
             val parser = OpenApiParser()
             val openapi = parser.parse(processorOptions)

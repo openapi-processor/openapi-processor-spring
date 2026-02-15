@@ -75,23 +75,16 @@ private val MAPPING_ANNOTATIONS = hashMapOf(
     HttpMethod.DELETE  to Annotation(getMappingAnnotationName(HttpMethod.DELETE.method)),
     HttpMethod.GET     to Annotation(getMappingAnnotationName(HttpMethod.GET.method)),
     HttpMethod.HEAD    to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue(
-            "RequestMethod.HEAD", "org.springframework.web.bind.annotation.RequestMethod"
-        ))
+        "method" to SimpleParameterValue("RequestMethod.HEAD", ANNOTATION_REQUEST_METHOD))
     ),
     HttpMethod.OPTIONS to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue(
-            "RequestMethod.OPTIONS", "org.springframework.web.bind.annotation.RequestMethod"
-        ))
+        "method" to SimpleParameterValue("RequestMethod.OPTIONS", ANNOTATION_REQUEST_METHOD))
     ),
     HttpMethod.PATCH   to Annotation(getMappingAnnotationName(HttpMethod.PATCH.method)),
     HttpMethod.POST    to Annotation(getMappingAnnotationName(HttpMethod.POST.method)),
     HttpMethod.PUT     to Annotation(getMappingAnnotationName(HttpMethod.PUT.method)),
     HttpMethod.TRACE   to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue(
-            "RequestMethod.TRACE", "org.springframework.web.bind.annotation.RequestMethod"
-        ))
-    )
+        "method" to SimpleParameterValue("RequestMethod.TRACE", ANNOTATION_REQUEST_METHOD)))
 )
 
 private val PARAMETER_ANNOTATIONS = hashMapOf(
@@ -107,6 +100,7 @@ private val PARAMETER_ANNOTATIONS = hashMapOf(
 private val UNKNOWN_ANNOTATION = Annotation("Unknown")
 
 private const val ANNOTATION_PKG = "org.springframework.web.bind.annotation"
+private const val ANNOTATION_REQUEST_METHOD = "${ANNOTATION_PKG}.RequestMethod"
 
 private fun getMappingAnnotationName(mappingName: String): String {
     val mappingNameUpper = mappingName.replaceFirst(mappingName.first(), mappingName.first().uppercaseChar())
