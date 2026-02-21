@@ -12,7 +12,7 @@ base = "2026.2"
 jacoco = "0.8.14"
 jacocolog = "4.0.1"
 
-spring-web = "7.0.4"
+spring-web = "7.0.5"
 spring-data = "4.0.3"
 
 [libraries]
