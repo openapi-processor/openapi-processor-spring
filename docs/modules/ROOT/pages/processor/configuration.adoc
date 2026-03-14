@@ -23,6 +23,7 @@ options:
   enum-type: string
   one-of-interface: true
   bean-validation: jakarta
+  jackson: v3
   generated: true
   generated-date: true
   format-code: true
@@ -83,7 +84,7 @@ parent key to group package-name related options.
 
 **required/optional** (string)
 
-the root (java) package name of the generated interfaces & models. The package folder tree will be created inside the `targetDir`.
+the root (java) package name of the generated interfaces and models. The package folder tree will be created inside the `targetDir`.
 
 This is the same as `package-name`. Only one of `package-name` or `package-names.base` is *required*.
 
@@ -96,9 +97,9 @@ It takes precedence above `package-name` if both ar set.
 
 `package-names.location` enables the creation of package names based on the file location of $ref'erenced parts of the OpenAPI description.
 
-It is the *parent* package for location based package names.
+It is the *parent* package of location-based package names.
 
-Only (OpenAPI) file locations below the parent package will be generated with a location based package name. Any other (OpenAPI) file location will use `package-names.base` (or `package-name`) as the package name.
+Only (OpenAPI) file locations below the parent package will be generated with a location-based package name. Any other (OpenAPI) file location will use `package-names.base` (or `package-name`) as the package name.
 
 Enabling this has a few conditions:
 
@@ -332,6 +333,23 @@ to handle the package name change from bean validation v2 to v3 (`javax` => `jak
 ** `true`: enables bean validation annotations v2, with `javax` package name
 ** `javax`: enables bean validation annotations v2, with `javax` package name
 ** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
+
+=== jackson ([.badge .badge-since]+new with 2026.3+)
+
+**optional** (string, `v2` or `v3`, default is `false`)
+
+selects the Jackson version, i.e., which package-name is used.
+
+|===
+|Version |package-name
+
+|v3
+|`tools.jackson`
+
+|v2 (default)
+|`com.fasterxml.jackson`
+
+|===
 
 === javadoc
 
