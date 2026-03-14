@@ -54,6 +54,7 @@ class SpringProcessor : OpenApiProcessorTest {
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidations = BeanValidationFactory(options)
+            val jacksonAnnotations = JacksonAnnotations(options)
             val javaDocWriter = JavaDocFactory(identifier)
             val formatter = getFormatter(options)
 
@@ -83,6 +84,7 @@ class SpringProcessor : OpenApiProcessorTest {
                         identifier,
                         generatedWriter,
                         beanValidations,
+                        jacksonAnnotations,
                         javaDocWriter
                     )
                     else -> DataTypeWriterPojo(
@@ -90,6 +92,7 @@ class SpringProcessor : OpenApiProcessorTest {
                         identifier,
                         generatedWriter,
                         beanValidations,
+                        jacksonAnnotations,
                         javaDocWriter
                     )
                 },
