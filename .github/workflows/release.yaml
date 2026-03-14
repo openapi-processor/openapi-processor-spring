@@ -27,7 +27,7 @@ jobs:
 
       - name: publish release
         env:
-          ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY_ORG }}
+          ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY }}
           ORG_GRADLE_PROJECT_signPwd: ${{ secrets.SIGN_PWD }}
           PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
           PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
