@@ -14,14 +14,16 @@ import io.openapiprocessor.core.model.parameters.CookieParameter
 import io.openapiprocessor.core.model.parameters.HeaderParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.PathParameter
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.spring.model.parameters.MultipartParameter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * provides Spring annotation details.
+ * provides Spring mapping annotation details.
+ *
+ * todo rename to SpringFrameworkMapping
  */
 class SpringFrameworkAnnotations: FrameworkAnnotations {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)

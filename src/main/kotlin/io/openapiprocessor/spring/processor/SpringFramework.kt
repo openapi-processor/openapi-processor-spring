@@ -11,9 +11,9 @@ import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.spring.model.RequestBody
 import io.openapiprocessor.spring.model.parameters.MultipartParameter
 import io.openapiprocessor.spring.model.parameters.QueryParameter
-import io.openapiprocessor.core.parser.MultipartParameter as MultipartParserParameter
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Parameter as OpenApiParameter
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
+import io.openapiprocessor.core.parser.MultipartParameter as ParserMultipartParameter
 
 /**
  * Spring model factory.
@@ -23,7 +23,7 @@ import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
 class SpringFramework: FrameworkBase() {
 
     @Override
-    override fun createQueryParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createQueryParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return QueryParameter (
             parameter.getName(),
             dataType,
@@ -31,8 +31,8 @@ class SpringFramework: FrameworkBase() {
             parameter.isDeprecated())
     }
 
-    override fun createMultipartParameter(parameter: ParserParameter, dataType: DataType): Parameter {
-        val mpp = parameter as MultipartParserParameter
+    override fun createMultipartParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
+        val mpp = parameter as ParserMultipartParameter
 
         return MultipartParameter(
             parameter.getName(),
@@ -44,7 +44,7 @@ class SpringFramework: FrameworkBase() {
         )
     }
 
-    override fun createRequestBody(contentType: String, requestBody: ParserRequestBody, dataType: DataType): RequestBody {
+    override fun createRequestBody(contentType: String, requestBody: OpenApiRequestBody, dataType: DataType): RequestBody {
         return RequestBody(
             "body",
             contentType,

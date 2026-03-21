@@ -27,7 +27,7 @@ import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.EmptyResponse
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.MethodWriter
 import spock.lang.Specification
