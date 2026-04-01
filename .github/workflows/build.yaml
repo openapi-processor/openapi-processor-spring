@@ -48,10 +48,20 @@ jobs:
         name: test-results-${{ matrix.os }}
         path: build/reports
 
-  publish:
-    if: ${{ github.actor == 'hauner' }}
-
+  check-publish:
     needs: [test]
+    name: check publish
+
+    runs-on: ubuntu-latest
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      github.actor == 'hauner' && contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
+
+    steps:
+      - run: echo "should publish ..."
+
+  publish:
+    needs: [check-publish]
     name: publish snapshot
 
     runs-on: ubuntu-latest
