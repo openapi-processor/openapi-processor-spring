@@ -40,7 +40,11 @@ class SpringProcessor : OpenApiProcessorTest {
             }
 
             val framework = SpringFramework()
-            val annotations = SpringFrameworkAnnotations()
+
+            val annotations = when (processorOptions["annotations"]?.toString()) {
+                "service-client" -> SpringFrameworkExchange()
+                else -> SpringFrameworkAnnotations()
+            }
 
             val options = convertOptions(processorOptions)
             val identifier = JavaIdentifier(IdentifierOptions(

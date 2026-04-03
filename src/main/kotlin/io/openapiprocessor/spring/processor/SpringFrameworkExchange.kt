@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-spring
+ * Copyright 2026 https://github.com/openapi-processor/openapi-processor-spring
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -21,15 +21,19 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * provides Spring mapping annotation details.
- *
- * todo rename to SpringFrameworkMapping
+ * provides Spring exchange annotation details.
  */
-class SpringFrameworkAnnotations: FrameworkAnnotations {
+class SpringFrameworkExchange: FrameworkAnnotations {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getAnnotation(httpMethod: HttpMethod): Annotation {
-        return MAPPING_ANNOTATIONS.getValue(httpMethod)
+        if(EXCHANGE_ANNOTATIONS.containsKey(httpMethod)) {
+            return EXCHANGE_ANNOTATIONS.getValue(httpMethod)
+        }
+
+        return Annotation(
+            getExchangeAnnotationName("Http"),
+            linkedMapOf("method" to SimpleParameterValue(""""${httpMethod.toString().uppercase()}"""")))
     }
 
     override fun getAnnotation(parameter: Parameter): Annotation {
@@ -55,7 +59,7 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
         }
 
         return Annotation(
-            getAnnotationName("ResponseStatus"),
+            "org.springframework.web.bind.annotation.ResponseStatus",
             linkedMapOf(
                 "code" to SimpleParameterValue(statusCode, HTTP_STATUS_ENUM)))
     }
@@ -73,42 +77,33 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
     }
 }
 
-private val MAPPING_ANNOTATIONS = hashMapOf(
-    HttpMethod.DELETE  to Annotation(getMappingAnnotationName(HttpMethod.DELETE.method)),
-    HttpMethod.GET     to Annotation(getMappingAnnotationName(HttpMethod.GET.method)),
-    HttpMethod.HEAD    to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue("RequestMethod.HEAD", ANNOTATION_REQUEST_METHOD))
-    ),
-    HttpMethod.OPTIONS to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue("RequestMethod.OPTIONS", ANNOTATION_REQUEST_METHOD))
-    ),
-    HttpMethod.PATCH   to Annotation(getMappingAnnotationName(HttpMethod.PATCH.method)),
-    HttpMethod.POST    to Annotation(getMappingAnnotationName(HttpMethod.POST.method)),
-    HttpMethod.PUT     to Annotation(getMappingAnnotationName(HttpMethod.PUT.method)),
-    HttpMethod.TRACE   to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue("RequestMethod.TRACE", ANNOTATION_REQUEST_METHOD)))
+private const val EXCHANGE_ANNOTATION_PKG = "org.springframework.web.service.annotation"
+
+private fun getExchangeAnnotationName(methodName: String): String =
+    "$EXCHANGE_ANNOTATION_PKG.${methodName}Exchange"
+
+private val EXCHANGE_ANNOTATIONS = hashMapOf(
+    HttpMethod.DELETE  to Annotation(getExchangeAnnotationName("Delete")),
+    HttpMethod.GET     to Annotation(getExchangeAnnotationName("Get")),
+    HttpMethod.HEAD    to Annotation(getExchangeAnnotationName("Http"),
+            linkedMapOf("method" to SimpleParameterValue(""""HEAD""""))),
+    HttpMethod.OPTIONS to Annotation(getExchangeAnnotationName("Http"),
+        linkedMapOf("method" to SimpleParameterValue(""""OPTIONS""""))),
+    HttpMethod.PATCH   to Annotation(getExchangeAnnotationName("Patch")),
+    HttpMethod.POST    to Annotation(getExchangeAnnotationName("Post")),
+    HttpMethod.PUT     to Annotation(getExchangeAnnotationName("Put")),
+    HttpMethod.TRACE   to Annotation(getExchangeAnnotationName("Http"),
+        linkedMapOf("method" to SimpleParameterValue(""""TRACE"""")))
 )
 
 private val PARAMETER_ANNOTATIONS = hashMapOf(
-    "query"           to Annotation (getAnnotationName("RequestParam")),
-    "header"          to Annotation (getAnnotationName("RequestHeader")),
-    "cookie"          to Annotation (getAnnotationName("CookieValue")),
-    "path"            to Annotation (getAnnotationName("PathVariable")),
-    "multipart-param" to Annotation (getAnnotationName("RequestParam")),
-    "multipart-part"  to Annotation (getAnnotationName("RequestPart")),
-    "body"            to Annotation (getAnnotationName("RequestBody"))
+    "query"           to Annotation ("org.springframework.web.service.annotation.QueryParam"),
+    "header"          to Annotation ("org.springframework.web.service.annotation.Header"),
+    "cookie"          to Annotation ("org.springframework.web.service.annotation.Cookie"),
+    "path"            to Annotation ("org.springframework.web.service.annotation.PathVariable"),
+    "multipart-param" to Annotation ("org.springframework.web.service.annotation.Part"),
+    "multipart-part"  to Annotation ("org.springframework.web.service.annotation.Part"),
+    "body"            to Annotation ("org.springframework.web.service.annotation.RequestBody")
 )
 
 private val UNKNOWN_ANNOTATION = Annotation("Unknown")
-
-private const val ANNOTATION_PKG = "org.springframework.web.bind.annotation"
-private const val ANNOTATION_REQUEST_METHOD = "${ANNOTATION_PKG}.RequestMethod"
-
-private fun getMappingAnnotationName(mappingName: String): String {
-    val mappingNameUpper = mappingName.replaceFirst(mappingName.first(), mappingName.first().uppercaseChar())
-    return getAnnotationName("${mappingNameUpper}Mapping")
-}
-
-private fun getAnnotationName(name: String): String {
-    return "${ANNOTATION_PKG}.${name}"
-}
