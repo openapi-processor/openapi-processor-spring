@@ -12,6 +12,7 @@ import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Versions
+import io.openapiprocessor.spring.processor.SpringAnnotations.Companion.EXCHANGE
 import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationFactory
 import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
@@ -39,18 +40,22 @@ class SpringProcessor : OpenApiProcessorTest {
                 openapi.printWarnings()
             }
 
-            val framework = SpringFramework()
+            val kind = SpringAnnotations.valueOf(processorOptions["annotations"]?.toString())
 
-            val annotations = when (processorOptions["annotations"]?.toString()) {
-                "service-client" -> SpringFrameworkExchange()
+            val annotations = when (kind) {
+                EXCHANGE -> SpringFrameworkExchange()
                 else -> SpringFrameworkAnnotations()
+            }
+            val annotationFactory = when (kind) {
+                EXCHANGE -> ExchangeAnnotationFactory(annotations)
+                else -> MappingAnnotationFactory(annotations)
             }
 
             val options = convertOptions(processorOptions)
             val identifier = JavaIdentifier(IdentifierOptions(
                 options.identifierWordBreakFromDigitToLetter,
                 options.identifierPrefixInvalidEnumStart))
-            val cv = ApiConverter(options, identifier, framework)
+            val cv = ApiConverter(options, identifier, SpringFramework())
             val api = cv.convert(openapi)
 
             val writerFactory = SpringWriterFactory(options)
@@ -73,7 +78,7 @@ class SpringProcessor : OpenApiProcessorTest {
                         options,
                         identifier,
                         StatusAnnotationWriter(annotations),
-                        MappingAnnotationFactory(annotations),
+                        annotationFactory,
                         ParameterAnnotationWriter(annotations),
                         beanValidations,
                         javaDocWriter
