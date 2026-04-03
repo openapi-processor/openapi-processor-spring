@@ -32,7 +32,7 @@ class SpringFrameworkExchange: FrameworkAnnotations {
         }
 
         return Annotation(
-            getExchangeAnnotationName("Http"),
+            getServiceAnnotationName("Http"),
             linkedMapOf("method" to SimpleParameterValue(""""${httpMethod.toString().uppercase()}"""")))
     }
 
@@ -77,33 +77,34 @@ class SpringFrameworkExchange: FrameworkAnnotations {
     }
 }
 
-private const val EXCHANGE_ANNOTATION_PKG = "org.springframework.web.service.annotation"
+private fun getBindAnnotationName(name: String): String =
+    "org.springframework.web.bind.annotation.${name}"
 
-private fun getExchangeAnnotationName(methodName: String): String =
-    "$EXCHANGE_ANNOTATION_PKG.${methodName}Exchange"
+private fun getServiceAnnotationName(methodName: String): String =
+    "org.springframework.web.service.annotation.${methodName}Exchange"
 
 private val EXCHANGE_ANNOTATIONS = hashMapOf(
-    HttpMethod.DELETE  to Annotation(getExchangeAnnotationName("Delete")),
-    HttpMethod.GET     to Annotation(getExchangeAnnotationName("Get")),
-    HttpMethod.HEAD    to Annotation(getExchangeAnnotationName("Http"),
-            linkedMapOf("method" to SimpleParameterValue(""""HEAD""""))),
-    HttpMethod.OPTIONS to Annotation(getExchangeAnnotationName("Http"),
+    HttpMethod.DELETE  to Annotation(getServiceAnnotationName("Delete")),
+    HttpMethod.GET     to Annotation(getServiceAnnotationName("Get")),
+    HttpMethod.HEAD    to Annotation(getServiceAnnotationName("Http"),
+        linkedMapOf("method" to SimpleParameterValue(""""HEAD""""))),
+    HttpMethod.OPTIONS to Annotation(getServiceAnnotationName("Http"),
         linkedMapOf("method" to SimpleParameterValue(""""OPTIONS""""))),
-    HttpMethod.PATCH   to Annotation(getExchangeAnnotationName("Patch")),
-    HttpMethod.POST    to Annotation(getExchangeAnnotationName("Post")),
-    HttpMethod.PUT     to Annotation(getExchangeAnnotationName("Put")),
-    HttpMethod.TRACE   to Annotation(getExchangeAnnotationName("Http"),
+    HttpMethod.PATCH   to Annotation(getServiceAnnotationName("Patch")),
+    HttpMethod.POST    to Annotation(getServiceAnnotationName("Post")),
+    HttpMethod.PUT     to Annotation(getServiceAnnotationName("Put")),
+    HttpMethod.TRACE   to Annotation(getServiceAnnotationName("Http"),
         linkedMapOf("method" to SimpleParameterValue(""""TRACE"""")))
 )
 
 private val PARAMETER_ANNOTATIONS = hashMapOf(
-    "query"           to Annotation ("org.springframework.web.service.annotation.QueryParam"),
-    "header"          to Annotation ("org.springframework.web.service.annotation.Header"),
-    "cookie"          to Annotation ("org.springframework.web.service.annotation.Cookie"),
-    "path"            to Annotation ("org.springframework.web.service.annotation.PathVariable"),
-    "multipart-param" to Annotation ("org.springframework.web.service.annotation.Part"),
-    "multipart-part"  to Annotation ("org.springframework.web.service.annotation.Part"),
-    "body"            to Annotation ("org.springframework.web.service.annotation.RequestBody")
+    "query"           to Annotation (getBindAnnotationName("RequestParam")),
+    "header"          to Annotation (getBindAnnotationName("RequestHeader")),
+    "cookie"          to Annotation (getBindAnnotationName("CookieValue")),
+    "path"            to Annotation (getBindAnnotationName("PathVariable")),
+    "multipart-param" to Annotation (getBindAnnotationName("RequestParam")),
+    "multipart-part"  to Annotation (getBindAnnotationName("RequestPart")),
+    "body"            to Annotation (getBindAnnotationName("RequestBody"))
 )
 
 private val UNKNOWN_ANNOTATION = Annotation("Unknown")
