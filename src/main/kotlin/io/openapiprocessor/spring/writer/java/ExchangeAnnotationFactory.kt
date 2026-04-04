@@ -12,8 +12,8 @@ import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMapp
 
 /**
  * spring exchange annotation factory.
- * org.springframework.web.service.annotation.HttpExchange was designed to be neutral to client vs server use.
- * The contentType attribute is for the request body, while the accept attribute is for the server response.
+ * org.springframework.web.service.annotation.HttpExchange was designed to be neutral to client vs. server use.
+ * The "contentType" attribute is for the request body, while the "accept" attribute is for the server response.
  *
  * | attribute | client side (request) | server side (controller, response) |
  * |-----------|-----------------------|------------------------------------|
