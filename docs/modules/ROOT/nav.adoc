@@ -2,6 +2,7 @@
 * xref:build.adoc[Build Integration]
 * xref:processor/index.adoc[The Processor]
 ** xref:processor/configuration.adoc[Configuration]
+** xref:processor/annotations.adoc[Spring Annotations]
 ** xref:processor/endpoint-interface.adoc[Endpoint Grouping]
 ** xref:processor/endpoint-content.adoc[Endpoint Content Type]
 ** xref:processor/models.adoc[Models]

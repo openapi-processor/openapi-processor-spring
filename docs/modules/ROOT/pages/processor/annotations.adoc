@@ -1,0 +1,114 @@
+= Spring Annotations
+include::partial$links.adoc[]
+
+Apart from the basic build plugin configuration, `openapi-processor-spring` has an additional configuration to select the annotation style.
+
+== `annotations`
+
+Spring Boot provides two annotation families
+
+* the standard _mapping_ annotations, i.e., `@RequestMapping`, `@GetMapping` and friends to define server side controllers
+
+* and the new _exchange_ (HTTP service clients) annotations, i.e., `@HttpExchange`, `@GetExchange` and friends to define server side controllers and http clients based on the same interface.
+
+`openapi-processor-spring` supports both kinds of annotations.
+
+In contrast to the usual `mapping.yaml` based configuration, it has to be configured as part of a processor configuration in the build instructions.
+
+
+[tabs]
+====
+Maven::
++
+++++
+<div></div>
+++++
+In the `pom.xml` configure the `annotations` in the processor `<execution>` block.
++
+[source,xml]
+----
+<!--pom.xml -->
+
+<plugin>
+    <groupId>io.openapiprocessor</groupId>
+    <artifactId>openapi-processor-maven-plugin</artifactId>
+    <version>${openapiprocessor.maven}</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.openapiprocessor</groupId>
+            <artifactId>openapi-processor-spring</artifactId>
+            <version>${openapiprocessor.spring}</version>
+        </dependency>
+    </dependencies>
+
+    <configuration>
+        <id>processor-api</id>
+        <apiPath>${project.basedir}/src/api/openapi.yaml</apiPath>
+    </configuration>
+
+    <executions>
+        <execution>
+            <id>server</id>
+            <phase>generate-sources</phase>
+
+            <configuration>
+                <id>server</id>
+                <processor>spring</processor>
+                <addSourceRoot>true</addSourceRoot>
+
+                <options>
+                    <values>
+                        <targetDir>${project.basedir}/target/generated-sources/openapi/server</targetDir>
+                        <mapping>${project.basedir}/src/api/mapping-server.yaml</mapping>
+                        <annotations>exchange</annotations> <!-- <1> -->
+                    </values>
+                </options>
+            </configuration>
+
+            <goals>
+                <goal>process</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+<!-- .... -->
+----
+Gradle::
++
+++++
+<div></div>
+++++
+In the `build.gradle.kts` configure the `annotations` in to the processor configuration block.
++
+[source,kotlin]
+----
+// build.gradle.kts
+
+openapiProcessor {
+
+    // the path to the open api YAML file. Usually the same for all processors.
+    apiPath("${projectDir}/src/api/openapi.yaml")
+
+    process("server") {
+        processorName("spring")
+
+        // the spring processor dependenc(y|ies)
+        dependencies {
+            //process("${oap.processor.core.get()}")
+            process("${oap.processor.spring.get()}")
+        }
+
+        targetDir("$projectDir/build/openapi")
+
+        prop("annotations", "exchange") // <1>
+        prop("mapping", layout.projectDirectory.file("src/api/mapping.yaml"))
+    }
+}
+----
+====
+
+<1> this configures the processor to use the `Exchange` annotations instead of the `Mapping` annotations.
++
+Using the `Mapping` annotations is the default and will be used if the `annotations` property is not set.

@@ -50,6 +50,8 @@ map:
 
 The only required option is `package-name` or alternatively `package-names.base`. All other options or the type mappings are optional.
 
+Configuration of the annotation style i.e., `Mapping` or `Exchange`, see xref:processor/annotations.adoc[].
+
 == options:
 
 
