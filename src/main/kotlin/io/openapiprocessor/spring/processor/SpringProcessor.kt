@@ -9,6 +9,9 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.parser.OpenApiParser
+import io.openapiprocessor.core.processor.JSON_SCHEMA_CORE
+import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.processor.MappingValidator
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import io.openapiprocessor.spring.Versions
@@ -32,7 +35,7 @@ class SpringProcessor : OpenApiProcessorTest {
     private var sourceRoot: String? = null
     private var resourceRoot: String? = null
 
-    fun run(processorOptions: Map<String, *>) {
+    fun run(processorOptions: Map<String, Any>) {
         try {
             val parser = OpenApiParser()
             val openapi = parser.parse(processorOptions)
@@ -40,7 +43,9 @@ class SpringProcessor : OpenApiProcessorTest {
                 openapi.printWarnings()
             }
 
-            val kind = SpringAnnotations.valueOf(processorOptions["annotations"]?.toString())
+            val options = convertOptions(processorOptions)
+
+            val kind = SpringAnnotations.valueOf(options.springAnnotations)
 
             val annotations = when (kind) {
                 EXCHANGE -> SpringFrameworkExchange()
@@ -51,7 +56,6 @@ class SpringProcessor : OpenApiProcessorTest {
                 else -> MappingAnnotationFactory(annotations)
             }
 
-            val options = convertOptions(processorOptions)
             val identifier = JavaIdentifier(IdentifierOptions(
                 options.identifierWordBreakFromDigitToLetter,
                 options.identifierPrefixInvalidEnumStart))
@@ -147,9 +151,11 @@ class SpringProcessor : OpenApiProcessorTest {
         testMode = true
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun convertOptions(processorOptions: Map<String, *>): ApiOptions {
-        val options = OptionsConverter().convertOptions (processorOptions as Map<String, Any>)
+    private fun convertOptions(processorOptions: Map<String, Any>): SpringApiOptions {
+        val options = SpringApiOptions()
+
+        OptionsConverter(createCoreMappingReader()).fillOptions (processorOptions, options)
+        SpringOptionsConverter(createSpringMappingReader()).fillOptions (processorOptions, options)
         options.validate ()
 
         if (options.targetDirOptions.standardLayout) {
@@ -170,5 +176,14 @@ class SpringProcessor : OpenApiProcessorTest {
 
     private fun getFormatter(apiOptions: ApiOptions): SourceFormatter {
         return SourceFormatterFactory().getFormatter(apiOptions)
+    }
+
+    private fun createCoreMappingReader(): MappingReader {
+        return MappingReader(MappingValidator(JSON_SCHEMA_CORE))
+    }
+
+    private fun createSpringMappingReader(): SpringMappingReader {
+        return SpringMappingReader(MappingValidator(
+            JSON_SCHEMA_SPRING, listOf(JSON_SCHEMA_CORE)))
     }
 }

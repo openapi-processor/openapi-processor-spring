@@ -25,7 +25,9 @@ class SpringService(private val testMode: Boolean = false):
             if (testMode) {
                 processor.enableTestMode()
             }
-            processor.run(processorOptions)
+
+            @Suppress("UNCHECKED_CAST")
+            processor.run(processorOptions as Map<String, Any>)
 
         } catch (ex: Exception) {
             throw ex

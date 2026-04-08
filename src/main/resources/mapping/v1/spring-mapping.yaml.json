@@ -1,0 +1,50 @@
+{
+  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-spring-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON Schema for openapi-processor-spring mapping.yaml v1",
+  "description": "openapi-processor-spring configuration and type mappings",
+  "allOf": [
+    { "$ref": "#/definitions/SpringMapping" },
+    { "$ref": "https://openapiprocessor.io/schemas/mapping/mapping-v18.json" }
+  ],
+  "definitions": {
+    "SpringMapping": {
+      "type": "object",
+      "properties": {
+        "openapi-processor-spring": {
+          "description": "version of the spring mapping format.",
+          "enum": ["v1"]
+        },
+        "openapi-processor-mapping": {
+          "description": "version of the mapping format.",
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/definitions/SpringOptions"
+        }
+      },
+      "oneOf": [
+        { "required": ["openapi-processor-spring"] },
+        { "required": ["openapi-processor-mapping"] }
+      ]
+    },
+    "SpringOptions": {
+      "description": "spring processor configuration options.",
+      "type": "object",
+      "properties": {
+        "spring": {
+          "type": "object",
+          "properties": {
+            "annotations": {
+              "type": "string",
+              "enum": [
+                "mapping",
+                "exchange"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

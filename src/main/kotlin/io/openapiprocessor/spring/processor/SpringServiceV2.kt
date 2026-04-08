@@ -37,13 +37,14 @@ class SpringServiceV2(
         return "spring"
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun run(processorOptions: MutableMap<String, *>) {
         try {
             val processor = SpringProcessor()
             if (testMode) {
                 processor.enableTestMode()
             }
-            processor.run(processorOptions)
+            processor.run(processorOptions as Map<String, Any>)
 
             sourceRoot = processor.sourceRoot
             resourceRoot = processor.resourceRoot
