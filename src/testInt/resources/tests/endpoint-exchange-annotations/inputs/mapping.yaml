@@ -1,0 +1,8 @@
+openapi-processor-spring: v1
+
+options:
+  package-name: generated
+  format-code: false
+
+  spring:
+    annotations: exchange

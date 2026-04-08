@@ -1,0 +1,29 @@
+openapi: 3.0.2
+info:
+  title: test request/response with exchange annotations
+  version: 1.0.0
+
+paths:
+  /foo:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Foo'
+        required: true
+      responses:
+        '201':
+          description: result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+    Foo:
+      type: object
+      properties:
+        foo:
+          type: string

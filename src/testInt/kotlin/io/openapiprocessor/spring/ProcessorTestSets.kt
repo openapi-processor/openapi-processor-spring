@@ -10,6 +10,7 @@ import io.openapiprocessor.test.*
 
 val ALL_3x: List<TestParams2> = join(
     emptyList(),
+    tests("endpoint-exchange-annotations"),
     testX("endpoint-http-mapping"),
     tests("params-complex-data-types"),
     testX("params-enum"),
