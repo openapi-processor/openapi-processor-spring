@@ -1,5 +1,6 @@
 = Configuration
 :toc:
+:toclevels: 4
 include::partial$links.adoc[]
 include::partial$vars.adoc[]
 
@@ -66,7 +67,7 @@ Interfaces and models will be generated into the `api` and `model` subpackages o
 * the final package name of the generated interfaces will be `"$\{package-name\}.api"`,
 * and the final package name of the generated models will be `"$\{package-name\}.model"`
 
-==== example
+*example*
 
 [source,yaml,subs=attributes+]
 ----
@@ -127,7 +128,7 @@ Usually you will separate the classes by putting them in different packages. Thi
 
 If a schema name from the OpenAPI description already ends with the `model-name-suffix`, the processor will **not** append the suffix. This allows migrating an existing api with a suffix in the API to `model-name-suffix` step by step.
 
-==== example
+*example*
 
 *OpenAPI*
 [source,yaml]
@@ -209,7 +210,7 @@ public class BarResource { // <2>
 
 generate pojos (class with get/set property methods) or records model classes from OpenAPI schemas. This is a global setting in the `mapping.yaml`. It can either have the value `default` (which is default) to generate pojos or `record` to generate records.
 
-==== example
+*example*
 
 *mapping.yaml*
 [source,yaml,subs=attributes+]
@@ -264,7 +265,7 @@ public class Foo {
 }
 ----
 
-=== model-accessors ([.badge .badge-since]+new with 2025.1+)
+=== model-accessors
 
 **optional** (boolean, `true` or `false`, default is `true`)
 
@@ -273,7 +274,7 @@ enables or disables generation of accessor methods, i.e., getter and setter. The
 [NOTE]
 This is only used with `model-type: default`. It is ignored with `model-type: record`.
 
-==== example
+*example*
 
 Here is a small example that uses object annotation mapping to add the lombok getter and setter annotations to the generated class.
 
@@ -359,7 +360,7 @@ selects the Jackson version, i.e., which package-name is used.
 
 enables generation of JavaDoc comments from the OpenAPI `description` s on the API interfaces and model pojos.
 
-=== format-code ([.badge .badge-since]+updated with 2025.1+)
+=== format-code
 
 // [.badge .badge-since]+changed with 2025.1+
 
@@ -385,7 +386,7 @@ In case of `google` (or `true`) see also xref:oap::jdk.adoc[JDK 16+].
 
 enables generation of marker interfaces for `oneOf` objects. See xref:processor/one-of-interface.adoc#_marker_interfaces[oneOf marker interfaces].
 
-=== response-interface ([.badge .badge-since]+new with 2025.2+)
+=== response-interface
 
 **optional** (boolean, `true` or `false`, default is `false`)
 
@@ -438,7 +439,7 @@ The other two can be used if `default` does not work.This is described in more d
 
 *`framework`* does generate a slightly different enum classes than `default` and a Spring `ConverterFactory` that can deserialize incoming values to proper enum values.
 
-==== example
+*example*
 
 *mapping.yaml*
 [source,yaml,subs=attributes+]
@@ -512,7 +513,7 @@ this controls if the `targetDir` is the source root folder or if there is anothe
  |                \--- model
  \--- resources
 
-==== example
+*example*
 
 [source,yaml,subs=attributes+]
 ----
@@ -522,6 +523,21 @@ options:
   target-dir:
     layout: standard
 ----
+
+=== spring
+
+The parent key to group Spring specific options.
+
+[NOTE]
+to benefit from editing support in IntelliJ make sure you use `openapi-processor-spring` instead of `openapi-processor-mapping` with the appropriate version.
+
+==== annotations ([.badge .badge-since]+new with 2026.3+)
+
+**optional** (string, `mapping` or `exchange`, default is `mapping`)
+
+Select the Spring annotation family, either `mapping` for `@RequestMapping` based annotations or `exchange` for `@HttpExchange` based annotations.
+
+See xref:processor/annotations.adoc[].
 
 == annotation-targets: ([.badge .badge-since]+new with 2025.6+)
 
