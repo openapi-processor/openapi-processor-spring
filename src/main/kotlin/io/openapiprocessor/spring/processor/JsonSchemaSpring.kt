@@ -11,5 +11,5 @@ import java.net.URI
 const val SPRING_MAPPING_SCHEMA_VERSION = "v1"
 
 val JSON_SCHEMA_SPRING = JsonSchema(
-    URI("https://openapiprocessor.io/schemas/mapping/spring-mapping-${SPRING_MAPPING_SCHEMA_VERSION}.json"),
+    URI("https://openapiprocessor.io/schemas/mapping/spring-${SPRING_MAPPING_SCHEMA_VERSION}.json"),
     "/mapping/${SPRING_MAPPING_SCHEMA_VERSION}/spring-mapping.yaml.json")

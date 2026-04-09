@@ -1,5 +1,5 @@
 {
-  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-spring-v1.json",
+  "$id": "https://openapiprocessor.io/schemas/mapping/spring-v1.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "JSON Schema for openapi-processor-spring mapping.yaml v1",
   "description": "openapi-processor-spring configuration and type mappings",
