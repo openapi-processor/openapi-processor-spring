@@ -3,6 +3,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "JSON Schema for openapi-processor-spring mapping.yaml v1",
   "description": "openapi-processor-spring configuration and type mappings",
+  "type": "object",
   "allOf": [
     { "$ref": "#/definitions/SpringMapping" },
     { "$ref": "https://openapiprocessor.io/schemas/mapping/mapping-v18.json" }
