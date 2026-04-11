@@ -1,0 +1,573 @@
+{
+  "$id": "https://openapiprocessor.io/schemas/mapping/spring-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON Schema for openapi-processor mapping.yaml v1",
+  "description": "openapi-processor configuration and type mappings",
+  "type": "object",
+  "properties": {
+    "openapi-processor-spring": {
+      "description": "version of the spring mapping format.",
+      "enum": ["v1"]
+    },
+    "openapi-processor-mapping": {
+      "description": "version of the mapping format.",
+      "type": "string"
+    },
+    "options": {
+      "$ref": "#/definitions/Options"
+    },
+    "logging": {
+      "$ref": "#/definitions/Logging"
+    },
+    "compatibility": {
+      "$ref": "#/definitions/Compatibility"
+    },
+    "map": {
+      "$ref": "#/definitions/Map"
+    },
+    "bean-validation": {
+      "$ref": "#/definitions/BeanValidation"
+    },
+    "annotation-targets": {
+      "$ref": "#/definitions/AnnotationTargets"
+    }
+  },
+  "required": [
+    "options"
+  ],
+  "oneOf": [
+    { "required": ["openapi-processor-spring"] },
+    { "required": ["openapi-processor-mapping"] }
+  ],
+  "additionalProperties": true,
+  "definitions": {
+    "Options": {
+      "description": "general processor configuration options.",
+      "type": "object",
+      "properties": {
+        "package-name": {
+          "description": "java base package name of the generated source files.",
+          "type": "string",
+          "default": "io.openapiprocessor.generated"
+        },
+        "package-names": {
+          "description": "package name related options",
+          "type": "object",
+          "properties": {
+            "base": {
+              "description": "java base package name of the generated source files. Alternative to 'package-name'.",
+              "type": "string",
+              "default": "io.openapiprocessor.generated"
+            },
+            "location": {
+              "description": "java base package name of location based generated source files.",
+              "type": "string",
+              "default": null
+            }
+          },
+          "required": ["base"]
+        },
+        "bean-validation": {
+          "description": "enable bean validation annotations for OpenAPI constraints.",
+          "default": false,
+          "enum": [false, true, "javax", "jakarta"]
+        },
+        "javadoc": {
+          "description": "generate javadoc from OpenAPI 'description' properties.",
+          "type": "boolean",
+          "default": false
+        },
+        "model-name-suffix": {
+          "description": "suffix for model class names and enum names. Default is none, i.e. an empty string.",
+          "type": "string",
+          "default": "",
+          "examples": [
+            "Resource", "Dto"
+          ]
+        },
+        "model-type": {
+          "description": "generate pojo or record based models. Default is default, i.e. classic pojos.",
+          "default": "default",
+          "enum": ["default", "record"]
+        },
+        "model-accessors": {
+          "description": "enable/disable generation of pojo accessor methods.",
+          "type": "boolean",
+          "default": true
+        },
+        "model-unreferenced": {
+          "description": "enable/disable generation of unreferenced models from components/schemas.",
+          "type": "boolean",
+          "default": false
+        },
+        "enum-type": {
+          "description": "generate default enum, string or framework enum. Default is default.",
+          "default": "default",
+          "enum": ["default", "string", "framework"]
+        },
+        "one-of-interface": {
+          "description": "generate common interface for a `oneOf` object list.",
+          "type": "boolean",
+          "default": false
+        },
+        "response-interface": {
+          "description": "generate common interface for different responses of same content type.",
+          "type": "boolean",
+          "default": false
+        },
+        "format-code": {
+          "description": "enable/disable code formatting.",
+          "default": false,
+          "enum": [false, true, "google", "eclipse"]
+        },
+        "generated-annotation": {
+          "description": "enable/disable the @Generated annotation.",
+          "type": "boolean",
+          "default": true
+        },
+        "generated-date": {
+          "description": "enable/disable generated date on the @Generated annotation.",
+          "type": "boolean",
+          "default": true
+        },
+        "clear-target-dir": {
+          "description": "enable/disable deletion of targetDir. (overridden by target-dir.clear)",
+          "type": "boolean",
+          "default": true
+        },
+        "json-property-annotation": {
+          "description": "generate @JsonProperty annotation.",
+          "default": "always",
+          "enum": ["always", "auto", "never"]
+        },
+        "target-dir": {
+          "description": "target-dir related options",
+          "type": "object",
+          "properties": {
+            "clear": {
+              "description": "enable/disable deletion of targetDir.",
+              "type": "boolean",
+              "default": true
+            },
+            "layout": {
+              "description": "target dir layout. classic: targetDir/packages, standard: targetDir/java/packages & targetDir/resources",
+              "default": "classic",
+              "enum": ["classic", "standard"]
+            }
+          }
+        },
+        "base-path": {
+          "description": "base-path related options",
+          "type": "object",
+          "properties": {
+            "server-url": {
+              "description": "index of the OpenAPI 'server.url' that is used as base path. Default is 'false', i.e. no prefix. 'true' == 0",
+              "default": false,
+              "type": ["boolean", "integer"],
+              "minimum": 0,
+              "examples": [
+                "true", "false", "0", "1"
+              ]
+            },
+            "properties-name": {
+              "description": "name of the resource properties file with the base path configuration",
+              "default": "api.properties",
+              "examples": ["api.properties", "openapi.properties"]
+            }
+          }
+        },
+        "spring": {
+          "description": "spring processor configuration options.",
+          "type": "object",
+          "properties": {
+            "annotations": {
+              "description": "annotation family, mapping or exchange. Default is mapping.",
+              "type": "string",
+              "enum": [
+                "mapping",
+                "exchange"
+              ]
+            }
+          }
+        }
+      },
+      "oneOf": [
+        { "required": ["package-name"] },
+        { "required": ["package-names"] }
+      ],
+      "additionalProperties": true
+    },
+    "Logging": {
+      "description": "logging options.",
+      "type": "object",
+      "properties": {
+        "mapping": {
+          "description": "enable mapping logging.",
+          "type": "boolean",
+          "default": false
+        },
+        "mapping-target": {
+          "description": "mapping logging target (logger logs on info level, stdout directly logs to stdout).",
+          "type": "string",
+          "default": "logger",
+          "enum": ["logger", "stdout"]
+        }
+      }
+    },
+    "Compatibility": {
+      "description": "backward compatibility options.",
+      "type": "object",
+      "properties": {
+        "bean-validation-valid-on-reactive": {
+          "description": "add bean validation @Valid annotation to reactive types.",
+          "type": "boolean",
+          "default": true
+        },
+        "identifier-word-break-from-digit-to-letter": {
+          "description": "identifier, break word when switching from digits to letters.",
+          "type": "boolean",
+          "default": true
+        },
+        "identifier-prefix-invalid-enum-start": {
+          "description": "identifier, prefix enum if it starts with an invalid character.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "BeanValidation": {
+      "description": "additional types that are supported by bean-validation annotations.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "AnnotationTargets": {
+      "description": "annotations are only applied to allowed annotation targets. No definition will add it to all targets.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "enum": ["type", "field", "method", "parameter"]
+        }
+      }
+    },
+    "Map": {
+      "description": "global & path specific mapping rules.",
+      "allOf": [{
+          "$ref": "#/definitions/Mappings"
+        }, {
+          "properties": {
+            "paths": {
+              "$ref": "#/definitions/Paths"
+            }
+          }
+        }, {
+          "properties": {
+            "extensions": {
+              "$ref": "#/definitions/Extensions"
+            }
+          }
+      }]
+    },
+    "Mappings": {
+      "description": "mapping rules.",
+      "type": "object",
+      "properties": {
+        "body-style": {
+          "$ref": "#/definitions/BodyStyleMapping"
+        },
+        "result": {
+          "$ref": "#/definitions/ResultMapping"
+        },
+        "result-style": {
+          "$ref": "#/definitions/ResultStyleMapping"
+        },
+        "result-status": {
+          "$ref": "#/definitions/ResultStatus"
+        },
+        "single": {
+          "$ref": "#/definitions/SingleMapping"
+        },
+        "multi": {
+          "$ref": "#/definitions/MultiMapping"
+        },
+        "null": {
+          "$ref": "#/definitions/NullMapping"
+        },
+        "types": {
+          "$ref": "#/definitions/TypeMappings"
+        },
+        "schemas": {
+          "$ref": "#/definitions/TypeMappings"
+        },
+        "parameters": {
+          "$ref": "#/definitions/ParameterMappings"
+        },
+        "responses": {
+          "$ref": "#/definitions/ResponseMappings"
+        }
+      }
+    },
+    "Paths": {
+      "description": "path specific mappings.",
+      "type": "object",
+      "patternProperties": {
+        "^/": {
+          "description": "a path.",
+          "allOf": [{
+              "$ref": "#/definitions/Exclude"
+            }, {
+              "$ref": "#/definitions/Mappings"
+            }, {
+              "$ref": "#/definitions/Methods"
+          }]
+        }
+      }
+    },
+    "Extensions": {
+      "description": "x-extensions annotation mapping rules.",
+      "type": "object",
+      "patternProperties": {
+        "^x-": {
+          "description": "an extension with a single value or a list of values.",
+          "anyOf": [{
+            "$ref": "#/definitions/AnnotationMappingFormat"
+          }, {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/AnnotationMappingFormat"
+            }
+          }]
+        }
+      }
+    },
+    "Methods": {
+      "description": "http method mapping rules.",
+      "type": "object",
+      "properties": {
+        "get": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "put": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "post": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "delete": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "options": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "head": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "patch": {
+          "$ref": "#/definitions/Mappings"
+        },
+        "trace": {
+          "$ref": "#/definitions/Mappings"
+        }
+      }
+    },
+    "BodyStyleMapping": {
+      "description": "body style of a http response. Pass body as 'object' or as 'destructure'd parameters.",
+      "enum": ["object", "destructure"],
+      "default": "destructure",
+      "examples": [
+        "object",
+        "destructure"
+      ]
+    },
+    "ResultMapping": {
+      "description": "wrapper object of a http response.",
+      "type": "string",
+      "examples": [
+        "org.springframework.http.ResponseEntity", "plain"
+      ]
+    },
+    "ResultStyleMapping": {
+      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
+      "enum": ["success", "all"],
+      "default": "success",
+      "examples": [
+        "all",
+        "success"
+      ]
+    },
+    "ResultStatus": {
+      "description": "add result http status if unambiguous (i.e., it always returns the same status) and not equal to 200.",
+      "type": "boolean",
+      "default": "true"
+    },
+    "SingleMapping": {
+      "description": "reactive wrapper of single types.",
+      "type": "string",
+      "examples": [
+        "reactor.core.publisher.Mono"
+      ]
+    },
+    "MultiMapping": {
+      "description": "reactive wrapper of array types.",
+      "type": "string",
+      "examples": [
+        "core.publisher.Flux"
+      ]
+    },
+    "NullMapping": {
+      "description": "null wrapper of 'nullable' object properties.",
+      "type": "string",
+      "examples": [
+        "org.openapitools.jackson.nullable.JsonNullable",
+        "org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()"
+      ]
+    },
+    "TypeMappings": {
+      "description": "basic type mappings.",
+      "type": "array",
+      "minItems": 1,
+      "items": [{
+        "description": "maps a schema to a a Java type.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+              "anyOf": [{
+                "$ref": "#/definitions/TypeMappingFormat"
+              }, {
+                "$ref": "#/definitions/AnnotationMappingFormat"
+              }, {
+                "$ref": "#/definitions/InterfaceMappingFormat"
+              }]
+          },
+          "generics": {
+            "$ref": "#/definitions/TypeMappingGenerics"
+          }
+        }
+      }]
+    },
+    "ParameterMappings": {
+      "description": "parameter type mappings.",
+      "type": "array",
+      "minItems": 1,
+      "items": [{
+        "description": "maps a parameter name to a Java type.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "anyOf": [{
+              "$ref": "#/definitions/TypeMappingFormat"
+            }, {
+              "$ref": "#/definitions/AnnotationMappingFormat"
+            }, {
+              "$ref": "#/definitions/InterfaceMappingFormat"
+            }]
+          },
+          "add": {
+            "$ref": "#/definitions/TypeMappingFormat"
+          },
+          "drop": {
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [{
+              "$ref": "#/definitions/TypeMappingFormat"
+            }, {
+              "$ref": "#/definitions/AnnotationMappingFormat"
+            }, {
+              "$ref": "#/definitions/InterfaceMappingFormat"
+            }]
+          },
+          "generics": {
+            "$ref": "#/definitions/TypeMappingGenerics"
+          }
+        }
+      }],
+      "required": [
+        "name"
+      ],
+      "examples": [
+        "foo => io.openapiprocessor.Foo"
+      ]
+    },
+    "ResponseMappings": {
+      "description": "response (content) type mappings.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "description": "maps a content type to a Java type.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/definitions/TypeMappingFormat"
+          },
+          "generics": {
+            "$ref": "#/definitions/TypeMappingGenerics"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "examples": [
+          "application/json => io.openapiprocessor.Foo"
+        ]
+      }
+    },
+    "Exclude": {
+      "description": "generate endpoint to a separate 'Excluded' interface.",
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "type": "boolean"
+        }
+      }
+    },
+    "TypeMappingFormat": {
+      "description": "schema => fully qualified Java type.",
+      "type": "string",
+      "pattern": "^.+\\s+(=>|map)\\s+.+$",
+      "examples": [
+        "array => java.util.Collection",
+        "FooSchema => io.openapiprocessor.Foo",
+        "FooSchema map io.openapiprocessor.Foo"
+      ]
+    },
+    "AnnotationMappingFormat": {
+      "description": "target @ fully qualified Java type with optional parameters.",
+      "type": "string",
+      "pattern": "^.+\\s+(@|annotate)\\s+.+$",
+      "examples": [
+        "FooSchema @ some.Annotation",
+        "FooSchema @ some.Annotation(\"bar\")",
+        "FooSchema @ some.Annotation(value = \"bar\", bar = 5)",
+        "property name @ some.Annotation",
+        "FooSchema annotate some.Annotation"
+      ]
+    },
+    "InterfaceMappingFormat": {
+      "description": "target =+ fully qualified interface type.",
+      "type": "string",
+      "pattern": "^.+\\s+(=\\+|implement)\\s+.+$",
+      "examples": [
+        "FooSchema =+ java.io.Serializable",
+        "object =+ java.io.Serializable",
+        "FooSchema implement java.io.Serializable"
+      ]
+    },
+    "TypeMappingGenerics": {
+      "description": "fully qualified Java types used as generic parameters of the type mapping.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
