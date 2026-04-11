@@ -54,10 +54,10 @@ jobs:
 
     runs-on: ubuntu-latest
     if: >-
-      github.actor != 'dependabot[bot]' &&
-      github.actor == 'hauner' && contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
+      github.actor != 'dependabot[bot]' && github.actor == 'hauner'
 
     steps:
+      - run: echo ${{ github.actor }} ${{ github.actor == 'hauner' }}
       - run: echo "should publish ..."
 
   publish:
