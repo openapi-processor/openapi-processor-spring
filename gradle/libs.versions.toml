@@ -1,5 +1,5 @@
 [versions]
-processor = "2026.3c-SNAPSHOT"
+processor = "2026.4-SNAPSHOT"
 
 kotlin = "2.3.20"
 target-jdk = "11"
