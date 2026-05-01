@@ -29,8 +29,7 @@ val HTTP_STATUS = hashMapOf(
 
     "300" to getEnum("MULTIPLE_CHOICES"),
     "301" to getEnum("MOVED_PERMANENTLY"),
-    "302" to getEnum("MOVED_TEMPORARILY"),
-    //"302" to getEnum("FOUND"), // replaces MOVED_TEMPORARILY
+    "302" to getEnum("FOUND"), // was MOVED_TEMPORARILY
     "303" to getEnum("SEE_OTHER"),
     "304" to getEnum("NOT_MODIFIED"),
     "305" to getEnum("USE_PROXY"),
@@ -50,10 +49,8 @@ val HTTP_STATUS = hashMapOf(
     "410" to getEnum("GONE"),
     "411" to getEnum("LENGTH_REQUIRED"),
     "412" to getEnum("PRECONDITION_FAILED"),
-    "413" to getEnum("REQUEST_ENTITY_TOO_LARGE"),
-    //"413" to getEnum("PAYLOAD_TOO_LARGE"), // replaces REQUEST_ENTITY_TOO_LARGE
-    "414" to getEnum("REQUEST_URI_TOO_LONG"),
-    //"414" to getEnum("URI_TOO_LONG"), // replaces REQUEST_URI_TOO_LONG
+    "413" to getEnum("PAYLOAD_TOO_LARGE"), // was REQUEST_ENTITY_TOO_LARGE
+    "414" to getEnum("URI_TOO_LONG"), // was REQUEST_URI_TOO_LONG
     "415" to getEnum("UNSUPPORTED_MEDIA_TYPE"),
     "416" to getEnum("REQUESTED_RANGE_NOT_SATISFIABLE"),
     "417" to getEnum("EXPECTATION_FAILED"),
