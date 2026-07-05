@@ -13,8 +13,8 @@ public interface Api {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/foo/params")
     void postFooParams(
-            @RequestParam(name = "foo") String foo,
-            @RequestParam(name = "bar") String bar);
+            @RequestParam(name = "foo", required = false) String foo,
+            @RequestParam(name = "bar", required = false) String bar);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/foo/object", consumes = {"application/x-www-form-urlencoded"})
