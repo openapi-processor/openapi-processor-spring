@@ -56,7 +56,8 @@ class MethodWriterSpec extends Specification {
             properties.responses ?: [:],
             properties.operationId as String ?: null,
             properties.deprecated as boolean ?: false,
-            new Documentation(null, properties.description as String ?: null))
+            new Documentation(null, properties.description as String ?: null),
+            new HashSet<String>())
     }
 
     void "writes map from single query parameter" () {

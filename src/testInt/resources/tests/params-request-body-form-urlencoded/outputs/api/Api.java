@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public interface Api {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping(path = "/foo/params")
+    @PostMapping(path = "/foo/params", consumes = {"application/x-www-form-urlencoded"})
     void postFooParams(
             @RequestParam(name = "foo", required = false) String foo,
             @RequestParam(name = "bar", required = false) String bar);
