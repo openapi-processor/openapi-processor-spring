@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradle.enterprise") version("3.14.1")
+    id("com.gradle.develocity").version("4.5.0")
 }
 
 dependencyResolutionManagement {
@@ -14,12 +14,13 @@ dependencyResolutionManagement {
     }
 }
 
-gradleEnterprise {
+develocity {
     if (System.getenv("CI") != null) {
         buildScan {
-            publishAlways()
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
+            buildScan {
+                termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+                termsOfUseAgree.set("yes")
+            }
         }
     }
 }
