@@ -4,7 +4,7 @@ processor = "2026.4-SNAPSHOT"
 kotlin = "2.4.0"
 target-jdk = "11"
 build-jdk = "17"
-build-plugins = "2026.6"
+build-plugins = "2026.7"
 
 api = "2024.2"
 base = "2026.3.1"
