@@ -337,7 +337,10 @@ to handle the package name change from bean validation v2 to v3 (`javax` => `jak
 ** `javax`: enables bean validation annotations v2, with `javax` package name
 ** `jakarta`: enables bean validation annotations v3, with `jakarta` package name
 
-=== jackson ([.badge .badge-since]+new with 2026.3+)
+=== [.line-through]#jackson ([.badge .badge-since]+new with 2026.3+)#
+
+[NOTE]
+do **not** use this. It is not necessary because jackson 3 still uses the jackson 2 package names.
 
 **optional** (string, `v2` or `v3`, default is `false`)
 
