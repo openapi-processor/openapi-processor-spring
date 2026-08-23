@@ -3,14 +3,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     `java-library`
     groovy
-    kotlin
-    alias(libs.plugins.versions)
-    alias(libs.plugins.sonar)
-    alias(libs.plugins.updates)
+    kotlin("jvm")
+    alias(build.plugins.versions)
+    alias(build.plugins.sonar)
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
     id("openapiprocessor.publish")
     id("openapiprocessor.coverage")
+    id("openapiprocessor.versions")
     id("openapiprocessor.newapi")
 }
 
@@ -34,7 +34,6 @@ kotlin {
     jvmToolchain(libs.versions.build.jdk.get().toInt())
 
     compilerOptions {
-        freeCompilerArgs.add("-Xannotation-default-target=param-property")
         jvmTarget = JvmTarget.fromTarget(libs.versions.target.jdk.get())
     }
 }
@@ -103,6 +102,7 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
     jvmArgs(listOf(
+        "-Xshare:off",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
@@ -137,6 +137,7 @@ sonarqube {
     property("sonar.projectKey", "openapi-processor_openapi-processor-spring")
     property("sonar.organization", "openapi-processor")
     property("sonar.host.url", "https://sonarcloud.io")
-    property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString())
+    property("sonar.coverage.jacoco.xmlReportPaths",
+        layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString())
   }
 }

@@ -1,0 +1,32 @@
+# plugins used by the build and the convention plugins
+
+[versions]
+build-plugins = "2026.7"
+
+target-jdk = "17"
+build-jdk = "21"
+
+kotlin = "2.4.10"
+
+checker = "0.6.61"
+jacoco = "0.8.15"
+jacocolog = "4.0.1"
+updates = "0.61.0"
+
+[libraries]
+plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-updates = { module = "io.github.ben-manes:gradle-versions-plugin", version.ref = "updates" }
+plugin-jacocolog = { module = "org.barfuin.gradle.jacocolog:org.barfuin.gradle.jacocolog.gradle.plugin", version.ref = "jacocolog" }
+
+[plugins]
+openapiprocessor-publish = { id = "io.openapiprocessor.build.plugin.publish", version.ref = "build-plugins" }
+openapiprocessor-bump = { id = "io.openapiprocessor.build.plugin.bump", version.ref = "build-plugins" }
+openapiprocessor-central = { id = "io.openapiprocessor.build.plugin.publish-central", version.ref = "build-plugins" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+jacoco = { id = "org.barfuin.gradle.jacocolog", version.ref = "jacocolog" }
+jacocolog = { id = "org.barfuin.gradle.jacocolog" }
+updates = { id = "io.github.ben-manes.versions", version = "0.61.0" }
+publish = { id = "io.openapiprocessor.build.plugin.publish" }
+versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
+sonar = { id = "org.sonarqube", version =  "7.3.1.8318" }

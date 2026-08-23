@@ -1,15 +1,16 @@
 [versions]
 processor = "2026.4-SNAPSHOT"
 
-kotlin = "2.4.10"
-target-jdk = "11"
-build-jdk = "17"
 build-plugins = "2026.7"
-
 api = "2024.2"
 base = "2026.3.1"
 
-jacoco = "0.8.14"
+target-jdk = "11"
+build-jdk = "17"
+
+kotlin = "2.4.10"
+
+jacoco = "0.8.15"
 jacocolog = "4.0.1"
 
 spring-web = "7.0.8"
@@ -43,21 +44,3 @@ mockk = "io.mockk:mockk:1.14.11"
 
 groovy-bom = "org.apache.groovy:groovy-bom:5.0.8"
 spock = "org.spockframework:spock-core:2.4-groovy-5.0"
-
-# for buildSrc convention plugins
-plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-#plugin-checker = { module = "org.checkerframework:checkerframework-gradle-plugin", version.ref = "checker" }
-#plugin-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "updates" }
-plugin-jacocolog = { module = "org.barfuin.gradle.jacocolog:org.barfuin.gradle.jacocolog.gradle.plugin", version.ref = "jacocolog" }
-#plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-#plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.5"
-#plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.53.0"
-
-[plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-jacoco = { id = "org.barfuin.gradle.jacocolog", version.ref = "jacocolog" }
-updates = { id = "com.github.ben-manes.versions", version = "0.59.0" }
-sonar = { id = "org.sonarqube", version =  "7.3.1.8318" }
-versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
-publish = { id = "io.openapiprocessor.build.plugin.publish" }

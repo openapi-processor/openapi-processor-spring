@@ -1,7 +1,3 @@
-plugins {
-    id("com.gradle.develocity").version("4.5.0")
-}
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -12,6 +8,15 @@ dependencyResolutionManagement {
             }
         }
     }
+    versionCatalogs {
+        create("build") {
+            from(files("./gradle/build.versions.toml"))
+        }
+    }
+}
+
+plugins {
+    id("com.gradle.develocity").version("4.5.0")
 }
 
 develocity {
