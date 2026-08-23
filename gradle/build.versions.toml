@@ -29,4 +29,4 @@ jacocolog = { id = "org.barfuin.gradle.jacocolog" }
 updates = { id = "io.github.ben-manes.versions", version = "0.61.0" }
 publish = { id = "io.openapiprocessor.build.plugin.publish" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
-sonar = { id = "org.sonarqube", version =  "7.3.1.8318" }
+sonar = { id = "org.sonarqube", version =  "7.4.0.8496" }
