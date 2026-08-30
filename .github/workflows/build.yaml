@@ -52,7 +52,7 @@ jobs:
       uses: actions/checkout@v7
 
     - name: set up jdk
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         distribution: 'temurin'
         java-version: |
@@ -85,7 +85,7 @@ jobs:
       uses: actions/checkout@v7
 
     - name: set up jdk
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         distribution: 'temurin'
         java-version: |
@@ -134,7 +134,7 @@ jobs:
           ${{ runner.os }}-sonar
 
     - name: set up jdk
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         distribution: 'temurin'
         java-version: |
