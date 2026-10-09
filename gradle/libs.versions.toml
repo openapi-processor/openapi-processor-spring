@@ -32,7 +32,7 @@ spring-data = { module ="org.springframework.data:spring-data-commons", version.
 
 jimfs = "com.google.jimfs:jimfs:1.3.2"
 slf4j = "org.slf4j:slf4j-api:2.0.19"
-logback = "ch.qos.logback:logback-classic:1.6.3"
+logback = "ch.qos.logback:logback-classic:1.6.5"
 
 kotest-bom = "io.kotest:kotest-bom:6.2.5"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
