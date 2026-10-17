@@ -40,4 +40,4 @@ kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.11"
 
 groovy-bom = "org.apache.groovy:groovy-bom:5.1.2"
-spock = "org.spockframework:spock-core:2.4-groovy-5.0"
+spock = "org.spockframework:spock-core:2.5-groovy-5.0"
