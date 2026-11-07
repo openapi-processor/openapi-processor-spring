@@ -25,10 +25,11 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first() == expected
+        def mapping = codeSnippets.first()
+        mapping.text == expected
 
         where:
         httpMethod         | path         | expected
@@ -50,10 +51,12 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first() == expected
+        def mapping = codeSnippets.first()
+        mapping.text == expected
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
 
         where:
         contentType         | expected
@@ -67,10 +70,12 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first() == expected
+        def mapping = codeSnippets.first()
+        mapping.text == expected
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
 
         where:
         contentType         | expected
@@ -89,10 +94,12 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first() == expected
+        def mapping = codeSnippets.first()
+        mapping.text == expected
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
 
         where:
         requestContentType | responseContentType | expected
@@ -110,10 +117,12 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first() == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
+        def mapping = codeSnippets.first()
+        mapping.text == """@GetMapping(path = "${endpoint.path}", produces = {"${endpoint.responses.'200'.first ().contentType}", "${endpoint.responses.'default'.first ().contentType}"})"""
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
     }
 
     void "writes unique 'consumes' parameter" () {
@@ -129,10 +138,12 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first ().contains ('consumes = {"foo/in"}')
+        def mapping = codeSnippets.first()
+        mapping.text.contains ('consumes = {"foo/in"}')
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
     }
 
     void "writes unique 'produces' parameters" () {
@@ -152,13 +163,15 @@ class MappingAnnotationFactorySpec extends Specification {
         ])
 
         when:
-        def annotations = factory.create (endpoint, endpoint.endpointResponses.first ())
+        def codeSnippets = factory.create (endpoint, endpoint.endpointResponses.first ())
 
         then:
-        annotations.first ().contains ('produces = {"foo/out"}')
+        def mapping = codeSnippets.first()
+        mapping.text.contains ('produces = {"foo/out"}')
+        mapping.imports.containsAll(["org.springframework.web.bind.annotation.GetMapping"])
     }
 
-    private Endpoint endpoint(Map properties) {
+    private static Endpoint endpoint(Map properties) {
         return new Endpoint(
             properties.path as String ?: '',
             properties.method as HttpMethod ?: HttpMethod.GET,

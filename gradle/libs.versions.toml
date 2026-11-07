@@ -3,7 +3,7 @@ processor = "2026.4-SNAPSHOT"
 
 build-plugins = "2026.7"
 api = "2024.2"
-base = "2026.3.1"
+base = "2026.4-SNAPSHOT"
 
 target-jdk = "11"
 build-jdk = "17"

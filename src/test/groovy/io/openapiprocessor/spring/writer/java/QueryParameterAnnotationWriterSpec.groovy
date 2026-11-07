@@ -1,17 +1,6 @@
 /*
- * Copyright 2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-spring
+ * PDX-License-Identifier: Apache-2.0
  */
 
 package io.openapiprocessor.spring.writer.java
@@ -25,7 +14,7 @@ import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
 import spock.lang.Specification
 
 class QueryParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
+    def factory = new ParameterAnnotationFactory(new SpringFrameworkAnnotations())
     def target = new StringWriter()
 
     void "write simple (required) query parameter" () {
@@ -33,10 +22,13 @@ class QueryParameterAnnotationWriterSpec extends Specification {
             'foo', new StringDataType(), true, false, null)
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == '@RequestParam(name = "foo")'
+        def annotation = codeSnippets.first()
+
+        annotation.text == '@RequestParam(name = "foo")'
+        annotation.imports.contains("org.springframework.web.bind.annotation.RequestParam")
     }
 
     void "write simple (optional) query parameter" () {
@@ -44,10 +36,12 @@ class QueryParameterAnnotationWriterSpec extends Specification {
             'foo', new StringDataType(), false, false, null)
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == '@RequestParam(name = "foo", required = false)'
+        def annotation = codeSnippets.first()
+        annotation.text == '@RequestParam(name = "foo", required = false)'
+        annotation.imports.contains("org.springframework.web.bind.annotation.RequestParam")
     }
 
     void "write simple (optional with default) query parameter" () {
@@ -59,10 +53,12 @@ class QueryParameterAnnotationWriterSpec extends Specification {
             false, false, null)
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == '@RequestParam(name = "foo", required = false, defaultValue = "bar")'
+        def annotation = codeSnippets.first()
+        annotation.text == '@RequestParam(name = "foo", required = false, defaultValue = "bar")'
+        annotation.imports.contains("org.springframework.web.bind.annotation.RequestParam")
     }
 
     void "writes object query parameter without annotation" () {
@@ -77,10 +73,9 @@ class QueryParameterAnnotationWriterSpec extends Specification {
         )
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == ""
+        codeSnippets.isEmpty()
     }
-
 }

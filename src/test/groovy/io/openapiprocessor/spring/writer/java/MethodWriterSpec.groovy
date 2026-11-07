@@ -20,6 +20,8 @@ import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.GenericDataType
 import io.openapiprocessor.core.model.datatypes.MappedDataType
+import io.openapiprocessor.core.writer.java.BeanValidationFormat
+import io.openapiprocessor.core.writer.java.BeanValidations
 import io.openapiprocessor.core.writer.java.JavaDocFactory
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.spring.model.parameters.QueryParameter
@@ -39,10 +41,10 @@ class MethodWriterSpec extends Specification {
     def writer = new MethodWriter (
         apiOptions,
         identifier,
-        new StatusAnnotationWriter(new SpringFrameworkAnnotations()),
+        new StatusAnnotationFactory(new SpringFrameworkAnnotations()),
         new MappingAnnotationFactory(new SpringFrameworkAnnotations()),
-        new ParameterAnnotationWriter(new SpringFrameworkAnnotations()),
-        new BeanValidationFactory (apiOptions),
+        new ParameterAnnotationFactory(new SpringFrameworkAnnotations()),
+        new BeanValidationFactory (apiOptions, BeanValidations.create(BeanValidationFormat.JAKARTA.name())),
         new JavaDocFactory(identifier))
     def target = new StringWriter ()
 

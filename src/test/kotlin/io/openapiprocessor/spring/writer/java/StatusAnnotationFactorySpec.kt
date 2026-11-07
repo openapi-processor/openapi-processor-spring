@@ -6,20 +6,19 @@
 package io.openapiprocessor.spring.writer.java
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.datatypes.NoneDataType
 import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.spring.processor.SpringFrameworkAnnotations
-import java.io.StringWriter
 
 
-class StatusAnnotationWriterSpec: StringSpec({
-    val writer = StatusAnnotationWriter(SpringFrameworkAnnotations())
-    val target = StringWriter()
+class StatusAnnotationFactorySpec: StringSpec({
+    val factory = StatusAnnotationFactory(SpringFrameworkAnnotations())
 
-    "write response status annotation" {
+    "creates response status annotation" {
         val ep = Endpoint(
             "/foo",
             HttpMethod.GET,
@@ -30,8 +29,12 @@ class StatusAnnotationWriterSpec: StringSpec({
             )
         )
 
-        writer.write(target, ep, ep.endpointResponses.first())
+        val codeSnippets = factory.create(ep, ep.endpointResponses.first())
+        val responseStatus = codeSnippets.first()
 
-        target.toString() shouldBeEqual """@ResponseStatus(HttpStatus.NO_CONTENT)"""
+        responseStatus.text shouldBeEqual """@ResponseStatus(HttpStatus.NO_CONTENT)"""
+        responseStatus.imports shouldContainExactly setOf(
+            "org.springframework.web.bind.annotation.ResponseStatus",
+            "org.springframework.http.HttpStatus")
     }
 })

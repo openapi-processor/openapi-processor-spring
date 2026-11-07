@@ -1,17 +1,6 @@
 /*
- * Copyright 2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-spring
+ * PDX-License-Identifier: Apache-2.0
  */
 
 package io.openapiprocessor.spring.writer.java
@@ -30,12 +19,11 @@ import io.openapiprocessor.spring.model.parameters.QueryParameter
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class ParameterAnnotationWriterSpec extends Specification {
-    def writer = new ParameterAnnotationWriter(new SpringFrameworkAnnotations())
-    def target = new StringWriter()
+class ParameterAnnotationFactorySpec extends Specification {
+    def factory = new ParameterAnnotationFactory(new SpringFrameworkAnnotations())
 
     @Unroll
-    void "writes simple (optional) query parameter with quoted string default value" () {
+    void "creates simple (optional) query parameter with quoted string default value" () {
         def param = clazz.newInstance('foo',
             new StringDataType(
                 'string',
@@ -43,10 +31,12 @@ class ParameterAnnotationWriterSpec extends Specification {
             false, false, null)
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == """${annotation}(name = "foo", required = false, defaultValue = "bar")"""
+        def parameter = codeSnippets.first()
+        parameter.text == """${annotation}(name = "foo", required = false, defaultValue = "bar")"""
+        parameter.imports.contains("org.springframework.web.bind.annotation.${annotation.substring(1)}".toString())
 
         where:
         clazz           | annotation
@@ -54,9 +44,11 @@ class ParameterAnnotationWriterSpec extends Specification {
         PathParameter   | "@PathVariable"
         CookieParameter | "@CookieValue"
         HeaderParameter | "@RequestHeader"
+
+        // todo imports
     }
 
-    void "writes simple (optional) query parameter with quoted number default value" () {
+    void "creates simple (optional) query parameter with quoted number default value" () {
         def param = clazz.newInstance ('foo',
             new LongDataType (
                 'integer:int64',
@@ -64,10 +56,12 @@ class ParameterAnnotationWriterSpec extends Specification {
             false, false, null)
 
         when:
-        writer.write (target, param)
+        def codeSnippets = factory.create (param)
 
         then:
-        target.toString () == """${annotation}(name = "foo", required = false, defaultValue = "5")"""
+        def parameter = codeSnippets.first()
+        parameter.text == """${annotation}(name = "foo", required = false, defaultValue = "5")"""
+        parameter.imports.contains("org.springframework.web.bind.annotation.${annotation.substring(1)}".toString())
 
         where:
         clazz           | annotation
@@ -77,7 +71,7 @@ class ParameterAnnotationWriterSpec extends Specification {
         HeaderParameter | "@RequestHeader"
     }
 
-    void "writes required request body parameter" () {
+    void "creates required request body parameter" () {
         def body = new RequestBody (
             'body', 'application/json',
             new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
@@ -85,13 +79,15 @@ class ParameterAnnotationWriterSpec extends Specification {
             true, false, null)
 
         when:
-        writer.write (target, body)
+        def codeSnippets = factory.create (body)
 
         then:
-        target.toString () == "@RequestBody"
+        def parameter = codeSnippets.first()
+        parameter.text == "@RequestBody"
+        parameter.imports.contains("org.springframework.web.bind.annotation.RequestBody")
     }
 
-    void "writes optional request body parameter" () {
+    void "creates optional request body parameter" () {
         def body = new RequestBody (
             'body', 'application/json',
             new ObjectDataType (new DataTypeName('FooRequestBody', 'FooRequestBody'), '',
@@ -99,13 +95,15 @@ class ParameterAnnotationWriterSpec extends Specification {
             false, false, null)
 
         when:
-        writer.write (target, body)
+        def codeSnippets = factory.create (body)
 
         then:
-        target.toString () == "@RequestBody(required = false)"
+        def parameter = codeSnippets.first()
+        parameter.text == "@RequestBody(required = false)"
+        parameter.imports.contains("org.springframework.web.bind.annotation.RequestBody")
     }
 
-    DataTypeConstraints createConstraints(def defaultValue) {
+    static DataTypeConstraints createConstraints(def defaultValue) {
         def c = new DataTypeConstraints()
         c.defaultValue = defaultValue
         c

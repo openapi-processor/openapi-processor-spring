@@ -8,6 +8,7 @@ package io.openapiprocessor.spring.writer.java
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
+import io.openapiprocessor.core.writer.java.CodeSnippet
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMappingAnnotationFactory
 
 /**
@@ -22,44 +23,45 @@ import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMapp
  */
 class ExchangeAnnotationFactory(private val annotations: FrameworkAnnotations): CoreMappingAnnotationFactory {
 
-    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
+    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<CodeSnippet> {
         return listOf(createAnnotation(endpoint, endpointResponse))
     }
 
-    private fun createAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+    private fun createAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): CodeSnippet {
         val annotation = annotations.getAnnotation(endpoint.method)
 
-        var mapping = annotation.annotationName
-        mapping += "("
-        mapping += "url = " + quote(endpoint.path)
+        var snippet = annotation.annotationName
+        snippet += "("
+        snippet += "url = " + quote(endpoint.path)
 
         // todo warn if size is larger than 1?
         val consumes = endpoint.getConsumesContentTypes()
         if (consumes.isNotEmpty()) {
-            mapping += ", "
-            mapping += "contentType = "
-            mapping += quote(consumes.first())
+            snippet += ", "
+            snippet += "contentType = "
+            snippet += quote(consumes.first())
         }
 
         val produces = endpointResponse.contentTypes
         if (produces.isNotEmpty()) {
-            mapping += ", "
-            mapping += "accept = {"
+            snippet += ", "
+            snippet += "accept = {"
 
-            mapping += produces.joinToString(", ") {
+            snippet += produces.joinToString(", ") {
                 quote(it)
             }
 
-            mapping += "}"
+            snippet += "}"
         }
 
         annotation.parameters.forEach {
-            mapping += ", "
-            mapping += "${it.key} = ${it.value.value}"
+            snippet += ", "
+            snippet += "${it.key} = ${it.value.value}"
         }
 
-        mapping += ")"
-        return mapping
+        snippet += ")"
+
+        return CodeSnippet(snippet, annotation.imports + annotation.referencedImports)
     }
 
     private fun quote(content: String): String {

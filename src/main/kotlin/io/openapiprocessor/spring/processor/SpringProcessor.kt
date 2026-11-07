@@ -18,8 +18,8 @@ import io.openapiprocessor.spring.Versions
 import io.openapiprocessor.spring.processor.SpringAnnotations.Companion.EXCHANGE
 import io.openapiprocessor.spring.writer.java.*
 import io.openapiprocessor.spring.writer.java.MappingAnnotationFactory
-import io.openapiprocessor.spring.writer.java.ParameterAnnotationWriter
-import io.openapiprocessor.spring.writer.java.StatusAnnotationWriter
+import io.openapiprocessor.spring.writer.java.ParameterAnnotationFactory
+import io.openapiprocessor.spring.writer.java.StatusAnnotationFactory
 import io.openapiprocessor.test.api.OpenApiProcessorTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -76,20 +76,17 @@ class SpringProcessor : OpenApiProcessorTest {
                 generatedWriter,
                 validationWriter,
                 InterfaceWriter(
-                    options,
                     generatedWriter,
                     MethodWriter(
                         options,
                         identifier,
-                        StatusAnnotationWriter(annotations),
+                        StatusAnnotationFactory(annotations),
                         annotationFactory,
-                        ParameterAnnotationWriter(annotations),
+                        ParameterAnnotationFactory(annotations),
                         beanValidations,
                         javaDocWriter
                     ),
-                    annotations,
-                    beanValidations,
-                    DefaultImportFilter()
+                    annotations
                 ),
                 when (options.modelType) {
                     "record" -> DataTypeWriterRecord(

@@ -7,6 +7,7 @@ package io.openapiprocessor.spring.writer.java
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.datatest.withData
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.builder.api.endpoint
@@ -39,9 +40,9 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldBe expected
+        codeSnippets.first().text shouldBe expected
     }
 
     data class TestContentType(val contentType: String, val expected: String)
@@ -62,9 +63,9 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldBe expected
+        codeSnippets.first().text shouldBe expected
     }
 
     data class TestAccept(val accept: String, val expected: String)
@@ -84,9 +85,9 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldBe expected
+        codeSnippets.first().text shouldBe expected
     }
 
     data class TestAcceptContentType(val accept: String, val contentType: String, val expected: String)
@@ -109,9 +110,9 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldBe expected
+        codeSnippets.first().text shouldBe expected
     }
 
     "writes exchange annotation with multiple result content types" {
@@ -126,9 +127,11 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldBe  """@GetExchange(url = "${endpoint.path}", accept = {"${endpoint.responses["200"]?.first ()?.contentType}", "${endpoint.responses["default"]?.first ()?.contentType}"})"""
+        val annotation = codeSnippets.first()
+        annotation.text shouldBe """@GetExchange(url = "${endpoint.path}", accept = {"${endpoint.responses["200"]?.first ()?.contentType}", "${endpoint.responses["default"]?.first ()?.contentType}"})"""
+        annotation.imports shouldContainAll listOf("org.springframework.web.service.annotation.GetExchange")
     }
 
     "writes unique 'contentType' parameter" {
@@ -143,9 +146,11 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldContain """contentType = "application/json""""
+        val annotation = codeSnippets.first()
+        annotation.text shouldContain """contentType = "application/json""""
+        annotation.imports shouldContainAll listOf("org.springframework.web.service.annotation.GetExchange")
     }
 
     "writes unique 'accept' parameter" {
@@ -166,8 +171,10 @@ class ExchangeAnnotationFactorySpec: StringSpec({
             }
         }
 
-        val annotations = factory.create(endpoint, endpoint.endpointResponses.first())
+        val codeSnippets = factory.create(endpoint, endpoint.endpointResponses.first())
 
-        annotations.first() shouldContain """accept = {"application/json"}"""
+        val annotation = codeSnippets.first()
+        annotation.text shouldContain """accept = {"application/json"}"""
+        annotation.imports shouldContainAll listOf("org.springframework.web.service.annotation.GetExchange")
     }
 })
