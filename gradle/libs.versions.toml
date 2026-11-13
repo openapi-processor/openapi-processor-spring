@@ -11,7 +11,7 @@ build-jdk = "17"
 jacoco = "0.8.15"
 jacocolog = "4.0.1"
 
-spring-web = "7.0.9"
+spring-web = "7.0.10"
 spring-data = "4.1.2"
 
 [libraries]
