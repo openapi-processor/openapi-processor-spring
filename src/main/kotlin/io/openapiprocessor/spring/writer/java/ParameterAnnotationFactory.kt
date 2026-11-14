@@ -50,7 +50,6 @@ class ParameterAnnotationFactory(private val annotations: FrameworkAnnotations):
 
         val annotation = annotations.getAnnotation (parameter)
 
-
         var snippet = annotation.annotationName
         if (parameter.withParameters) {
             snippet += "("
