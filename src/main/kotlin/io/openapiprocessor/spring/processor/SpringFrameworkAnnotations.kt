@@ -73,7 +73,7 @@ class SpringFrameworkAnnotations: FrameworkAnnotations {
     }
 }
 
-private val MAPPING_ANNOTATIONS = hashMapOf(
+private val MAPPING_ANNOTATIONS: Map<HttpMethod, Annotation> = hashMapOf(
     HttpMethod.DELETE  to Annotation(getMappingAnnotationName(HttpMethod.DELETE.method)),
     HttpMethod.GET     to Annotation(getMappingAnnotationName(HttpMethod.GET.method)),
     HttpMethod.HEAD    to Annotation(getMappingAnnotationName("request"), linkedMapOf(
