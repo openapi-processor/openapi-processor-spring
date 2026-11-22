@@ -1,0 +1,6 @@
+openapi-processor-spring: v1
+
+options:
+  package-name: generated
+  format-code: false
+

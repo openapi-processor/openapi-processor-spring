@@ -12,6 +12,7 @@ val ALL_3x: List<TestParams2> = join(
     emptyList(),
     tests("endpoint-exchange-annotations"),
     testX("endpoint-http-mapping"),
+    tests("endpoint-http-mapping-32", apis = listOf(API_32), modelTypes = MT_X),
     tests("params-complex-data-types"),
     testX("params-enum"),
     testX("params-pageable-mapping"),

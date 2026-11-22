@@ -1,0 +1,12 @@
+openapi: 3.2.1
+info:
+  title: test endpoint http method query mapping
+  version: 1.0.0
+paths:
+  /endpoint:
+    query:
+      tags:
+        - endpoint
+      responses:
+        "204":
+          description: empty

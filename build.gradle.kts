@@ -77,6 +77,7 @@ dependencies {
     testIntImplementation (libs.mockk)
     testIntImplementation (libs.logback)
     testIntImplementation (libs.jimfs)
+    testIntImplementation (platform(libs.spring.bom))
     testIntImplementation (libs.spring.web)
     testIntImplementation (libs.spring.data)
 }

@@ -86,7 +86,9 @@ private val MAPPING_ANNOTATIONS = hashMapOf(
     HttpMethod.POST    to Annotation(getMappingAnnotationName(HttpMethod.POST.method)),
     HttpMethod.PUT     to Annotation(getMappingAnnotationName(HttpMethod.PUT.method)),
     HttpMethod.TRACE   to Annotation(getMappingAnnotationName("request"), linkedMapOf(
-        "method" to SimpleParameterValue("RequestMethod.TRACE", ANNOTATION_REQUEST_METHOD)))
+        "method" to SimpleParameterValue("RequestMethod.TRACE", ANNOTATION_REQUEST_METHOD))),
+    HttpMethod.QUERY   to Annotation(getMappingAnnotationName("request"), linkedMapOf(
+        "method" to SimpleParameterValue("RequestMethod.QUERY", ANNOTATION_REQUEST_METHOD)))
 )
 
 private val PARAMETER_ANNOTATIONS = hashMapOf(
