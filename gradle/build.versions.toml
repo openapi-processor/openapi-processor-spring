@@ -6,12 +6,12 @@ build-plugins = "2026.7"
 target-jdk = "17"
 build-jdk = "21"
 
-kotlin = "2.4.10"
+kotlin = "2.4.21"
 
 checker = "0.6.61"
-jacoco = "0.8.15"
+jacoco = "0.8.16"
 jacocolog = "4.0.1"
-updates = "0.61.0"
+updates = "0.67.0"
 
 [libraries]
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
@@ -29,4 +29,4 @@ jacocolog = { id = "org.barfuin.gradle.jacocolog" }
 updates = { id = "io.github.ben-manes.versions", version = "0.61.0" }
 publish = { id = "io.openapiprocessor.build.plugin.publish" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
-sonar = { id = "org.sonarqube", version =  "7.4.0.8496" }
+sonar = { id = "org.sonarqube", version =  "7.6.0.18749" }

@@ -8,7 +8,7 @@ base = "2026.4-SNAPSHOT"
 target-jdk = "11"
 build-jdk = "17"
 
-jacoco = "0.8.15"
+jacoco = "0.8.16"
 jacocolog = "4.0.1"
 
 [libraries]
@@ -30,12 +30,12 @@ spring-data = { module ="org.springframework.data:spring-data-commons" }
 
 jimfs = "com.google.jimfs:jimfs:1.3.2"
 slf4j = "org.slf4j:slf4j-api:2.0.20"
-logback = "ch.qos.logback:logback-classic:1.6.7"
+logback = "ch.qos.logback:logback-classic:1.6.8"
 
 kotest-bom = "io.kotest:kotest-bom:6.2.7"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
-mockk = "io.mockk:mockk:1.14.11"
+mockk = "io.mockk:mockk:1.14.12"
 
 groovy-bom = "org.apache.groovy:groovy-bom:5.1.2"
 spock = "org.spockframework:spock-core:2.4-groovy-5.0"
